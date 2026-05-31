@@ -9,10 +9,10 @@ export default function Loading() {
   return (
     <SiteShell>
       <div className="mx-auto max-w-6xl space-y-8 px-4 py-10 sm:px-6 sm:py-14">
-        <div className="space-y-4">
-          <SkeletonBlock className="mx-auto h-10 max-w-md sm:mx-0" />
-          <SkeletonBlock className="mx-auto h-6 max-w-lg sm:mx-0" />
-          <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
+        <div className="max-w-2xl space-y-4">
+          <SkeletonBlock className="h-10 max-w-md" />
+          <SkeletonBlock className="h-6 max-w-lg" />
+          <div className="flex flex-wrap justify-start gap-2">
             {Array.from({ length: 4 }).map((_, index) => (
               <SkeletonBlock key={index} className="h-6 w-24 rounded-full" />
             ))}

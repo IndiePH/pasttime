@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono, Roboto_Slab } from "next/font/google"
 import Script from "next/script"
 
 import { NuqsAdapter } from "nuqs/adapters/next/app"
@@ -27,6 +27,12 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+const robotoSlab = Roboto_Slab({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-game-title",
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,7 +42,13 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        robotoSlab.variable,
+        "font-sans",
+        geist.variable,
+      )}
     >
       <head>
         <Script id="pasttime-theme-init" strategy="beforeInteractive">

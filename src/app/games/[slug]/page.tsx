@@ -1,11 +1,9 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { notFound } from "next/navigation"
-
-import { SiteShell } from "@/components/shared"
-import { Button } from "@/components/ui/button"
+import { AdPanel, GameLaunchActions, SiteShell } from "@/components/shared"
 import { getGameById } from "@/domain/games"
-import { GameIcon } from "@/components/ui/icons"
+import { GamePageShell } from "@/features/games/components/game-page-shell"
+import { GameSessionHeader } from "@/features/games/components/game-session-header"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -35,17 +33,15 @@ export default async function GamePage({ params }: PageProps) {
 
   return (
     <SiteShell>
-      <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-16 text-center sm:px-6 sm:py-24">
-        <GameIcon id={game.icon} className="size-20 rounded-2xl" title={game.title} />
-        <h1 className="mt-6 text-2xl font-semibold tracking-tight">{game.title}</h1>
-        <p className="mt-2 text-muted-foreground">{game.description}</p>
-        <p className="mt-8 rounded-full bg-muted px-4 py-1.5 text-sm font-medium">
-          Coming soon
-        </p>
-        <Button variant="outline" className="mt-8" asChild>
-          <Link href="/">Back to catalog</Link>
-        </Button>
-      </div>
+      <GamePageShell>
+        <GameSessionHeader game={game} subtitle={game.description} />
+        <GameLaunchActions game={game} />
+        <AdPanel
+          slot="game-below-launch"
+          variant="box"
+          className="mt-10 w-full"
+        />
+      </GamePageShell>
     </SiteShell>
   )
 }

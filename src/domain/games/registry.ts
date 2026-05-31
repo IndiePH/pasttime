@@ -9,7 +9,6 @@ export const GAME_REGISTRY: readonly GameDefinition[] = [
     icon: "sample-word",
     tags: ["word", "daily"],
     playerCount: "1 player",
-    duration: "5–10 min",
   },
   {
     id: "sample-grid",
@@ -19,7 +18,33 @@ export const GAME_REGISTRY: readonly GameDefinition[] = [
     icon: "sample-grid",
     tags: ["logic", "daily"],
     playerCount: "1 player",
-    duration: "10–15 min",
+  },
+  {
+    id: "sample-quiz",
+    title: "Sample Quiz",
+    description: "Race friends to answer trivia questions.",
+    status: "coming_soon",
+    icon: "sample-quiz",
+    tags: ["trivia", "party", "multiplayer"],
+    playerCount: "2–8 players",
+  },
+  {
+    id: "sample-tiles",
+    title: "Sample Tiles",
+    description: "Flip and match pairs before the timer runs out.",
+    status: "available",
+    icon: "sample-tiles",
+    tags: ["memory", "solo"],
+    playerCount: "1 player",
+  },
+  {
+    id: "sample-crew",
+    title: "Sample Crew",
+    description: "Coordinate with friends to finish the mission in time.",
+    status: "available",
+    icon: "sample-crew",
+    tags: ["co-op", "party", "multiplayer"],
+    playerCount: "2–6 players",
   },
 ] as const
 
@@ -34,6 +59,19 @@ export function filterGamesByStatus(
     return [...GAME_REGISTRY]
   }
   return GAME_REGISTRY.filter((game) => game.status === status)
+}
+
+export function filterGamesByTitle(
+  games: readonly GameDefinition[],
+  query: string,
+): GameDefinition[] {
+  const normalized = query.trim().toLowerCase()
+  if (!normalized) {
+    return [...games]
+  }
+  return games.filter((game) =>
+    game.title.toLowerCase().includes(normalized),
+  )
 }
 
 /** Featured row: available games first, else leading registry entries. */

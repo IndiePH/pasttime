@@ -11,7 +11,7 @@ const TRUST_ITEMS = [
 export function TrustBadges({ className }: { className?: string }) {
   return (
     <ul
-      className={cn("flex flex-wrap justify-center gap-2 sm:justify-start", className)}
+      className={cn("flex flex-wrap justify-start gap-2", className)}
       aria-label="Features"
     >
       {TRUST_ITEMS.map((label) => (
