@@ -25,7 +25,14 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run start` | Production server |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript |
+| `npm run test` | Vitest (unit + hook tests) |
 | `npm run format` | Prettier |
+
+## CI
+
+On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) runs the same gates as [Quick verify](./docs/QUALITY-CHECKLIST.md#quick-verify-every-pr): `npm ci`, then `lint`, `typecheck`, `test`, and `build`. Node version comes from [`.nvmrc`](./.nvmrc) (aligned with `package.json` `engines`).
+
+Enable branch protection on `main` so PRs cannot merge when CI fails.
 
 ## Project layout
 
@@ -38,8 +45,10 @@ src/
 ├── infrastructure/   # L1 — storage adapters
 └── lib/              # L0 — utilities (cn)
 docs/
-├── DESIGN.md         # Hub visual direction
-└── IMPLEMENTATION.md # Build slices
+├── CARD-ASSETS.md       # Playing card SVG layout and paths
+├── DESIGN.md            # Hub visual direction
+├── IMPLEMENTATION.md    # Build slices
+└── QUALITY-CHECKLIST.md # Maintainability, stability, integrity, safety gates
 ```
 
 **Phase:** Slice 1 complete — hub catalog at `/`.
@@ -48,3 +57,4 @@ docs/
 
 - [Design direction](./docs/DESIGN.md)
 - [Implementation slices](./docs/IMPLEMENTATION.md)
+- [Quality checklist](./docs/QUALITY-CHECKLIST.md)
