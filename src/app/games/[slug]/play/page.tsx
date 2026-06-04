@@ -4,9 +4,12 @@ import { notFound } from "next/navigation"
 import { SiteShell } from "@/components/shared"
 import { getGameById } from "@/domain/games"
 import { GamePlayView } from "@/features/games/components/game-play-view"
+import { getGameModule } from "@/features/games/module-registry"
+import { parseGameSearchParams } from "@/features/games/parse-game-search-params"
 
 type PageProps = {
   params: Promise<{ slug: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 export async function generateMetadata({
@@ -23,8 +26,9 @@ export async function generateMetadata({
   }
 }
 
-export default async function GamePlayPage({ params }: PageProps) {
+export default async function GamePlayPage({ params, searchParams }: PageProps) {
   const { slug } = await params
+  await parseGameSearchParams(slug, searchParams)
   const game = getGameById(slug)
 
   if (!game || game.status !== "available") {
@@ -35,9 +39,12 @@ export default async function GamePlayPage({ params }: PageProps) {
     ? "Solo practice"
     : "Solo play"
 
+  const gameModule = getGameModule(slug)
+  const PlayView = gameModule?.PlayView ?? GamePlayView
+
   return (
     <SiteShell>
-      <GamePlayView game={game} modeLabel={modeLabel} />
+      <PlayView game={game} modeLabel={modeLabel} />
     </SiteShell>
   )
 }

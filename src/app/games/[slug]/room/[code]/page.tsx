@@ -9,9 +9,11 @@ import {
   normalizeRoomCode,
 } from "@/domain/games"
 import { RoomLobbyView } from "@/features/games/components/room-lobby-view"
+import { parseGameSearchParams } from "@/features/games/parse-game-search-params"
 
 type PageProps = {
   params: Promise<{ slug: string; code: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 export async function generateMetadata({
@@ -28,8 +30,12 @@ export async function generateMetadata({
   }
 }
 
-export default async function GameRoomPage({ params }: PageProps) {
+export default async function GameRoomPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { slug, code } = await params
+  await parseGameSearchParams(slug, searchParams)
   const game = getGameById(slug)
   const roomCode = normalizeRoomCode(code)
 

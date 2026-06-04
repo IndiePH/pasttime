@@ -9,10 +9,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { StorageProvider } from "@/infrastructure/storage"
 import { cn } from "@/lib/utils"
 
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
+const geist = Geist({subsets:['latin'],variable:'--font-sans'})
 
 export const metadata: Metadata = {
   title: {

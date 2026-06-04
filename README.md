@@ -32,7 +32,18 @@ Open [http://localhost:3000](http://localhost:3000).
 
 On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) runs the same gates as [Quick verify](./docs/QUALITY-CHECKLIST.md#quick-verify-every-pr): `npm ci`, then `lint`, `typecheck`, `test`, and `build`. Node version comes from [`.nvmrc`](./.nvmrc) (aligned with `package.json` `engines`).
 
-Enable branch protection on `main` so PRs cannot merge when CI fails.
+### Merge enforcement (GitHub)
+
+CI always reports status on PRs. **Rulesets / branch protection that block merge when checks fail** depend on repo visibility and plan:
+
+| Repo | Plan | Enforced rules on `main` |
+|------|------|---------------------------|
+| Public | Free (personal or org) | Yes — add ruleset: require PR + **Quality gates** status check |
+| Private | Org Free | **No** — rulesets not enforced until org **Team** |
+| Private | Personal Free | **No** — need **Pro** for protected branches |
+| Private | Org Team / personal Pro | Yes — same ruleset setup as public |
+
+Until upgrade or a public repo: merge only after **Quality gates** is green (manual discipline). See [Slice Q1](./docs/QUALITY-CHECKLIST.md#slice-q1--ci-pipeline-).
 
 ## Project layout
 

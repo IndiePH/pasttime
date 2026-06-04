@@ -16,7 +16,7 @@ See [DESIGN.md](./DESIGN.md).
 - [x] L3: `card`, `badge`, `GameCard`, icons, `Header`, `Footer`, `SiteShell`, theme toggle
 - [x] L4: hub hero, catalog, URL filter (`?status=`)
 - [x] L5: `src/app/page.tsx` + minimal `games/[slug]` placeholder for card links
-- DoD: catalog with `sample-word` / `sample-grid`, filter, links to game routes
+- DoD: catalog with planned roadmap games (Word Guess live + coming soon entries), filter, links to game routes
 
 ## Slice 2 — Game shell `/games/[slug]`
 
@@ -26,6 +26,8 @@ See [DESIGN.md](./DESIGN.md).
 
 ## Adding a game (after slice 2)
 
-1. Registry entry + icon in L3
-2. `features/games/<id>/` module
-3. Register in L4 `moduleRegistry` — no new route file
+1. Review and complete `docs/GAMES.md` checklist (name, trademark, gameplay viability, legal status)
+2. Registry entry + icon in L3
+3. `features/games/<id>/` module
+4. Register in L4 `moduleRegistry` — no new route file
+5. Complete relevant gates in [QUALITY-CHECKLIST.md](./QUALITY-CHECKLIST.md) (tests, registry integrity, URL state)

@@ -12,6 +12,7 @@ Visual references (not copies):
 | **Hero** | Short headline + one-line subcopy (Party Play energy, NYT restraint). No autoplay video. |
 | **Trust row** | 3–4 compact badges: instant play, no download, works on mobile/desktop, free (MVP truths only). |
 | **Sections** | “Top picks” (featured `available` or highlighted registry entries), “All games” grid. Optional tags later. |
+| **Roadmap visibility** | Show full planned catalog on hub with clear `Coming soon` badges for backlog entries. |
 | **Cards** | Icon, title, description, meta line (`playerCount` · `duration`), status badge (`Coming soon` / `Play`). shadcn `Card` + `Badge`. |
 | **Layout** | Max-width container, responsive grid (1 → 2 → 3 cols), comfortable whitespace. |
 | **Nav** | Sticky header: wordmark, browse link (future), theme toggle (Phase 4 polish). |

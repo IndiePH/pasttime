@@ -13,9 +13,15 @@ import {
 interface JoinRoomPanelProps {
   gameId: string
   onCancel: () => void
+  /** Override room URL (e.g. preserve game settings query). */
+  roomHrefForCode?: (code: string) => string
 }
 
-export function JoinRoomPanel({ gameId, onCancel }: JoinRoomPanelProps) {
+export function JoinRoomPanel({
+  gameId,
+  onCancel,
+  roomHrefForCode,
+}: JoinRoomPanelProps) {
   const router = useRouter()
   const [code, setCode] = React.useState("")
   const [error, setError] = React.useState<string | null>(null)
@@ -37,7 +43,9 @@ export function JoinRoomPanel({ gameId, onCancel }: JoinRoomPanelProps) {
       setError("Enter a 6-character room code.")
       return
     }
-    router.push(gameRoomPath(gameId, code))
+    router.push(
+      roomHrefForCode ? roomHrefForCode(code) : gameRoomPath(gameId, code),
+    )
   }
 
   return (

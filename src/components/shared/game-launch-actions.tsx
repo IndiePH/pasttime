@@ -12,6 +12,7 @@ import {
   generateRoomCode,
   isMultiplayerGame,
 } from "@/domain/games"
+import { GameHowToPlay } from "@/features/games/components/game-how-to-play"
 import { JoinRoomPanel } from "@/features/games/components/join-room-panel"
 
 export function GameLaunchActions({ game }: { game: GameDefinition }) {
@@ -21,10 +22,10 @@ export function GameLaunchActions({ game }: { game: GameDefinition }) {
   if (game.status === "coming_soon") {
     return (
       <>
-        <p className="rounded-full bg-muted px-4 py-1.5 text-sm font-medium">
+        <p className="mt-8 rounded-full bg-muted px-4 py-1.5 text-sm font-medium">
           Coming soon
         </p>
-        <Button variant="outline" className="mt-8" asChild>
+        <Button variant="outline" className="mt-6" asChild>
           <Link href="/">Back to catalog</Link>
         </Button>
       </>
@@ -40,6 +41,7 @@ export function GameLaunchActions({ game }: { game: GameDefinition }) {
   return (
     <>
       <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
+        <GameHowToPlay game={game} />
         {multiplayer ? (
           showJoinPanel ? (
             <JoinRoomPanel

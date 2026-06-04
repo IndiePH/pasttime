@@ -1,5 +1,25 @@
 import type { NextConfig } from "next"
 
-const nextConfig: NextConfig = {}
+const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/games/sample-word",
+        destination: "/games/word-guess",
+        permanent: true,
+      },
+      {
+        source: "/games/sample-word/play",
+        destination: "/games/word-guess/play",
+        permanent: true,
+      },
+      {
+        source: "/games/sample-word/room/:code",
+        destination: "/games/word-guess/room/:code",
+        permanent: true,
+      },
+    ]
+  },
+}
 
 export default nextConfig

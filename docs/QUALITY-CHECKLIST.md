@@ -34,10 +34,13 @@ npm run build
 - [x] Add `.github/workflows/ci.yml` (or equivalent) on `push` + `pull_request`
 - [x] Job steps: `npm ci` → `lint` → `typecheck` → `test` → `build`
 - [x] Pin Node to `.nvmrc` / `package.json` `engines`
-- [x] Document CI in [README](../README.md) scripts table
+- [x] Document CI and merge-enforcement limits in [README](../README.md#ci)
 - [ ] (Optional) `npm audit --audit-level=high` as non-blocking or weekly job
+- [ ] (Optional, when plan allows) Ruleset on `main`: require PR + **Quality gates** check
 
-**DoD:** A failing test blocks merge; contributors see CI status on PRs. *(Requires branch protection on `main` in GitHub repo settings.)*
+**DoD (workflow):** CI runs on every push/PR; contributors see **Quality gates** on PRs.
+
+**DoD (enforced merge):** Failing checks block merge — requires GitHub rulesets/branch protection. **Not available** on a **private org repo with GitHub Free** (rulesets are not enforced; upgrade org to **Team**, or use a **public** repo on Free, or **Pro** for a private personal repo). Until then, rely on local [Quick verify](#quick-verify-every-pr) before merge.
 
 ---
 

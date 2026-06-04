@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useQueryState } from "nuqs"
 import { Check, Copy, Users } from "lucide-react"
 
 import { AdPanel } from "@/components/shared/ad-panel"
@@ -14,9 +15,16 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import type { GameDefinition } from "@/domain/games"
-import { gameLaunchPath } from "@/domain/games"
+import { gameLaunchPath, getMultiplayerPlayerLimits } from "@/domain/games"
+import {
+  formatWordLengthLabel,
+  type WordGuessLength,
+  type WordGuessRoundMode,
+  wordGuessLaunchPath,
+} from "@/domain/games/word-guess"
 import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
+import { wordGuessSearchParams } from "@/features/games/word-guess/search-params"
 
 interface RoomLobbyViewProps {
   game: GameDefinition
@@ -25,6 +33,20 @@ interface RoomLobbyViewProps {
 
 export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
   const [copied, setCopied] = React.useState(false)
+  const [lettersParam] = useQueryState(
+    "letters",
+    wordGuessSearchParams.letters,
+  )
+  const [modeParam] = useQueryState("mode", wordGuessSearchParams.mode)
+  const isWordGuess = game.id === "word-guess"
+  const wordLength = Number(lettersParam) as WordGuessLength
+  const mode = modeParam as WordGuessRoundMode
+  const launchHref = isWordGuess
+    ? wordGuessLaunchPath(wordLength, mode)
+    : gameLaunchPath(game.id)
+  const limits = getMultiplayerPlayerLimits(game)
+  const maxPlayers = limits?.maxPlayers ?? 8
+  const minPlayers = limits?.minPlayers ?? 2
 
   async function handleCopyCode() {
     try {
@@ -37,10 +59,11 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
   }
 
   async function handleCopyLink() {
+    const path = launchHref
     const link =
       typeof window !== "undefined"
-        ? `${window.location.origin}${gameLaunchPath(game.id)}`
-        : gameLaunchPath(game.id)
+        ? `${window.location.origin}${path}`
+        : path
     try {
       await navigator.clipboard.writeText(
         `Join my ${game.title} room — code ${roomCode}: ${link}`,
@@ -54,7 +77,14 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
 
   return (
     <GamePageShell>
-      <GameSessionHeader game={game} subtitle="Multiplayer room" />
+      <GameSessionHeader
+        game={game}
+        subtitle={
+          isWordGuess
+            ? `Multiplayer room · ${formatWordLengthLabel(wordLength)}`
+            : "Multiplayer room"
+        }
+      />
       <Card className="mt-8 w-full text-left">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -62,8 +92,9 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
             Room lobby
           </CardTitle>
           <CardDescription>
-            Share the code below so friends can join. Multiplayer sync is not
-            connected yet — this lobby previews the flow.
+            Share the code below so friends can join (up to {maxPlayers}{" "}
+            players). Multiplayer sync is not connected yet — this lobby
+            previews the flow.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -88,6 +119,13 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
               )}
               {copied ? "Copied" : "Copy code"}
             </Button>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+            <span>Players</span>
+            <span>
+              1 / {maxPlayers}
+            </span>
           </div>
 
           <ul className="space-y-2 rounded-lg border border-border/80 px-3 py-3">
@@ -116,13 +154,14 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Start unlocks when at least two players join.
+            Start unlocks when at least {minPlayers} players join. Rooms hold
+            up to {maxPlayers} players.
           </p>
         </CardContent>
       </Card>
 
       <Button variant="outline" className="mt-6 w-full max-w-xs" asChild>
-        <Link href={gameLaunchPath(game.id)}>Leave room</Link>
+        <Link href={launchHref}>Leave room</Link>
       </Button>
 
       <p className="mt-4 max-w-sm text-xs text-muted-foreground">

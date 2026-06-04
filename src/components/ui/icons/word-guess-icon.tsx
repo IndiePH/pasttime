@@ -1,6 +1,6 @@
 import type { SVGProps } from "react"
 
-export function SampleWordIcon(props: SVGProps<SVGSVGElement>) {
+export function WordGuessIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 48 48"

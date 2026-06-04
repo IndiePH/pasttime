@@ -4,15 +4,23 @@ import { SampleCrewIcon } from "./sample-crew-icon"
 import { SampleGridIcon } from "./sample-grid-icon"
 import { SampleQuizIcon } from "./sample-quiz-icon"
 import { SampleTilesIcon } from "./sample-tiles-icon"
-import { SampleWordIcon } from "./sample-word-icon"
+import { WordGuessIcon } from "./word-guess-icon"
 
 const ICONS = {
-  "sample-word": SampleWordIcon,
-  "sample-grid": SampleGridIcon,
-  "sample-quiz": SampleQuizIcon,
-  "sample-tiles": SampleTilesIcon,
-  "sample-crew": SampleCrewIcon,
-} satisfies Record<GameIconId, typeof SampleWordIcon>
+  "word-guess": WordGuessIcon,
+  solitaire: SampleCrewIcon,
+  tongits: SampleCrewIcon,
+  "pusoy-dos": SampleCrewIcon,
+  crossword: SampleGridIcon,
+  sudoku: SampleGridIcon,
+  reversi: SampleTilesIcon,
+  "fleet-grid": SampleQuizIcon,
+  spades: SampleCrewIcon,
+  "word-factory": WordGuessIcon,
+  "type-rush": SampleQuizIcon,
+  "type-shield": SampleQuizIcon,
+  "tile-words": WordGuessIcon,
+} satisfies Record<GameIconId, typeof WordGuessIcon>
 
 export function GameIcon({
   id,
