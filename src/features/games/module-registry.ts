@@ -2,16 +2,17 @@ import type { ComponentType } from "react"
 
 import type { GameDefinition } from "@/domain/games"
 import {
-  SolitaireLaunchView,
-  SolitairePlayView,
-  SolitaireSettingsWidget,
-} from "@/features/games/solitaire/components"
+  GAME_HOW_TO_PLAY_CONTENT,
+  type GameHowToPlayContentProps,
+} from "@/features/games/game-how-to-play-registry"
 import {
-  WordGuessHowToPlay,
-  WordGuessLaunchView,
-  WordGuessPlayView,
-  WordGuessSettingsWidget,
-} from "@/features/games/word-guess/components"
+  GAME_SETTINGS_WIDGETS,
+  type GameSettingsWidgetProps,
+} from "@/features/games/game-settings-registry"
+import { SolitaireLaunchView } from "@/features/games/solitaire/components/solitaire-launch-view"
+import { SolitairePlayView } from "@/features/games/solitaire/components/solitaire-play-view"
+import { WordGuessLaunchView } from "@/features/games/word-guess/components/word-guess-launch-view"
+import { WordGuessPlayView } from "@/features/games/word-guess/components/word-guess-play-view"
 
 type GameLaunchViewProps = {
   game: GameDefinition
@@ -20,14 +21,6 @@ type GameLaunchViewProps = {
 type GamePlayViewProps = {
   game: GameDefinition
   modeLabel: string
-}
-
-type GameSettingsWidgetProps = {
-  className?: string
-}
-
-type GameHowToPlayContentProps = {
-  game: GameDefinition
 }
 
 export type GameModule = {
@@ -41,13 +34,13 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   solitaire: {
     LaunchView: SolitaireLaunchView,
     PlayView: SolitairePlayView,
-    SettingsWidget: SolitaireSettingsWidget,
+    SettingsWidget: GAME_SETTINGS_WIDGETS.solitaire,
   },
   "word-guess": {
     LaunchView: WordGuessLaunchView,
     PlayView: WordGuessPlayView,
-    SettingsWidget: WordGuessSettingsWidget,
-    HowToPlayContent: WordGuessHowToPlay,
+    SettingsWidget: GAME_SETTINGS_WIDGETS["word-guess"],
+    HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT["word-guess"],
   },
 }
 
