@@ -120,10 +120,12 @@ export function KlondikeBoard({
   )`
 
   const wasteFrom: KlondikePileRef = { pile: "waste" }
+  const [boardRoot, setBoardRoot] = React.useState<HTMLDivElement | null>(null)
 
   return (
     <>
       <div
+        ref={setBoardRoot}
         className={cn(
           "klondike-board",
           isAutoCompleting && "pointer-events-none select-none",
@@ -353,6 +355,7 @@ export function KlondikeBoard({
       </div>
       <KlondikeDragOverlay session={dragSession} />
       <KlondikeFlyOverlay
+        boardRoot={boardRoot}
         sessions={flySessions}
         durationMs={flyDurationMs}
         onComplete={handleFlyComplete}
