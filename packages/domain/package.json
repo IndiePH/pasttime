@@ -1,0 +1,22 @@
+{
+  "name": "@pasttime/domain",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./daily": "./daily/index.ts",
+    "./games": "./games/index.ts",
+    "./games/*": "./games/*"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "vitest": "^4.1.8"
+  }
+}
