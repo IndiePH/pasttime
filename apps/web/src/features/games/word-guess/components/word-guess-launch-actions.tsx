@@ -18,6 +18,7 @@ import {
 import type { GameDefinition } from "@pasttime/domain/games"
 import { GameHowToPlay } from "@/features/games/components/game-how-to-play"
 import { JoinRoomPanel } from "@/features/games/components/join-room-panel"
+import { useWordGuessDailyCompleted } from "@/features/games/word-guess/hooks/use-word-guess-daily-completed"
 import { wordGuessSearchParams } from "@/features/games/word-guess/search-params"
 
 interface WordGuessLaunchActionsProps {
@@ -34,6 +35,10 @@ export function WordGuessLaunchActions({ game }: WordGuessLaunchActionsProps) {
   const [modeParam] = useQueryState("mode", wordGuessSearchParams.mode)
   const wordLength = Number(lettersParam) as WordGuessLength
   const mode = modeParam as WordGuessRoundMode
+  const isDailyCompleted = useWordGuessDailyCompleted(wordLength)
+  const soloPlayMode: WordGuessRoundMode = "random"
+  const playMode = isDailyCompleted ? soloPlayMode : "daily"
+  const playLabel = isDailyCompleted ? "Play solo" : "Play daily word"
 
   function handleCreateRoom() {
     router.push(wordGuessRoomPath(generateRoomCode(), wordLength, mode))
@@ -58,7 +63,9 @@ export function WordGuessLaunchActions({ game }: WordGuessLaunchActionsProps) {
       <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
         <GameHowToPlay game={game} />
         <Button type="button" className="w-full" asChild>
-          <PlatformLink href={wordGuessPlayPath(wordLength, mode)}>Play solo</PlatformLink>
+          <PlatformLink href={wordGuessPlayPath(wordLength, playMode)}>
+            {playLabel}
+          </PlatformLink>
         </Button>
         <Button
           type="button"

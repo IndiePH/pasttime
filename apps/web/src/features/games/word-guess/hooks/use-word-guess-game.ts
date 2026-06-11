@@ -4,7 +4,8 @@ import * as React from "react"
 
 import {
   createWordGuessRound,
-  getWordGuessRoundSeed,
+  getWordGuessSoloStorageKey,
+  parseStoredWordGuessGame,
   submitWordGuessGuess,
   type WordGuessGuessEvaluation,
   type WordGuessLength,
@@ -22,11 +23,6 @@ interface UseWordGuessGameOptions {
   roundMode: WordGuessRoundMode
 }
 
-interface StoredWordGuessGame {
-  round: WordGuessRoundState
-  currentGuess: string
-}
-
 const LETTER_PATTERN = /^[A-Z]$/
 
 const KEY_STATE_PRIORITY: Record<WordGuessLetterState, number> = {
@@ -37,55 +33,6 @@ const KEY_STATE_PRIORITY: Record<WordGuessLetterState, number> = {
 
 function createRound(length: WordGuessLength, mode: WordGuessRoundMode): WordGuessRoundState {
   return createWordGuessRound({ length, mode })
-}
-
-function isWordGuessRoundState(
-  value: unknown,
-  length: WordGuessLength,
-  mode: WordGuessRoundMode,
-): value is WordGuessRoundState {
-  if (!value || typeof value !== "object") {
-    return false
-  }
-
-  const record = value as Record<string, unknown>
-  return (
-    typeof record.answer === "string" &&
-    record.length === length &&
-    record.mode === mode &&
-    typeof record.maxTries === "number" &&
-    Array.isArray(record.guesses) &&
-    (record.status === "playing" ||
-      record.status === "won" ||
-      record.status === "lost")
-  )
-}
-
-function asStoredWordGuessGame(
-  value: unknown,
-  length: WordGuessLength,
-  mode: WordGuessRoundMode,
-): StoredWordGuessGame | null {
-  if (!value || typeof value !== "object") {
-    return null
-  }
-
-  const record = value as Record<string, unknown>
-  const round = record.round
-  const currentGuess = record.currentGuess
-
-  if (
-    !isWordGuessRoundState(round, length, mode) ||
-    typeof currentGuess !== "string" ||
-    currentGuess.length > length
-  ) {
-    return null
-  }
-
-  return {
-    round,
-    currentGuess,
-  }
 }
 
 function buildBoardRows(
@@ -164,16 +111,13 @@ export function useWordGuessGame({
   roundMode,
 }: UseWordGuessGameOptions) {
   const storage = useStorage()
-  const dailySeed = React.useMemo(
-    () => getWordGuessRoundSeed(roundMode, new Date()),
-    [roundMode],
+  const storageKey = React.useMemo(
+    () => getWordGuessSoloStorageKey(wordLength, roundMode),
+    [roundMode, wordLength],
   )
-  const storageKey = React.useMemo(() => {
-    return `word-guess:solo:${roundMode}:${wordLength}:${dailySeed ?? "session"}`
-  }, [dailySeed, roundMode, wordLength])
   const initialGame = React.useMemo(() => {
     return (
-      asStoredWordGuessGame(storage.get<unknown>(storageKey), wordLength, roundMode) ?? {
+      parseStoredWordGuessGame(storage.get<unknown>(storageKey), wordLength, roundMode) ?? {
         round: createRound(wordLength, roundMode),
         currentGuess: "",
       }
@@ -188,11 +132,10 @@ export function useWordGuessGame({
   } | null>(null)
 
   React.useEffect(() => {
-    const payload: StoredWordGuessGame = {
+    storage.set(storageKey, {
       round,
       currentGuess,
-    }
-    storage.set(storageKey, payload)
+    })
   }, [currentGuess, round, storage, storageKey])
 
   const isPlaying = round.status === "playing"

@@ -29,6 +29,13 @@ export {
   submitWordGuessGuess,
 } from "./game"
 export { getWordGuessRoundSeed, pickWordGuessAnswer } from "./pick-target-word"
+export {
+  getWordGuessSoloStorageKey,
+  isWordGuessDailyCompleted,
+  isWordGuessDailyRoundFinished,
+  parseStoredWordGuessGame,
+} from "./persistence"
+export type { StoredWordGuessGame } from "./persistence"
 export type {
   WordGuessGuessEvaluation,
   WordGuessLetterResult,
