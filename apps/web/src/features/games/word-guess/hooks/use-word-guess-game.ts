@@ -182,7 +182,10 @@ export function useWordGuessGame({
   const [round, setRound] = React.useState<WordGuessRoundState>(initialGame.round)
   const [currentGuess, setCurrentGuess] = React.useState(initialGame.currentGuess)
   const [feedback, setFeedback] = React.useState<string | null>(null)
-  const [invalidWordShakeCount, setInvalidWordShakeCount] = React.useState(0)
+  const [invalidWordShake, setInvalidWordShake] = React.useState<{
+    rowIndex: number
+    trigger: number
+  } | null>(null)
 
   React.useEffect(() => {
     const payload: StoredWordGuessGame = {
@@ -231,11 +234,15 @@ export function useWordGuessGame({
     if (!result.ok) {
       setFeedback(messageForInvalidGuess(wordLength, result.reason))
       if (result.reason === "invalid-word") {
-        setInvalidWordShakeCount((count) => count + 1)
+        setInvalidWordShake((prev) => ({
+          rowIndex: round.guesses.length,
+          trigger: (prev?.trigger ?? 0) + 1,
+        }))
       }
       return
     }
 
+    setInvalidWordShake(null)
     setRound(result.round)
     setCurrentGuess("")
     if (result.round.status === "won") {
@@ -254,6 +261,7 @@ export function useWordGuessGame({
     setRound(createRound(wordLength, roundMode))
     setCurrentGuess("")
     setFeedback(null)
+    setInvalidWordShake(null)
   }, [roundMode, wordLength])
 
   React.useEffect(() => {
@@ -308,7 +316,7 @@ export function useWordGuessGame({
     canSubmit: isPlaying && currentGuess.length === wordLength,
     currentGuess,
     feedback,
-    invalidWordShakeCount,
+    invalidWordShake,
     isPlaying,
     keyboardStates,
     round,

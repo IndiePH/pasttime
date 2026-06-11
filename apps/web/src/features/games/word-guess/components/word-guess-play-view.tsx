@@ -50,7 +50,7 @@ function WordGuessPlayCard({
     attemptsUsed,
     boardRows,
     feedback,
-    invalidWordShakeCount,
+    invalidWordShake,
     isPlaying,
     keyboardStates,
     round,
@@ -63,8 +63,8 @@ function WordGuessPlayCard({
     isPlaying ? attemptsUsed + 1 : attemptsUsed,
     round.maxTries,
   )
-  const shakeRowIndex =
-    invalidWordShakeCount > 0 && isPlaying ? attemptsUsed : null
+  const shakeRowIndex = isPlaying ? (invalidWordShake?.rowIndex ?? null) : null
+  const shakeTrigger = invalidWordShake?.trigger ?? 0
 
   return (
     <Card className="w-full text-left">
@@ -88,7 +88,7 @@ function WordGuessPlayCard({
           <WordGuessBoard
             rows={boardRows}
             shakeRowIndex={shakeRowIndex}
-            shakeTrigger={invalidWordShakeCount}
+            shakeTrigger={shakeTrigger}
           />
         </div>
 
