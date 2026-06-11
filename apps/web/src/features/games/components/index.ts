@@ -6,6 +6,8 @@ export {
   GamePlayFooterActions,
   gamePlayFooterActionsClassName,
 } from "./game-play-footer-actions"
+export { GamePlaySection, gamePlaySettingsClassName, type GamePlayContentLayout } from "./game-play-section"
+export { GamePlaySettings } from "./game-play-settings"
 export {
   GamePlayShell,
   gamePlayBoardShellClassName,

@@ -2,9 +2,13 @@ import { describe, expect, it } from "vitest"
 
 import {
   applyKlondikeMove,
+  applyKlondikeAutoStack,
   createKlondikeGame,
   getKlondikeAutoFoundationMove,
   getKlondikeNextAutoCompleteMove,
+  getKlondikeNextAutoFoundationMove,
+  getKlondikeNextAutoFoundationMoveBatch,
+  getKlondikeNextAutoStackMove,
   isKlondikeAutoCompleteReady,
 } from "./game"
 import type { KlondikeCard, KlondikeState } from "./types"
@@ -285,7 +289,14 @@ describe("isKlondikeAutoCompleteReady", () => {
   })
 })
 
-describe("getKlondikeNextAutoCompleteMove", () => {
+describe("getKlondikeNextAutoFoundationMove", () => {
+  it("uses the same selector for auto-stack and auto-complete entry points", () => {
+    expect(getKlondikeNextAutoStackMove).toBe(getKlondikeNextAutoFoundationMove)
+    expect(getKlondikeNextAutoCompleteMove).toBe(
+      getKlondikeNextAutoFoundationMove,
+    )
+  })
+
   it("picks the lowest rank card that can move to foundation", () => {
     const state = baseState({
       foundations: [
@@ -304,12 +315,115 @@ describe("getKlondikeNextAutoCompleteMove", () => {
       ],
     })
 
-    const next = getKlondikeNextAutoCompleteMove(state)
+    const next = getKlondikeNextAutoFoundationMove(state)
 
     expect(next?.card.rank).toBe(2)
     expect(next?.move).toEqual({
       type: "auto-foundation",
       from: { pile: "tableau", index: 0 },
     })
+  })
+})
+
+describe("getKlondikeNextAutoFoundationMoveBatch", () => {
+  it("returns one move per foundation pile in parallel", () => {
+    const state = baseState({
+      foundations: [
+        [card("f1", "heart", 1, true)],
+        [card("f2", "club", 1, true)],
+        [card("f3", "diamond", 1, true)],
+      ],
+      tableau: [
+        [card("t1", "heart", 2, true)],
+        [card("t2", "club", 2, true)],
+        [card("t3", "diamond", 2, true)],
+        [],
+        [],
+        [],
+        [],
+      ],
+    })
+
+    const batch = getKlondikeNextAutoFoundationMoveBatch(state)
+
+    expect(batch).toHaveLength(3)
+    expect(batch.map((entry) => entry.card.rank)).toEqual([2, 2, 2])
+    expect(batch.map((entry) => entry.foundationIndex)).toEqual([0, 1, 2])
+  })
+
+  it("returns only the next rank per suit, not multiple ranks at once", () => {
+    const state = baseState({
+      foundations: [[card("f1", "heart", 4, true)]],
+      waste: [card("w1", "heart", 6, true)],
+      tableau: [[card("t1", "heart", 5, true)], [], [], [], [], [], []],
+    })
+
+    const batch = getKlondikeNextAutoFoundationMoveBatch(state)
+
+    expect(batch).toHaveLength(1)
+    expect(batch[0]?.card.rank).toBe(5)
+    expect(batch[0]?.from).toEqual({ pile: "tableau", index: 0 })
+  })
+})
+
+describe("getKlondikeNextAutoStackMove", () => {
+  it("includes a newly drawn ace from stock", () => {
+    const state = baseState({
+      stock: [card("stock-ace", "diamond", 1, false)],
+      waste: [],
+      foundations: [[card("f1", "spade", 3, true)], [], [], []],
+    })
+
+    const drawResult = applyKlondikeMove(state, { type: "draw" })
+    expect(drawResult.ok).toBe(true)
+    if (!drawResult.ok) {
+      return
+    }
+
+    const next = getKlondikeNextAutoStackMove(drawResult.state)
+
+    expect(next?.from).toEqual({ pile: "waste" })
+    expect(next?.card).toMatchObject({ suit: "diamond", rank: 1 })
+  })
+
+  it("prefers waste before tableau columns", () => {
+    const state = baseState({
+      foundations: [[card("f1", "heart", 1, true)]],
+      waste: [card("w1", "heart", 2, true)],
+      tableau: [[card("t1", "club", 2, true)], [], [], [], [], [], []],
+    })
+
+    const next = getKlondikeNextAutoStackMove(state)
+
+    expect(next?.from).toEqual({ pile: "waste" })
+    expect(next?.card.id).toBe("w1")
+  })
+})
+
+describe("applyKlondikeAutoStack", () => {
+  it("moves all eligible top cards to foundations", () => {
+    const state = baseState({
+      foundations: [
+        [card("f1", "heart", 1, true)],
+        [card("f2", "club", 1, true)],
+      ],
+      tableau: [
+        [card("t1", "heart", 2, true)],
+        [card("t2", "club", 2, true)],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+    })
+
+    const next = applyKlondikeAutoStack(state)
+
+    expect(next.foundations[0]).toHaveLength(2)
+    expect(next.foundations[1]).toHaveLength(2)
+    expect(next.tableau[0]).toHaveLength(0)
+    expect(next.tableau[1]).toHaveLength(0)
+    expect(next.moves).toBeGreaterThan(0)
   })
 })

@@ -5,13 +5,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "word-guess:build-dictionary": "node scripts/word-guess/build-dictionary.mjs"
+    "word-guess:build-dictionary": "node scripts/word-guess/build-dictionary.mjs",
+    "preview:stop": "taskkill /F /IM workerd.exe 2>nul || exit 0",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "preview:serve": "opennextjs-cloudflare build --skipNextBuild && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.19.11",
@@ -40,7 +46,7 @@
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "^20",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

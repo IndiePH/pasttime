@@ -2,6 +2,7 @@ export type { GameDefinition, GameIconId, GameStatus } from "./types"
 export {
   gamePath,
   getMultiplayerPlayerLimits,
+  isCardGame,
   isMultiplayerGame,
 } from "./types"
 export type { MultiplayerPlayerLimits } from "./types"
@@ -32,6 +33,9 @@ export {
   PLAYING_CARD_BACK_VARIANTS,
   PLAYING_CARD_RANKS,
   PLAYING_CARD_SUITS,
+  PLAYING_CARD_VARIANTS,
+  formatPlayingCardVariantLabel,
+  isPlayingCardVariant,
   playingCardBackSrc,
   playingCardFaceSrc,
   playingCardRankFromValue,

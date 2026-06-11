@@ -19,10 +19,10 @@ const SIDE_INSET = "calc(var(--game-card-w) * 0.35)"
 type KlondikeGameSession = ReturnType<typeof useKlondikeGame>
 
 interface KlondikePlayCardProps {
-  game: KlondikeGameSession
+  session: KlondikeGameSession
 }
 
-export function KlondikePlayCard({ game }: KlondikePlayCardProps) {
+export function KlondikePlayCard({ session }: KlondikePlayCardProps) {
 
   return (
     <Card className="klondike-vars mx-auto overflow-visible text-left">
@@ -40,28 +40,28 @@ export function KlondikePlayCard({ game }: KlondikePlayCardProps) {
         </div>
         <div className="flex flex-wrap items-center gap-2 py-0.5 text-sm landscape:justify-end">
           <Badge variant="outline" className="leading-normal">
-            Moves {game.state.moves}
+            Moves {session.state.moves}
           </Badge>
           <Badge variant="outline" className="leading-normal">
-            {game.state.status === "won" ? "Won" : "Playing"}
+            {session.state.status === "won" ? "Won" : "Playing"}
           </Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-4 px-0 pt-4 pb-2 landscape:space-y-3 landscape:pt-3 landscape:pb-2">
         <GameContentPanel sideInset={SIDE_INSET} className="pb-2.5">
           <KlondikeBoard
-            state={game.state}
-            selection={game.selection}
-            drawOrRecycle={game.drawOrRecycle}
-            autoFoundation={game.autoFoundation}
-            handleTableauCardClick={game.handleTableauCardClick}
-            handleWasteClick={game.handleWasteClick}
-            handleFoundationClick={game.handleFoundationClick}
-            handleEmptyTableauClick={game.handleEmptyTableauClick}
-            moveCards={game.moveCards}
-            selectFrom={game.selectFrom}
-            clearSelection={game.clearSelection}
-            autoComplete={game.autoComplete}
+            state={session.state}
+            selection={session.selection}
+            drawOrRecycle={session.drawOrRecycle}
+            autoFoundation={session.autoFoundation}
+            handleTableauCardClick={session.handleTableauCardClick}
+            handleWasteClick={session.handleWasteClick}
+            handleFoundationClick={session.handleFoundationClick}
+            handleEmptyTableauClick={session.handleEmptyTableauClick}
+            moveCards={session.moveCards}
+            selectFrom={session.selectFrom}
+            clearSelection={session.clearSelection}
+            foundationFly={session.foundationFly}
           />
         </GameContentPanel>
 
@@ -74,16 +74,16 @@ export function KlondikePlayCard({ game }: KlondikePlayCardProps) {
             role="status"
             aria-live="polite"
           >
-            {game.feedback ?? "\u00A0"}
+            {session.feedback ?? "\u00A0"}
           </p>
 
           <Button
             type="button"
             variant="outline"
-            onClick={game.clearSelection}
-            className={cn(!game.selection && "invisible pointer-events-none")}
-            tabIndex={game.selection ? 0 : -1}
-            aria-hidden={!game.selection}
+            onClick={session.clearSelection}
+            className={cn(!session.selection && "invisible pointer-events-none")}
+            tabIndex={session.selection ? 0 : -1}
+            aria-hidden={!session.selection}
           >
             Clear selection
           </Button>

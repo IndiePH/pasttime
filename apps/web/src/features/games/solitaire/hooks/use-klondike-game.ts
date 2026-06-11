@@ -6,13 +6,18 @@ import {
   applyKlondikeMove,
   createKlondikeGame,
   getKlondikeAutoFoundationMove,
+  getKlondikeNextAutoFoundationMove,
+  getKlondikeNextAutoFoundationMoveBatch,
+  isKlondikeAutoCompleteReady,
   type KlondikeMove,
   type KlondikePileRef,
   type KlondikeState,
   type KlondikeTableauIndex,
 } from "@pasttime/domain/games/solitaire"
 import { useStorage } from "@/infrastructure/storage"
-import { useKlondikeAutoComplete } from "@/features/games/solitaire/hooks/use-klondike-auto-complete"
+import { useKlondikeFoundationFly } from "@/features/games/solitaire/hooks/use-klondike-foundation-fly"
+import { useSolitairePlayPreferencesContext } from "@/features/games/solitaire/context/solitaire-play-preferences-context"
+import { waitForNextPaint } from "@/features/games/solitaire/lib/klondike-pile-geometry"
 
 export interface KlondikeSelection {
   from: KlondikePileRef
@@ -20,6 +25,8 @@ export interface KlondikeSelection {
 }
 
 const STORAGE_KEY = "solitaire:klondike:session"
+
+type FoundationFlyQueueMode = "auto-stack" | "auto-complete" | null
 
 function isKlondikeState(value: unknown): value is KlondikeState {
   if (!value || typeof value !== "object") {
@@ -54,33 +61,52 @@ function isSameSelectionSource(
   return pileKey(a.from) === pileKey(b)
 }
 
-function tryMove(
+function applyUserMove(
   state: KlondikeState,
   move: KlondikeMove,
-): { state: KlondikeState; feedback: string | null } {
+): { state: KlondikeState; feedback: string | null; ok: boolean } {
   const result = applyKlondikeMove(state, move)
   if (!result.ok) {
-    return { state, feedback: null }
+    return { state, feedback: null, ok: false }
   }
 
   if (result.state.status === "won") {
-    return { state: result.state, feedback: "You won!" }
+    return { state: result.state, feedback: "You won!", ok: true }
   }
 
-  return { state: result.state, feedback: null }
+  return { state: result.state, feedback: null, ok: true }
+}
+
+function shouldQueueAutoStack(
+  nextState: KlondikeState,
+  autoStackEnabled: boolean,
+): boolean {
+  return (
+    autoStackEnabled &&
+    nextState.status === "playing" &&
+    !isKlondikeAutoCompleteReady(nextState) &&
+    getKlondikeNextAutoFoundationMove(nextState) !== null
+  )
 }
 
 export function useKlondikeGame() {
   const storage = useStorage()
+  const { autoStackEnabled } = useSolitairePlayPreferencesContext()
   const initialState = React.useMemo(() => {
     const stored = storage.get<unknown>(STORAGE_KEY)
     return isKlondikeState(stored) ? stored : createKlondikeGame()
   }, [storage])
   const [state, setState] = React.useState<KlondikeState>(initialState)
+  const stateRef = React.useRef(state)
+  const foundationFlyModeRef = React.useRef<FoundationFlyQueueMode>(null)
   const [selection, setSelection] = React.useState<KlondikeSelection | null>(
     null,
   )
   const [feedback, setFeedback] = React.useState<string | null>(null)
+
+  React.useLayoutEffect(() => {
+    stateRef.current = state
+  }, [state])
 
   React.useEffect(() => {
     storage.set(STORAGE_KEY, state)
@@ -92,28 +118,124 @@ export function useKlondikeGame() {
     setSelection(null)
   }, [])
 
-  const applyAndUpdate = React.useCallback((move: KlondikeMove) => {
+  const applyMovesOnly = React.useCallback((moves: KlondikeMove[]) => {
+    if (moves.length === 0) {
+      return
+    }
+
     setState((current) => {
-      const next = tryMove(current, move)
-      setFeedback(next.feedback)
-      return next.state
+      let nextState = current
+      let feedback: string | null = null
+
+      for (const move of moves) {
+        const next = applyUserMove(nextState, move)
+        if (!next.ok) {
+          break
+        }
+
+        nextState = next.state
+        if (next.feedback) {
+          feedback = next.feedback
+        }
+      }
+
+      setFeedback(feedback)
+      return nextState
     })
     setSelection(null)
   }, [])
 
-  const handleAutoCompleteFinished = React.useCallback(() => {
-    setFeedback("You won!")
+  const clearFoundationFlyMode = React.useCallback(() => {
+    foundationFlyModeRef.current = null
   }, [])
 
-  const autoComplete = useKlondikeAutoComplete({
+  const handleFoundationFlyFinished = React.useCallback(
+    (finalState: KlondikeState) => {
+      clearFoundationFlyMode()
+      if (finalState.status === "won") {
+        setFeedback("You won!")
+      }
+    },
+    [clearFoundationFlyMode],
+  )
+
+  const foundationFlyQueue = useKlondikeFoundationFly({
     state,
-    isPlaying,
-    applyMove: applyAndUpdate,
-    onComplete: handleAutoCompleteFinished,
+    getNextBatch: getKlondikeNextAutoFoundationMoveBatch,
+    applyMoves: applyMovesOnly,
+    onFinished: handleFoundationFlyFinished,
   })
 
-  const interactionEnabled =
-    isPlaying && !autoComplete.isAutoCompleting
+  const applyAndUpdate = React.useCallback((move: KlondikeMove) => {
+    const next = applyUserMove(stateRef.current, move)
+    if (!next.ok) {
+      return
+    }
+
+    setFeedback(next.feedback)
+    setState(next.state)
+    setSelection(null)
+  }, [])
+
+  React.useEffect(() => {
+    if (
+      !isPlaying ||
+      foundationFlyQueue.isActive ||
+      foundationFlyQueue.flySessions.length > 0
+    ) {
+      return
+    }
+
+    const autoCompleteReady = isKlondikeAutoCompleteReady(state)
+    const shouldAutoStack = shouldQueueAutoStack(state, autoStackEnabled)
+
+    if (!autoCompleteReady && !shouldAutoStack) {
+      return
+    }
+
+    foundationFlyModeRef.current = autoCompleteReady
+      ? "auto-complete"
+      : "auto-stack"
+
+    void waitForNextPaint().then(() => {
+      foundationFlyQueue.startQueue()
+    })
+  }, [
+    autoStackEnabled,
+    foundationFlyQueue.flySessions.length,
+    foundationFlyQueue.isActive,
+    foundationFlyQueue.startQueue,
+    isPlaying,
+    state,
+  ])
+
+  React.useEffect(() => {
+    if (foundationFlyModeRef.current !== "auto-complete") {
+      return
+    }
+
+    if (state.stock.length > 0) {
+      foundationFlyQueue.cancelQueue()
+      clearFoundationFlyMode()
+    }
+  }, [
+    clearFoundationFlyMode,
+    foundationFlyQueue.cancelQueue,
+    state.stock.length,
+  ])
+
+  const foundationFlyActive = foundationFlyQueue.isActive
+
+  const foundationFly = {
+    isAutoCompleting: foundationFlyActive,
+    flySessions: foundationFlyQueue.flySessions,
+    hiddenCardIds: foundationFlyQueue.hiddenCardIds,
+    flyDurationMs: foundationFlyQueue.flyDurationMs,
+    handleFlyComplete: foundationFlyQueue.handleFlyComplete,
+    handleFlyMeasureFailed: foundationFlyQueue.handleFlyMeasureFailed,
+  }
+
+  const interactionEnabled = isPlaying && !foundationFlyActive
 
   const drawOrRecycle = React.useCallback(() => {
     if (!interactionEnabled) {
@@ -174,17 +296,18 @@ export function useKlondikeGame() {
         to,
       }
 
-      const result = applyKlondikeMove(state, move)
-      if (!result.ok) {
+      const next = applyUserMove(stateRef.current, move)
+      if (!next.ok) {
         return false
       }
 
-      setState(result.state)
+      setFeedback(next.feedback)
+      setState(next.state)
       setSelection(null)
-      setFeedback(result.state.status === "won" ? "You won!" : null)
+
       return true
     },
-    [interactionEnabled, state],
+    [interactionEnabled],
   )
 
   const attemptMoveTo = React.useCallback(
@@ -278,10 +401,12 @@ export function useKlondikeGame() {
   )
 
   const newGame = React.useCallback(() => {
+    foundationFlyQueue.cancelQueue()
+    clearFoundationFlyMode()
     setState(createKlondikeGame())
     setSelection(null)
     setFeedback(null)
-  }, [])
+  }, [clearFoundationFlyMode, foundationFlyQueue.cancelQueue])
 
   return {
     state,
@@ -298,6 +423,6 @@ export function useKlondikeGame() {
     selectFrom,
     clearSelection,
     newGame,
-    autoComplete,
+    foundationFly,
   }
 }

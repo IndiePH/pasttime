@@ -297,9 +297,9 @@ function getAutoFoundationTargetIndex(
     : null
 }
 
-export function getKlondikeNextAutoCompleteMove(
+function collectKlondikeAutoFoundationCandidates(
   state: KlondikeState,
-): KlondikeAutoCompleteMove | null {
+): KlondikeAutoCompleteMove[] {
   const candidates: KlondikeAutoCompleteMove[] = []
 
   const wasteMove = getKlondikeAutoFoundationMove(state, { pile: "waste" })
@@ -307,7 +307,12 @@ export function getKlondikeNextAutoCompleteMove(
     const card = state.waste[state.waste.length - 1]
     const foundationIndex = getAutoFoundationTargetIndex(state, { pile: "waste" })
     if (card && foundationIndex !== null) {
-      candidates.push({ move: wasteMove, from: { pile: "waste" }, card, foundationIndex })
+      candidates.push({
+        move: wasteMove,
+        from: { pile: "waste" },
+        card,
+        foundationIndex,
+      })
     }
   }
 
@@ -329,13 +334,73 @@ export function getKlondikeNextAutoCompleteMove(
     }
   }
 
-  if (candidates.length === 0) {
-    return null
+  return candidates
+}
+
+function compareKlondikeAutoFoundationCandidates(
+  left: KlondikeAutoCompleteMove,
+  right: KlondikeAutoCompleteMove,
+): number {
+  const rankDiff = left.card.rank - right.card.rank
+  if (rankDiff !== 0) {
+    return rankDiff
   }
 
-  candidates.sort((left, right) => left.card.rank - right.card.rank)
-  return candidates[0] ?? null
+  if (left.from.pile === "waste" && right.from.pile !== "waste") {
+    return -1
+  }
+
+  if (right.from.pile === "waste" && left.from.pile !== "waste") {
+    return 1
+  }
+
+  if (left.from.pile === "tableau" && right.from.pile === "tableau") {
+    return left.from.index - right.from.index
+  }
+
+  return 0
 }
+
+/** One move per foundation pile — parallel across suits, sequential by rank. */
+export function getKlondikeNextAutoFoundationMoveBatch(
+  state: KlondikeState,
+): KlondikeAutoCompleteMove[] {
+  const candidates = collectKlondikeAutoFoundationCandidates(state)
+  if (candidates.length === 0) {
+    return []
+  }
+
+  const byFoundation = new Map<
+    KlondikeFoundationIndex,
+    KlondikeAutoCompleteMove
+  >()
+
+  for (const candidate of candidates) {
+    const existing = byFoundation.get(candidate.foundationIndex)
+    if (
+      !existing ||
+      compareKlondikeAutoFoundationCandidates(candidate, existing) < 0
+    ) {
+      byFoundation.set(candidate.foundationIndex, candidate)
+    }
+  }
+
+  const batch = [...byFoundation.values()]
+  batch.sort(compareKlondikeAutoFoundationCandidates)
+  return batch
+}
+
+export function getKlondikeNextAutoFoundationMove(
+  state: KlondikeState,
+): KlondikeAutoCompleteMove | null {
+  return getKlondikeNextAutoFoundationMoveBatch(state)[0] ?? null
+}
+
+/** @deprecated Use getKlondikeNextAutoFoundationMove */
+export const getKlondikeNextAutoStackMove = getKlondikeNextAutoFoundationMove
+
+/** @deprecated Use getKlondikeNextAutoFoundationMove */
+export const getKlondikeNextAutoCompleteMove = getKlondikeNextAutoFoundationMove
 
 export function getKlondikeAutoFoundationMove(
   state: KlondikeState,
@@ -364,6 +429,34 @@ export function getKlondikeAutoFoundationMove(
   }
 
   return { type: "auto-foundation", from }
+}
+
+export function applyKlondikeAutoStack(state: KlondikeState): KlondikeState {
+  if (state.status === "won") {
+    return state
+  }
+
+  let current = state
+  let changed = true
+
+  while (changed && current.status !== "won") {
+    changed = false
+
+    const batch = getKlondikeNextAutoFoundationMoveBatch(current)
+    if (batch.length === 0) {
+      continue
+    }
+
+    for (const next of batch) {
+      const result = applyKlondikeMove(current, next.move)
+      if (result.ok) {
+        current = result.state
+        changed = true
+      }
+    }
+  }
+
+  return current
 }
 
 export function isValidKlondikeTableauPlacement(

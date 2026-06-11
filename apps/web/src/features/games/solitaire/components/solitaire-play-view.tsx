@@ -20,8 +20,9 @@ import {
   type SolitaireMode,
 } from "@pasttime/domain/games/solitaire"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
+import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
-import { GameSessionHeader } from "@/features/games/components/game-session-header"
+import { SolitairePlayPreferencesProvider } from "@/features/games/solitaire/context/solitaire-play-preferences-context"
 import { KlondikePlayCard } from "@/features/games/solitaire/components/klondike-play-card"
 import { useKlondikeGame } from "@/features/games/solitaire/hooks/use-klondike-game"
 import { solitaireSearchParams } from "@/features/games/solitaire/search-params"
@@ -31,7 +32,7 @@ interface SolitairePlayViewProps {
   modeLabel: string
 }
 
-function KlondikePlaySection({
+function KlondikePlayInner({
   game,
   mode,
   modeLabel,
@@ -43,31 +44,47 @@ function KlondikePlaySection({
   const klondike = useKlondikeGame()
 
   return (
-    <>
-      <GameSessionHeader
-        game={game}
-        subtitle={`${formatSolitaireModeLabel(mode)} · ${modeLabel}`}
-        density="compact"
-      />
-      <div className="mt-4 w-fit max-w-full landscape:mt-3">
-        <KlondikePlayCard game={klondike} />
-      </div>
-      <GamePlayFooterActions>
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={klondike.newGame}
-        >
-          New game
-        </Button>
-        <Button variant="outline" className="w-full" asChild>
-          <PlatformLink href={solitaireLaunchPath(mode)}>
-            Back to launch options
-          </PlatformLink>
-        </Button>
-      </GamePlayFooterActions>
-    </>
+    <GamePlaySection
+      game={game}
+      subtitle={`${formatSolitaireModeLabel(mode)} · ${modeLabel}`}
+      headerDensity="compact"
+      contentLayout="board"
+      footer={
+        <GamePlayFooterActions>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={klondike.newGame}
+          >
+            New game
+          </Button>
+          <Button variant="outline" className="w-full" asChild>
+            <PlatformLink href={solitaireLaunchPath(mode)}>
+              Back to launch options
+            </PlatformLink>
+          </Button>
+        </GamePlayFooterActions>
+      }
+    >
+      <KlondikePlayCard session={klondike} />
+    </GamePlaySection>
+  )
+}
+
+function KlondikePlaySection({
+  game,
+  mode,
+  modeLabel,
+}: {
+  game: GameDefinition
+  mode: SolitaireMode
+  modeLabel: string
+}) {
+  return (
+    <SolitairePlayPreferencesProvider>
+      <KlondikePlayInner game={game} mode={mode} modeLabel={modeLabel} />
+    </SolitairePlayPreferencesProvider>
   )
 }
 
@@ -82,12 +99,20 @@ export function SolitairePlayView({ game, modeLabel }: SolitairePlayViewProps) {
       {isBoardLayout ? (
         <KlondikePlaySection game={game} mode={mode} modeLabel={modeLabel} />
       ) : (
-        <>
-          <GameSessionHeader
-            game={game}
-            subtitle={`${formatSolitaireModeLabel(mode)} · ${modeLabel}`}
-          />
-          <Card className="mt-8 w-full text-left">
+        <GamePlaySection
+          game={game}
+          subtitle={`${formatSolitaireModeLabel(mode)} · ${modeLabel}`}
+          footer={
+            <GamePlayFooterActions>
+              <Button variant="outline" className="w-full" asChild>
+                <PlatformLink href={solitaireLaunchPath(mode)}>
+                  Back to launch options
+                </PlatformLink>
+              </Button>
+            </GamePlayFooterActions>
+          }
+        >
+          <Card className="w-full text-left">
             <CardHeader>
               <CardTitle>{formatSolitaireModeLabel(mode)}</CardTitle>
               <CardDescription>{tagline}</CardDescription>
@@ -98,14 +123,7 @@ export function SolitairePlayView({ game, modeLabel }: SolitairePlayViewProps) {
               </div>
             </CardContent>
           </Card>
-          <GamePlayFooterActions>
-            <Button variant="outline" className="w-full" asChild>
-              <PlatformLink href={solitaireLaunchPath(mode)}>
-                Back to launch options
-              </PlatformLink>
-            </Button>
-          </GamePlayFooterActions>
-        </>
+        </GamePlaySection>
       )}
     </GamePlayShell>
   )

@@ -53,6 +53,8 @@ pnpm-debug.log*
 # local env files
 .env*.local
 .env
+.dev.vars*
+!.dev.vars.example
 
 # vercel
 .vercel

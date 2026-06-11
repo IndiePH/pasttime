@@ -120,12 +120,15 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
+const fallbackThemeContext: ThemeContextValue = {
+  theme: "system",
+  setTheme: () => {},
+  resolvedTheme: "light",
+}
+
 function useTheme(): ThemeContextValue {
   const ctx = React.useContext(ThemeContext)
-  if (!ctx) {
-    throw new Error("useTheme must be used within ThemeProvider")
-  }
-  return ctx
+  return ctx ?? fallbackThemeContext
 }
 
 export { ThemeProvider, useTheme }

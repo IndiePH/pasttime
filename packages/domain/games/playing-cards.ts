@@ -3,6 +3,22 @@ export type PlayingCardVariant = "minimal"
 
 export const DEFAULT_PLAYING_CARD_VARIANT: PlayingCardVariant = "minimal"
 
+export const PLAYING_CARD_VARIANTS: readonly PlayingCardVariant[] = [
+  "minimal",
+] as const
+
+export function isPlayingCardVariant(
+  value: string,
+): value is PlayingCardVariant {
+  return (PLAYING_CARD_VARIANTS as readonly string[]).includes(value)
+}
+
+export function formatPlayingCardVariantLabel(
+  variant: PlayingCardVariant,
+): string {
+  return variant.charAt(0).toUpperCase() + variant.slice(1)
+}
+
 /** Suit folder names (singular). */
 export type PlayingCardSuit = "club" | "diamond" | "heart" | "spade"
 

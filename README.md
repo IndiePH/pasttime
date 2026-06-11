@@ -4,7 +4,7 @@ A games hub — catalog first, individual games as plugins. Available on **web**
 
 ## Prerequisites
 
-- Node.js 20 LTS (`nvm use` reads `.nvmrc`)
+- Node.js 24 LTS (`nvm use` reads `.nvmrc`)
 - npm 10+
 
 ## Quick start (web)

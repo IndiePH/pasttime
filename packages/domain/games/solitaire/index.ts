@@ -10,11 +10,15 @@ export type { SolitaireMode, SolitaireModeInfo } from "./modes"
 export { solitaireLaunchPath, solitairePlayPath } from "./paths"
 export {
   applyKlondikeMove,
+  applyKlondikeAutoStack,
   canApplyKlondikeMove,
   canPlaceOnKlondikeTableau,
   createKlondikeGame,
   getKlondikeAutoFoundationMove,
   getKlondikeNextAutoCompleteMove,
+  getKlondikeNextAutoFoundationMove,
+  getKlondikeNextAutoFoundationMoveBatch,
+  getKlondikeNextAutoStackMove,
   isKlondikeAutoCompleteReady,
   isValidKlondikeFoundationPlacement,
   isValidKlondikeTableauPlacement,

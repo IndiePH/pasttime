@@ -23,7 +23,7 @@ import {
 } from "@pasttime/domain/games/word-guess"
 import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
-import { GameSessionHeader } from "@/features/games/components/game-session-header"
+import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { WordGuessBoard } from "@/features/games/word-guess/components/word-guess-board"
 import { WordGuessKeyboard } from "@/features/games/word-guess/components/word-guess-keyboard"
 import { useWordGuessGame } from "@/features/games/word-guess/hooks/use-word-guess-game"
@@ -35,15 +35,11 @@ interface WordGuessPlayViewProps {
 }
 
 interface WordGuessPlayCardProps {
-  game: GameDefinition
-  modeLabel: string
   wordLength: WordGuessLength
   roundMode: WordGuessRoundMode
 }
 
 function WordGuessPlayCard({
-  game,
-  modeLabel,
   wordLength,
   roundMode,
   session,
@@ -71,60 +67,54 @@ function WordGuessPlayCard({
     invalidWordShakeCount > 0 && isPlaying ? attemptsUsed : null
 
   return (
-    <>
-      <GameSessionHeader
-        game={game}
-        subtitle={`${modeLabel} · ${modeLabelText} · ${formatWordLengthLabel(wordLength)}`}
-      />
-      <Card className="mt-8 w-full text-left">
-        <CardHeader>
-          <CardTitle>Game board</CardTitle>
-          <CardDescription>
-            Guess the hidden word in six tries. Use Enter to submit and
-            Backspace to edit.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-5 py-4">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
-            <Badge variant="outline">
-              Attempt {attemptDisplay} / {round.maxTries}
-            </Badge>
-            <Badge variant="outline">{modeLabelText}</Badge>
-            <Badge variant="outline">{formatWordLengthLabel(wordLength)}</Badge>
-          </div>
+    <Card className="w-full text-left">
+      <CardHeader>
+        <CardTitle>Game board</CardTitle>
+        <CardDescription>
+          Guess the hidden word in six tries. Use Enter to submit and Backspace
+          to edit.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-5 py-4">
+        <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
+          <Badge variant="outline">
+            Attempt {attemptDisplay} / {round.maxTries}
+          </Badge>
+          <Badge variant="outline">{modeLabelText}</Badge>
+          <Badge variant="outline">{formatWordLengthLabel(wordLength)}</Badge>
+        </div>
 
-          <div className="flex justify-center">
-            <WordGuessBoard
-              rows={boardRows}
-              shakeRowIndex={shakeRowIndex}
-              shakeTrigger={invalidWordShakeCount}
-            />
-          </div>
-
-          <p
-            className="min-h-5 text-center text-sm text-muted-foreground"
-            role="status"
-            aria-live="polite"
-          >
-            {feedback ?? "\u00A0"}
-          </p>
-
-          {round.status === "lost" ? (
-            <p className="text-center text-sm text-muted-foreground">
-              Answer: <strong>{round.answer}</strong>
-            </p>
-          ) : null}
-
-          <WordGuessKeyboard
-            keyStates={keyboardStates}
-            disabled={!isPlaying}
-            onLetter={addLetter}
-            onEnter={submitGuess}
-            onBackspace={removeLetter}
+        <div className="flex justify-center">
+          <WordGuessBoard
+            rows={boardRows}
+            shakeRowIndex={shakeRowIndex}
+            shakeTrigger={invalidWordShakeCount}
           />
-        </CardContent>
-      </Card>
-    </>
+        </div>
+
+        <p
+          className="min-h-5 text-center text-sm text-muted-foreground"
+          role="status"
+          aria-live="polite"
+        >
+          {feedback ?? "\u00A0"}
+        </p>
+
+        {round.status === "lost" ? (
+          <p className="text-center text-sm text-muted-foreground">
+            Answer: <strong>{round.answer}</strong>
+          </p>
+        ) : null}
+
+        <WordGuessKeyboard
+          keyStates={keyboardStates}
+          disabled={!isPlaying}
+          onLetter={addLetter}
+          onEnter={submitGuess}
+          onBackspace={removeLetter}
+        />
+      </CardContent>
+    </Card>
   )
 }
 
@@ -133,34 +123,42 @@ function WordGuessPlaySession({
   modeLabel,
   wordLength,
   roundMode,
-}: WordGuessPlayCardProps) {
+}: WordGuessPlayCardProps & {
+  game: GameDefinition
+  modeLabel: string
+}) {
   const session = useWordGuessGame({ wordLength, roundMode })
 
+  const modeLabelText = formatWordGuessRoundModeLabel(roundMode)
+
   return (
-    <>
+    <GamePlaySection
+      game={game}
+      subtitle={`${modeLabel} · ${modeLabelText} · ${formatWordLengthLabel(wordLength)}`}
+      footer={
+        <GamePlayFooterActions>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={session.resetRound}
+          >
+            {roundMode === "daily" ? "Restart daily round" : "Play again"}
+          </Button>
+          <Button variant="outline" className="w-full" asChild>
+            <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode)}>
+              Back to setup
+            </PlatformLink>
+          </Button>
+        </GamePlayFooterActions>
+      }
+    >
       <WordGuessPlayCard
-        game={game}
-        modeLabel={modeLabel}
         wordLength={wordLength}
         roundMode={roundMode}
         session={session}
       />
-      <GamePlayFooterActions>
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={session.resetRound}
-        >
-          {roundMode === "daily" ? "Restart daily round" : "Play again"}
-        </Button>
-        <Button variant="outline" className="w-full" asChild>
-          <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode)}>
-            Back to setup
-          </PlatformLink>
-        </Button>
-      </GamePlayFooterActions>
-    </>
+    </GamePlaySection>
   )
 }
 

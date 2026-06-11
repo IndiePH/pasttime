@@ -4,6 +4,7 @@ import * as React from "react"
 import { createPortal } from "react-dom"
 
 import { useTheme } from "@/components/theme-provider"
+import { useSolitairePlayPreferencesContext } from "@/features/games/solitaire/context/solitaire-play-preferences-context"
 import type { KlondikeDragSession } from "@/features/games/solitaire/hooks/use-klondike-drag"
 import { PlayingCard } from "@/features/games/solitaire/components/playing-card"
 
@@ -13,6 +14,7 @@ interface KlondikeDragOverlayProps {
 
 export function KlondikeDragOverlay({ session }: KlondikeDragOverlayProps) {
   const { resolvedTheme } = useTheme()
+  const { cardVariant } = useSolitairePlayPreferencesContext()
   const backVariant = resolvedTheme === "dark" ? "light" : "dark"
   const isMounted = React.useSyncExternalStore(
     () => () => {},
@@ -53,6 +55,7 @@ export function KlondikeDragOverlay({ session }: KlondikeDragOverlayProps) {
         >
           <PlayingCard
             card={card}
+            variant={cardVariant}
             backVariant={backVariant}
             className="aspect-auto h-full w-full shadow-lg"
           />

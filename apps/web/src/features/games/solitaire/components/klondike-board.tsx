@@ -12,6 +12,7 @@ import type {
 import { useTheme } from "@/components/theme-provider"
 import { KlondikeDragOverlay } from "@/features/games/solitaire/components/klondike-drag-overlay"
 import { KlondikeFlyOverlay } from "@/features/games/solitaire/components/klondike-fly-overlay"
+import { useSolitairePlayPreferencesContext } from "@/features/games/solitaire/context/solitaire-play-preferences-context"
 import type { KlondikeSelection } from "@/features/games/solitaire/hooks/use-klondike-game"
 import { useKlondikeDrag } from "@/features/games/solitaire/hooks/use-klondike-drag"
 import { cn } from "@/lib/utils"
@@ -32,10 +33,12 @@ type KlondikeBoardProps = Pick<
   | "moveCards"
   | "selectFrom"
   | "clearSelection"
-  | "autoComplete"
+  | "foundationFly"
 >
 
 const CARD_WIDTH_CLASS = "w-[var(--game-card-w)]"
+const CARD_HEIGHT = "calc(var(--game-card-w) * 4 / 3)"
+const TOP_ROW_MIN_HEIGHT = `calc(${CARD_HEIGHT} + 0.25rem)`
 const STACK_OFFSET_CLASS = "top-[calc(var(--game-stack-step)*var(--stack-index))]"
 const SOLITAIRE_GAME_ID = "solitaire"
 
@@ -73,11 +76,18 @@ export function KlondikeBoard({
   moveCards,
   selectFrom,
   clearSelection,
-  autoComplete,
+  foundationFly,
 }: KlondikeBoardProps) {
   const dragEnabled = isCardDragEnabled(SOLITAIRE_GAME_ID)
-  const { isAutoCompleting, flySession, hiddenCardId, flyDurationMs, handleFlyComplete } =
-    autoComplete
+  const {
+    isAutoCompleting,
+    flySessions,
+    hiddenCardIds,
+    flyDurationMs,
+    handleFlyComplete,
+    handleFlyMeasureFailed,
+  } = foundationFly
+  const { cardVariant } = useSolitairePlayPreferencesContext()
   const { resolvedTheme } = useTheme()
   const backVariant = resolvedTheme === "dark" ? "light" : "dark"
   const stockTop = state.stock[state.stock.length - 1]
@@ -129,13 +139,17 @@ export function KlondikeBoard({
         <div className={cn("space-y-[calc(var(--game-card-w)*0.35)]")}>
           <div
             className="flex items-start justify-between pt-1"
-            style={{ width: "var(--klondike-board-w)" }}
+            style={{
+              width: "var(--klondike-board-w)",
+              minHeight: TOP_ROW_MIN_HEIGHT,
+            }}
           >
             <div className={cn("flex items-start", columnGapClass)}>
               <div className={cn("relative overflow-visible", CARD_WIDTH_CLASS)}>
                 {stockTop ? (
                   <PlayingCard
                     card={stockTop}
+                    variant={cardVariant}
                     backVariant={backVariant}
                     onClick={drawOrRecycle}
                     ariaLabel={
@@ -164,11 +178,12 @@ export function KlondikeBoard({
                   <div data-klondike-pile="waste">
                     <PlayingCard
                       card={wasteTop}
+                      variant={cardVariant}
                       backVariant={backVariant}
                       selected={isSelected(selection, "waste")}
                       dragSourceHidden={
                         isDragSourceHidden(wasteFrom) ||
-                        hiddenCardId === wasteTop.id
+                        hiddenCardIds.has(wasteTop.id)
                       }
                     onClick={() => {
                       if (consumeSuppressedClick()) {
@@ -207,6 +222,7 @@ export function KlondikeBoard({
                     {top ? (
                       <PlayingCard
                         card={top}
+                        variant={cardVariant}
                         backVariant={backVariant}
                         onClick={() =>
                           handleFoundationClick({
@@ -297,12 +313,13 @@ export function KlondikeBoard({
                         >
                           <PlayingCard
                             card={card}
+                            variant={cardVariant}
                             backVariant={backVariant}
                             selected={isInSelectedStack}
                             dragSourceHidden={
                               card.faceUp
                                 ? isDragSourceHidden(tableauFrom, cardIndex) ||
-                                  hiddenCardId === card.id
+                                  hiddenCardIds.has(card.id)
                                 : false
                             }
                             onClick={() => {
@@ -336,9 +353,10 @@ export function KlondikeBoard({
       </div>
       <KlondikeDragOverlay session={dragSession} />
       <KlondikeFlyOverlay
-        session={flySession}
+        sessions={flySessions}
         durationMs={flyDurationMs}
         onComplete={handleFlyComplete}
+        onMeasureFailed={handleFlyMeasureFailed}
       />
     </>
   )

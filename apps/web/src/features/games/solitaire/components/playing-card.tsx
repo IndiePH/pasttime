@@ -7,6 +7,7 @@ import {
   playingCardFaceSrc,
   playingCardRankFromValue,
   type PlayingCardBackVariant,
+  type PlayingCardVariant,
 } from "@pasttime/domain/games"
 import type { KlondikeCard } from "@pasttime/domain/games/solitaire"
 
@@ -16,6 +17,7 @@ const DOUBLE_CLICK_MS = 300
 
 interface PlayingCardProps {
   card?: KlondikeCard | null
+  variant?: PlayingCardVariant
   backVariant?: PlayingCardBackVariant
   selected?: boolean
   className?: string
@@ -28,6 +30,7 @@ interface PlayingCardProps {
 
 export function PlayingCard({
   card,
+  variant,
   backVariant = "dark",
   selected = false,
   className,
@@ -42,10 +45,11 @@ export function PlayingCard({
   const src = card
     ? card.faceUp
       ? playingCardFaceSrc({
+          variant,
           suit: card.suit,
           rank: playingCardRankFromValue(card.rank),
         })
-      : playingCardBackSrc({ back: backVariant })
+      : playingCardBackSrc({ variant, back: backVariant })
     : null
 
   if (!src) {
@@ -115,7 +119,7 @@ export function CardSlot({
       onClick={onClick}
       aria-label={ariaLabel}
       className={cn(
-        "aspect-[3/4] w-full rounded-md border border-dashed border-border/70 bg-muted/20",
+        "block aspect-[3/4] w-full rounded-md border border-dashed border-border/70 bg-muted/20",
         onClick && "cursor-pointer hover:bg-muted/40",
         className,
       )}
