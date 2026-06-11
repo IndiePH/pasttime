@@ -26,6 +26,10 @@
     "server:start": "npm run start -w @pasttime/server",
     "mobile:dev": "npm run dev -w @pasttime/mobile"
   },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "1.0.3",
+    "@rolldown/binding-win32-x64-msvc": "1.0.3"
+  },
   "overrides": {
     "postcss": "8.5.10",
     "react": "19.2.7",
