@@ -12,7 +12,11 @@ export interface KlondikePileRect {
 
 const BOARD_SELECTOR = ".klondike-board"
 
-function getBoardRoot(): Element | null {
+function getBoardRoot(boardRoot?: Element | null): Element | null {
+  if (boardRoot) {
+    return boardRoot
+  }
+
   if (typeof document === "undefined") {
     return null
   }
@@ -33,8 +37,11 @@ function pileSelector(ref: KlondikePileRef): string | null {
   }
 }
 
-function readPileRect(selector: string): KlondikePileRect | null {
-  const board = getBoardRoot()
+function readPileRect(
+  selector: string,
+  boardRoot?: Element | null,
+): KlondikePileRect | null {
+  const board = getBoardRoot(boardRoot)
   const element = board?.querySelector(selector)
   if (!element) {
     return null
@@ -53,19 +60,23 @@ function readPileRect(selector: string): KlondikePileRect | null {
   }
 }
 
-export function getKlondikePileRect(ref: KlondikePileRef): KlondikePileRect | null {
+export function getKlondikePileRect(
+  ref: KlondikePileRef,
+  boardRoot?: Element | null,
+): KlondikePileRect | null {
   const selector = pileSelector(ref)
   if (!selector) {
     return null
   }
 
-  return readPileRect(selector)
+  return readPileRect(selector, boardRoot)
 }
 
 export function getKlondikeFoundationRect(
   index: KlondikeFoundationIndex,
+  boardRoot?: Element | null,
 ): KlondikePileRect | null {
-  return readPileRect(`[data-klondike-pile="foundation-${index}"]`)
+  return readPileRect(`[data-klondike-pile="foundation-${index}"]`, boardRoot)
 }
 
 export function waitForNextPaint(): Promise<void> {

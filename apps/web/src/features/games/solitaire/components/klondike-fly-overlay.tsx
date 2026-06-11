@@ -25,6 +25,7 @@ export interface KlondikeFlySession {
 }
 
 interface KlondikeFlyOverlayProps {
+  boardRoot: Element | null
   sessions: readonly KlondikeFlySession[]
   durationMs: number
   onComplete: () => void
@@ -32,6 +33,7 @@ interface KlondikeFlyOverlayProps {
 }
 
 interface KlondikeFlyingCardProps {
+  boardRoot: Element | null
   session: KlondikeFlySession
   durationMs: number
   cardVariant: PlayingCardVariant
@@ -40,13 +42,21 @@ interface KlondikeFlyingCardProps {
   onMeasureFailed: (cardId: string) => void
 }
 
-const MAX_MEASURE_ATTEMPTS = 8
+const MAX_MEASURE_ATTEMPTS = 12
+const OFFSCREEN_TRANSFORM = "translate3d(-9999px, -9999px, 0)"
 
 function flyTransform(x: number, y: number): string {
   return `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`
 }
 
+function resetFlyNodeStyles(node: HTMLDivElement) {
+  node.style.width = "var(--game-card-w, 4rem)"
+  node.style.height = "calc(var(--game-card-w, 4rem) * 4 / 3)"
+  node.style.transform = OFFSCREEN_TRANSFORM
+}
+
 function KlondikeFlyingCard({
+  boardRoot,
   session,
   durationMs,
   cardVariant,
@@ -69,6 +79,8 @@ function KlondikeFlyingCard({
       return
     }
 
+    resetFlyNodeStyles(node)
+
     if (session.move.type !== "auto-foundation") {
       onMeasureFailedRef.current(session.card.id)
       return
@@ -87,8 +99,8 @@ function KlondikeFlyingCard({
       while (attempt < MAX_MEASURE_ATTEMPTS && !cancelled) {
         await waitForNextPaint()
 
-        const from = getKlondikePileRect(moveFrom)
-        const to = getKlondikeFoundationRect(foundationIndex)
+        const from = getKlondikePileRect(moveFrom, boardRoot)
+        const to = getKlondikeFoundationRect(foundationIndex, boardRoot)
 
         if (!from || !to) {
           attempt += 1
@@ -123,7 +135,11 @@ function KlondikeFlyingCard({
           },
         )
 
-        animation.addEventListener("finish", handleFinish)
+        animation.onfinish = () => {
+          if (!cancelled) {
+            onCompleteRef.current(cardId)
+          }
+        }
         return
       }
 
@@ -132,32 +148,21 @@ function KlondikeFlyingCard({
       }
     }
 
-    function handleFinish() {
-      if (!cancelled) {
-        onCompleteRef.current(cardId)
-      }
-    }
-
     void runFly()
 
     return () => {
       cancelled = true
       if (animation) {
-        animation.removeEventListener("finish", handleFinish)
+        animation.onfinish = null
         animation.cancel()
       }
     }
-  }, [durationMs, session])
+  }, [boardRoot, durationMs, session])
 
   return (
     <div
       ref={nodeRef}
       className="pointer-events-none fixed left-0 top-0 z-[200] will-change-transform"
-      style={{
-        width: "var(--game-card-w, 4rem)",
-        height: "calc(var(--game-card-w, 4rem) * 4 / 3)",
-        transform: "translate3d(-9999px, -9999px, 0)",
-      }}
       aria-hidden
     >
       <PlayingCard
@@ -171,6 +176,7 @@ function KlondikeFlyingCard({
 }
 
 export function KlondikeFlyOverlay({
+  boardRoot,
   sessions,
   durationMs,
   onComplete,
@@ -235,6 +241,7 @@ export function KlondikeFlyOverlay({
       {sessions.map((session) => (
         <KlondikeFlyingCard
           key={session.card.id}
+          boardRoot={boardRoot}
           session={session}
           durationMs={durationMs}
           cardVariant={cardVariant}
