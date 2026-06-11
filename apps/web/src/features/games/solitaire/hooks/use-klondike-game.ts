@@ -166,6 +166,17 @@ export function useKlondikeGame() {
     onFinished: handleFoundationFlyFinished,
   })
 
+  const {
+    isActive: foundationFlyActive,
+    flySessions: foundationFlyFlySessions,
+    startQueue: startFoundationFlyQueue,
+    cancelQueue: cancelFoundationFlyQueue,
+    hiddenCardIds: foundationFlyHiddenCardIds,
+    flyDurationMs: foundationFlyFlyDurationMs,
+    handleFlyComplete: foundationFlyHandleFlyComplete,
+    handleFlyMeasureFailed: foundationFlyHandleFlyMeasureFailed,
+  } = foundationFlyQueue
+
   const applyAndUpdate = React.useCallback((move: KlondikeMove) => {
     const next = applyUserMove(stateRef.current, move)
     if (!next.ok) {
@@ -180,8 +191,8 @@ export function useKlondikeGame() {
   React.useEffect(() => {
     if (
       !isPlaying ||
-      foundationFlyQueue.isActive ||
-      foundationFlyQueue.flySessions.length > 0
+      foundationFlyActive ||
+      foundationFlyFlySessions.length > 0
     ) {
       return
     }
@@ -198,14 +209,14 @@ export function useKlondikeGame() {
       : "auto-stack"
 
     void waitForNextPaint().then(() => {
-      foundationFlyQueue.startQueue()
+      startFoundationFlyQueue()
     })
   }, [
     autoStackEnabled,
-    foundationFlyQueue.flySessions.length,
-    foundationFlyQueue.isActive,
-    foundationFlyQueue.startQueue,
+    foundationFlyActive,
+    foundationFlyFlySessions.length,
     isPlaying,
+    startFoundationFlyQueue,
     state,
   ])
 
@@ -215,24 +226,22 @@ export function useKlondikeGame() {
     }
 
     if (state.stock.length > 0) {
-      foundationFlyQueue.cancelQueue()
+      cancelFoundationFlyQueue()
       clearFoundationFlyMode()
     }
   }, [
+    cancelFoundationFlyQueue,
     clearFoundationFlyMode,
-    foundationFlyQueue.cancelQueue,
     state.stock.length,
   ])
 
-  const foundationFlyActive = foundationFlyQueue.isActive
-
   const foundationFly = {
     isAutoCompleting: foundationFlyActive,
-    flySessions: foundationFlyQueue.flySessions,
-    hiddenCardIds: foundationFlyQueue.hiddenCardIds,
-    flyDurationMs: foundationFlyQueue.flyDurationMs,
-    handleFlyComplete: foundationFlyQueue.handleFlyComplete,
-    handleFlyMeasureFailed: foundationFlyQueue.handleFlyMeasureFailed,
+    flySessions: foundationFlyFlySessions,
+    hiddenCardIds: foundationFlyHiddenCardIds,
+    flyDurationMs: foundationFlyFlyDurationMs,
+    handleFlyComplete: foundationFlyHandleFlyComplete,
+    handleFlyMeasureFailed: foundationFlyHandleFlyMeasureFailed,
   }
 
   const interactionEnabled = isPlaying && !foundationFlyActive
@@ -401,12 +410,12 @@ export function useKlondikeGame() {
   )
 
   const newGame = React.useCallback(() => {
-    foundationFlyQueue.cancelQueue()
+    cancelFoundationFlyQueue()
     clearFoundationFlyMode()
     setState(createKlondikeGame())
     setSelection(null)
     setFeedback(null)
-  }, [clearFoundationFlyMode, foundationFlyQueue.cancelQueue])
+  }, [cancelFoundationFlyQueue, clearFoundationFlyMode])
 
   return {
     state,

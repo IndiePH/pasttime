@@ -137,14 +137,16 @@ function WordGuessPlaySession({
       subtitle={`${modeLabel} · ${modeLabelText} · ${formatWordLengthLabel(wordLength)}`}
       footer={
         <GamePlayFooterActions>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={session.resetRound}
-          >
-            {roundMode === "daily" ? "Restart daily round" : "Play again"}
-          </Button>
+          {roundMode !== "daily" && (
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={session.resetRound}
+            >
+              Play again
+            </Button>
+          )}
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode)}>
               Back to setup

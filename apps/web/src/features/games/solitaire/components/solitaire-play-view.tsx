@@ -61,7 +61,7 @@ function KlondikePlayInner({
           </Button>
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={solitaireLaunchPath(mode)}>
-              Back to launch options
+              Back to setup
             </PlatformLink>
           </Button>
         </GamePlayFooterActions>
@@ -106,7 +106,7 @@ export function SolitairePlayView({ game, modeLabel }: SolitairePlayViewProps) {
             <GamePlayFooterActions>
               <Button variant="outline" className="w-full" asChild>
                 <PlatformLink href={solitaireLaunchPath(mode)}>
-                  Back to launch options
+                  Back to setup
                 </PlatformLink>
               </Button>
             </GamePlayFooterActions>

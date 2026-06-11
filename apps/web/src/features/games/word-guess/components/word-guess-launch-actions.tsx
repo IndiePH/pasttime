@@ -67,6 +67,13 @@ export function WordGuessLaunchActions({ game }: WordGuessLaunchActionsProps) {
             {playLabel}
           </PlatformLink>
         </Button>
+        {isDailyCompleted ? (
+          <Button type="button" variant="secondary" className="w-full" asChild>
+            <PlatformLink href={wordGuessPlayPath(wordLength, "daily")}>
+              View today&apos;s results
+            </PlatformLink>
+          </Button>
+        ) : null}
         <Button
           type="button"
           variant="secondary"

@@ -86,6 +86,8 @@ export function useMoveQueue<TSession>({
     setSession(next)
   }, [])
 
+  const scheduleNextRef = React.useRef<(() => void) | null>(null)
+
   const scheduleNext = React.useCallback(() => {
     clearGapTimeout()
     pendingRef.current = null
@@ -98,12 +100,17 @@ export function useMoveQueue<TSession>({
 
     if (prefersReducedMotion()) {
       onApply(next)
-      gapTimeoutRef.current = window.setTimeout(scheduleNext, REDUCED_MOTION_GAP_MS)
+      gapTimeoutRef.current = window.setTimeout(
+        () => scheduleNextRef.current?.(),
+        REDUCED_MOTION_GAP_MS,
+      )
       return
     }
 
     beginSession(next)
   }, [beginSession, clearGapTimeout, finishQueue, getNext, onApply])
+
+  scheduleNextRef.current = scheduleNext
 
   const handleComplete = React.useCallback(() => {
     const pending = pendingRef.current
