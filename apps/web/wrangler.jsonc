@@ -1,7 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
-	"name": "pasttime-web",
+	"name": "pasttime",
 	"compatibility_date": "2026-04-15",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	"assets": {
@@ -13,7 +13,7 @@
 			// Self-reference service binding; service name must match worker name
 			// https://opennext.js.org/cloudflare/caching
 			"binding": "WORKER_SELF_REFERENCE",
-			"service": "pasttime-web"
+			"service": "pasttime"
 		}
 	],
 	"images": {
