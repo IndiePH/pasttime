@@ -22,16 +22,27 @@ function card(
   return { id, suit, rank, faceUp }
 }
 
-function baseState(overrides: Partial<KlondikeState> = {}): KlondikeState {
+type TestOverrides = Omit<Partial<KlondikeState>, "foundations"> & {
+  foundations?: KlondikeCard[][]
+}
+
+function baseState(overrides: TestOverrides = {}): KlondikeState {
+  const { foundations: fo, ...rest } = overrides
+  const foundations: [
+    KlondikeCard[],
+    KlondikeCard[],
+    KlondikeCard[],
+    KlondikeCard[],
+  ] = [fo?.[0] ?? [], fo?.[1] ?? [], fo?.[2] ?? [], fo?.[3] ?? []]
   return {
     stock: [],
     waste: [],
-    foundations: [[], [], [], []],
+    foundations,
     tableau: [[], [], [], [], [], [], []],
     status: "playing",
     moves: 0,
     seed: 42,
-    ...overrides,
+    ...(rest as Partial<KlondikeState>),
   }
 }
 
