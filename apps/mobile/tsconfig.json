@@ -1,0 +1,14 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@/*": ["./*"],
+      "@pasttime/domain": ["../../packages/domain/index.ts"],
+      "@pasttime/domain/*": ["../../packages/domain/*"],
+      "@pasttime/storage": ["../../packages/storage/index.ts"],
+      "@pasttime/api-client": ["../../packages/api-client/index.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+}

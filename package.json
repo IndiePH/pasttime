@@ -1,0 +1,43 @@
+{
+  "name": "pasttime",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @pasttime/web",
+    "build": "npm run build -w @pasttime/web",
+    "start": "npm run start -w @pasttime/web",
+    "lint": "npm run lint -w @pasttime/web",
+    "format": "npm run format -w @pasttime/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "word-guess:build-dictionary": "npm run word-guess:build-dictionary -w @pasttime/web",
+    "desktop:dev": "npm run dev -w @pasttime/desktop",
+    "desktop:build": "npm run build -w @pasttime/desktop",
+    "desktop:dist": "npm run dist -w @pasttime/desktop",
+    "server:dev": "npm run dev -w @pasttime/server",
+    "server:build": "npm run build -w @pasttime/server",
+    "server:start": "npm run start -w @pasttime/server",
+    "mobile:dev": "npm run dev -w @pasttime/mobile"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "1.0.3",
+    "@rolldown/binding-win32-x64-msvc": "1.0.3",
+    "@tailwindcss/oxide-linux-x64-gnu": "4.3.0",
+    "@tailwindcss/oxide-win32-x64-msvc": "4.3.0"
+  },
+  "overrides": {
+    "postcss": "8.5.10",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "react-native": "0.85.3",
+    "expo": "~56.0.11",
+    "expo-status-bar": "~56.0.4"
+  }
+}

@@ -1,0 +1,87 @@
+import dynamic from "next/dynamic"
+import type { ComponentType } from "react"
+
+import type { GameDefinition } from "@pasttime/domain/games"
+import {
+  GAME_HOW_TO_PLAY_CONTENT,
+  type GameHowToPlayContentProps,
+} from "@/features/games/game-how-to-play-registry"
+import {
+  GAME_SETTINGS_WIDGETS,
+  type GameSettingsWidgetProps,
+} from "@/features/games/game-settings-registry"
+import type { GamePlayLayout } from "@/features/games/components/game-play-shell"
+import { solitaireSearchParamsCache } from "@/features/games/solitaire/search-params"
+import { wordGuessSearchParamsCache } from "@/features/games/word-guess/search-params"
+
+type SearchParamsInput = Promise<
+  Record<string, string | string[] | undefined>
+>
+
+type GameLaunchViewProps = {
+  game: GameDefinition
+}
+
+type GamePlayViewProps = {
+  game: GameDefinition
+  modeLabel: string
+}
+
+export type GameModule = {
+  LaunchView?: ComponentType<GameLaunchViewProps>
+  PlayView?: ComponentType<GamePlayViewProps>
+  SettingsWidget?: ComponentType<GameSettingsWidgetProps>
+  HowToPlayContent?: ComponentType<GameHowToPlayContentProps>
+  /** Expansive play layout for board-style games (cards, grids, etc.). */
+  playLayout?: GamePlayLayout
+  parseSearchParams?: (searchParams: SearchParamsInput) => Promise<void>
+}
+
+const SolitaireLaunchView = dynamic(() =>
+  import("@/features/games/solitaire/components/solitaire-launch-view").then(
+    (m) => ({ default: m.SolitaireLaunchView }),
+  ),
+)
+
+const SolitairePlayView = dynamic(() =>
+  import("@/features/games/solitaire/components/solitaire-play-view").then(
+    (m) => ({ default: m.SolitairePlayView }),
+  ),
+)
+
+const WordGuessLaunchView = dynamic(() =>
+  import("@/features/games/word-guess/components/word-guess-launch-view").then(
+    (m) => ({ default: m.WordGuessLaunchView }),
+  ),
+)
+
+const WordGuessPlayView = dynamic(() =>
+  import("@/features/games/word-guess/components/word-guess-play-view").then(
+    (m) => ({ default: m.WordGuessPlayView }),
+  ),
+)
+
+export const GAME_MODULES: Partial<Record<string, GameModule>> = {
+  solitaire: {
+    LaunchView: SolitaireLaunchView,
+    PlayView: SolitairePlayView,
+    SettingsWidget: GAME_SETTINGS_WIDGETS.solitaire,
+    playLayout: "board",
+    parseSearchParams: async (searchParams) => {
+      await solitaireSearchParamsCache.parse(searchParams)
+    },
+  },
+  "word-guess": {
+    LaunchView: WordGuessLaunchView,
+    PlayView: WordGuessPlayView,
+    SettingsWidget: GAME_SETTINGS_WIDGETS["word-guess"],
+    HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT["word-guess"],
+    parseSearchParams: async (searchParams) => {
+      await wordGuessSearchParamsCache.parse(searchParams)
+    },
+  },
+}
+
+export function getGameModule(gameId: string): GameModule | undefined {
+  return GAME_MODULES[gameId]
+}

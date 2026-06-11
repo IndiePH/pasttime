@@ -1,0 +1,19 @@
+{
+  "name": "@pasttime/api-client",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "vitest": "^4.1.8"
+  }
+}
