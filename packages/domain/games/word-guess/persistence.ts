@@ -1,5 +1,6 @@
 import { getDailySeed } from "../../daily"
 
+export type { WordGuessLength } from "./settings"
 import type { WordGuessLength, WordGuessRoundMode } from "./settings"
 import type { WordGuessRoundState } from "./types"
 
