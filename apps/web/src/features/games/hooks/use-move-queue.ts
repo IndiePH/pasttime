@@ -110,7 +110,9 @@ export function useMoveQueue<TSession>({
     beginSession(next)
   }, [beginSession, clearGapTimeout, finishQueue, getNext, onApply])
 
-  scheduleNextRef.current = scheduleNext
+  React.useLayoutEffect(() => {
+    scheduleNextRef.current = scheduleNext
+  })
 
   const handleComplete = React.useCallback(() => {
     const pending = pendingRef.current
