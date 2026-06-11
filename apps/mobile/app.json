@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Pasttime",
+    "slug": "pasttime",
+    "version": "0.0.1",
+    "scheme": "pasttime",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pasttime.app",
+      "associatedDomains": ["applinks:pasttime.app"]
+    },
+    "android": {
+      "package": "com.pasttime.app",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "pasttime.app",
+              "pathPrefix": "/games"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "apiUrl": "http://localhost:4000",
+      "wsUrl": "ws://localhost:4000/ws"
+    }
+  }
+}

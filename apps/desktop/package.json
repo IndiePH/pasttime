@@ -1,0 +1,48 @@
+{
+  "name": "@pasttime/desktop",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Pasttime desktop app",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "npm run build:main && electron .",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build": "npm run build:main",
+    "dist": "npm run build:main && electron-builder",
+    "typecheck": "tsc -p tsconfig.main.json --noEmit"
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2"
+  },
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5"
+  },
+  "build": {
+    "appId": "com.pasttime.app",
+    "productName": "Pasttime",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "pasttime",
+      "repo": "pasttime"
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.games"
+    },
+    "linux": {
+      "target": ["AppImage"]
+    }
+  }
+}

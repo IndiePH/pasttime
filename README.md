@@ -1,68 +1,86 @@
 # Pasttime
 
-A games hub — catalog first, individual games as plugins.
+A games hub — catalog first, individual games as plugins. Available on **web**, **desktop** (Electron), and **mobile** (Expo).
 
 ## Prerequisites
 
 - Node.js 20 LTS (`nvm use` reads `.nvmrc`)
 - npm 10+
 
-## Quick start
+## Quick start (web)
 
 ```bash
 npm install
+cp .env.example apps/web/.env.local   # optional — multiplayer API
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Multiplayer API (optional)
+
+```bash
+npm run server:dev    # http://localhost:4000
+```
+
+Set `NEXT_PUBLIC_API_URL=http://localhost:4000` in `apps/web/.env.local` for live room sync.
+
+## Monorepo layout
+
+```
+apps/
+├── web/          # Next.js — primary web app (your domain)
+├── desktop/      # Electron — loads web URL in a native window
+├── mobile/       # Expo / React Native
+└── server/       # REST + WebSocket multiplayer API
+packages/
+├── domain/       # Game catalog, rules (no React)
+├── storage/      # Storage adapters (localStorage, AsyncStorage)
+└── api-client/   # Typed REST + WebSocket client
+docs/
+```
+
+Web app layers (`apps/web/src/`):
+
+```
+├── app/              # L5 — routes
+├── components/       # L3 — shared UI
+├── features/         # L4 — hub, games
+├── infrastructure/   # L1 — storage provider
+├── platform/         # Navigation abstractions
+└── lib/              # L0 — utilities
+```
+
 ## Scripts
 
 | Command | Purpose |
 |---------|---------|
-| `npm run dev` | Development server |
-| `npm run build` | Production build |
-| `npm run start` | Production server |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript |
-| `npm run test` | Vitest (unit + hook tests) |
-| `npm run format` | Prettier |
+| `npm run dev` | Web dev server |
+| `npm run build` | Web production build |
+| `npm run start` | Web production server |
+| `npm run lint` | ESLint (web) |
+| `npm run typecheck` | TypeScript (all workspaces) |
+| `npm run test` | Vitest (all workspaces) |
+| `npm run server:dev` | Multiplayer API dev |
+| `npm run desktop:dev` | Electron desktop (web on :3000) |
+| `npm run mobile:dev` | Expo mobile dev server |
+
+## Environment
+
+Copy [`.env.example`](./.env.example). Key variables:
+
+| Variable | App | Purpose |
+|----------|-----|---------|
+| `NEXT_PUBLIC_API_URL` | web | REST API base URL |
+| `NEXT_PUBLIC_WS_URL` | web | WebSocket URL (optional) |
+| `PASTTIME_WEB_URL` | desktop | URL loaded in Electron window |
+| `PORT` | server | API port (default 4000) |
+
+Mobile API URL: `apps/mobile/app.json` → `expo.extra.apiUrl`.
 
 ## CI
 
-On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) runs the same gates as [Quick verify](./docs/QUALITY-CHECKLIST.md#quick-verify-every-pr): `npm ci`, then `lint`, `typecheck`, `test`, and `build`. Node version comes from [`.nvmrc`](./.nvmrc) (aligned with `package.json` `engines`).
-
-### Merge enforcement (GitHub)
-
-CI always reports status on PRs. **Rulesets / branch protection that block merge when checks fail** depend on repo visibility and plan:
-
-| Repo | Plan | Enforced rules on `main` |
-|------|------|---------------------------|
-| Public | Free (personal or org) | Yes — add ruleset: require PR + **Quality gates** status check |
-| Private | Org Free | **No** — rulesets not enforced until org **Team** |
-| Private | Personal Free | **No** — need **Pro** for protected branches |
-| Private | Org Team / personal Pro | Yes — same ruleset setup as public |
-
-Until upgrade or a public repo: merge only after **Quality gates** is green (manual discipline). See [Slice Q1](./docs/QUALITY-CHECKLIST.md#slice-q1--ci-pipeline-).
-
-## Project layout
-
-```
-src/
-├── app/              # L5 — routes
-├── components/       # L3 — shared UI (shadcn + composed)
-├── domain/           # L2 — types, registry (no React)
-├── features/         # L4 — hub, games
-├── infrastructure/   # L1 — storage adapters
-└── lib/              # L0 — utilities (cn)
-docs/
-├── CARD-ASSETS.md       # Playing card SVG layout and paths
-├── DESIGN.md            # Hub visual direction
-├── IMPLEMENTATION.md    # Build slices
-└── QUALITY-CHECKLIST.md # Maintainability, stability, integrity, safety gates
-```
-
-**Phase:** Slice 1 complete — hub catalog at `/`.
+On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) runs: `npm ci`, `lint`, `typecheck`, `test`, `build`.
 
 ## Docs
 

@@ -1,1 +1,0 @@
-export { getDailySeed } from "./seed"
