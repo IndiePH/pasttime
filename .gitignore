@@ -44,6 +44,7 @@ apps/mobile/ios/
 .turbo/
 .kilo/
 .kilocode/
+.clawhub/
 
 # game clue generation cache
 packages/domain/games/crossword/clues.cache.json
@@ -53,6 +54,7 @@ packages/domain/games/shared/dictionary.full.enriched.json
 
 # skills tool artifacts
 skills-lock.json
+/skills/
 
 # misc
 .DS_Store
@@ -85,3 +87,4 @@ next-env.d.ts
 /domains
 capability_index.md
 CLAUDE.md
+AGENTS.md
