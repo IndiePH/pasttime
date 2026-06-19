@@ -1,1 +1,1 @@
-export { getDailySeed } from "./seed"
+export { getDailySeed, hashSeed } from "./seed"
