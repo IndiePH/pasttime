@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-06-19T18:15:17.016Z",
+  "phase": "01",
+  "phase_name": "end-to-end-playable-puzzle",
+  "phase_dir": ".planning/phases/01-end-to-end-playable-puzzle",
+  "plan": 4,
+  "task": 2,
+  "total_tasks": 2,
+  "status": "paused",
+  "completed_tasks": [
+    {"id": 1, "name": "Fix settings.test.ts corpus assertions", "status": "done", "commit": "269b57a"},
+    {"id": 2, "name": "Human verify E2E loop + fix bugs found", "status": "in_progress", "progress": "Bugs fixed (dedup, arrow keys, column layout, placeholder clues). SUMMARY.md not yet written. Executor agent acbdeef811a929aa8 awaiting 'approved'."}
+  ],
+  "remaining_tasks": [
+    {"id": 3, "name": "Write and commit 01-04-SUMMARY.md", "status": "not_started"},
+    {"id": 4, "name": "Update ROADMAP + STATE for plan 01-04 completion", "status": "not_started"},
+    {"id": 5, "name": "Code review gate (gsd-code-review)", "status": "not_started"},
+    {"id": 6, "name": "Phase verification (gsd-verifier)", "status": "not_started"},
+    {"id": 7, "name": "Mark phase 01 complete in ROADMAP/STATE", "status": "not_started"}
+  ],
+  "blockers": [],
+  "human_actions_pending": [
+    {"action": "Confirm E2E loop passes after corpus fix (rebuild reloads automatically in dev server)", "context": "Two corpus bugs fixed since last test: placeholder clues removed, duplicate keys deduped", "blocking": true}
+  ],
+  "decisions": [
+    {"decision": "Merge all 4 corpus files, deduplicate by answer", "rationale": "D-01 from CONTEXT.md", "phase": "01"},
+    {"decision": "Filter placeholder clues matching /^a N-letter word$/i", "rationale": "55 entries from low-quality sources had useless clues", "phase": "01"},
+    {"decision": "Single-column clue layout, scrollable panel", "rationale": "User feedback: 2-col was hard to read, down clues invisible", "phase": "01"},
+    {"decision": "Arrow key nav stops at blocks/edges, does not wrap", "rationale": "User spec: do not proceed to blocked cell", "phase": "01"}
+  ],
+  "uncommitted_files": [],
+  "next_action": "Resume plan 01-04: write 01-04-SUMMARY.md capturing all fixes, commit it, update ROADMAP+STATE, run code review, run verifier, mark phase complete.",
+  "context_notes": "Wave 1 (01-01, 01-02, 01-03) fully merged. Wave 2 (01-04) is at the human-verify checkpoint. All bugs from human testing are fixed and committed. Executor agent still alive but don't resume it — write SUMMARY manually and do post-wave steps inline."
+}
