@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useSyncExternalStore } from "react"
+import { useEffect, useSyncExternalStore, type CSSProperties } from "react"
 import { useQueryState } from "nuqs"
 
 import { Badge } from "@/components/ui/badge"
@@ -124,7 +124,10 @@ function CrosswordPlaySession({
         </GamePlayFooterActions>
       }
     >
-      <Card className="crossword-vars mx-auto overflow-visible text-left">
+      <Card
+        className="crossword-vars mx-auto overflow-visible text-left"
+        style={{ "--crossword-grid-size": gridSize } as CSSProperties}
+      >
         <CardHeader
           className="gap-3 pt-2 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
           style={{ paddingInline: SIDE_INSET }}
@@ -220,8 +223,8 @@ export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
   }
 
   return (
-    <GamePlayShell layout="board">
-      <CrosswordPlayPreferencesProvider>
+    <CrosswordPlayPreferencesProvider>
+      <GamePlayShell layout="board">
         <CrosswordPlaySession
           key={sessionKey}
           game={game}
@@ -229,7 +232,7 @@ export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
           gridSize={gridSize}
           mode={playMode}
         />
-      </CrosswordPlayPreferencesProvider>
-    </GamePlayShell>
+      </GamePlayShell>
+    </CrosswordPlayPreferencesProvider>
   )
 }
