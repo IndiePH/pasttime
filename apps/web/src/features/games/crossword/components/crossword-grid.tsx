@@ -29,6 +29,20 @@ export function CrosswordGrid({
       onCellChange(row, col, e.key.toUpperCase())
     } else if (e.key === "Backspace" || e.key === "Delete") {
       onCellChange(row, col, "")
+    } else if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+      e.preventDefault()
+      const delta: Record<string, [number, number]> = {
+        ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0],
+      }
+      const [dr, dc] = delta[e.key]
+      const nr = row + dr
+      const nc = col + dc
+      if (nr >= 0 && nr < gridSize && nc >= 0 && nc < gridSize && !blockSet.has(`${nr},${nc}`)) {
+        onCellClick(nr, nc)
+        const nextIdx = nr * gridSize + nc
+        const nextCell = (e.currentTarget as HTMLElement).parentElement?.children[nextIdx] as HTMLElement
+        nextCell?.focus()
+      }
     }
   }
 

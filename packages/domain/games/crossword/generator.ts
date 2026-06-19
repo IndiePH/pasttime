@@ -292,7 +292,14 @@ function finalize(
 
   const across: CrosswordClue[] = []
   const down: CrosswordClue[] = []
-  for (const p of placed) {
+  const seenPlaced = new Set<string>()
+  const dedupedPlaced = placed.filter((p) => {
+    const k = `${p.direction},${p.row},${p.col}`
+    if (seenPlaced.has(k)) return false
+    seenPlaced.add(k)
+    return true
+  })
+  for (const p of dedupedPlaced) {
     const number = startNumber.get(`${p.row},${p.col}`)
     if (number === undefined) continue
     const clue: CrosswordClue = {
