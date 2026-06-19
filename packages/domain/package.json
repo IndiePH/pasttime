@@ -13,7 +13,8 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:corpus": "node games/crossword/scripts/build-corpus.mjs"
   },
   "devDependencies": {
     "typescript": "^5",
