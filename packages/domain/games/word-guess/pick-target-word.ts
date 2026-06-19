@@ -1,4 +1,4 @@
-import { getDailySeed } from "../../daily"
+import { getDailySeed, hashSeed } from "../../daily"
 
 import { getWordGuessDictionaryByLength } from "./dictionary"
 import type { WordGuessLength, WordGuessRoundMode } from "./settings"
@@ -12,14 +12,6 @@ export function getWordGuessRoundSeed(
   }
 
   return null
-}
-
-function hashSeed(seed: number): number {
-  let value = seed | 0
-  value = Math.imul(value ^ (value >>> 16), 0x45d9f3b)
-  value = Math.imul(value ^ (value >>> 16), 0x45d9f3b)
-  value ^= value >>> 16
-  return value >>> 0
 }
 
 export function pickWordGuessAnswer(

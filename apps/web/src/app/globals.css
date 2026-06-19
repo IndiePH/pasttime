@@ -181,6 +181,35 @@
   width: min(var(--klondike-panel-w), calc(100vw - 1.5rem));
 }
 
+/* ── Word Guess board sizing ───────────────────────────────────────── */
+
+.word-guess-vars {
+  /* No specific sizing needed, inherits from board layout */
+}
+
+/* ── Crossword board sizing ────────────────────────────────────────── */
+
+.crossword-vars {
+  --crossword-cell-w: clamp(1.75rem, 3.2vw, 2.75rem);
+}
+
+.crossword-grid {
+  width: fit-content;
+}
+
+.crossword-cell {
+  width: var(--crossword-cell-w);
+  height: var(--crossword-cell-w);
+}
+
+@media (orientation: landscape) and (min-height: 320px) {
+  .crossword-vars {
+    --crossword-cell-w: clamp(2rem, 3.8vw, 3.25rem);
+  }
+}
+
+/* ── Landscape board overrides (shared) ──────────────────────────── */
+
 @media (orientation: landscape) and (min-height: 320px) {
   .game-play-board {
     max-width: none;

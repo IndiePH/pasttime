@@ -21,9 +21,10 @@ import {
   type WordGuessLength,
   type WordGuessRoundMode,
 } from "@pasttime/domain/games/word-guess"
-import { GamePageShell } from "@/features/games/components/game-page-shell"
+import { GameContentPanel } from "@/features/games/components/game-content-panel"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlaySection } from "@/features/games/components/game-play-section"
+import { GamePlayShell } from "@/features/games/components/game-play-shell"
 import { WordGuessBoard } from "@/features/games/word-guess/components/word-guess-board"
 import { WordGuessKeyboard } from "@/features/games/word-guess/components/word-guess-keyboard"
 import { useWordGuessGame } from "@/features/games/word-guess/hooks/use-word-guess-game"
@@ -38,6 +39,8 @@ interface WordGuessPlayCardProps {
   wordLength: WordGuessLength
   roundMode: WordGuessRoundMode
 }
+
+const SIDE_INSET = "0.75rem"
 
 function WordGuessPlayCard({
   wordLength,
@@ -67,52 +70,69 @@ function WordGuessPlayCard({
   const shakeTrigger = invalidWordShake?.trigger ?? 0
 
   return (
-    <Card className="w-full text-left">
-      <CardHeader>
-        <CardTitle>Game board</CardTitle>
-        <CardDescription>
-          Guess the hidden word in six tries. Use Enter to submit and Backspace
-          to edit.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-5 py-4">
-        <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
-          <Badge variant="outline">
+    <Card className="word-guess-vars mx-auto overflow-visible text-left">
+      <CardHeader
+        className="gap-3 pt-2 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
+        style={{ paddingInline: SIDE_INSET }}
+      >
+        <div className="space-y-1.5">
+          <CardTitle>Game board</CardTitle>
+          <CardDescription className="max-w-2xl landscape:hidden">
+            Guess the hidden word in six tries. Use Enter to submit and Backspace
+            to edit.
+          </CardDescription>
+        </div>
+        <div className="flex flex-wrap items-center gap-2 py-0.5 text-sm landscape:justify-end">
+          <Badge variant="outline" className="leading-normal">
             Attempt {attemptDisplay} / {round.maxTries}
           </Badge>
-          <Badge variant="outline">{modeLabelText}</Badge>
-          <Badge variant="outline">{formatWordLengthLabel(wordLength)}</Badge>
+          <Badge variant="outline" className="leading-normal">
+            {modeLabelText}
+          </Badge>
+          <Badge variant="outline" className="leading-normal">
+            {formatWordLengthLabel(wordLength)}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4 px-0 pt-4 pb-2 landscape:space-y-3 landscape:pt-3 landscape:pb-2">
+        <GameContentPanel sideInset={SIDE_INSET}>
+          <div className="flex justify-center">
+            <WordGuessBoard
+              rows={boardRows}
+              shakeRowIndex={shakeRowIndex}
+              shakeTrigger={shakeTrigger}
+            />
+          </div>
+        </GameContentPanel>
+
+        <div
+          className="flex flex-col items-center gap-2"
+          style={{ paddingInline: SIDE_INSET }}
+        >
+          <p
+            className="min-h-5 w-full text-center text-sm text-muted-foreground"
+            role="status"
+            aria-live="polite"
+          >
+            {feedback ?? "\u00A0"}
+          </p>
+
+          {round.status === "lost" ? (
+            <p className="text-center text-sm text-muted-foreground">
+              Answer: <strong>{round.answer}</strong>
+            </p>
+          ) : null}
         </div>
 
-        <div className="flex justify-center">
-          <WordGuessBoard
-            rows={boardRows}
-            shakeRowIndex={shakeRowIndex}
-            shakeTrigger={shakeTrigger}
+        <div style={{ paddingInline: SIDE_INSET }}>
+          <WordGuessKeyboard
+            keyStates={keyboardStates}
+            disabled={!isPlaying}
+            onLetter={addLetter}
+            onEnter={submitGuess}
+            onBackspace={removeLetter}
           />
         </div>
-
-        <p
-          className="min-h-5 text-center text-sm text-muted-foreground"
-          role="status"
-          aria-live="polite"
-        >
-          {feedback ?? "\u00A0"}
-        </p>
-
-        {round.status === "lost" ? (
-          <p className="text-center text-sm text-muted-foreground">
-            Answer: <strong>{round.answer}</strong>
-          </p>
-        ) : null}
-
-        <WordGuessKeyboard
-          keyStates={keyboardStates}
-          disabled={!isPlaying}
-          onLetter={addLetter}
-          onEnter={submitGuess}
-          onBackspace={removeLetter}
-        />
       </CardContent>
     </Card>
   )
@@ -135,6 +155,8 @@ function WordGuessPlaySession({
     <GamePlaySection
       game={game}
       subtitle={`${modeLabel} · ${modeLabelText} · ${formatWordLengthLabel(wordLength)}`}
+      headerDensity="compact"
+      contentLayout="board"
       footer={
         <GamePlayFooterActions>
           {roundMode !== "daily" && (
@@ -181,8 +203,8 @@ export function WordGuessPlayView({ game, modeLabel }: WordGuessPlayViewProps) {
 
   if (!isMounted) {
     return (
-      <GamePageShell>
-        <Card className="mt-8 w-full text-left">
+      <GamePlayShell layout="board">
+        <Card className="word-guess-vars mx-auto w-full text-left">
           <CardHeader>
             <CardTitle>Loading game…</CardTitle>
             <CardDescription>
@@ -190,12 +212,12 @@ export function WordGuessPlayView({ game, modeLabel }: WordGuessPlayViewProps) {
             </CardDescription>
           </CardHeader>
         </Card>
-      </GamePageShell>
+      </GamePlayShell>
     )
   }
 
   return (
-    <GamePageShell>
+    <GamePlayShell layout="board">
       <WordGuessPlaySession
         key={sessionKey}
         game={game}
@@ -203,6 +225,6 @@ export function WordGuessPlayView({ game, modeLabel }: WordGuessPlayViewProps) {
         wordLength={wordLength}
         roundMode={roundMode}
       />
-    </GamePageShell>
+    </GamePlayShell>
   )
 }

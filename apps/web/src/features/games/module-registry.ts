@@ -13,6 +13,7 @@ import {
 import type { GamePlayLayout } from "@/features/games/components/game-play-shell"
 import { solitaireSearchParamsCache } from "@/features/games/solitaire/search-params"
 import { wordGuessSearchParamsCache } from "@/features/games/word-guess/search-params"
+import { crosswordSearchParamsCache } from "@/features/games/crossword/search-params"
 
 type SearchParamsInput = Promise<
   Record<string, string | string[] | undefined>
@@ -61,6 +62,18 @@ const WordGuessPlayView = dynamic(() =>
   ),
 )
 
+const CrosswordLaunchView = dynamic(() =>
+  import("@/features/games/crossword/components/crossword-launch-view").then(
+    (m) => ({ default: m.CrosswordLaunchView }),
+  ),
+)
+
+const CrosswordPlayView = dynamic(() =>
+  import("@/features/games/crossword/components/crossword-play-view").then(
+    (m) => ({ default: m.CrosswordPlayView }),
+  ),
+)
+
 export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   solitaire: {
     LaunchView: SolitaireLaunchView,
@@ -78,6 +91,16 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
     HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT["word-guess"],
     parseSearchParams: async (searchParams) => {
       await wordGuessSearchParamsCache.parse(searchParams)
+    },
+  },
+  crossword: {
+    LaunchView: CrosswordLaunchView,
+    PlayView: CrosswordPlayView,
+    SettingsWidget: GAME_SETTINGS_WIDGETS.crossword,
+    HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT.crossword,
+    playLayout: "board",
+    parseSearchParams: async (searchParams) => {
+      await crosswordSearchParamsCache.parse(searchParams)
     },
   },
 }

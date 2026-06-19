@@ -34,12 +34,25 @@ web-build/
 apps/mobile/android/
 apps/mobile/ios/
 
+# GSD planning artifacts (local only)
+.planning/
+
 # tooling / deploy caches
 .fallow/
 .wrangler/
 .open-next/
 .turbo/
 .kilo/
+.kilocode/
+
+# game clue generation cache
+packages/domain/games/crossword/clues.cache.json
+
+# generated dictionary intermediates (build-time only, not deployed)
+packages/domain/games/shared/dictionary.full.enriched.json
+
+# skills tool artifacts
+skills-lock.json
 
 # misc
 .DS_Store
@@ -64,4 +77,11 @@ firebase-debug.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# AI agent infrastructure (local only)
 /.cursor
+/.agents
+/agents
+/rules
+/domains
+capability_index.md
+CLAUDE.md
