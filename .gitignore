@@ -85,6 +85,8 @@ next-env.d.ts
 /agents
 /rules
 /domains
+/.claude
+/.opencode
 capability_index.md
 CLAUDE.md
 AGENTS.md
