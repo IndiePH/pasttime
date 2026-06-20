@@ -201,7 +201,7 @@ async function main() {
       console.log(`\n💡 Next step: Run 'npm run crossword:backup-pipeworx' to fetch missing definitions`)
     }
 
-    console.log(`\n✅ Next step: Run 'npm run crossword:enrich-dictionary' to enrich dictionary.full.json`)
+    console.log(`\n✅ Next step: Run 'npm run crossword:build-enriched' to build the enriched dictionary`)
   } catch (err) {
     console.error(`\n❌ Error: ${err.message}`)
     process.exitCode = 1

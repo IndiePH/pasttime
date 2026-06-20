@@ -9,6 +9,7 @@
     ".": "./index.ts",
     "./daily": "./daily/index.ts",
     "./games": "./games/index.ts",
+    "./games/shared": "./games/shared/index.ts",
     "./games/*": "./games/*"
   },
   "scripts": {

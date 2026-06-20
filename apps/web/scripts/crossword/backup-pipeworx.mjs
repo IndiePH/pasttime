@@ -31,7 +31,7 @@ async function main() {
     console.log(`   2. Call PipeworxMCP for each word`)
     console.log(`   3. Format response to match Apify structure`)
     console.log(`   4. Add to crossword-definitions.json`)
-    console.log(`   5. Re-run 'npm run crossword:enrich-dictionary'`)
+    console.log(`   5. Re-run 'npm run crossword:build-enriched'`)
   } catch (err) {
     console.error(`Error: ${err.message}`)
     process.exitCode = 1

@@ -49,9 +49,6 @@ apps/mobile/ios/
 # game clue generation cache
 packages/domain/games/crossword/clues.cache.json
 
-# generated dictionary intermediates (build-time only, not deployed)
-packages/domain/games/shared/dictionary.full.enriched.json
-
 # skills tool artifacts
 skills-lock.json
 /skills/

@@ -13,7 +13,7 @@
     "test": "vitest run",
     "word-guess:build-dictionary": "node scripts/word-guess/build-dictionary.mjs",
     "crossword:collect-definitions": "node scripts/crossword/collect-definitions.mjs",
-    "crossword:enrich-dictionary": "node scripts/crossword/enrich-dictionary.mjs",
+    "crossword:build-enriched": "node scripts/crossword/build-enriched.mjs",
     "crossword:backup-pipeworx": "node scripts/crossword/backup-pipeworx.mjs",
     "crossword:build-clues": "node scripts/crossword/build-clues.mjs",
     "preview:stop": "taskkill /F /IM workerd.exe 2>nul || exit 0",
