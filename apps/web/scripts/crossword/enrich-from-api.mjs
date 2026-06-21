@@ -31,6 +31,8 @@ function getAllWords(queue) {
   return words
 }
 
+const delay = ms => new Promise(r => setTimeout(r, ms))
+
 async function fetchWord(word) {
   const url = `${API_BASE}/${encodeURIComponent(word.toLowerCase())}`
   const res = await fetch(url)
@@ -99,14 +101,28 @@ function addToEnriched(enriched, entry, length) {
   enriched[length].sort((a, b) => a.word.localeCompare(b.word))
 }
 
+function saveProgress(queue, enriched, blocklist) {
+  const sortedQueue = {}
+  for (const key of Object.keys(queue).sort((a, b) => Number(a) - Number(b))) {
+    sortedQueue[key] = queue[key]
+  }
+  writeFileSync(QUEUE_PATH, JSON.stringify(sortedQueue, null, 2) + "\n")
+  writeFileSync(ENRICHED_PATH, JSON.stringify(enriched, null, 2) + "\n")
+  writeFileSync(BLOCKLIST_PATH, [...blocklist].sort().join("\n") + "\n")
+}
+
 const allWords = getAllWords(queue)
-const sample = pickRandom(allWords, 6)
+const batchSize = parseInt(process.argv[2], 10) || 500
+const sample = pickRandom(allWords, batchSize)
 
 console.log("Picked words:", sample.map(s => s.word).join(", "))
+
+let count = 0
 
 for (const { word, length } of sample) {
   process.stdout.write(`  ${word}... `)
   try {
+    await delay(500)
     const apiData = await fetchWord(word)
     const info = extractInfo(apiData)
 
@@ -126,19 +142,15 @@ for (const { word, length } of sample) {
       console.log("blocklisted (no useful data)")
     }
   } catch (err) {
-    removeFromQueue(queue, word, length)
-    blocklist.add(word)
-    console.log(`blocklisted (${err.message})`)
+    console.log(`skipped (${err.message})`)
+  }
+
+  count++
+  if (count % 50 === 0) {
+    saveProgress(queue, enriched, blocklist)
+    console.log(`  [checkpoint: ${count}/${sample.length} processed]`)
   }
 }
 
-const sortedQueue = {}
-for (const key of Object.keys(queue).sort((a, b) => Number(a) - Number(b))) {
-  sortedQueue[key] = queue[key]
-}
-
-writeFileSync(QUEUE_PATH, JSON.stringify(sortedQueue, null, 2) + "\n")
-writeFileSync(ENRICHED_PATH, JSON.stringify(enriched, null, 2) + "\n")
-writeFileSync(BLOCKLIST_PATH, [...blocklist].sort().join("\n") + "\n")
-
-console.log("\nDone. Updated queue, enriched, and blocklist.")
+saveProgress(queue, enriched, blocklist)
+console.log(`\nDone. ${count} words processed. Updated queue, enriched, and blocklist.`)
