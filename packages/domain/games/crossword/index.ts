@@ -33,3 +33,14 @@ export {
   isCrosswordSolved,
   resolveCrosswordStatus,
 } from "./status"
+export {
+  cellIndexInClue,
+  findClueAtCell,
+  getClueCells,
+  nextCellInWord,
+  nextClueInDirection,
+  previousCellInWord,
+  previousClueInDirection,
+  resolveDirection,
+} from "./navigation"
+export type { CrosswordDirection } from "./navigation"
