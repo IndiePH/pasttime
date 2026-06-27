@@ -17,6 +17,7 @@ import { PlatformLink } from "@/platform/navigation"
 import type { GameDefinition } from "@pasttime/domain/games"
 import {
   crosswordLaunchPath,
+  findClueAtCell,
   type CrosswordClue,
   type CrosswordDirection,
 } from "@pasttime/domain/games/crossword"
@@ -24,8 +25,8 @@ import { GameContentPanel } from "@/features/games/components/game-content-panel
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
-import { CrosswordPlayPreferencesProvider } from "@/features/games/crossword/context/crossword-play-preferences-context"
-import { useCrosswordPlayPreferences } from "@/features/games/crossword/context/crossword-play-preferences-context"
+import { CrosswordPlayPreferencesProvider, useCrosswordPlayPreferences } from "@/features/games/crossword/context/crossword-play-preferences-context"
+import { IS_CROSSWORD_DEV } from "@/features/games/crossword/context/dev-flag"
 import { CrosswordGrid } from "@/features/games/crossword/components/crossword-grid"
 import { useCrosswordGame } from "@/features/games/crossword/hooks/use-crossword-game"
 import { crosswordSearchParams } from "@/features/games/crossword/search-params"
@@ -158,13 +159,20 @@ type CrosswordPlaySessionProps = {
   mode: "daily" | "random"
 }
 
-function CrosswordPlaySession({
+export function CrosswordPlaySession({
   game,
   modeLabel,
   gridSize,
   mode,
 }: CrosswordPlaySessionProps) {
-  const { showErrors, autoCheck } = useCrosswordPlayPreferences()
+  const {
+    showErrors,
+    autoCheck,
+    showWordSpanHighlight,
+    showCornerArrowGlyph,
+    showDirectionBorderColor,
+    blinkActiveClue,
+  } = useCrosswordPlayPreferences()
   const {
     gameState,
     newPuzzle,
@@ -172,6 +180,9 @@ function CrosswordPlaySession({
     recheckStatus,
     blocks,
     setActiveCell,
+    direction,
+    setDirection,
+    activeClue,
   } = useCrosswordGame(gridSize, mode)
 
   // Recompute status after each input when auto-check is on.
@@ -180,6 +191,47 @@ function CrosswordPlaySession({
       recheckStatus()
     }
   }, [autoCheck, gameState, recheckStatus])
+
+  // Helper: check if a given direction has a word at the cell.
+  const otherDirectionHasWord = useCallback(
+    (cell: { row: number; col: number }, dir: CrosswordDirection) => {
+      return findClueAtCell(gameState.puzzle, cell, dir) !== null
+    },
+    [gameState.puzzle],
+  )
+
+  // Handle cell click: re-click on the active cell flips direction (D-02)
+  // guarded so it never lands on a non-word direction (D-03).
+  const handleCellClick = useCallback(
+    (row: number, col: number) => {
+      const clicked = { row, col }
+      if (
+        gameState.activeCell &&
+        gameState.activeCell.row === row &&
+        gameState.activeCell.col === col
+      ) {
+        // Re-click on already-active cell: flip to the other direction
+        // only if it has a word at this cell.
+        const other: CrosswordDirection =
+          direction === "across" ? "down" : "across"
+        if (otherDirectionHasWord(clicked, other)) {
+          setDirection(other)
+        }
+        // No word in the other direction at this cell → no-op
+      } else {
+        // Fresh click: set active cell (direction resolves across-first
+        // inside the hook's setActiveCell)
+        setActiveCell(clicked)
+      }
+    },
+    [
+      gameState.activeCell,
+      direction,
+      setDirection,
+      setActiveCell,
+      otherDirectionHasWord,
+    ],
+  )
 
   const subtitle = `${modeLabel} · ${mode === "daily" ? "Daily puzzle" : "Random puzzle"}`
   const modeLabelBadge = mode === "daily" ? "Daily puzzle" : "Random puzzle"
@@ -243,11 +295,18 @@ function CrosswordPlaySession({
                   gridSize={gridSize}
                   inputs={gameState.inputs}
                   activeCell={gameState.activeCell}
-                  showErrors={showErrors}
+                  showErrors={IS_CROSSWORD_DEV && showErrors}
                   blocks={blocks}
                   onCellChange={updateInput}
-                  onCellClick={(row, col) => setActiveCell({ row, col })}
+                  onCellClick={handleCellClick}
                   gridData={gameState.puzzle.grid}
+                  direction={direction}
+                  onDirectionChange={setDirection}
+                  activeClue={activeClue}
+                  showWordSpanHighlight={showWordSpanHighlight}
+                  showCornerArrowGlyph={showCornerArrowGlyph}
+                  showDirectionBorderColor={showDirectionBorderColor}
+                  puzzle={gameState.puzzle}
                 />
               </GameContentPanel>
               <p
@@ -269,6 +328,15 @@ function CrosswordPlaySession({
               <CrosswordClues
                 across={gameState.puzzle.across}
                 down={gameState.puzzle.down}
+                activeClue={
+                  activeClue
+                    ? {
+                        direction: activeClue.direction,
+                        number: activeClue.number,
+                      }
+                    : null
+                }
+                blinkActiveClue={blinkActiveClue}
               />
             </div>
           </div>
