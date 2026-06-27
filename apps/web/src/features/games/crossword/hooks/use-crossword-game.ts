@@ -5,15 +5,19 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useStorage } from "@/infrastructure/storage"
 import type {
   CrosswordCell,
+  CrosswordClue,
+  CrosswordDirection,
   CrosswordGameState,
   CrosswordGridSize,
   CrosswordRoundMode,
 } from "@pasttime/domain/games/crossword"
 import {
   createCrosswordGameState,
+  findClueAtCell,
   getCellKey,
   isCellFilled,
   resolveCrosswordStatus,
+  resolveDirection,
 } from "@pasttime/domain/games/crossword"
 
 const CROSSWORD_STORAGE_KEY = (
@@ -54,10 +58,24 @@ export function useCrosswordGame(
 
   const [gameState, setGameState] = useState<CrosswordGameState>(initialState)
 
+  // Ephemeral direction state — re-derived on reload (D-09). Lazy-initialises
+  // across-first from the persisted activeCell (D-03).
+  const [direction, setDirection] = useState<CrosswordDirection>(() =>
+    gameState.activeCell
+      ? resolveDirection(gameState.puzzle, gameState.activeCell, "across")
+      : "across",
+  )
+
   // Persist on every state change (like klondike).
   useEffect(() => {
     storage.set(storageKey, gameState)
   }, [gameState, storage, storageKey])
+
+  // Derived activeClue — never persisted, recomputed on every render (D-09).
+  const activeClue = useMemo(() => {
+    if (!gameState.activeCell) return null
+    return findClueAtCell(gameState.puzzle, gameState.activeCell, direction)
+  }, [gameState.puzzle, gameState.activeCell, direction])
 
   const newPuzzle = useCallback(() => {
     storage.remove(storageKey)
@@ -97,8 +115,11 @@ export function useCrosswordGame(
         ...prev,
         activeCell: cell ?? undefined,
       }))
+      if (cell) {
+        setDirection((d) => resolveDirection(gameState.puzzle, cell, d))
+      }
     },
-    [],
+    [gameState.puzzle],
   )
 
   const blocks = gameState
@@ -118,6 +139,9 @@ export function useCrosswordGame(
     recheckStatus,
     blocks,
     setActiveCell,
+    direction,
+    setDirection,
+    activeClue,
   }
 }
 
