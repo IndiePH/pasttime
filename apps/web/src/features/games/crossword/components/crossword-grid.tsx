@@ -248,6 +248,15 @@ export function CrosswordGrid({
         const cellData = gridData?.[row]?.[col]
         const clueNum = cellData?.clueNumber
         const isInActiveWord = activeWordCells.has(key)
+        const isLetter = !isBlock
+        const ringColor =
+          isLetter &&
+          isActive &&
+          showDirectionBorderColor
+            ? direction === "across"
+              ? "ring-ring"
+              : "ring-primary"
+            : "ring-ring"
 
         // Error only when typed answer disagrees with grid and showErrors is on.
         // Empty cells are never errors (no answer leakage).
@@ -268,12 +277,21 @@ export function CrosswordGrid({
               isBlock
                 ? "cursor-not-allowed bg-muted/30"
                 : "cursor-pointer border border-border bg-game-card-surface dark:bg-game-card-surface/90",
-              !isBlock &&
+              // Active cell: direction-colored ring (or default ring-ring)
+              isLetter &&
                 isActive &&
-                "border-foreground ring-2 ring-ring dark:border-white",
+                `border-foreground ring-2 ${ringColor} dark:border-white`,
+              // Word-span tint (D-14): non-active cells in the active word
               !isBlock &&
                 !isActive &&
+                isInActiveWord &&
+                "bg-primary/15",
+              // Hover on non-active, non-block cells (applies after tint)
+              isLetter &&
+                !isActive &&
                 "hover:border-foreground/50 dark:hover:border-white/50",
+              // Error overrides tint (D-18) — kept LAST so tailwind-merge
+              // lets bg-destructive/10 win over bg-primary/15
               isError &&
                 "border-destructive/60 bg-destructive/10 text-destructive dark:border-destructive dark:text-destructive",
             )}
@@ -296,6 +314,14 @@ export function CrosswordGrid({
                     {clueNum}
                   </span>
                 ) : null}
+                {showCornerArrowGlyph && isActive && (
+                  <span
+                    className="absolute top-0.5 right-0.5 text-[10px] leading-none font-normal text-muted-foreground"
+                    aria-hidden="true"
+                  >
+                    {direction === "across" ? "\u2192" : "\u2193"}
+                  </span>
+                )}
                 <span className="flex h-full w-full items-center justify-center">
                   {value || "\u00A0"}
                 </span>
