@@ -1,20 +1,57 @@
 import { cleanup, render, screen } from "@testing-library/react"
-import { afterEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { CrosswordClue } from "@pasttime/domain/games/crossword"
 import { CrosswordClues } from "./crossword-play-view"
 
 const ACROSS_CLUES: CrosswordClue[] = [
-  { id: "a1", number: 1, direction: "across", text: "Feline", answer: "CAT", row: 0, col: 0 },
-  { id: "a4", number: 4, direction: "across", text: "Pets, plural", answer: "DOGS", row: 2, col: 0 },
+  {
+    id: "a1",
+    number: 1,
+    direction: "across",
+    text: "Feline",
+    answer: "CAT",
+    row: 0,
+    col: 0,
+  },
+  {
+    id: "a4",
+    number: 4,
+    direction: "across",
+    text: "Pets, plural",
+    answer: "DOGS",
+    row: 2,
+    col: 0,
+  },
 ]
 
 const DOWN_CLUES: CrosswordClue[] = [
-  { id: "d1", number: 1, direction: "down", text: "Bad driver", answer: "CAD", row: 0, col: 0 },
-  { id: "d3", number: 3, direction: "down", text: "Stamps", answer: "TS", row: 0, col: 2 },
+  {
+    id: "d1",
+    number: 1,
+    direction: "down",
+    text: "Bad driver",
+    answer: "CAD",
+    row: 0,
+    col: 0,
+  },
+  {
+    id: "d3",
+    number: 3,
+    direction: "down",
+    text: "Stamps",
+    answer: "TS",
+    row: 0,
+    col: 2,
+  },
 ]
 
 describe("CrosswordClues", () => {
+  beforeEach(() => {
+    // jsdom does not implement scrollIntoView — provide a no-op stub
+    Element.prototype.scrollIntoView = vi.fn()
+  })
+
   afterEach(() => {
     cleanup()
     vi.restoreAllMocks()
@@ -42,7 +79,8 @@ describe("CrosswordClues", () => {
       />,
     )
 
-    expect(screen.getByText(/1\./)).toBeInTheDocument()
+    // Both across and down may share clue numbers; use getAllByText for shared nums
+    expect(screen.getAllByText(/1\./).length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText(/Feline/)).toBeInTheDocument()
     expect(screen.getByText(/4\./)).toBeInTheDocument()
     expect(screen.getByText(/Pets/)).toBeInTheDocument()
@@ -62,10 +100,10 @@ describe("CrosswordClues", () => {
       />,
     )
 
-    // The 1. Feline clue should be highlighted
     const acrossItems = screen.getAllByRole("listitem")
-    // Find the one containing "Feline"
-    const activeLi = acrossItems.find((el) => el.textContent?.includes("Feline"))
+    const activeLi = acrossItems.find((el) =>
+      el.textContent?.includes("Feline"),
+    )
     expect(activeLi).toBeDefined()
     expect(activeLi!.className).toContain("bg-primary/10")
     expect(activeLi!.className).toContain("font-semibold")
@@ -85,8 +123,9 @@ describe("CrosswordClues", () => {
     )
 
     const acrossItems = screen.getAllByRole("listitem")
-    // The DOGS clue (non-active) should NOT be highlighted
-    const nonActiveLi = acrossItems.find((el) => el.textContent?.includes("Pets"))
+    const nonActiveLi = acrossItems.find((el) =>
+      el.textContent?.includes("Pets"),
+    )
     expect(nonActiveLi).toBeDefined()
     expect(nonActiveLi!.className).not.toContain("bg-primary/10")
   })
@@ -107,7 +146,9 @@ describe("CrosswordClues", () => {
     )
 
     const acrossItems = screen.getAllByRole("listitem")
-    const activeLi = acrossItems.find((el) => el.textContent?.includes("Feline"))
+    const activeLi = acrossItems.find((el) =>
+      el.textContent?.includes("Feline"),
+    )
     expect(activeLi).toBeDefined()
     expect(scrollIntoViewMock).toHaveBeenCalled()
   })
@@ -115,7 +156,6 @@ describe("CrosswordClues", () => {
   it("adds bg-primary/20 blink class when blinkActiveClue is on and motion is not reduced", () => {
     vi.useFakeTimers()
 
-    // Ensure prefers-reduced-motion is false (default in jsdom)
     const activeClue = { direction: "across" as const, number: 1 }
 
     render(
@@ -128,7 +168,9 @@ describe("CrosswordClues", () => {
     )
 
     const acrossItems = screen.getAllByRole("listitem")
-    const activeLi = acrossItems.find((el) => el.textContent?.includes("Feline"))
+    const activeLi = acrossItems.find((el) =>
+      el.textContent?.includes("Feline"),
+    )
     expect(activeLi).toBeDefined()
 
     // The blink class should be present immediately (added in useEffect)
@@ -156,7 +198,9 @@ describe("CrosswordClues", () => {
     )
 
     const acrossItems = screen.getAllByRole("listitem")
-    const activeLi = acrossItems.find((el) => el.textContent?.includes("Feline"))
+    const activeLi = acrossItems.find((el) =>
+      el.textContent?.includes("Feline"),
+    )
     expect(activeLi).toBeDefined()
 
     // The blink class should NOT be present when blinkActiveClue is off

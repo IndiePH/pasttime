@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useSyncExternalStore, type CSSProperties } from "react"
+import { useCallback, useEffect, useRef, useSyncExternalStore, type CSSProperties } from "react"
 import { useQueryState } from "nuqs"
 
+import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -17,6 +18,7 @@ import type { GameDefinition } from "@pasttime/domain/games"
 import {
   crosswordLaunchPath,
   type CrosswordClue,
+  type CrosswordDirection,
 } from "@pasttime/domain/games/crossword"
 import { GameContentPanel } from "@/features/games/components/game-content-panel"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
@@ -38,29 +40,111 @@ const SIDE_INSET = "calc(var(--crossword-cell-w) * 0.35)"
 interface CrosswordCluesProps {
   across: CrosswordClue[]
   down: CrosswordClue[]
+  activeClue?: { direction: CrosswordDirection; number: number } | null
+  blinkActiveClue?: boolean
 }
 
-function CrosswordClues({ across, down }: CrosswordCluesProps) {
+export function CrosswordClues({
+  across,
+  down,
+  activeClue,
+  blinkActiveClue = true,
+}: CrosswordCluesProps) {
+  const liRefs = useRef<Map<string, HTMLLIElement>>(new Map())
+  const blinkTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const setLiRef = useCallback(
+    (el: HTMLLIElement | null, key: string) => {
+      if (el) liRefs.current.set(key, el)
+      else liRefs.current.delete(key)
+    },
+    [],
+  )
+
+  // Scroll active clue into view and optionally blink
+  useEffect(() => {
+    if (!activeClue) return
+
+    const key = `${activeClue.direction}-${activeClue.number}`
+    const li = liRefs.current.get(key)
+    if (!li) return
+
+    const reduced = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+    li.scrollIntoView({
+      block: "nearest",
+      behavior: reduced ? "auto" : "smooth",
+    })
+
+    // Blink: skip when disabled or user prefers reduced motion
+    if (!blinkActiveClue || reduced) return
+
+    // Debounce: clear any pending blink timer
+    if (blinkTimeoutRef.current) clearTimeout(blinkTimeoutRef.current)
+
+    li.classList.add("bg-primary/20")
+    blinkTimeoutRef.current = setTimeout(() => {
+      li.classList.remove("bg-primary/20")
+    }, 260)
+
+    // Cleanup on unmount or re-key
+    return () => {
+      if (blinkTimeoutRef.current) {
+        clearTimeout(blinkTimeoutRef.current)
+        blinkTimeoutRef.current = null
+      }
+    }
+  }, [activeClue, blinkActiveClue])
+
   return (
     <div className="grid grid-cols-1 gap-4">
       <div>
         <h3 className="text-sm font-medium">Across</h3>
         <ul className="mt-2 grid grid-cols-1 gap-y-1">
-          {across.map((clue, i) => (
-            <li key={`across-${i}`} className="text-sm">
-              <span className="font-medium">{clue.number}.</span> {clue.text}
-            </li>
-          ))}
+          {across.map((clue, i) => {
+            const isActiveClue =
+              activeClue?.direction === "across" &&
+              activeClue.number === clue.number
+            return (
+              <li
+                key={`across-${i}`}
+                ref={(el) => setLiRef(el, `across-${clue.number}`)}
+                className={cn(
+                  "text-sm",
+                  isActiveClue &&
+                    "rounded-sm bg-primary/10 font-semibold text-foreground",
+                )}
+              >
+                <span className="font-medium">{clue.number}.</span>{" "}
+                {clue.text}
+              </li>
+            )
+          })}
         </ul>
       </div>
       <div>
         <h3 className="text-sm font-medium">Down</h3>
         <ul className="mt-2 grid grid-cols-1 gap-y-1">
-          {down.map((clue, i) => (
-            <li key={`down-${i}`} className="text-sm">
-              <span className="font-medium">{clue.number}.</span> {clue.text}
-            </li>
-          ))}
+          {down.map((clue, i) => {
+            const isActiveClue =
+              activeClue?.direction === "down" &&
+              activeClue.number === clue.number
+            return (
+              <li
+                key={`down-${i}`}
+                ref={(el) => setLiRef(el, `down-${clue.number}`)}
+                className={cn(
+                  "text-sm",
+                  isActiveClue &&
+                    "rounded-sm bg-primary/10 font-semibold text-foreground",
+                )}
+              >
+                <span className="font-medium">{clue.number}.</span>{" "}
+                {clue.text}
+              </li>
+            )
+          })}
         </ul>
       </div>
     </div>
