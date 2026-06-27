@@ -43,6 +43,7 @@ interface CrosswordCluesProps {
   down: CrosswordClue[]
   activeClue?: { direction: CrosswordDirection; number: number } | null
   blinkActiveClue?: boolean
+  onClueClick?: (clue: CrosswordClue) => void
 }
 
 export function CrosswordClues({
@@ -50,6 +51,7 @@ export function CrosswordClues({
   down,
   activeClue,
   blinkActiveClue = true,
+  onClueClick,
 }: CrosswordCluesProps) {
   const liRefs = useRef<Map<string, HTMLLIElement>>(new Map())
   const blinkTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -112,10 +114,11 @@ export function CrosswordClues({
                 key={`across-${i}`}
                 ref={(el) => setLiRef(el, `across-${clue.number}`)}
                 className={cn(
-                  "text-sm",
+                  "cursor-pointer text-sm",
                   isActiveClue &&
                     "rounded-sm bg-primary/10 font-semibold text-foreground",
                 )}
+                onClick={() => onClueClick?.(clue)}
               >
                 <span className="font-medium">{clue.number}.</span>{" "}
                 {clue.text}
@@ -136,10 +139,11 @@ export function CrosswordClues({
                 key={`down-${i}`}
                 ref={(el) => setLiRef(el, `down-${clue.number}`)}
                 className={cn(
-                  "text-sm",
+                  "cursor-pointer text-sm",
                   isActiveClue &&
                     "rounded-sm bg-primary/10 font-semibold text-foreground",
                 )}
+                onClick={() => onClueClick?.(clue)}
               >
                 <span className="font-medium">{clue.number}.</span>{" "}
                 {clue.text}
@@ -231,6 +235,15 @@ export function CrosswordPlaySession({
       setActiveCell,
       otherDirectionHasWord,
     ],
+  )
+
+  // Handle clue click: navigate to the clue's starting cell and set direction
+  const handleClueClick = useCallback(
+    (clue: CrosswordClue) => {
+      setActiveCell({ row: clue.row, col: clue.col })
+      setDirection(clue.direction)
+    },
+    [setActiveCell, setDirection],
   )
 
   const subtitle = `${modeLabel} · ${mode === "daily" ? "Daily puzzle" : "Random puzzle"}`
@@ -337,6 +350,7 @@ export function CrosswordPlaySession({
                     : null
                 }
                 blinkActiveClue={blinkActiveClue}
+                onClueClick={handleClueClick}
               />
             </div>
           </div>
