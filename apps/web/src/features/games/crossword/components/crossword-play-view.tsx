@@ -301,7 +301,7 @@ export function CrosswordPlaySession({
           </div>
         </CardHeader>
         <CardContent className="px-0 pt-4 pb-2 landscape:pt-3 landscape:pb-2">
-          <div className="mx-auto flex w-fit max-w-full flex-col items-center gap-4 landscape:flex-row landscape:items-start landscape:gap-8">
+          <div className="mx-auto flex w-fit max-w-full flex-col items-center landscape:flex-row landscape:items-start">
             <div className="flex flex-col items-center gap-2">
               <GameContentPanel sideInset={SIDE_INSET} className="pb-2.5">
                 <CrosswordGrid
@@ -335,7 +335,7 @@ export function CrosswordPlaySession({
             </div>
 
             <div
-              className="w-full landscape:w-64 landscape:shrink-0 landscape:pt-1 max-h-[60vh] overflow-y-auto"
+              className="w-full landscape:w-72 landscape:shrink-0 landscape:pt-1 max-h-[60vh] overflow-y-auto"
               style={{ paddingInline: SIDE_INSET }}
             >
               <CrosswordClues
