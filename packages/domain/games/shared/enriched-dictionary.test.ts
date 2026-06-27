@@ -15,13 +15,13 @@ describe("enriched dictionary loader", () => {
   })
 
   it("looks up known words case-insensitively", () => {
-    const upper = getEnrichedWord("GET")
-    const lower = getEnrichedWord("cafe")
+    const upper = getEnrichedWord("ACE")
+    const lower = getEnrichedWord("age")
 
     expect(upper).toBeDefined()
-    expect(upper?.word).toBe("GET")
+    expect(upper?.word).toBe("ACE")
     expect(lower).toBeDefined()
-    expect(lower?.word).toBe("CAFE")
+    expect(lower?.word).toBe("AGE")
   })
 
   it("returns undefined for unknown words instead of throwing", () => {
@@ -30,8 +30,8 @@ describe("enriched dictionary loader", () => {
   })
 
   it("normalizes and reports presence consistently", () => {
-    expect(normalizeEnrichedWord("  blow ")).toBe("BLOW")
-    expect(hasEnrichedWord("  blow ")).toBe(true)
+    expect(normalizeEnrichedWord("  ace ")).toBe("ACE")
+    expect(hasEnrichedWord("  ace ")).toBe(true)
   })
 
   it("exposes a read-only list per length", () => {
