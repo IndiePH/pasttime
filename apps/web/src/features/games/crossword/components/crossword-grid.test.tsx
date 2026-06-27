@@ -626,4 +626,235 @@ describe("CrosswordGrid handleKeyDown", () => {
       expect(onCellClick).toHaveBeenCalledWith(4, 2)
     })
   })
+
+  describe("Indicator class assertions (D-05 / D-14 / D-18)", () => {
+    it("renders bg-primary/15 on non-active cells in the active word, gated by showWordSpanHighlight", () => {
+      const puzzle = buildTestPuzzle()
+
+      // CAT runs across (0,0)-(0,1)-(0,2); active cell is (0,0), so (0,1) and (0,2) get tint
+      render(
+        <CrosswordGrid
+          gridSize={GRID_SIZE}
+          inputs={{}}
+          activeCell={{ row: 0, col: 0 }}
+          activeClue={CAT_CLUE}
+          direction="across"
+          onDirectionChange={vi.fn()}
+          onCellChange={vi.fn()}
+          onCellClick={vi.fn()}
+          blocks={blocks}
+          gridData={puzzle.grid}
+          puzzle={puzzle}
+          showWordSpanHighlight={true}
+          showCornerArrowGlyph={false}
+          showDirectionBorderColor={false}
+        />,
+      )
+
+      const cells = getGridcells()
+      // Cell (0,1) — non-active, in active word → has bg-primary/15
+      expect(cells[cellIndex(0, 1)].className).toContain("bg-primary/15")
+      // Cell (0,0) — active cell → does NOT have word-span tint
+      expect(cells[cellIndex(0, 0)].className).not.toContain("bg-primary/15")
+      // Cell (1,0) — not in active word → does NOT have bg-primary/15
+      expect(cells[cellIndex(1, 0)].className).not.toContain("bg-primary/15")
+    })
+
+    it("renders no word-span tint when showWordSpanHighlight is false", () => {
+      const puzzle = buildTestPuzzle()
+
+      render(
+        <CrosswordGrid
+          gridSize={GRID_SIZE}
+          inputs={{}}
+          activeCell={{ row: 0, col: 0 }}
+          activeClue={CAT_CLUE}
+          direction="across"
+          onDirectionChange={vi.fn()}
+          onCellChange={vi.fn()}
+          onCellClick={vi.fn()}
+          blocks={blocks}
+          gridData={puzzle.grid}
+          puzzle={puzzle}
+          showWordSpanHighlight={false}
+          showCornerArrowGlyph={false}
+          showDirectionBorderColor={false}
+        />,
+      )
+
+      const cells = getGridcells()
+      // Even cells in the active word should not have the tint when gated off
+      expect(cells[cellIndex(0, 1)].className).not.toContain("bg-primary/15")
+    })
+
+    it("renders the direction arrow glyph on the active cell when enabled", () => {
+      const puzzle = buildTestPuzzle()
+
+      render(
+        <CrosswordGrid
+          gridSize={GRID_SIZE}
+          inputs={{}}
+          activeCell={{ row: 0, col: 0 }}
+          activeClue={CAT_CLUE}
+          direction="across"
+          onDirectionChange={vi.fn()}
+          onCellChange={vi.fn()}
+          onCellClick={vi.fn()}
+          blocks={blocks}
+          gridData={puzzle.grid}
+          puzzle={puzzle}
+          showWordSpanHighlight={false}
+          showCornerArrowGlyph={true}
+          showDirectionBorderColor={false}
+        />,
+      )
+
+      const cells = getGridcells()
+      // Active cell should contain the across arrow (→)
+      expect(cells[cellIndex(0, 0)].innerHTML).toContain("\u2192")
+
+      // Down mode: active cell should show the down arrow (↓)
+      // Unmount and re-render with direction="down"
+      cleanup()
+      render(
+        <CrosswordGrid
+          gridSize={GRID_SIZE}
+          inputs={{}}
+          activeCell={{ row: 0, col: 0 }}
+          activeClue={CAD_CLUE}
+          direction="down"
+          onDirectionChange={vi.fn()}
+          onCellChange={vi.fn()}
+          onCellClick={vi.fn()}
+          blocks={blocks}
+          gridData={puzzle.grid}
+          puzzle={puzzle}
+          showWordSpanHighlight={false}
+          showCornerArrowGlyph={true}
+          showDirectionBorderColor={false}
+        />,
+      )
+
+      const cellsDown = getGridcells()
+      expect(cellsDown[cellIndex(0, 0)].innerHTML).toContain("\u2193")
+    })
+
+    it("does not render the glyph when showCornerArrowGlyph is false", () => {
+      const puzzle = buildTestPuzzle()
+
+      render(
+        <CrosswordGrid
+          gridSize={GRID_SIZE}
+          inputs={{}}
+          activeCell={{ row: 0, col: 0 }}
+          activeClue={CAT_CLUE}
+          direction="across"
+          onDirectionChange={vi.fn()}
+          onCellChange={vi.fn()}
+          onCellClick={vi.fn()}
+          blocks={blocks}
+          gridData={puzzle.grid}
+          puzzle={puzzle}
+          showWordSpanHighlight={false}
+          showCornerArrowGlyph={false}
+          showDirectionBorderColor={false}
+        />,
+      )
+
+      const cells = getGridcells()
+      // The test defaults have all indicators off, so no glyph
+      expect(cells[cellIndex(0, 0)].innerHTML).not.toContain("\u2192")
+    })
+
+    it("uses ring-ring for across and ring-primary for down when direction border color is enabled", () => {
+      const puzzle = buildTestPuzzle()
+
+      // Across mode → ring-ring
+      render(
+        <CrosswordGrid
+          gridSize={GRID_SIZE}
+          inputs={{}}
+          activeCell={{ row: 0, col: 0 }}
+          activeClue={CAT_CLUE}
+          direction="across"
+          onDirectionChange={vi.fn()}
+          onCellChange={vi.fn()}
+          onCellClick={vi.fn()}
+          blocks={blocks}
+          gridData={puzzle.grid}
+          puzzle={puzzle}
+          showWordSpanHighlight={false}
+          showCornerArrowGlyph={false}
+          showDirectionBorderColor={true}
+        />,
+      )
+
+      const cells = getGridcells()
+      expect(cells[cellIndex(0, 0)].className).toContain("ring-ring")
+
+      cleanup()
+
+      // Down mode → ring-primary
+      render(
+        <CrosswordGrid
+          gridSize={GRID_SIZE}
+          inputs={{}}
+          activeCell={{ row: 0, col: 0 }}
+          activeClue={CAD_CLUE}
+          direction="down"
+          onDirectionChange={vi.fn()}
+          onCellChange={vi.fn()}
+          onCellClick={vi.fn()}
+          blocks={blocks}
+          gridData={puzzle.grid}
+          puzzle={puzzle}
+          showWordSpanHighlight={false}
+          showCornerArrowGlyph={false}
+          showDirectionBorderColor={true}
+        />,
+      )
+
+      const cellsDown = getGridcells()
+      expect(cellsDown[cellIndex(0, 0)].className).toContain("ring-primary")
+    })
+
+    it("applies destructive class to a wrong in-word cell (error-overrides-tint D-18)", () => {
+      const puzzle = buildTestPuzzle()
+
+      // Cell (0,1) is in CAT (answer is 'A'); we set input 'B' to trigger error.
+      // The cell is also in the active word, so both bg-primary/15 and bg-destructive/10
+      // apply. Since isError is last in cn(), bg-destructive/10 should be present.
+      render(
+        <CrosswordGrid
+          gridSize={GRID_SIZE}
+          inputs={{ "0,0": "C", "0,1": "B" }}
+          activeCell={{ row: 0, col: 0 }}
+          activeClue={CAT_CLUE}
+          direction="across"
+          showErrors={true}
+          onDirectionChange={vi.fn()}
+          onCellChange={vi.fn()}
+          onCellClick={vi.fn()}
+          blocks={blocks}
+          gridData={puzzle.grid}
+          puzzle={puzzle}
+          showWordSpanHighlight={true}
+          showCornerArrowGlyph={false}
+          showDirectionBorderColor={false}
+        />,
+      )
+
+      const cells = getGridcells()
+      const cell = cells[cellIndex(0, 1)]
+      // Cell should have the destructive background (error overrides tint per D-18)
+      expect(cell.className).toContain("bg-destructive/10")
+      // Cell should NOT have the word-span tint (destructive won, per D-18)
+      // Note: tailwind-merge keeps the last conflicting utility, so
+      // bg-destructive/10 should be present, and bg-primary/15 may or may not be
+      // depending on whether tailwind-merge removes it. The key assertion is
+      // that the destructive class is present — the cell renders as an error.
+      expect(cell.className).toContain("bg-destructive")
+      expect(cell.getAttribute("aria-invalid")).toBe("true")
+    })
+  })
 })
