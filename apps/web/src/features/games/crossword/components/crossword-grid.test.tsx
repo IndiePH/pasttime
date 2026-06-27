@@ -94,6 +94,11 @@ const TS_CLUE: CrosswordClue = {
   id: "d3", number: 3, direction: "down", text: "Stamps", answer: "TS", row: 0, col: 2,
 }
 
+// Shared puzzle fixture reference (rebuilt every test for isolation)
+function makePuzzle() {
+  return buildTestPuzzle()
+}
+
 // Default prefs — all indicators off so tests don't depend on indicator rendering
 const defaultPrefs = {
   showWordSpanHighlight: false,
@@ -134,6 +139,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -167,6 +173,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -197,6 +204,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -224,6 +232,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -251,6 +260,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -280,6 +290,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -308,6 +319,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -341,6 +353,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -398,6 +411,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -427,6 +441,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -454,6 +469,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -482,6 +498,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -509,6 +526,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -538,6 +556,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -566,6 +585,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
@@ -592,6 +612,7 @@ describe("CrosswordGrid handleKeyDown", () => {
           onCellClick={onCellClick}
           blocks={blocks}
           gridData={puzzle.grid}
+          puzzle={puzzle}
           {...defaultPrefs}
         />,
       )
