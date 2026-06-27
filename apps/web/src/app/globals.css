@@ -181,6 +181,52 @@
   width: min(var(--klondike-panel-w), calc(100vw - 1.5rem));
 }
 
+/* ── Word Guess board sizing ───────────────────────────────────────── */
+
+.word-guess-vars {
+  /* No specific sizing needed, inherits from board layout */
+}
+
+/* ── Crossword board sizing ────────────────────────────────────────── */
+
+/*
+ * Cell size is grid-size aware so a board of any size (5–15) fits the
+ * viewport. The preferred value is the smaller of a generous viewport-
+ * scaled growth term and the per-cell share of the available width, then
+ * capped (max) for readability and floored (min) for tap targets.
+ * `--crossword-grid-size` is set inline per puzzle (default 15).
+ */
+.crossword-vars {
+  --crossword-grid-size: 15;
+  --crossword-cell-w: clamp(
+    1.3rem,
+    min(6vw, calc((100vw - 3.5rem) / var(--crossword-grid-size))),
+    2.75rem
+  );
+}
+
+.crossword-grid {
+  width: fit-content;
+}
+
+.crossword-cell {
+  width: var(--crossword-cell-w);
+  height: var(--crossword-cell-w);
+}
+
+@media (orientation: landscape) and (min-height: 320px) {
+  .crossword-vars {
+    /* reserve the clues column + gutters so board + clues sit side-by-side */
+    --crossword-cell-w: clamp(
+      1.6rem,
+      min(4.2vw, calc((100vw - 22rem) / var(--crossword-grid-size))),
+      3.25rem
+    );
+  }
+}
+
+/* ── Landscape board overrides (shared) ──────────────────────────── */
+
 @media (orientation: landscape) and (min-height: 320px) {
   .game-play-board {
     max-width: none;

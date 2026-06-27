@@ -1,0 +1,4938 @@
+{
+  "clues": [
+    {
+      "answer": "APPLE",
+      "clues": [
+        "Fruit with a core"
+      ]
+    },
+    {
+      "answer": "HOUSE",
+      "clues": [
+        "Place where you live"
+      ]
+    },
+    {
+      "answer": "WATER",
+      "clues": [
+        "Clear liquid essential for life"
+      ]
+    },
+    {
+      "answer": "LIGHT",
+      "clues": [
+        "Opposite of heavy or darkness"
+      ]
+    },
+    {
+      "answer": "MUSIC",
+      "clues": [
+        "Art form using sound and rhythm"
+      ]
+    },
+    {
+      "answer": "GREEN",
+      "clues": [
+        "Color of grass"
+      ]
+    },
+    {
+      "answer": "BLACK",
+      "clues": [
+        "Darkest color"
+      ]
+    },
+    {
+      "answer": "WHITE",
+      "clues": [
+        "Snow color"
+      ]
+    },
+    {
+      "answer": "BLUE",
+      "clues": [
+        "Color of the sky"
+      ]
+    },
+    {
+      "answer": "ORANGE",
+      "clues": [
+        "Citrus fruit or sunset color"
+      ]
+    },
+    {
+      "answer": "PURPLE",
+      "clues": [
+        "Color between red and blue"
+      ]
+    },
+    {
+      "answer": "YELLOW",
+      "clues": [
+        "Color of the sun"
+      ]
+    },
+    {
+      "answer": "DOG",
+      "clues": [
+        "Man's best friend"
+      ]
+    },
+    {
+      "answer": "CAT",
+      "clues": [
+        "Feline pet"
+      ]
+    },
+    {
+      "answer": "BIRD",
+      "clues": [
+        "Flying animal with feathers"
+      ]
+    },
+    {
+      "answer": "FISH",
+      "clues": [
+        "Aquatic creature"
+      ]
+    },
+    {
+      "answer": "TREE",
+      "clues": [
+        "Large plant with trunk and branches"
+      ]
+    },
+    {
+      "answer": "MOUNTAIN",
+      "clues": [
+        "Large natural elevation of earth"
+      ]
+    },
+    {
+      "answer": "RIVER",
+      "clues": [
+        "Flowing body of water"
+      ]
+    },
+    {
+      "answer": "OCEAN",
+      "clues": [
+        "Large body of salt water"
+      ]
+    },
+    {
+      "answer": "DESERT",
+      "clues": [
+        "Arid sandy landscape"
+      ]
+    },
+    {
+      "answer": "FOREST",
+      "clues": [
+        "Area covered with trees"
+      ]
+    },
+    {
+      "answer": "SKY",
+      "clues": [
+        "Above our heads, blue or cloudy"
+      ]
+    },
+    {
+      "answer": "SUN",
+      "clues": [
+        "Star at the center of our solar system"
+      ]
+    },
+    {
+      "answer": "MOON",
+      "clues": [
+        "Earth's natural satellite"
+      ]
+    },
+    {
+      "answer": "STAR",
+      "clues": [
+        "Twinkling celestial body"
+      ]
+    },
+    {
+      "answer": "COMPUTER",
+      "clues": [
+        "Electronic device for processing data"
+      ]
+    },
+    {
+      "answer": "PHONE",
+      "clues": [
+        "Device for voice communication"
+      ]
+    },
+    {
+      "answer": "TABLE",
+      "clues": [
+        "Furniture with a flat top"
+      ]
+    },
+    {
+      "answer": "CHAIR",
+      "clues": [
+        "Seat for one person"
+      ]
+    },
+    {
+      "answer": "BOOK",
+      "clues": [
+        "Written or printed work"
+      ]
+    },
+    {
+      "answer": "PAPER",
+      "clues": [
+        "Thin material for writing"
+      ]
+    },
+    {
+      "answer": "PEN",
+      "clues": [
+        "Writing instrument"
+      ]
+    },
+    {
+      "answer": "CLOCK",
+      "clues": [
+        "Tells time"
+      ]
+    },
+    {
+      "answer": "DOOR",
+      "clues": [
+        "Entrance way"
+      ]
+    },
+    {
+      "answer": "WINDOW",
+      "clues": [
+        "Transparent opening in a wall"
+      ]
+    },
+    {
+      "answer": "CAR",
+      "clues": [
+        "Motor vehicle"
+      ]
+    },
+    {
+      "answer": "BUS",
+      "clues": [
+        "Large passenger vehicle"
+      ]
+    },
+    {
+      "answer": "TRAIN",
+      "clues": [
+        "Railway transportation"
+      ]
+    },
+    {
+      "answer": "PLANE",
+      "clues": [
+        "Flying aircraft"
+      ]
+    },
+    {
+      "answer": "BOAT",
+      "clues": [
+        "Water vessel"
+      ]
+    },
+    {
+      "answer": "BENCH",
+      "clues": [
+        "Public seating"
+      ]
+    },
+    {
+      "answer": "FLOWER",
+      "clues": [
+        "Blooming plant part"
+      ]
+    },
+    {
+      "answer": "GRASS",
+      "clues": [
+        "Green ground cover"
+      ]
+    },
+    {
+      "answer": "HAPPY",
+      "clues": [
+        "Feeling joy"
+      ]
+    },
+    {
+      "answer": "SMILE",
+      "clues": [
+        "Facial expression of pleasure"
+      ]
+    },
+    {
+      "answer": "FRIEND",
+      "clues": [
+        "Close companion"
+      ]
+    },
+    {
+      "answer": "FAMILY",
+      "clues": [
+        "Relatives"
+      ]
+    },
+    {
+      "answer": "NIGHT",
+      "clues": [
+        "Dark period after sunset"
+      ]
+    },
+    {
+      "answer": "MORNING",
+      "clues": [
+        "Early part of the day"
+      ]
+    },
+    {
+      "answer": "WINTER",
+      "clues": [
+        "Coldest season"
+      ]
+    },
+    {
+      "answer": "SUMMER",
+      "clues": [
+        "Warmest season"
+      ]
+    },
+    {
+      "answer": "SPRING",
+      "clues": [
+        "Season of renewal"
+      ]
+    },
+    {
+      "answer": "FALL",
+      "clues": [
+        "Season when leaves drop"
+      ]
+    },
+    {
+      "answer": "BEACH",
+      "clues": [
+        "Sandy shore by the ocean"
+      ]
+    },
+    {
+      "answer": "PARK",
+      "clues": [
+        "Public outdoor area"
+      ]
+    },
+    {
+      "answer": "SCHOOL",
+      "clues": [
+        "Place of learning"
+      ]
+    },
+    {
+      "answer": "HOSPITAL",
+      "clues": [
+        "Medical facility"
+      ]
+    },
+    {
+      "answer": "STORE",
+      "clues": [
+        "Retail establishment"
+      ]
+    },
+    {
+      "answer": "RESTAURANT",
+      "clues": [
+        "Place to dine out"
+      ]
+    },
+    {
+      "answer": "CAFE",
+      "clues": [
+        "Small coffee shop"
+      ]
+    },
+    {
+      "answer": "OFFICE",
+      "clues": [
+        "Workplace"
+      ]
+    },
+    {
+      "answer": "GARDEN",
+      "clues": [
+        "Planted area"
+      ]
+    },
+    {
+      "answer": "MAGIC",
+      "clues": [
+        "Supernatural phenomena"
+      ]
+    },
+    {
+      "answer": "DANCE",
+      "clues": [
+        "Rhythmic movement"
+      ]
+    },
+    {
+      "answer": "SING",
+      "clues": [
+        "Vocal musical expression"
+      ]
+    },
+    {
+      "answer": "WRITE",
+      "clues": [
+        "Form letters on paper"
+      ]
+    },
+    {
+      "answer": "READ",
+      "clues": [
+        "Look at written text"
+      ]
+    },
+    {
+      "answer": "PLAY",
+      "clues": [
+        "Engage in recreation"
+      ]
+    },
+    {
+      "answer": "RUN",
+      "clues": [
+        "Move quickly on foot"
+      ]
+    },
+    {
+      "answer": "JUMP",
+      "clues": [
+        "Push off ground into air"
+      ]
+    },
+    {
+      "answer": "SWIM",
+      "clues": [
+        "Move through water"
+      ]
+    },
+    {
+      "answer": "FLY",
+      "clues": [
+        "Move through air"
+      ]
+    },
+    {
+      "answer": "WALK",
+      "clues": [
+        "Move on foot"
+      ]
+    },
+    {
+      "answer": "SLEEP",
+      "clues": [
+        "Rest state"
+      ]
+    },
+    {
+      "answer": "DREAM",
+      "clues": [
+        "Thoughts during sleep"
+      ]
+    },
+    {
+      "answer": "LAUGH",
+      "clues": [
+        "Expression of amusement"
+      ]
+    },
+    {
+      "answer": "CRY",
+      "clues": [
+        "Shedding tears"
+      ]
+    },
+    {
+      "answer": "LOVE",
+      "clues": [
+        "Deep affection"
+      ]
+    },
+    {
+      "answer": "HATE",
+      "clues": [
+        "Intense dislike"
+      ]
+    },
+    {
+      "answer": "GOLD",
+      "clues": [
+        "Precious yellow metal"
+      ]
+    },
+    {
+      "answer": "SILVER",
+      "clues": [
+        "Shiny gray precious metal"
+      ]
+    },
+    {
+      "answer": "BRONZE",
+      "clues": [
+        "Metal alloy of copper and tin"
+      ]
+    },
+    {
+      "answer": "IRON",
+      "clues": [
+        "Strong magnetic metal"
+      ]
+    },
+    {
+      "answer": "STEEL",
+      "clues": [
+        "Alloy of iron and carbon"
+      ]
+    },
+    {
+      "answer": "ROCK",
+      "clues": [
+        "Solid mineral mass"
+      ]
+    },
+    {
+      "answer": "STONE",
+      "clues": [
+        "Hard solid non-metallic mineral"
+      ]
+    },
+    {
+      "answer": "SAND",
+      "clues": [
+        "Granular material"
+      ]
+    },
+    {
+      "answer": "SOIL",
+      "clues": [
+        "Earth's top layer"
+      ]
+    },
+    {
+      "answer": "FIRE",
+      "clues": [
+        "Combustion producing heat and light"
+      ]
+    },
+    {
+      "answer": "WIND",
+      "clues": [
+        "Moving air"
+      ]
+    },
+    {
+      "answer": "RAIN",
+      "clues": [
+        "Precipitation from clouds"
+      ]
+    },
+    {
+      "answer": "SNOW",
+      "clues": [
+        "Frozen precipitation"
+      ]
+    },
+    {
+      "answer": "ICE",
+      "clues": [
+        "Frozen water"
+      ]
+    },
+    {
+      "answer": "FROST",
+      "clues": [
+        "Thin ice crystals"
+      ]
+    },
+    {
+      "answer": "CLOUD",
+      "clues": [
+        "Visible mass of condensed water vapor"
+      ]
+    },
+    {
+      "answer": "STORM",
+      "clues": [
+        "Severe weather"
+      ]
+    },
+    {
+      "answer": "THUNDER",
+      "clues": [
+        "Loud noise after lightning"
+      ]
+    },
+    {
+      "answer": "LIGHTNING",
+      "clues": [
+        "Electrical discharge in clouds"
+      ]
+    },
+    {
+      "answer": "RAINBOW",
+      "clues": [
+        "Curved colored arc after rain"
+      ]
+    },
+    {
+      "answer": "ABACK",
+      "clues": [
+        "Towards the back or rear; backwards.",
+        "In the rear; a distance behind.",
+        "By surprise; startled; dumbfounded. (see usage)",
+        "Backward against the mast; said of the sails when pressed by the"
+      ]
+    },
+    {
+      "answer": "ABACUS",
+      "clues": [
+        "A table or tray scattered with sand which was used for calculating",
+        "A device used for performing arithmetical calculations; a table on which loose",
+        "The uppermost portion of the capital of a column immediately under the",
+        "A board, tray, or table, divided into perforated compartments for holding bottles,"
+      ]
+    },
+    {
+      "answer": "ABANDON",
+      "clues": [
+        "To give up or relinquish control of, to surrender or to give",
+        "To desist in doing, practicing, following, holding, or adhering to; to turn",
+        "To leave behind; to desert as in a ship or a position,",
+        "To subdue; to take control of.",
+        "To cast out; to banish; to expel; to reject."
+      ]
+    },
+    {
+      "answer": "ABATE",
+      "clues": [
+        "Abatement.",
+        "(obsolete outside law) To put an end to; to cause to cease.",
+        "To become null and void.",
+        "To nullify; make void.",
+        "To humble; to lower in status; to bring someone down physically or"
+      ]
+    },
+    {
+      "answer": "ABBEY",
+      "clues": [
+        "The office or dominion of an abbot or abbess.",
+        "A monastery or society of people, secluded from the world and devoted",
+        "The church of a monastery.",
+        "A residence that was previously an abbatial building."
+      ]
+    },
+    {
+      "answer": "ABBOT",
+      "clues": [
+        "The superior or head of an abbey or monastery.",
+        "The pastor and/or administrator of an order, including minor and major orders",
+        "A layman who received the abbey's revenues, after the closing of the",
+        "(British slang) A brothel-owner's husband or lover.",
+        "(British slang) A ponce; a man employed by a prostitute to find"
+      ]
+    },
+    {
+      "answer": "ABDICATE",
+      "clues": [
+        "To disclaim and expel from the family, as a father his child;",
+        "To formally separate oneself from or to divest oneself of.",
+        "To depose.",
+        "To reject; to cast off; to discard.",
+        "To surrender, renounce or relinquish, as sovereign power; to withdraw definitely from"
+      ]
+    },
+    {
+      "answer": "ABDICATED",
+      "clues": [
+        "To disclaim and expel from the family, as a father his child;",
+        "To formally separate oneself from or to divest oneself of.",
+        "To depose.",
+        "To reject; to cast off; to discard.",
+        "To surrender, renounce or relinquish, as sovereign power; to withdraw definitely from"
+      ]
+    },
+    {
+      "answer": "ABDOMEN",
+      "clues": [
+        "The fat surrounding the belly.",
+        "The belly, or that part of the body between the thorax and",
+        "The cavity of the belly, which is lined by the peritoneum, and",
+        "The posterior section of the body, behind the thorax, in insects, crustaceans,"
+      ]
+    },
+    {
+      "answer": "ABDOMINAL",
+      "clues": [
+        "A fish of the order Abdominales.",
+        "(usually plurale tantum) An abdominal muscle.",
+        "Of or pertaining to the abdomen; ventral.",
+        "Having the ventral fins under the abdomen and behind the pectoral fins.",
+        "Ventral, in describing a fin."
+      ]
+    },
+    {
+      "answer": "ABDUCT",
+      "clues": [
+        "To take away by force; to carry away (a human being) wrongfully",
+        "To draw away, as a limb or other part, from the median"
+      ]
+    },
+    {
+      "answer": "ABDUCTION",
+      "clues": [
+        "Leading away; a carrying away.",
+        "The act of abducing or abducting; a drawing apart; the movement which",
+        "A syllogism or form of argument in which the major premise is",
+        "The wrongful, and usually forcible, carrying off of a human being."
+      ]
+    },
+    {
+      "answer": "ABELIAN",
+      "clues": [
+        "Having a commutative defining operation."
+      ]
+    },
+    {
+      "answer": "ABIDE",
+      "clues": [
+        "To endure without yielding; to withstand; await defiantly; to encounter; to persevere.",
+        "To bear patiently; to tolerate; to put up with; stand.",
+        "To pay for; to stand the consequences of; to answer for; to",
+        "To wait in expectation.",
+        "To pause; to delay."
+      ]
+    },
+    {
+      "answer": "ABIGAIL",
+      "clues": [
+        "A lady's maid."
+      ]
+    },
+    {
+      "answer": "ABILITY",
+      "clues": [
+        "Suitableness.",
+        "The quality or state of being able; capacity to do or of",
+        "The legal wherewithal to act.",
+        "Physical power.",
+        "Financial ability."
+      ]
+    },
+    {
+      "answer": "ABJECT",
+      "clues": [
+        "A person in the lowest and most despicable condition; a castaway; outcast.",
+        "Sunk to or existing in a low condition, state, or position.",
+        "Cast down in spirit or hope; degraded; servile; grovelling; despicable; lacking courage;",
+        "Showing utter hopelessness, helplessness; showing resignation; wretched.",
+        "Rejected; cast aside."
+      ]
+    },
+    {
+      "answer": "ABLAZE",
+      "clues": [
+        "Burning fiercely; in a blaze; on fire.",
+        "Radiant with bright light and color.",
+        "In a state of glowing excitement or ardent desire.",
+        "On fire; in a blaze, gleaming.",
+        "Lit up brightly and with color."
+      ]
+    },
+    {
+      "answer": "ABLE",
+      "clues": [
+        "Easy to use.",
+        "Suitable; competent.",
+        "Liable to.",
+        "Having the necessary powers or the needed resources to accomplish a task.",
+        "Free from constraints preventing completion of task; permitted to; not prevented from."
+      ]
+    },
+    {
+      "answer": "ABNORMAL",
+      "clues": [
+        "A person or object that is not normal.",
+        "Not conforming to rule or system; deviating from the usual or normal",
+        "Of or pertaining to that which is irregular, in particular, behaviour that"
+      ]
+    },
+    {
+      "answer": "ABOARD",
+      "clues": [
+        "On board; into or within a ship or boat; hence, into or",
+        "On or onto a horse, a camel, etc.",
+        "On base.",
+        "Into a team, group, or company.",
+        "Alongside."
+      ]
+    },
+    {
+      "answer": "ABODE",
+      "clues": [
+        "To endure without yielding; to withstand; await defiantly; to encounter; to persevere.",
+        "To bear patiently; to tolerate; to put up with; stand.",
+        "To pay for; to stand the consequences of; to answer for; to",
+        "To wait in expectation.",
+        "To pause; to delay."
+      ]
+    },
+    {
+      "answer": "ABOLISH",
+      "clues": [
+        "To end a law, system, institution, custom or practice.",
+        "To put an end to or destroy, as a physical object; to"
+      ]
+    },
+    {
+      "answer": "ABOLITION",
+      "clues": [
+        "The act of abolishing; an annulling; abrogation",
+        "The state of being abolished",
+        "(often capitalised) The ending of the slave trade or of slavery.",
+        "(often capitalised) The ending of convict transportation.",
+        "An amnesty; a putting out of memory."
+      ]
+    },
+    {
+      "answer": "ABORIGINAL",
+      "clues": [
+        "An Aboriginal inhabitant of Australia, Aborigine.",
+        "Of or pertaining to Australian Aboriginal peoples, Aborigines, or their language.",
+        "An animal or plant native to a region.",
+        "First according to historical or scientific records; original; indigenous; primitive.",
+        "Living in a land before colonization by the Europeans."
+      ]
+    },
+    {
+      "answer": "ABORT",
+      "clues": [
+        "A miscarriage; an untimely birth; an abortion.",
+        "The product of a miscarriage; an aborted offspring; an abortion.",
+        "An early termination of a mission, action, or procedure in relation to",
+        "The function used to abort a process.",
+        "An event involving the abort of a process."
+      ]
+    },
+    {
+      "answer": "ABORTION",
+      "clues": [
+        "The expulsion from the womb of a foetus or embryo before it",
+        "An aborted foetus; an abortus.",
+        "A misshapen person or thing; a monstrosity.",
+        "Failure or abandonment of a project, promise, goal etc.",
+        "Arrest of development of any organ, so that it remains an imperfect"
+      ]
+    },
+    {
+      "answer": "ABORTIVE",
+      "clues": [
+        "That which is born or brought forth prematurely; an abortion.",
+        "A fruitless effort or issue.",
+        "A medicine to which is attributed the property of causing abortion, abortifacient.",
+        "To cause an abortion; to render without fruit.",
+        "Produced by abortion; born prematurely and therefore unnatural."
+      ]
+    },
+    {
+      "answer": "ABOUND",
+      "clues": [
+        "To be full to overflowing.",
+        "To be wealthy.",
+        "To be highly productive.",
+        "To be present or available in large numbers; to be plentiful.",
+        "To revel in."
+      ]
+    },
+    {
+      "answer": "ABOUT",
+      "clues": [
+        "Moving around; astir.",
+        "In existence; being in evidence; apparent.",
+        "Near; in the vicinity or neighbourhood.",
+        "On all sides; around.",
+        "Here and there; around; in one place and another; up and down."
+      ]
+    },
+    {
+      "answer": "ABSENCE",
+      "clues": [
+        "A state of being away or withdrawn from a place or from",
+        "Failure to be present where one is expected, wanted, or needed; nonattendance;",
+        "Lack; deficiency; nonexistence.",
+        "Inattention to things present; abstraction (of mind).",
+        "Temporary loss or disruption of consciousness, with sudden onset and recovery, and"
+      ]
+    },
+    {
+      "answer": "ABSENT",
+      "clues": [
+        "(with definite article) Something absent, especially absent people collectively; those who were",
+        "An absentee; a person who is not there.",
+        "Being away from a place; withdrawn from a place; not present; missing.",
+        "Not existing; lacking.",
+        "(sometimes comparable) Inattentive to what is passing; absent-minded; preoccupied."
+      ]
+    },
+    {
+      "answer": "ABSENTEE",
+      "clues": [
+        "A person who is absent from his or her employment, school, post,",
+        "A landholder who lives in another district or country than the one",
+        "One that is nonexistent or lacking.",
+        "A voter that is not present at the time of voting; absentee",
+        "Pertaining to one that is absent."
+      ]
+    },
+    {
+      "answer": "ABSOLUTE",
+      "clues": [
+        "That which is independent of context-dependent interpretation, inviolate, fundamental.",
+        "Anything that is absolute.",
+        "In a plane, the two imaginary circular points at infinity; in space",
+        "(usually capitalized) A realm which exists without reference to anything else; that",
+        "(usually capitalized) The unity of spirit and nature; God."
+      ]
+    },
+    {
+      "answer": "ABSORB",
+      "clues": [
+        "To include so that it no longer has separate existence; to overwhelm;",
+        "To engulf, as in water; to swallow up.",
+        "To suck up; to drink in; to imbibe, like a sponge or",
+        "To take in energy and convert it, as",
+        "To engross or engage wholly; to occupy fully"
+      ]
+    },
+    {
+      "answer": "ABSORPTION",
+      "clues": [
+        "The act or process of absorbing or of being absorbed as,",
+        "Entire engrossment or occupation of the mind.",
+        "Mental assimilation.",
+        "The retaining of electrical energy for a short time after it has"
+      ]
+    },
+    {
+      "answer": "ABSTAIN",
+      "clues": [
+        "Keep or withhold oneself.",
+        "Refrain from (something or doing something); keep from doing, especially an indulgence.",
+        "Fast (not eat for a period).",
+        "Deliberately refrain from casting one's vote at a meeting where one is",
+        "Hinder; keep back; withhold."
+      ]
+    },
+    {
+      "answer": "ABSTRACT",
+      "clues": [
+        "An abridgement or summary of a longer publication.",
+        "Something that concentrates in itself the qualities of a larger item, or",
+        "An abstraction; an abstract term; that which is abstract.",
+        "The theoretical way of looking at things; something that exists only in",
+        "An abstract work of art."
+      ]
+    },
+    {
+      "answer": "ABSURD",
+      "clues": [
+        "An absurdity.",
+        "(often preceded by the) The opposition between the human search for meaning",
+        "Contrary to reason or propriety; obviously and flatly opposed to manifest truth;",
+        "Inharmonious; dissonant.",
+        "Having no rational or orderly relationship to people's lives; meaningless; lacking order"
+      ]
+    },
+    {
+      "answer": "ABSURDITY",
+      "clues": [
+        "That which is absurd; an absurd action; a logical contradiction.",
+        "The quality of being absurd or inconsistent with obvious truth, reason, or",
+        "Dissonance."
+      ]
+    },
+    {
+      "answer": "ABUNDANCE",
+      "clues": [
+        "A large quantity; many.",
+        "An overflowing fullness or ample sufficiency; profusion; copious supply; superfluity; plentifulness.",
+        "Wealth; affluence; plentiful amount of resources.",
+        "Frequency, amount, ratio of something within a given environment or sample.",
+        "A bid to take nine or more tricks in solo whist."
+      ]
+    },
+    {
+      "answer": "ABUNDANT",
+      "clues": [
+        "Fully sufficient; found in copious supply; in great quantity; overflowing.",
+        "Richly supplied; wealthy; possessing in great quantity.",
+        "Being an abundant number, i.e. less than the sum of all of"
+      ]
+    },
+    {
+      "answer": "ABUSIVE",
+      "clues": [
+        "Prone to treat someone badly by coarse, insulting words or other maltreatment;",
+        "Tending to deceive; fraudulent.",
+        "Tending to misuse; practising or containing abuse.",
+        "Being physically or emotionally injurious; characterized by repeated violence or other abuse.",
+        "Wrongly used; perverted; misapplied; unjust; illegal."
+      ]
+    },
+    {
+      "answer": "ABYSMAL",
+      "clues": [
+        "Pertaining to, or resembling an abyss.",
+        "Extremely bad; terrible."
+      ]
+    },
+    {
+      "answer": "ACACIA",
+      "clues": [
+        "A shrub or tree of the tribe Acacieae.",
+        "The thickened or dried juice of several species in Acacieae, in particular",
+        "A false acacia; robinia tree, Robinia pseudoacacia.",
+        "Gum arabic; gum acacia.",
+        "Any of several related trees, such as the locust tree."
+      ]
+    },
+    {
+      "answer": "ACADEMIC",
+      "clues": [
+        "(usually capitalized) A follower of Plato, a Platonist.",
+        "A senior member of an academy, college, or university; a person who",
+        "A member of the Academy; an academician.",
+        "A student in a college.",
+        "Academic dress; academicals."
+      ]
+    },
+    {
+      "answer": "ACADEMY",
+      "clues": [
+        "(usually capitalized) The garden where Plato taught.",
+        "(usually capitalized) Plato's philosophical system based on skepticism; Plato's followers.",
+        "An institution for the study of higher learning; a college or a",
+        "A school or place of training in which some special art is",
+        "A society of learned people united for the advancement of the arts"
+      ]
+    },
+    {
+      "answer": "ACCEDE",
+      "clues": [
+        "To approach; to arrive, to come forward.",
+        "To give one's adhesion; to join up with (a group, etc.); to",
+        "To agree or assent to a proposal or a view; to give",
+        "To come to an office, state or dignity; to attain, assume (a",
+        "To become a party to an agreement or a treaty."
+      ]
+    },
+    {
+      "answer": "ACCEDED",
+      "clues": [
+        "To approach; to arrive, to come forward.",
+        "To give one's adhesion; to join up with (a group, etc.); to",
+        "To agree or assent to a proposal or a view; to give",
+        "To come to an office, state or dignity; to attain, assume (a",
+        "To become a party to an agreement or a treaty."
+      ]
+    },
+    {
+      "answer": "ACCELERATE",
+      "clues": [
+        "To cause to move faster; to quicken the motion of; to add",
+        "To quicken the natural or ordinary progression or process of.",
+        "To cause a change of velocity.",
+        "To hasten, as the occurrence of an event.",
+        "To enable a student to finish a course of study in less"
+      ]
+    },
+    {
+      "answer": "ACCENT",
+      "clues": [
+        "A higher-pitched or stronger articulation of a particular syllable of a word",
+        "Emphasis or importance in general.",
+        "A mark or character used in writing, in order to indicate the",
+        "Modulation of the voice in speaking; the manner of speaking or pronouncing;",
+        "The distinctive manner of pronouncing a language associated with a particular region,"
+      ]
+    },
+    {
+      "answer": "ACCEPT",
+      "clues": [
+        "To receive, especially with a consent, with favour, or with approval.",
+        "To admit to a place or a group.",
+        "To regard as proper, usual, true, or to believe in.",
+        "To receive as adequate or satisfactory.",
+        "To receive or admit to; to agree to; to assent to; to"
+      ]
+    },
+    {
+      "answer": "ACCEPTABLE",
+      "clues": [
+        "Worthy, decent, sure of being accepted or received with at least moderate",
+        "Barely worthy, less than excellent; passable."
+      ]
+    },
+    {
+      "answer": "ACCEPTANCE",
+      "clues": [
+        "The act of accepting; a receiving of something offered, with acquiescence, approbation,",
+        "Belief in something; agreement, assent.",
+        "The state of being accepted.",
+        "The usual or accepted meaning of a word or expression.",
+        "An assent and engagement by the person on whom a bill of"
+      ]
+    },
+    {
+      "answer": "ACCEPTOR",
+      "clues": [
+        "One who accepts.",
+        "One who accepts a draft or a bill of exchange; a drawee",
+        "An atom or molecule which can accept an electron to form a",
+        "A transfer RNA molecule that can accept a specific amino acid",
+        "A chemical acceptor atom forming a positive hole in a semiconductor"
+      ]
+    },
+    {
+      "answer": "ACCESS",
+      "clues": [
+        "A way or means of approaching or entering; an entrance; a passage.",
+        "The act of approaching or entering; an advance.",
+        "The right or ability of approaching or entering; admittance; admission; accessibility.",
+        "The quality of being easy to approach or enter.",
+        "Admission to sexual intercourse."
+      ]
+    },
+    {
+      "answer": "ACCESSES",
+      "clues": [
+        "A way or means of approaching or entering; an entrance; a passage.",
+        "The act of approaching or entering; an advance.",
+        "The right or ability of approaching or entering; admittance; admission; accessibility.",
+        "The quality of being easy to approach or enter.",
+        "Admission to sexual intercourse."
+      ]
+    },
+    {
+      "answer": "ACCESSIBLE",
+      "clues": [
+        "Easy of access or approach.",
+        "(specifically) Built or designed as to be usable by people with disabilities.",
+        "(of a person) Easy to get along with.",
+        "(followed by to) Open to the influence of.",
+        "Obtainable; to be got at."
+      ]
+    },
+    {
+      "answer": "ACCOMPLISH",
+      "clues": [
+        "To finish successfully.",
+        "To complete, as time or distance.",
+        "To execute fully; to fulfill; to complete successfully.",
+        "To equip or furnish thoroughly; hence, to complete in acquirements; to render",
+        "To gain; to obtain."
+      ]
+    },
+    {
+      "answer": "ACCORD",
+      "clues": [
+        "Agreement or concurrence of opinion, will, or action.",
+        "A harmony in sound, pitch and tone; concord.",
+        "Agreement or harmony of things in general.",
+        "An agreement between parties in controversy, by which satisfaction for an injury",
+        "An international agreement."
+      ]
+    },
+    {
+      "answer": "ACCORDANCE",
+      "clues": [
+        "Agreement; harmony; conformity; compliance.",
+        "The act of granting something."
+      ]
+    },
+    {
+      "answer": "ACCORDION",
+      "clues": [
+        "A small, portable, keyed wind instrument, whose tones are generated by play",
+        "A vertical list of items that can be individually expanded and collapsed",
+        "To fold up, in the manner of an accordion"
+      ]
+    },
+    {
+      "answer": "ACCOUNT",
+      "clues": [
+        "A registry of pecuniary transactions; a written or printed statement of business",
+        "A sum of money deposited at a bank and subject to withdrawal.",
+        "A statement in general of reasons, causes, grounds, etc., explanatory of some",
+        "A reason, grounds, consideration, motive; a person's sake.",
+        "A business relationship involving the exchange of money and credit."
+      ]
+    },
+    {
+      "answer": "ACCOUNTANT",
+      "clues": [
+        "One who renders account; one accountable.",
+        "A reckoner, or someone who maintains financial matters for a person(s).",
+        "One who is skilled in, keeps, or adjusts, accounts; an officer in",
+        "One whose profession includes organizing, maintaining and auditing the records of another."
+      ]
+    },
+    {
+      "answer": "ACCRUE",
+      "clues": [
+        "Something that accrues; advantage accruing",
+        "To increase, to rise",
+        "To reach or come to by way of increase; to arise or",
+        "To be incurred as a result of the passage of time.",
+        "To accumulate"
+      ]
+    },
+    {
+      "answer": "ACCRUED",
+      "clues": [
+        "To increase, to rise",
+        "To reach or come to by way of increase; to arise or",
+        "To be incurred as a result of the passage of time.",
+        "To accumulate",
+        "To become an enforceable and permanent right."
+      ]
+    },
+    {
+      "answer": "ACCUMULATE",
+      "clues": [
+        "To heap up in a mass; to pile up; to collect or",
+        "To grow or increase in quantity or number; to increase greatly.",
+        "To take a higher degree at the same time with a lower",
+        "Collected; accumulated."
+      ]
+    },
+    {
+      "answer": "ACCURACY",
+      "clues": [
+        "The state of being accurate; being free from mistakes, this exemption arising",
+        "Exact conformity to truth, or to a rule or model; degree of"
+      ]
+    },
+    {
+      "answer": "ACCURATE",
+      "clues": [
+        "Telling the truth or giving a true result; exact; not defective or",
+        "Deviating only slightly or within acceptable limits.",
+        "Precisely fixed; executed with care; careful."
+      ]
+    },
+    {
+      "answer": "ACCUSATION",
+      "clues": [
+        "The act of accusing.",
+        "A formal charge brought against a person in a court of law.",
+        "An allegation."
+      ]
+    },
+    {
+      "answer": "ACCUSE",
+      "clues": [
+        "Accusation.",
+        "To find fault with, blame, censure",
+        "(followed by \"of\") to charge with having committed a crime or offence",
+        "To make an accusation against someone"
+      ]
+    },
+    {
+      "answer": "ACCUSED",
+      "clues": [
+        "To find fault with, blame, censure",
+        "(followed by \"of\") to charge with having committed a crime or offence",
+        "To make an accusation against someone",
+        "The person charged with an offense; the defendant in a criminal case.",
+        "Having been accused; being the target of accusations."
+      ]
+    },
+    {
+      "answer": "ACCUSER",
+      "clues": [
+        "One who accuses; one who brings a charge of crime or fault."
+      ]
+    },
+    {
+      "answer": "ACCUSING",
+      "clues": [
+        "To find fault with, blame, censure",
+        "(followed by \"of\") to charge with having committed a crime or offence",
+        "To make an accusation against someone",
+        "Accusation.",
+        "Accusatory."
+      ]
+    },
+    {
+      "answer": "ACETATE",
+      "clues": [
+        "Any salt or ester of acetic acid.",
+        "Cellulose acetate.",
+        "A transparent sheet used for overlays.",
+        "Ellipsis of acetate disc: a disc of aluminium covered in a wax"
+      ]
+    },
+    {
+      "answer": "ACETIC",
+      "clues": [
+        "Of, pertaining to, or producing vinegar",
+        "Of or pertaining to acetic acid or its derivatives"
+      ]
+    },
+    {
+      "answer": "ACETONE",
+      "clues": [
+        "A colourless, volatile, flammable liquid ketone, (CH3)2CO, used as a solvent."
+      ]
+    },
+    {
+      "answer": "ACHARYA",
+      "clues": [
+        "A spiritual teacher, guru.",
+        "One of the five types of revered people in Jain religion, who",
+        "An influential mentor."
+      ]
+    },
+    {
+      "answer": "ACHIEVE",
+      "clues": [
+        "To succeed in something, now especially in academic performance.",
+        "To carry out successfully; to accomplish.",
+        "To conclude, finish, especially successfully.",
+        "To obtain, or gain (a desired result, objective etc.), as the result",
+        "To conclude, to turn out."
+      ]
+    },
+    {
+      "answer": "ACHIEVED",
+      "clues": [
+        "To succeed in something, now especially in academic performance.",
+        "To carry out successfully; to accomplish.",
+        "To conclude, finish, especially successfully.",
+        "To obtain, or gain (a desired result, objective etc.), as the result",
+        "To conclude, to turn out."
+      ]
+    },
+    {
+      "answer": "ACHIEVING",
+      "clues": [
+        "To succeed in something, now especially in academic performance.",
+        "To carry out successfully; to accomplish.",
+        "To conclude, finish, especially successfully.",
+        "To obtain, or gain (a desired result, objective etc.), as the result",
+        "To conclude, to turn out."
+      ]
+    },
+    {
+      "answer": "ACIDIC",
+      "clues": [
+        "Having a pH less than 7, or being sour, or having the",
+        "Containing a high percentage of silica; opposed to basic.",
+        "Of or relating to acid; having the character of an acid."
+      ]
+    },
+    {
+      "answer": "ACIDITY",
+      "clues": [
+        "The quality or state of being acid",
+        "Sourness; tartness; sharpness to the taste",
+        "Excessive acid quality, as in gastric secretions."
+      ]
+    },
+    {
+      "answer": "ACORN",
+      "clues": [
+        "The fruit of the oak, being an oval nut growing in a",
+        "A cone-shaped piece of wood on the point of the spindle above",
+        "See acorn-shell.",
+        "(usually in the plural) A testicle."
+      ]
+    },
+    {
+      "answer": "ACOUSTIC",
+      "clues": [
+        "A medicine or other agent to assist hearing.",
+        "Pertaining to the sense of hearing, the organs of hearing, or the",
+        "Naturally producing or produced by an instrument without electrical amplification, as an",
+        "(retronym) A hollow-body guitar of the older variety, in contradistinction to an"
+      ]
+    },
+    {
+      "answer": "ACQUIRE",
+      "clues": [
+        "To get.",
+        "To gain, usually by one's own exertions; to get as one's own",
+        "To contract.",
+        "To sample signals and convert them into digital values."
+      ]
+    },
+    {
+      "answer": "ACQUIRED",
+      "clues": [
+        "To get.",
+        "To gain, usually by one's own exertions; to get as one's own",
+        "To contract.",
+        "To sample signals and convert them into digital values.",
+        "Developed after birth; not congenital."
+      ]
+    },
+    {
+      "answer": "ACQUIRING",
+      "clues": [
+        "To get.",
+        "To gain, usually by one's own exertions; to get as one's own",
+        "To contract.",
+        "To sample signals and convert them into digital values."
+      ]
+    },
+    {
+      "answer": "ACQUITTAL",
+      "clues": [
+        "The act of fulfilling the duties (of a given role, obligation etc.).",
+        "A legal decision that someone is not guilty with which they have",
+        "Payment of a debt or other obligation; reparations, amends.",
+        "The act of releasing someone from debt or other obligation; acquittance.",
+        "Avoidance of danger; deliverance."
+      ]
+    },
+    {
+      "answer": "ACREAGE",
+      "clues": [
+        "Size, as measured in acres.",
+        "An area of land measured in acres."
+      ]
+    },
+    {
+      "answer": "ACROBAT",
+      "clues": [
+        "An athlete who performs acts requiring skill, agility and coordination."
+      ]
+    },
+    {
+      "answer": "ACROBATIC",
+      "clues": [
+        "Of or pertaining to an acrobat.",
+        "Vigorously active"
+      ]
+    },
+    {
+      "answer": "ACRONYM",
+      "clues": [
+        "An abbreviation formed by the initial letters of other words, sometimes exclusively",
+        "An abbreviation formed by the beginning letters or syllables of other words",
+        "To form into an acronym."
+      ]
+    },
+    {
+      "answer": "ACROSS",
+      "clues": [
+        "(crosswords, often in combination) A word that runs horizontally in the completed",
+        "From one side to the other.",
+        "On the other side.",
+        "In a particular direction.",
+        "(crosswords) Horizontally."
+      ]
+    },
+    {
+      "answer": "ACRYLIC",
+      "clues": [
+        "An acrylic resin.",
+        "A paint containing an acrylic resin.",
+        "A painting executed using such a paint.",
+        "A thick sheet of plastic.",
+        "A liquid coating system based on an acrylic resin"
+      ]
+    },
+    {
+      "answer": "ACT",
+      "clues": [
+        "Something done, a deed.",
+        "Actuality.",
+        "Something done once and for all, as distinguished from a work.",
+        "A product of a legislative body, a statute.",
+        "The process of doing something."
+      ]
+    },
+    {
+      "answer": "ACTIN",
+      "clues": [
+        "A globular structural protein that polymerizes in a helical fashion to form",
+        "One of the six isoforms of actin."
+      ]
+    },
+    {
+      "answer": "ACTION",
+      "clues": [
+        "Something done so as to accomplish a purpose.",
+        "A way of motion or functioning.",
+        "Fast-paced activity.",
+        "A mechanism; a moving part or assembly.",
+        "The mechanism, that is the set of moving mechanical parts, of a"
+      ]
+    },
+    {
+      "answer": "ACTIONABLE",
+      "clues": [
+        "That can be acted on; that can be used as the basis",
+        "Affording grounds for legal action."
+      ]
+    },
+    {
+      "answer": "ACTIVATE",
+      "clues": [
+        "To encourage development or induce increased activity; to stimulate.",
+        "To put a device, mechanism (alarm etc.) or system into action or",
+        "To render more reactive; excite.",
+        "To render a molecule reactive, active, or effective in performing its function.",
+        "To render a substance radioactive."
+      ]
+    },
+    {
+      "answer": "ACTIVATED",
+      "clues": [
+        "To encourage development or induce increased activity; to stimulate.",
+        "To put a device, mechanism (alarm etc.) or system into action or",
+        "To render more reactive; excite.",
+        "To render a molecule reactive, active, or effective in performing its function.",
+        "To render a substance radioactive."
+      ]
+    },
+    {
+      "answer": "ACTIVATING",
+      "clues": [
+        "To encourage development or induce increased activity; to stimulate.",
+        "To put a device, mechanism (alarm etc.) or system into action or",
+        "To render more reactive; excite.",
+        "To render a molecule reactive, active, or effective in performing its function.",
+        "To render a substance radioactive."
+      ]
+    },
+    {
+      "answer": "ACTIVATION",
+      "clues": [
+        "Making active and effective; bringing into a state of activity.",
+        "The process of making a radioisotope by bombarding a stable element with",
+        "(biochemistry) The process through which molecules are made able to react."
+      ]
+    },
+    {
+      "answer": "ACTIVE",
+      "clues": [
+        "A person or thing that is acting or capable of acting.",
+        "Any component that is not passive. See Passivity (engineering).",
+        "Having the power or quality of acting; causing change; communicating action or",
+        "Quick in physical movement; of an agile and vigorous body; nimble.",
+        "In action; actually proceeding; working; in force"
+      ]
+    },
+    {
+      "answer": "ACTIVISM",
+      "clues": [
+        "The practice of using action to achieve a result, such as political"
+      ]
+    },
+    {
+      "answer": "ACTIVIST",
+      "clues": [
+        "One who is politically active in the role of a citizen; especially,",
+        "One who is conspicuously active in carrying out any occupational or professional",
+        "Behaving as an activist."
+      ]
+    },
+    {
+      "answer": "ACTIVITY",
+      "clues": [
+        "The state or quality of being active; activeness.",
+        "Something done as an action or a movement.",
+        "Something done for pleasure or entertainment, especially one involving movement or an",
+        "(grammar) The lexical aspect (aktionsart) of verbs or predicates that change over"
+      ]
+    },
+    {
+      "answer": "ACTOR",
+      "clues": [
+        "A person who performs, plays a part in a theatrical play or",
+        "One who acts; a doer.",
+        "One who takes part in a situation.",
+        "An advocate or proctor in civil courts or causes.",
+        "One who institutes a suit; plaintiff or complainant."
+      ]
+    },
+    {
+      "answer": "ACTRESS",
+      "clues": [
+        "A female who performs on the stage or in films.",
+        "A female doer or \"actor\" (in a general sense)."
+      ]
+    },
+    {
+      "answer": "ADAGE",
+      "clues": [
+        "An old saying which has obtained credit by long use",
+        "An old saying which has been overused or considered a cliché; a"
+      ]
+    },
+    {
+      "answer": "ADAGIO",
+      "clues": [
+        "A tempo mark directing that a passage is to be played rather",
+        "A passage having this mark.",
+        "A male-female duet or mixed trio ballet displaying demanding balance, spins and/or",
+        "Describing a passage having this mark.",
+        "Played rather slowly."
+      ]
+    },
+    {
+      "answer": "ADAMANT",
+      "clues": [
+        "An imaginary rock or mineral of impenetrable hardness; a name given to",
+        "An embodiment of impregnable hardness.",
+        "A lodestone.",
+        "(said of people and their conviction) Firm; unshakeable; unyielding; determined.",
+        "(of an object) Very difficult to break, pierce, or cut."
+      ]
+    },
+    {
+      "answer": "ADAPT",
+      "clues": [
+        "To make suitable; to make to correspond; to fit or suit",
+        "To fit by alteration; to modify or remodel for a different purpose;",
+        "To make by altering or fitting something else; to produce by change",
+        "To make oneself comfortable to a new thing.",
+        "Adapted; fit; suited; suitable."
+      ]
+    },
+    {
+      "answer": "ADAPTABLE",
+      "clues": [
+        "Capable of adapting or of being adapted."
+      ]
+    },
+    {
+      "answer": "ADAPTATION",
+      "clues": [
+        "The process of adapting something or becoming adapted to a situation; adjustment,",
+        "A change that is made or undergone to suit a condition or",
+        "The process of change that an organism undergoes to be better suited",
+        "An instance of an organism undergoing change, or the structure or behavior",
+        "The process of adapting an artistic work from a different medium."
+      ]
+    },
+    {
+      "answer": "ADAPTION",
+      "clues": [
+        "The process of adapting something or becoming adapted to a situation; adjustment,",
+        "A change that is made or undergone to suit a condition or",
+        "The process of change that an organism undergoes to be better suited",
+        "An instance of an organism undergoing change, or the structure or behavior",
+        "The process of adapting an artistic work from a different medium."
+      ]
+    },
+    {
+      "answer": "ADAPTIVE",
+      "clues": [
+        "Of, pertaining to, characterized by or showing adaptation; making or made fit",
+        "Capable of being adapted or of adapting; susceptible of or undergoing accordant",
+        "Of a trait: that helps an individual to function well in society."
+      ]
+    },
+    {
+      "answer": "ADAPTOR",
+      "clues": [
+        "One who is capable of adapting to differing situations.",
+        "One who adapts a thing, e.g. a play.",
+        "A device or application used to achieve operative compatibility between devices that"
+      ]
+    },
+    {
+      "answer": "ADD",
+      "clues": [
+        "An act or instance of adding.",
+        "An additional enemy that joins a fight after the primary target.",
+        "To join or unite (e.g. one thing to another, or as several",
+        "To sum up; to put together mentally.",
+        "To combine elements of (something) into one quantity."
+      ]
+    },
+    {
+      "answer": "ADDENDUM",
+      "clues": [
+        "Something to be added; especially text added as an appendix or supplement",
+        "A postscript.",
+        "The height by which the tooth of a gear projects beyond (outside"
+      ]
+    },
+    {
+      "answer": "ADDER",
+      "clues": [
+        "Any snake.",
+        "A name loosely applied to various snakes more or less resembling the"
+      ]
+    },
+    {
+      "answer": "ADDICT",
+      "clues": [
+        "A person who is addicted, especially to a harmful drug",
+        "An adherent or fan (of something)",
+        "To deliver (someone or something) following a judicial decision.",
+        "To devote (oneself) to a given activity, occupation, thing etc.",
+        "To bind (a person or thing) to the service of something."
+      ]
+    },
+    {
+      "answer": "ADDICTION",
+      "clues": [
+        "A state that is characterized by compulsive drug use or compulsive engagement",
+        "The state of being addicted; devotion; inclination.",
+        "A habit or practice that damages, jeopardizes or shortens one's life but",
+        "A pathological relationship to mood altering experience that has life damaging consequences."
+      ]
+    },
+    {
+      "answer": "ADDICTIVE",
+      "clues": [
+        "A drug that causes an addiction.",
+        "Anything that is very habit-forming.",
+        "Causing or tending to cause addiction; habit-forming.",
+        "Enjoyable.",
+        "Characterized by or susceptible to addiction."
+      ]
+    },
+    {
+      "answer": "ADDITION",
+      "clues": [
+        "The act of adding anything.",
+        "Anything that is added.",
+        "The arithmetic operation of adding.",
+        "A dot at the right side of a note as an indication",
+        "A title annexed to a person's name to identify him or her"
+      ]
+    },
+    {
+      "answer": "ADDITIONAL",
+      "clues": [
+        "Something added.",
+        "Supplemental or added to something."
+      ]
+    },
+    {
+      "answer": "ADDITIVE",
+      "clues": [
+        "A substance added to another substance or product to produce specific properties",
+        "(grammar) A word or phrase that adds something, such as also, even,",
+        "Pertaining to addition; that can be, or has been, added.",
+        "(of a function, etc.) That is distributive over addition.",
+        "(of a group, semigroup, etc.) Whose operator is identified as addition."
+      ]
+    },
+    {
+      "answer": "ADDRESS",
+      "clues": [
+        "Direction.",
+        "Preparation.",
+        "To prepare oneself.",
+        "To direct speech.",
+        "To aim; to direct."
+      ]
+    },
+    {
+      "answer": "ADDRESSES",
+      "clues": [
+        "Direction.",
+        "Preparation.",
+        "To prepare oneself.",
+        "To direct speech.",
+        "To aim; to direct."
+      ]
+    },
+    {
+      "answer": "ADEPT",
+      "clues": [
+        "One fully skilled or well versed in anything; a proficient",
+        "Well skilled; completely versed; thoroughly proficient"
+      ]
+    },
+    {
+      "answer": "ADEQUATE",
+      "clues": [
+        "To equalize; to make adequate.",
+        "To equal.",
+        "Equal to or fulfilling some requirement."
+      ]
+    },
+    {
+      "answer": "ADHERE",
+      "clues": [
+        "To stick fast or cleave, as a glutinous substance does; to become",
+        "To be attached or devoted by personal union, in belief, on principle,",
+        "To be consistent or coherent; to be in accordance; to agree.",
+        "To affirm a judgment."
+      ]
+    },
+    {
+      "answer": "ADHERED",
+      "clues": [
+        "To stick fast or cleave, as a glutinous substance does; to become",
+        "To be attached or devoted by personal union, in belief, on principle,",
+        "To be consistent or coherent; to be in accordance; to agree.",
+        "To affirm a judgment."
+      ]
+    },
+    {
+      "answer": "ADHERENCE",
+      "clues": [
+        "A close physical union of two objects.",
+        "Faithful support for some cause.",
+        "An extent to which a patient continues an agreed treatment plan."
+      ]
+    },
+    {
+      "answer": "ADJOINT",
+      "clues": [
+        "The transpose of the cofactor matrix of a given square matrix.",
+        "(of a matrix) Transpose conjugate.",
+        "(of an operator) Hermitian conjugate.",
+        "A functor related to another functor by an adjunction.",
+        "A curve A such that any point of a given curve C"
+      ]
+    },
+    {
+      "answer": "ADJUDGED",
+      "clues": [
+        "To declare to be.",
+        "To deem or determine to be.",
+        "To award judicially; to assign."
+      ]
+    },
+    {
+      "answer": "ADJUNCT",
+      "clues": [
+        "An appendage; something attached to something else in a subordinate capacity.",
+        "A person associated with another, usually in a subordinate position; a colleague.",
+        "An unmalted grain or grain product that supplements the main mash ingredient.",
+        "A quality or property of the body or mind, whether natural or",
+        "A key or scale closely related to another as principal; a relative"
+      ]
+    },
+    {
+      "answer": "ADJUST",
+      "clues": [
+        "To modify.",
+        "To improve or rectify.",
+        "To settle an insurance claim.",
+        "To change to fit circumstances."
+      ]
+    },
+    {
+      "answer": "ADJUSTABLE",
+      "clues": [
+        "Anything that can be adjusted.",
+        "Capable of being adjusted"
+      ]
+    },
+    {
+      "answer": "ADJUSTMENT",
+      "clues": [
+        "The action of adjusting something",
+        "The result of adjusting something; a small change; a minor correction; a",
+        "The settling or balancing of a financial account",
+        "The behavioural process of balancing conflicting needs, or needs against obstacles in",
+        "The assessment, by an insurance company, of a claim; the settlement of"
+      ]
+    },
+    {
+      "answer": "ADJUTANT",
+      "clues": [
+        "A lower-ranking officer who assists a higher-ranking officer with administrative affairs.",
+        "An assistant.",
+        "Any bird of the genus Leptoptilos, a branch of the stork family",
+        "Assistant; who helps a higher-ranking officer."
+      ]
+    },
+    {
+      "answer": "ADMIN",
+      "clues": [
+        "Administration, or administrative work.",
+        "A systems administrator; one who maintains a computer system or network.",
+        "A user of a discussion forum, web site, etc. with privileges allowing",
+        "To serve as an administrator for or of."
+      ]
+    },
+    {
+      "answer": "ADMINISTER",
+      "clues": [
+        "To cause to ingest (a drug), either by openly offering or through",
+        "To apportion out, distribute.",
+        "To manage or supervise the conduct, performance or execution of; to govern",
+        "To minister (to).",
+        "To settle, as the estate of one who dies without a will,"
+      ]
+    },
+    {
+      "answer": "ADMIRABLE",
+      "clues": [
+        "Deserving of the highest esteem or admiration."
+      ]
+    },
+    {
+      "answer": "ADMIRAL",
+      "clues": [
+        "A naval officer of the highest rank; the commander of a country's",
+        "A naval officer of high rank, immediately below Admiral of the Fleet;",
+        "A flag officer in the United States Navy or Coast Guard of",
+        "The ship which carries the admiral, the flagship; also, the most considerable",
+        "A prince or Saracen leader under the Sultan."
+      ]
+    },
+    {
+      "answer": "ADMIRALTY",
+      "clues": [
+        "The office or jurisdiction of an admiral.",
+        "The department or officers having authority over naval affairs generally.",
+        "The court which has jurisdiction of maritime questions and offenses.",
+        "The system of jurisprudence of admiralty courts.",
+        "The building in which the lords of the admiralty, in England, transact"
+      ]
+    },
+    {
+      "answer": "ADMIRATION",
+      "clues": [
+        "A positive emotion including wonder and approbation; the regarding of another as",
+        "Wondering or questioning (without any particular positive or negative attitude to the",
+        "Cause of admiration; something to excite wonder, or pleased surprise."
+      ]
+    },
+    {
+      "answer": "ADMIRE",
+      "clues": [
+        "To be amazed at; to view with surprise; to marvel at.",
+        "To regard with wonder and delight.",
+        "To look upon with an elevated feeling of pleasure, as something which",
+        "To estimate or value highly; to hold in high esteem.",
+        "To be enthusiastic about (doing something); to want or like (to do"
+      ]
+    },
+    {
+      "answer": "ADMIRED",
+      "clues": [
+        "To be amazed at; to view with surprise; to marvel at.",
+        "To regard with wonder and delight.",
+        "To look upon with an elevated feeling of pleasure, as something which",
+        "To estimate or value highly; to hold in high esteem.",
+        "To be enthusiastic about (doing something); to want or like (to do"
+      ]
+    },
+    {
+      "answer": "ADMIRER",
+      "clues": [
+        "One who admires."
+      ]
+    },
+    {
+      "answer": "ADMIRING",
+      "clues": [
+        "To be amazed at; to view with surprise; to marvel at.",
+        "To regard with wonder and delight.",
+        "To look upon with an elevated feeling of pleasure, as something which",
+        "To estimate or value highly; to hold in high esteem.",
+        "To be enthusiastic about (doing something); to want or like (to do"
+      ]
+    },
+    {
+      "answer": "ADMISSION",
+      "clues": [
+        "The act or practice of admitting.",
+        "Permission to enter, or the entrance itself; admittance; entrance; access",
+        "The granting of an argument or position not fully proved; the act",
+        "Acquiescence or concurrence in a statement made by another, and distinguishable from",
+        "A fact, point, or statement admitted; as, admission made out of court"
+      ]
+    },
+    {
+      "answer": "ADMIT",
+      "clues": [
+        "To allow to enter; to grant entrance (to), whether into a place,",
+        "To allow (someone) to enter a profession or to enjoy a privilege;",
+        "To concede as true; to acknowledge or assent to, as an allegation",
+        "To be capable of; to permit. In this sense, \"of\" may be",
+        "To give warrant or allowance, to grant opportunity or permission (+ of)."
+      ]
+    },
+    {
+      "answer": "ADOBE",
+      "clues": [
+        "An unburnt brick dried in the sun.",
+        "The earth from which such bricks are made.",
+        "A house made of adobe brick."
+      ]
+    },
+    {
+      "answer": "ADOLESCENT",
+      "clues": [
+        "A person who is in adolescence; someone who has reached puberty but",
+        "Of, relating to, or at the age of adolescence; at the stage"
+      ]
+    },
+    {
+      "answer": "ADOPT",
+      "clues": [
+        "To take by choice into relationship (a child, heir, friend, citizen, etc.)",
+        "To take or receive as one's own what is not so naturally.",
+        "To select and take or approve.",
+        "To win ten consecutive games against an opponent"
+      ]
+    },
+    {
+      "answer": "ADOPTION",
+      "clues": [
+        "The act of adopting.",
+        "The state of being adopted; the acceptance of a child of other",
+        "Admission to an institution, for example a hospital, clinic, mental asylum.",
+        "The choosing and making that to be one's own which originally was",
+        "Transfer between an old system to another (usually better) system."
+      ]
+    },
+    {
+      "answer": "ADOPTIVE",
+      "clues": [
+        "Related through adoption; more generally, relating to adoption."
+      ]
+    },
+    {
+      "answer": "ADORATION",
+      "clues": [
+        "An act of religious worship.",
+        "Admiration or esteem.",
+        "The act of adoring; loving devotion or fascination.",
+        "The selection of a pope by acclamation and before any formal ballot"
+      ]
+    },
+    {
+      "answer": "ADORE",
+      "clues": [
+        "To worship.",
+        "To love with one's entire heart and soul; regard with deep respect",
+        "To be very fond of.",
+        "To adorn."
+      ]
+    },
+    {
+      "answer": "ADORN",
+      "clues": [
+        "Adornment",
+        "To make more beautiful and attractive; to decorate.",
+        "Adorned; ornate"
+      ]
+    },
+    {
+      "answer": "ADVANCING",
+      "clues": [
+        "To promote or advantage.",
+        "To move forward in space or time.",
+        "To raise, be raised.",
+        "The act of proceeding forward; an advance."
+      ]
+    },
+    {
+      "answer": "ADVANTAGE",
+      "clues": [
+        "Any condition, circumstance, opportunity or means, particularly favorable to success, or to",
+        "Superiority; mastery; — used with of to specify its nature or with",
+        "Superiority of state, or that which gives it; benefit; gain; profit",
+        "The score where one player wins a point after deuce but needs",
+        "The continuation of the game after a foul against the attacking team,"
+      ]
+    },
+    {
+      "answer": "ADVENT",
+      "clues": [
+        "Arrival; onset; a time when something first comes or appears"
+      ]
+    },
+    {
+      "answer": "ADVENTURE",
+      "clues": [
+        "The encountering of risks; a bold undertaking, in which dangers are likely",
+        "A remarkable occurrence; a striking event.",
+        "A mercantile or speculative enterprise of hazard; a venture; a shipment by",
+        "A feeling of desire for new and exciting things.",
+        "A text adventure or an adventure game."
+      ]
+    },
+    {
+      "answer": "ADVENTURER",
+      "clues": [
+        "One who enjoys adventures.",
+        "A person who seeks a fortune in new and possibly dangerous enterprises.",
+        "A soldier of fortune, a speculator.",
+        "A person who tries to advance their social position by somewhat devious",
+        "A player of adventure games or text adventures."
+      ]
+    },
+    {
+      "answer": "ADVERB",
+      "clues": [
+        "(grammar) A word that modifies a verb, adjective, other adverbs, or various",
+        "To make into or become an adverb."
+      ]
+    },
+    {
+      "answer": "ADVERSARY",
+      "clues": [
+        "An opponent or rival."
+      ]
+    },
+    {
+      "answer": "ADVERSE",
+      "clues": [
+        "Unfavorable; antagonistic in purpose or effect; hostile; actively opposing one's interests or",
+        "Opposed; contrary; opposing one's interests or desire.",
+        "Opposite; confronting."
+      ]
+    },
+    {
+      "answer": "ADVERSITY",
+      "clues": [
+        "The state of adverse conditions; state of misfortune or calamity.",
+        "An event that is adverse; calamity."
+      ]
+    },
+    {
+      "answer": "ADVERT",
+      "clues": [
+        "An advertisement, an ad."
+      ]
+    },
+    {
+      "answer": "ADVERTISE",
+      "clues": [
+        "To give (especially public) notice of (something); to announce publicly.",
+        "To provide information about a person or goods and services to influence",
+        "To provide public information about (a product, service etc.) in order to",
+        "To notify (someone) of something; to call someone's attention to something.",
+        "In gin rummy, to discard a card of one's preferred suit so"
+      ]
+    },
+    {
+      "answer": "ADVERTISED",
+      "clues": [
+        "To give (especially public) notice of (something); to announce publicly.",
+        "To provide information about a person or goods and services to influence",
+        "To provide public information about (a product, service etc.) in order to",
+        "To notify (someone) of something; to call someone's attention to something.",
+        "In gin rummy, to discard a card of one's preferred suit so"
+      ]
+    },
+    {
+      "answer": "ADVERTISER",
+      "clues": [
+        "One who advertises.",
+        "A periodical in which advertisements can be published by individuals."
+      ]
+    },
+    {
+      "answer": "ADVICE",
+      "clues": [
+        "An opinion offered in an effort to be helpful.",
+        "Deliberate consideration; knowledge.",
+        "(commonly in plural) Information or news given; intelligence",
+        "In language about financial transactions executed by formal documents, an advisory document.",
+        "In commercial language, information communicated by letter; used chiefly in reference to"
+      ]
+    },
+    {
+      "answer": "ADVISABLE",
+      "clues": [
+        "(of a course of action) Worthy of being recommended; desirable.",
+        "(of a person) Capable of being advised or willing to be advised."
+      ]
+    },
+    {
+      "answer": "ADVISE",
+      "clues": [
+        "To give advice to; to offer an opinion to, as worthy or",
+        "To recommend; to offer as advice.",
+        "To give information or notice to; to inform or counsel; — with",
+        "To consider, to deliberate.",
+        "To look at, watch; to see."
+      ]
+    },
+    {
+      "answer": "ADVISED",
+      "clues": [
+        "To give advice to; to offer an opinion to, as worthy or",
+        "To recommend; to offer as advice.",
+        "To give information or notice to; to inform or counsel; — with",
+        "To consider, to deliberate.",
+        "To look at, watch; to see."
+      ]
+    },
+    {
+      "answer": "ADVISER",
+      "clues": [
+        "One who advises"
+      ]
+    },
+    {
+      "answer": "ADVISING",
+      "clues": [
+        "To give advice to; to offer an opinion to, as worthy or",
+        "To recommend; to offer as advice.",
+        "To give information or notice to; to inform or counsel; — with",
+        "To consider, to deliberate.",
+        "To look at, watch; to see."
+      ]
+    },
+    {
+      "answer": "ADVISOR",
+      "clues": [
+        "One who offers advice."
+      ]
+    },
+    {
+      "answer": "ADVISORY",
+      "clues": [
+        "A warning.",
+        "Able to give advice.",
+        "Containing advice; advising."
+      ]
+    },
+    {
+      "answer": "ADVOCACY",
+      "clues": [
+        "The profession of an advocate",
+        "The act of arguing in favour of, or supporting something",
+        "The practice of supporting someone to make their voice heard"
+      ]
+    },
+    {
+      "answer": "ADVOCATE",
+      "clues": [
+        "Someone whose job is to speak for someone's case in a court",
+        "Anyone who argues the case of another; an intercessor.",
+        "A person who speaks in support of something.",
+        "A person who supports others to make their voices heard, or ideally",
+        "To plead in favour of; to defend by argument, before a tribunal"
+      ]
+    },
+    {
+      "answer": "ADVOCATED",
+      "clues": [
+        "To plead in favour of; to defend by argument, before a tribunal",
+        "To encourage support for something.",
+        "(with for) To engage in advocacy.",
+        "Having been argued in favor of."
+      ]
+    },
+    {
+      "answer": "ADVOCATING",
+      "clues": [
+        "To plead in favour of; to defend by argument, before a tribunal",
+        "To encourage support for something.",
+        "(with for) To engage in advocacy."
+      ]
+    },
+    {
+      "answer": "AEGIS",
+      "clues": [
+        "A mythological shield associated with the Greek deities Zeus and Athena (and",
+        "Usually as under the aegis: guidance, protection; endorsement, sponsorship."
+      ]
+    },
+    {
+      "answer": "AFFILIATE",
+      "clues": [
+        "Someone or something, especially, a television station, that is associated with a",
+        "To adopt; to receive into a family as one's offspring",
+        "To bring or receive into close connection; to ally.",
+        "(said of an illegitimate child) To fix the paternity of",
+        "To connect in the way of descent; to trace origin to."
+      ]
+    },
+    {
+      "answer": "AFFILIATED",
+      "clues": [
+        "To adopt; to receive into a family as one's offspring",
+        "To bring or receive into close connection; to ally.",
+        "(said of an illegitimate child) To fix the paternity of",
+        "To connect in the way of descent; to trace origin to.",
+        "(followed by \"to\" or \"with\") To attach (to) or unite (with); to"
+      ]
+    },
+    {
+      "answer": "AFFINE",
+      "clues": [
+        "(genealogy) A relative by marriage, an in-law.",
+        "To refine.",
+        "Assigning finite values to finite quantities.",
+        "Of or pertaining to a function expressible as f(\\vec x)= A \\vec",
+        "Of two materials, having mutual affinity."
+      ]
+    },
+    {
+      "answer": "AFFINITY",
+      "clues": [
+        "A natural attraction or feeling of kinship to a person or thing.",
+        "A family relationship through marriage of a relative (e.g. sister-in-law), as opposed",
+        "A kinsman or kinswoman of a such relationship; one who is affinal.",
+        "The fact of and manner in which something is related to another.",
+        "Any romantic relationship."
+      ]
+    },
+    {
+      "answer": "AFFIRM",
+      "clues": [
+        "To agree, verify or concur; to answer positively.",
+        "To assert positively; to tell with confidence; to aver; to maintain as",
+        "To support or encourage.",
+        "To make firm; to confirm, or ratify; especially to assert or confirm,"
+      ]
+    },
+    {
+      "answer": "AFFIX",
+      "clues": [
+        "That which is affixed; an appendage.",
+        "A bound morpheme added to the word’s stem's end.",
+        "(broadly) A bound morpheme added to a word’s stem; a prefix, suffix",
+        "The complex number a+bi associated with the point in the Gauss plane",
+        "(decorative art) Any small feature, as a figure, a flower, or the"
+      ]
+    },
+    {
+      "answer": "AFFIXES",
+      "clues": [
+        "That which is affixed; an appendage.",
+        "A bound morpheme added to the word’s stem's end.",
+        "(broadly) A bound morpheme added to a word’s stem; a prefix, suffix",
+        "The complex number a+bi associated with the point in the Gauss plane",
+        "(decorative art) Any small feature, as a figure, a flower, or the"
+      ]
+    },
+    {
+      "answer": "AFFLUENT",
+      "clues": [
+        "Somebody who is wealthy.",
+        "A stream or river flowing into a larger river or into a",
+        "Abundant; copious; plenteous.",
+        "(by extension) Abounding in goods or riches; having a moderate level of",
+        "Tributary."
+      ]
+    },
+    {
+      "answer": "AFFORD",
+      "clues": [
+        "To incur, stand, or bear without serious detriment, as an act which",
+        "To offer, provide, or supply, as in selling, granting, expending, with profit,",
+        "To give forth; to supply, yield, or produce as the natural result,",
+        "To give, grant, or confer, with a remoter reference to its being"
+      ]
+    },
+    {
+      "answer": "AFFORDABLE",
+      "clues": [
+        "Able to be afforded; inexpensive or reasonably priced."
+      ]
+    },
+    {
+      "answer": "AFFRONT",
+      "clues": [
+        "An open or intentional offense, slight, or insult.",
+        "A hostile encounter or meeting.",
+        "To insult intentionally, especially openly.",
+        "To meet defiantly; to confront.",
+        "To meet or encounter face to face."
+      ]
+    },
+    {
+      "answer": "AFGHAN",
+      "clues": [
+        "A blanket or throw, usually crocheted or knitted.",
+        "A type of iced chocolate biscuit, sometimes containing cornflakes and topped with"
+      ]
+    },
+    {
+      "answer": "AFIELD",
+      "clues": [
+        "Away (from the home or starting point, physical or conceptual); usually preceded",
+        "On the field.",
+        "Out in the open."
+      ]
+    },
+    {
+      "answer": "AFIRE",
+      "clues": [
+        "On fire (often metaphorically)."
+      ]
+    },
+    {
+      "answer": "AFLOAT",
+      "clues": [
+        "Floating",
+        "Covered with water bearing floating articles; flooded.",
+        "Out at sea.",
+        "Making successful progress under one's own steam."
+      ]
+    },
+    {
+      "answer": "AFOOT",
+      "clues": [
+        "(predicative) That is on foot, in motion, in action, in progress.",
+        "On foot. (means of locomotion, walking)",
+        "On foot. (support of the body, standing)",
+        "In motion; in action; astir; stirring; in progress."
+      ]
+    },
+    {
+      "answer": "AFOUL",
+      "clues": [
+        "(principally nautical) In a state of collision or entanglement.",
+        "(with of) In a state of entanglement or conflict (with)."
+      ]
+    },
+    {
+      "answer": "AFRAID",
+      "clues": [
+        "(usually used predicatively, not attributively, be afraid) Impressed with fear or apprehension;",
+        "Regretful, sorry.",
+        "(used with for) Worried about, feeling concern for, fearing for (someone or"
+      ]
+    },
+    {
+      "answer": "AFRESH",
+      "clues": [
+        "Anew; again; once more"
+      ]
+    },
+    {
+      "answer": "AFTER",
+      "clues": [
+        "Later; second (of two); next, following, subsequent",
+        "(where the frame of reference is within the ship) At or towards",
+        "Behind; later in time; following.",
+        "Subsequently to; following in time; later than.",
+        "Behind."
+      ]
+    },
+    {
+      "answer": "AFTERLIFE",
+      "clues": [
+        "Life after death.",
+        "The place believed to be inhabited by deceased people."
+      ]
+    },
+    {
+      "answer": "AFTERMATH",
+      "clues": [
+        "A second mowing; the grass which grows after the first crop of",
+        "That which happens after, that which follows, usually of strongly negative connotation"
+      ]
+    },
+    {
+      "answer": "AFTERNOON",
+      "clues": [
+        "The part of the day from noon or lunchtime until sunset, evening,",
+        "The later part of anything, often with implications of decline.",
+        "A party or social event held in the afternoon.",
+        "(more often in the plural) In the afternoon.",
+        "Clipping of good afternoon."
+      ]
+    },
+    {
+      "answer": "AFTERWARD",
+      "clues": [
+        "(temporal location) At a later or succeeding time."
+      ]
+    },
+    {
+      "answer": "AGAIN",
+      "clues": [
+        "Another time; once more.",
+        "Over and above a factor of one.",
+        "Used metalinguistically, with the repetition being in the discussion, or in the",
+        "Back in the reverse direction, or to an original starting point.",
+        "Back (to a former place or state)."
+      ]
+    },
+    {
+      "answer": "AGENCY",
+      "clues": [
+        "The capacity, condition, or state of acting or of exerting power.",
+        "The capacity of individuals to act independently and to make their own",
+        "A medium through which power is exerted or an end is achieved.",
+        "The office or function of an agent; also, the relationship between a",
+        "An establishment engaged in doing business for another; also, the place of"
+      ]
+    },
+    {
+      "answer": "AGENDA",
+      "clues": [
+        "A temporally organized plan for matters to be attended to.",
+        "A list of matters to be taken up (as at a meeting).",
+        "A notebook used to organize and maintain such plans or lists, an",
+        "A hidden agenda.",
+        "A ritual."
+      ]
+    },
+    {
+      "answer": "AGENT",
+      "clues": [
+        "One who exerts power, or has the power to act",
+        "One who acts for, or in the place of, another (the principal),",
+        "A person who looks for work for another person",
+        "Someone who works for an intelligence agency",
+        "An active power or cause or substance; something which has the power"
+      ]
+    },
+    {
+      "answer": "AGGRAVATED",
+      "clues": [
+        "To make (an offence) worse or more severe; to increase in offensiveness",
+        "(by extension) To make worse; to exacerbate.",
+        "To give extra weight or intensity to; to exaggerate, to magnify.",
+        "To pile or heap (something heavy or onerous) on or upon someone.",
+        "To exasperate; to provoke or irritate."
+      ]
+    },
+    {
+      "answer": "AGGREGATE",
+      "clues": [
+        "A mass, assemblage, or sum of particulars; something consisting of elements but",
+        "A mass formed by the union of homogeneous particles; – in distinction",
+        "A set (collection of objects).",
+        "The full chromatic scale of twelve equal tempered pitches.",
+        "The total score in a set of games between teams or competitors,"
+      ]
+    },
+    {
+      "answer": "AGGREGATED",
+      "clues": [
+        "To bring together; to collect into a mass or sum.",
+        "To add or unite (e.g. a person), to an association.",
+        "To amount in the aggregate to."
+      ]
+    },
+    {
+      "answer": "AGGREGATOR",
+      "clues": [
+        "Someone or something which aggregates",
+        "An online feed reader used to keep track of updates to blogs,"
+      ]
+    },
+    {
+      "answer": "AGGRESSION",
+      "clues": [
+        "The act of initiating hostilities or invasion.",
+        "The practice or habit of launching attacks.",
+        "Hostile or destructive behavior or actions."
+      ]
+    },
+    {
+      "answer": "AGGRESSIVE",
+      "clues": [
+        "Characterized by aggression; unjustly attacking; prone to behave in a way that",
+        "Of heuristics, source code optimization techniques, etc.: exploiting every opportunity to be",
+        "(of a tumour or disease) That spreads quickly or extensively; virulent; malignant."
+      ]
+    },
+    {
+      "answer": "AGILE",
+      "clues": [
+        "Having the faculty of quick motion in the limbs; apt or ready",
+        "Characterised by quick motion",
+        "Of or relating to agile software development, a technique for iterative and"
+      ]
+    },
+    {
+      "answer": "AGILITY",
+      "clues": [
+        "The quality of being agile; the power of moving the limbs quickly",
+        "A faculty of being agile in body, mind, or figuratively."
+      ]
+    },
+    {
+      "answer": "AGING",
+      "clues": [
+        "To cause to grow old; to impart the characteristics of age to.",
+        "To postpone an action that would extinguish something, as a debt.",
+        "To categorize by age.",
+        "To grow aged; to become old; to show marks of age.",
+        "The process of becoming older or more mature."
+      ]
+    },
+    {
+      "answer": "AGITATION",
+      "clues": [
+        "The act of agitating, or the state of being agitated; the state",
+        "A stirring up or arousing; disturbance of tranquillity; disturbance of mind which",
+        "Excitement of public feeling by discussion, appeals, etc.",
+        "Examination or consideration of a subject in controversy, or of a plan"
+      ]
+    },
+    {
+      "answer": "AGNOSTIC",
+      "clues": [
+        "A person who holds to a form of agnosticism, especially uncertainty of",
+        "Of or relating to agnosticism or its adherents.",
+        "Doubtful or uncertain about the existence or demonstrability of God or other",
+        "Of a software component etc.: unaware or noncommittal regarding the specific nature",
+        "(usually with a prepositional phrase) Having no firmly held opinions on an"
+      ]
+    },
+    {
+      "answer": "AGO",
+      "clues": [
+        "Gone; gone by; gone away; passed; passed away.",
+        "Nearly gone; dead (used in Devonshire at the turn of the 19th",
+        "Before"
+      ]
+    },
+    {
+      "answer": "AGONIST",
+      "clues": [
+        "Someone involved in a contest or battle (as in an agon), protagonist.",
+        "The muscle that contracts while the other relaxes.",
+        "A molecule that can combine with a receptor on a cell to"
+      ]
+    },
+    {
+      "answer": "AGONY",
+      "clues": [
+        "Extreme pain.",
+        "The sufferings of Jesus Christ in the garden of Gethsemane.",
+        "Violent contest or striving.",
+        "Paroxysm of joy; keen emotion.",
+        "The last struggle of life; death struggle."
+      ]
+    },
+    {
+      "answer": "AGORA",
+      "clues": [
+        "A place for gathering.",
+        "A marketplace, especially in Classical Greece."
+      ]
+    },
+    {
+      "answer": "AGRARIAN",
+      "clues": [
+        "A person who advocates the political interests of working farmers",
+        "Of, or relating to, the ownership, tenure and cultivation of land.",
+        "Agricultural or rural.",
+        "Wild; said of plants growing in a cultivated field."
+      ]
+    },
+    {
+      "answer": "AGREE",
+      "clues": [
+        "To harmonize in opinion, statement, or action; to be in unison or",
+        "To yield assent; to accede;—followed by to.",
+        "To yield assent to; to approve.",
+        "To make a stipulation by way of settling differences or determining a",
+        "To be conformable; to resemble; to coincide; to correspond."
+      ]
+    },
+    {
+      "answer": "AGREEABLE",
+      "clues": [
+        "Something pleasing; anything that is agreeable.",
+        "Pleasing, either to the mind or senses; pleasant; grateful.",
+        "Willing; ready to agree or consent.",
+        "Agreeing or suitable; conformable; correspondent; concordant; adapted; followed by to, or rarely",
+        "In pursuance, conformity, or accordance; used adverbially"
+      ]
+    },
+    {
+      "answer": "AGREED",
+      "clues": [
+        "To harmonize in opinion, statement, or action; to be in unison or",
+        "To yield assent; to accede;—followed by to.",
+        "To yield assent to; to approve.",
+        "To make a stipulation by way of settling differences or determining a",
+        "To be conformable; to resemble; to coincide; to correspond."
+      ]
+    },
+    {
+      "answer": "AGREEMENT",
+      "clues": [
+        "An understanding between entities to follow a specific course of conduct.",
+        "A state whereby several parties share a view or opinion; the state",
+        "A legally binding contract enforceable in a court of law.",
+        "(grammar) Rules that exist in many languages that force some parts of",
+        "(chiefly in the plural) An agreeable quality."
+      ]
+    },
+    {
+      "answer": "AGROUND",
+      "clues": [
+        "(of a normally floating craft) Resting on the bottom.",
+        "(by extension) at a loss, ruined, with no way out"
+      ]
+    },
+    {
+      "answer": "AIRBAG",
+      "clues": [
+        "A protective system in automobiles in which when a crash occurs, a",
+        "A similar inflated bag used in performing stunts, etc.",
+        "A person who talks too much; a windbag or gossip."
+      ]
+    },
+    {
+      "answer": "AIRBASE",
+      "clues": [
+        "A military airport, providing housing and support for aircraft and personnel."
+      ]
+    },
+    {
+      "answer": "AIRBORNE",
+      "clues": [
+        "Military infantry intended to be transported by air and delivered to the",
+        "In or carried by the air.",
+        "In flight.",
+        "Fitted to an aircraft.",
+        "Transported by air in an aircraft."
+      ]
+    },
+    {
+      "answer": "AIRBUS",
+      "clues": [
+        "A subsonic jet airliner, especially a wide-bodied one."
+      ]
+    },
+    {
+      "answer": "AIRCRAFT",
+      "clues": [
+        "A vehicle capable of atmospheric flight due to interaction with the air,"
+      ]
+    },
+    {
+      "answer": "AIRCREW",
+      "clues": [
+        "A group of two or more trained individuals, formed as a team"
+      ]
+    },
+    {
+      "answer": "AIRDATE",
+      "clues": [
+        "The date on which a television or radio program is broadcast."
+      ]
+    },
+    {
+      "answer": "AIRFIELD",
+      "clues": [
+        "An open field designated for the taking off and landing of aircraft,"
+      ]
+    },
+    {
+      "answer": "AIRFLOW",
+      "clues": [
+        "Any flow of air, especially the motion of air around a moving"
+      ]
+    },
+    {
+      "answer": "AIRFOIL",
+      "clues": [
+        "A structure shaped to produce lift when moving in air.",
+        "A wing of an aircraft."
+      ]
+    },
+    {
+      "answer": "AIRFRAME",
+      "clues": [
+        "The main body and structure of an aircraft (without the powerplant)."
+      ]
+    },
+    {
+      "answer": "AIRLIFT",
+      "clues": [
+        "The transportation of troops, civilians or supplies by air, especially in an",
+        "Such a flight.",
+        "A pipe that is used to suck up objects from the sea",
+        "To transport (troops etc) in an airlift."
+      ]
+    },
+    {
+      "answer": "AIRLINE",
+      "clues": [
+        "A company that flies airplanes to transport people and goods."
+      ]
+    },
+    {
+      "answer": "AIRLINER",
+      "clues": [
+        "A passenger-carrying aircraft, especially one of a fleet operated by an airline."
+      ]
+    },
+    {
+      "answer": "AIRMAIL",
+      "clues": [
+        "The system of conveying mail using aircraft.",
+        "The items of mail so carried.",
+        "To send mail by air.",
+        "To (unintentionally) throw the ball well over a fielder's head where that"
+      ]
+    },
+    {
+      "answer": "AIRMAN",
+      "clues": [
+        "A pilot of an aircraft.",
+        "A member of an air force.",
+        "A person of a rank in the U.S. Air Force above airman",
+        "A naval seaman, especially one in the U.S. Navy, who works on"
+      ]
+    },
+    {
+      "answer": "AIRMEN",
+      "clues": [
+        "A pilot of an aircraft.",
+        "A member of an air force.",
+        "A person of a rank in the U.S. Air Force above airman",
+        "A naval seaman, especially one in the U.S. Navy, who works on"
+      ]
+    },
+    {
+      "answer": "AIRPLANE",
+      "clues": [
+        "A powered heavier-than-air aircraft with fixed wings.",
+        "To fly in an aeroplane.",
+        "To transport by aeroplane."
+      ]
+    },
+    {
+      "answer": "AIRPLAY",
+      "clues": [
+        "The playing of a particular song, band or genre on the radio,"
+      ]
+    },
+    {
+      "answer": "AIRPORT",
+      "clues": [
+        "An airfield (an area designated for the takeoff and landing of aircraft),"
+      ]
+    },
+    {
+      "answer": "AIRSHIP",
+      "clues": [
+        "A lighter-than-air aircraft that can be propelled forward through the air as",
+        "Any aircraft.",
+        "The highest ranking officials of the RAF, viewed as arrogant and distant.",
+        "To transport goods by aircraft."
+      ]
+    },
+    {
+      "answer": "AIRSHOW",
+      "clues": [
+        "A public display of stunt flying, aerobatics, and historical aircraft."
+      ]
+    },
+    {
+      "answer": "AIRSPACE",
+      "clues": [
+        "A specified portion of the atmosphere, especially that under the technical aviation",
+        "That part of the sky designated for the sole use of aircraft.",
+        "Space (i.e. a few neighboring frequencies) available for broadcasting within a particular",
+        "The portion of an enclosed area which contains air, especially breathable air.",
+        "The cavity in a cavity wall containing air for insulation."
+      ]
+    },
+    {
+      "answer": "AIRSPEED",
+      "clues": [
+        "The speed of an aircraft relative to the air through which it"
+      ]
+    },
+    {
+      "answer": "AIRSTRIKE",
+      "clues": [
+        "An attack on a ground or naval target by one or more",
+        "To attack a ground target through the use of aircraft or missiles."
+      ]
+    },
+    {
+      "answer": "AIRSTRIP",
+      "clues": [
+        "An aircraft landing field, usually with one runway and only basic facilities."
+      ]
+    },
+    {
+      "answer": "AIRTIME",
+      "clues": [
+        "The duration during which a radio or television program (or part of",
+        "The chargeable use of a mobile phone, either in minutes or in",
+        "The period during which a person riding a rollercoaster or similar ride"
+      ]
+    },
+    {
+      "answer": "AIRWAY",
+      "clues": [
+        "The trachea.",
+        "A flight path used by aeroplanes."
+      ]
+    },
+    {
+      "answer": "ALBEIT",
+      "clues": [
+        "Although, despite (it) being."
+      ]
+    },
+    {
+      "answer": "ALBINO",
+      "clues": [
+        "A person or animal congenitally lacking melanin pigmentation in the skin, eyes,",
+        "Congenitally lacking melanin pigmentation in the skin, eyes, and hair or feathers"
+      ]
+    },
+    {
+      "answer": "ALBUM",
+      "clues": [
+        "A book specially designed to keep photographs, stamps, or autographs.",
+        "A collection, especially of literary items",
+        "A phonograph record that is composed of several tracks",
+        "A jacket or cover for such a phonograph record.",
+        "A group of audio recordings, on any medium, intended for distribution as"
+      ]
+    },
+    {
+      "answer": "ALCALDE",
+      "clues": [
+        "In Spain or Latin America, a municipal magistrate who has both judicial"
+      ]
+    },
+    {
+      "answer": "ALCHEMIST",
+      "clues": [
+        "One who practices alchemy.",
+        "One who blends material or substances in the nature or supposed nature"
+      ]
+    },
+    {
+      "answer": "ALCHEMY",
+      "clues": [
+        "The ancient search for a universal panacea, and of the philosopher's stone,",
+        "The causing of any sort of mysterious sudden transmutation.",
+        "Any elaborate transformation process or algorithm."
+      ]
+    },
+    {
+      "answer": "ALCOHOL",
+      "clues": [
+        "Any of a class of organic compounds (such as ethanol) containing a",
+        "Ethanol.",
+        "Beverages containing ethanol, collectively.",
+        "Any very fine powder."
+      ]
+    },
+    {
+      "answer": "ALCOHOLIC",
+      "clues": [
+        "A person addicted to alcohol.",
+        "One who abuses alcohol.",
+        "Of or pertaining to alcohol.",
+        "Having more than a trace amount of alcohol in its contents.",
+        "Of, pertaining to, or affected by alcoholism."
+      ]
+    },
+    {
+      "answer": "ALCOHOLISM",
+      "clues": [
+        "A chronic disease caused by compulsive and uncontrollable consumption of alcoholic beverages,",
+        "Acute alcohol poisoning."
+      ]
+    },
+    {
+      "answer": "ALCOVE",
+      "clues": [
+        "A small recessed area set off from a larger room.",
+        "A shady retreat."
+      ]
+    },
+    {
+      "answer": "ALDER",
+      "clues": [
+        "Any of several trees or shrubs of the genus Alnus, belonging to"
+      ]
+    },
+    {
+      "answer": "ALDERMAN",
+      "clues": [
+        "A member of a municipal legislative body in a city or town.",
+        "A half-crown coin; its value, 30 pence.",
+        "A long pipe for smoking."
+      ]
+    },
+    {
+      "answer": "ALDERMEN",
+      "clues": [
+        "A member of a municipal legislative body in a city or town.",
+        "A half-crown coin; its value, 30 pence.",
+        "A long pipe for smoking."
+      ]
+    },
+    {
+      "answer": "ALDRIN",
+      "clues": [
+        "An insecticide and persistent organic pollutant containing a naphthalene-derived compound."
+      ]
+    },
+    {
+      "answer": "ALEPH",
+      "clues": [
+        "The first letter of the Proto-Canaanite alphabet, and its descendants in descended"
+      ]
+    },
+    {
+      "answer": "ALERT",
+      "clues": [
+        "An alarm.",
+        "A notification of higher importance than an advisory.",
+        "A state of readiness for potential combat.",
+        "Attentive; awake; on guard.",
+        "Brisk; nimble; moving with celerity."
+      ]
+    },
+    {
+      "answer": "ALEXIA",
+      "clues": [
+        "Word blindness, the inability, due to a cerebral disorder, to comprehend or"
+      ]
+    },
+    {
+      "answer": "ALFALFA",
+      "clues": [
+        "A plant, principally of Medicago sativa, grown as a pasture crop.",
+        "A type or breed of this plant."
+      ]
+    },
+    {
+      "answer": "ALFREDO",
+      "clues": [
+        "(noun adjunct) The sauce made from butter and Parmesan cheese used in"
+      ]
+    },
+    {
+      "answer": "ALGAE",
+      "clues": [
+        "Any of many aquatic photosynthetic organisms, including the seaweeds, whose size ranges",
+        "Algal organisms viewed collectively or as a mass; algal growth.",
+        "A particular kind of algae."
+      ]
+    },
+    {
+      "answer": "ALGAL",
+      "clues": [
+        "An alga.",
+        "Pertaining to, or like, algae"
+      ]
+    },
+    {
+      "answer": "ALGEBRA",
+      "clues": [
+        "A system for computation using letters or other symbols to represent numbers,",
+        "The surgical treatment of a dislocated or fractured bone. Also : a",
+        "The study of algebraic structures.",
+        "A universal algebra.",
+        "An algebraic structure consisting of a module over a commutative ring (or"
+      ]
+    },
+    {
+      "answer": "ALGEBRAIC",
+      "clues": [
+        "Of, or relating to, algebra.",
+        "(of an expression, equation or function) Containing only numbers, letters and arithmetic",
+        "(of a number) Which is a root of some polynomial whose coefficients",
+        "(of a field) Whose every element is a root of some polynomial",
+        "(of notation) Describing squares by file (referred to in intrinsic order rather"
+      ]
+    },
+    {
+      "answer": "ALGORITHM",
+      "clues": [
+        "A collection of ordered steps that solve a mathematical problem. A precise",
+        "Calculation with Arabic numerals; algorism."
+      ]
+    },
+    {
+      "answer": "ALIGN",
+      "clues": [
+        "To form a line; to fall into line.",
+        "To adjust or form to a line; to range or form in",
+        "To store (data) in a way that is consistent with the memory",
+        "To identify with or match the behaviour, thoughts, etc of another person.",
+        "To organize a linear arrangement of DNA, RNA or protein sequences which"
+      ]
+    },
+    {
+      "answer": "ALIGNMENT",
+      "clues": [
+        "An arrangement of items in a line.",
+        "The process of adjusting a mechanism such that its parts are aligned;",
+        "An alliance of factions.",
+        "The conjunction of two celestial objects.",
+        "The precise route or course taken by a linear way (road, railway,"
+      ]
+    },
+    {
+      "answer": "ALIKE",
+      "clues": [
+        "Having resemblance or similitude; similar; without difference.",
+        "In the same manner, form, or degree; in common; equally."
+      ]
+    },
+    {
+      "answer": "ALINE",
+      "clues": [
+        "To form a line; to fall into line.",
+        "To adjust or form to a line; to range or form in",
+        "To store (data) in a way that is consistent with the memory",
+        "To identify with or match the behaviour, thoughts, etc of another person.",
+        "To organize a linear arrangement of DNA, RNA or protein sequences which"
+      ]
+    },
+    {
+      "answer": "ALIVE",
+      "clues": [
+        "Having life; living; not dead",
+        "In a state of action; in force or operation; existent",
+        "Busy with activity of many living beings; swarming; thronged; busy.",
+        "Sprightly; lively; brisk.",
+        "Susceptible; easy to impress; having keen feelings, as opposed to apathy"
+      ]
+    },
+    {
+      "answer": "ALIYAH",
+      "clues": [
+        "The calling up of someone to the bimah for the reading of",
+        "The immigration of Jews to Israel.",
+        "One of the major waves of immigration of Jews to Israel.",
+        "To make aliyah, to immigrate to Israel."
+      ]
+    },
+    {
+      "answer": "ALKALI",
+      "clues": [
+        "One of a class of caustic bases, such as soda, soda ash,",
+        "(Western United States) Soluble mineral matter, other than common salt, contained in"
+      ]
+    },
+    {
+      "answer": "ALKALINE",
+      "clues": [
+        "An alkaline battery.",
+        "Of, or relating to an alkali, one of a class of caustic",
+        "Having a pH greater than 7."
+      ]
+    },
+    {
+      "answer": "ALKENE",
+      "clues": [
+        "An unsaturated, aliphatic hydrocarbon with one or more carbon–carbon double bonds"
+      ]
+    },
+    {
+      "answer": "ALKYL",
+      "clues": [
+        "Any of a series of univalent radicals of the general formula CnH2n+1"
+      ]
+    },
+    {
+      "answer": "ALL",
+      "clues": [
+        "(with a possessive pronoun) Everything that one is capable of.",
+        "The totality of one's possessions.",
+        "All gone; dead.",
+        "(degree) Intensifier.",
+        "Entirely; completely; totally."
+      ]
+    },
+    {
+      "answer": "ALLAY",
+      "clues": [
+        "Alleviation; abatement; check.",
+        "An alloy.",
+        "To make quiet or put at rest; to pacify or appease; to",
+        "To alleviate; to abate; to mitigate.",
+        "To subside, abate, become peaceful."
+      ]
+    },
+    {
+      "answer": "ALLEE",
+      "clues": [
+        "A tree-lined avenue, often particularly one that is part of a landscaped"
+      ]
+    },
+    {
+      "answer": "ALLEGATION",
+      "clues": [
+        "An assertion, especially an accusation, not necessarily based on facts.",
+        "The act of alleging."
+      ]
+    },
+    {
+      "answer": "ALLEGE",
+      "clues": [
+        "To state under oath, to plead.",
+        "To cite or quote an author or his work for or against.",
+        "To adduce (something) as a reason, excuse, support etc.",
+        "To make a claim as justification or proof; to make an assertion"
+      ]
+    },
+    {
+      "answer": "ALLEGED",
+      "clues": [
+        "To state under oath, to plead.",
+        "To cite or quote an author or his work for or against.",
+        "To adduce (something) as a reason, excuse, support etc.",
+        "To make a claim as justification or proof; to make an assertion",
+        "To lighten, diminish."
+      ]
+    },
+    {
+      "answer": "ALLEGIANCE",
+      "clues": [
+        "Loyalty to some cause, nation or ruler."
+      ]
+    },
+    {
+      "answer": "ALLEGING",
+      "clues": [
+        "To state under oath, to plead.",
+        "To cite or quote an author or his work for or against.",
+        "To adduce (something) as a reason, excuse, support etc.",
+        "To make a claim as justification or proof; to make an assertion",
+        "To lighten, diminish."
+      ]
+    },
+    {
+      "answer": "ALLEGORY",
+      "clues": [
+        "The representation of abstract principles by characters or figures.",
+        "A picture, book, or other form of communication using such representation.",
+        "A symbolic representation which can be interpreted to reveal a hidden meaning,",
+        "A category that retains some of the structure of the category of"
+      ]
+    },
+    {
+      "answer": "ALLEGRO",
+      "clues": [
+        "A tempo mark directing that a passage is to be played in",
+        "In more traditional use, an expressive marking indicating lively or happily, not",
+        "A passage having this mark",
+        "In a quick and lively manner",
+        "Played in a quick, lively tempo"
+      ]
+    },
+    {
+      "answer": "ALLELE",
+      "clues": [
+        "One of a number of alternative forms of the same gene occupying"
+      ]
+    },
+    {
+      "answer": "ALLERGIC",
+      "clues": [
+        "A person with a tendency to having allergies; a person with multiple",
+        "Of or pertaining to allergy.",
+        "Having an allergy.",
+        "Excessively sensitive; susceptible."
+      ]
+    },
+    {
+      "answer": "ALLERGY",
+      "clues": [
+        "A disorder of the immune system causing adverse reactions to substances (allergens)",
+        "Any condition of hypersensitivity to a substance.",
+        "Altered susceptibility to a first treatment as exhibited in reaction to a",
+        "An antipathy, as toward a person or activity."
+      ]
+    },
+    {
+      "answer": "ALLEVIATE",
+      "clues": [
+        "To make less severe, as a pain or difficulty."
+      ]
+    },
+    {
+      "answer": "ALLEY",
+      "clues": [
+        "A narrow street or passageway, especially one through the middle of a",
+        "The area between the outfielders.",
+        "An establishment where bowling is played.",
+        "An elongated wooden strip of floor along which a bowling ball is",
+        "The extra area between the sidelines or tramlines on a tennis court"
+      ]
+    },
+    {
+      "answer": "ALLIANCE",
+      "clues": [
+        "The state of being allied.",
+        "The act of allying or uniting.",
+        "A union or connection of interests between families, states, parties, etc., especially",
+        "Any union resembling that of families or states; union by relationship in",
+        "(with the definite article) The persons or parties allied."
+      ]
+    },
+    {
+      "answer": "ALLOCATION",
+      "clues": [
+        "The process or procedure for allocating things, especially money or other resources."
+      ]
+    },
+    {
+      "answer": "ALLOT",
+      "clues": [
+        "To distribute or apportion by (or as if by) lot.",
+        "To assign or designate as a task or for a purpose."
+      ]
+    },
+    {
+      "answer": "ALLOTMENT",
+      "clues": [
+        "The act of allotting.",
+        "Something allotted; a share, part, or portion granted or distributed",
+        "The allowance of a specific amount of money or other credit of",
+        "A plot of land rented from the council for growing fruit and"
+      ]
+    },
+    {
+      "answer": "ALLOW",
+      "clues": [
+        "To grant, give, admit, accord, afford, or yield; to let one have.",
+        "To acknowledge; to accept as true; to concede; to accede to an",
+        "To grant (something) as a deduction or an addition; especially to abate",
+        "To grant license to; to permit; to consent to.",
+        "To not bar or obstruct."
+      ]
+    },
+    {
+      "answer": "ALLOWABLE",
+      "clues": [
+        "Permitted amount or activity.",
+        "Appropriate; satisfactory; acceptable.",
+        "Intellectually admissible; valid; probable.",
+        "Able to be added or deducted in consideration of something.",
+        "Permissible; tolerable; legitimate."
+      ]
+    },
+    {
+      "answer": "ALLOWANCE",
+      "clues": [
+        "Permission; granting, conceding, or admitting",
+        "Acknowledgment.",
+        "That which is allowed; a share or portion allotted or granted; a",
+        "Abatement; deduction; the taking into account of mitigating circumstances",
+        "A customary deduction from the gross weight of goods, differing by country."
+      ]
+    },
+    {
+      "answer": "ALLOY",
+      "clues": [
+        "A metal that is a combination of two or more elements, at",
+        "A metal of lesser value, mixed with a metal of greater value.",
+        "An admixture; something added which stains, taints etc.",
+        "Fusion, marriage, combination."
+      ]
+    },
+    {
+      "answer": "ALLUDE",
+      "clues": [
+        "To refer to something indirectly or by suggestion."
+      ]
+    },
+    {
+      "answer": "ALLUDED",
+      "clues": [
+        "To refer to something indirectly or by suggestion."
+      ]
+    },
+    {
+      "answer": "ALLUDING",
+      "clues": [
+        "To refer to something indirectly or by suggestion."
+      ]
+    },
+    {
+      "answer": "ALLURE",
+      "clues": [
+        "The power to attract, entice; the quality causing attraction.",
+        "Gait; bearing",
+        "To entice; to attract."
+      ]
+    },
+    {
+      "answer": "ALLUSION",
+      "clues": [
+        "An indirect reference; a hint; a reference to something supposed to be"
+      ]
+    },
+    {
+      "answer": "ALLUVIAL",
+      "clues": [
+        "A deposition of sediment over a long period of time by a",
+        "Alluvial soil; specifically, in Australia, gold-bearing alluvial soil.",
+        "Pertaining to the soil deposited by a stream."
+      ]
+    },
+    {
+      "answer": "ALMANAC",
+      "clues": [
+        "A book or table listing nautical, astronomical, astrological or other events for",
+        "A handbook, typically published annually, containing information on a particular subject",
+        "A GPS signal consisting of coarse orbit and status information for each"
+      ]
+    },
+    {
+      "answer": "ALMIGHTY",
+      "clues": [
+        "(sometimes postpositive) Unlimited in might; omnipotent; all-powerful",
+        "Great; extreme; terrible.",
+        "(by extension) Having very great power, influence, etc.",
+        "Extremely; thoroughly."
+      ]
+    },
+    {
+      "answer": "ALMOND",
+      "clues": [
+        "A type of tree nut.",
+        "A small deciduous tree in family Rosaceae, Prunus dulcis, that produces predominantly",
+        "Other plants that produce almond-like nuts:",
+        "The colour of the kernel of an almond without its shell and",
+        "The color of an almond still covered by its skin, a shade"
+      ]
+    },
+    {
+      "answer": "ALMOST",
+      "clues": [
+        "Something or someone that doesn't quite make it.",
+        "Very close to, not quite."
+      ]
+    },
+    {
+      "answer": "ALOFT",
+      "clues": [
+        "At, to, or in the air or sky.",
+        "Above, overhead, in a high place; up.",
+        "In the top, at the masthead, or on the higher yards or"
+      ]
+    },
+    {
+      "answer": "ALOHA",
+      "clues": [
+        "Good wishes, love.",
+        "An utterance of aloha (see Interjection, below).",
+        "Expressing good wishes when greeting or parting from someone; hello; goodbye."
+      ]
+    },
+    {
+      "answer": "ALONE",
+      "clues": [
+        "By oneself, solitary.",
+        "Apart from, or exclusive of, others.",
+        "Considered separately.",
+        "Without equal.",
+        "Unique; rare; matchless."
+      ]
+    },
+    {
+      "answer": "ALONG",
+      "clues": [
+        "In company; together.",
+        "Onward, forward, with progressive action.",
+        "By the length of; in a line with the length of; lengthwise",
+        "In a line with, with a progressive motion on; onward on; forward"
+      ]
+    },
+    {
+      "answer": "ALONGSIDE",
+      "clues": [
+        "Along the side; by the side; side by side with.",
+        "Together with or at the same time."
+      ]
+    },
+    {
+      "answer": "ALOOF",
+      "clues": [
+        "Reserved and remote; either physically or emotionally distant; standoffish.",
+        "At or from a distance, but within view, or at a small",
+        "Without sympathy; unfavorably.",
+        "Away from; clear of."
+      ]
+    },
+    {
+      "answer": "ALOUD",
+      "clues": [
+        "Spoken out loud.",
+        "With a loud voice, or great noise; loudly; audibly.",
+        "Audibly, as opposed to silently/quietly."
+      ]
+    },
+    {
+      "answer": "ALPHA",
+      "clues": [
+        "The name of the first letter of the Greek alphabet (Α, α),",
+        "Latin alpha",
+        "The name of the symbols Α and α used in science and",
+        "The return of a given asset or portfolio adjusted for systematic risk.",
+        "A person, especially a male, who is dominant, successful and attractive; (see"
+      ]
+    },
+    {
+      "answer": "ALPHABET",
+      "clues": [
+        "The set of letters used when writing in a language.",
+        "A writing system in which letters represent phonemes. (Contrast e.g. logography, a",
+        "A typically finite set of distinguishable symbols.",
+        "An individual letter of an alphabet; an alphabetic character.",
+        "The simplest rudiments; elements."
+      ]
+    },
+    {
+      "answer": "ALPINE",
+      "clues": [
+        "Any of several plants, native to mountain habitats, often grown in a",
+        "Of, relating to, or inhabiting mountains, especially above the timber line",
+        "Of or relating to slalom and downhill skiing. (Compare Nordic.)"
+      ]
+    },
+    {
+      "answer": "ALREADY",
+      "clues": [
+        "Prior to some specified time, either past, present, or future; by this",
+        "So soon."
+      ]
+    },
+    {
+      "answer": "ALRIGHT",
+      "clues": [
+        "Good; in acceptable, if not excellent condition.",
+        "In good health, unharmed.",
+        "Used to indicate acknowledgement or acceptance; OK.",
+        "A generic greeting; hello; how are you."
+      ]
+    },
+    {
+      "answer": "ALSO",
+      "clues": [
+        "(focus) In addition; besides; as well; further; too.",
+        "To the same degree or extent; so, as."
+      ]
+    },
+    {
+      "answer": "ALT",
+      "clues": [
+        "High pitch, of a voice or instrument; especially, the octave above the",
+        "A state of excitement, a heightened emotional condition."
+      ]
+    },
+    {
+      "answer": "ALTAR",
+      "clues": [
+        "A table or similar flat-topped structure used for religious rites.",
+        "A raised area around an altar in a church; the sanctuary.",
+        "Anything that is worshipped or sacrificed to."
+      ]
+    },
+    {
+      "answer": "ALTARPIECE",
+      "clues": [
+        "A work of art suspended above and behind an altar in a"
+      ]
+    },
+    {
+      "answer": "ALUMINIUM",
+      "clues": [
+        "A light, silvery metal extracted from bauxite, and a chemical element (symbol",
+        "A single atom of this element.",
+        "Aircraft or other machinery made partially or wholly of aluminium."
+      ]
+    },
+    {
+      "answer": "ALUMINUM",
+      "clues": [
+        "A metallic chemical element (symbol Al) with an atomic number of 13.",
+        "A single atom of this element.",
+        "Aircraft or other machinery made partially or wholly of aluminum."
+      ]
+    },
+    {
+      "answer": "ALUMNA",
+      "clues": [
+        "A female pupil or student (especially of a university or college).",
+        "A female graduate."
+      ]
+    },
+    {
+      "answer": "ALUMNAE",
+      "clues": [
+        "A female pupil or student (especially of a university or college).",
+        "A female graduate."
+      ]
+    },
+    {
+      "answer": "ALUMNI",
+      "clues": [
+        "An individual alumnus or alumna.",
+        "A male pupil or student.",
+        "A male graduate.",
+        "A student of any gender.",
+        "A graduate of any gender."
+      ]
+    },
+    {
+      "answer": "ALUMNUS",
+      "clues": [
+        "A male pupil or student.",
+        "A male graduate.",
+        "A student of any gender.",
+        "A graduate of any gender."
+      ]
+    },
+    {
+      "answer": "ALVEOLAR",
+      "clues": [
+        "An alveolar consonant",
+        "Of or relating to an alveolus.",
+        "Relating to the jaw ridge containing the tooth sockets.",
+        "Relating to the alveoli (small air sacs) of the lungs.",
+        "Formed with the tongue touching or approaching the inner ridge of the"
+      ]
+    },
+    {
+      "answer": "AMALGAM",
+      "clues": [
+        "An alloy containing mercury.",
+        "A combination of different things.",
+        "One of the ingredients in an alloy.",
+        "To amalgamate."
+      ]
+    },
+    {
+      "answer": "AMATEUR",
+      "clues": [
+        "A lover of something.",
+        "A person attached to a particular pursuit, study, or science as to",
+        "Someone who is unqualified or insufficiently skillful.",
+        "Non-professional.",
+        "Created, done, or populated by amateurs or non-professionals."
+      ]
+    },
+    {
+      "answer": "AMAZE",
+      "clues": [
+        "Amazement, astonishment.",
+        "To fill with wonder and surprise; to astonish, astound, surprise or perplex.",
+        "To undergo amazement; to be astounded.",
+        "To stupefy; to knock unconscious.",
+        "To bewilder; to stupefy; to bring into a maze."
+      ]
+    },
+    {
+      "answer": "AMAZON",
+      "clues": [
+        "A tall, strong, athletic woman."
+      ]
+    },
+    {
+      "answer": "AMBASSADOR",
+      "clues": [
+        "A minister of the highest rank sent to a foreign court to",
+        "An official messenger and representative.",
+        "A corporate representative, often the public face of the company."
+      ]
+    },
+    {
+      "answer": "AMBER",
+      "clues": [
+        "Ambergris, the waxy product of the sperm whale.",
+        "A hard, generally yellow to brown translucent fossil resin, used for jewellery.",
+        "A yellow-orange colour.",
+        "The intermediate light in a set of three traffic lights, which when",
+        "The stop codon (nucleotide triplet) \"UAG\", or a mutant which has this"
+      ]
+    },
+    {
+      "answer": "AMBIENCE",
+      "clues": [
+        "A particular mood or atmosphere of an environment or surrounding influence.",
+        "(3D models) A secondary color of a polygon that becomes more pronounced"
+      ]
+    },
+    {
+      "answer": "AMBIENT",
+      "clues": [
+        "Something that surrounds; encompassing material, substance or shape.",
+        "The atmosphere; the surrounding air or sky; atmospheric components collectively such as",
+        "A type of modern music that creates a relaxing and peaceful atmosphere.",
+        "Encompassing on all sides; surrounding; encircling; enveloping.",
+        "Evoking or creating an atmosphere: atmospheric."
+      ]
+    },
+    {
+      "answer": "AMBIGUITY",
+      "clues": [
+        "Something, particularly words and sentences, that is open to more than one",
+        "The state of being ambiguous."
+      ]
+    },
+    {
+      "answer": "AMBIGUOUS",
+      "clues": [
+        "Open to multiple interpretations.",
+        "Vague and unclear.",
+        "(of persons) Hesitant; uncertain; not taking sides."
+      ]
+    },
+    {
+      "answer": "AMBIT",
+      "clues": [
+        "The sphere or area of control and influence of something.",
+        "A circuit, or a boundary around a property.",
+        "The extent of actions, thoughts, or the meaning of words, etc."
+      ]
+    },
+    {
+      "answer": "AMBITION",
+      "clues": [
+        "Eager or inordinate desire for some object that confers distinction, as preferment,",
+        "An object of an ardent desire.",
+        "A desire, as in (sense 1), for another person to achieve these",
+        "A personal quality similar to motivation, not necessarily tied to a single",
+        "The act of going about to solicit or obtain an office, or"
+      ]
+    },
+    {
+      "answer": "AMBITIOUS",
+      "clues": [
+        "(of a person or their character) Having or showing ambition; wanting a",
+        "(followed by \"of\" or the infinitive) Very desirous",
+        "Resulting from, characterized by, or indicating, ambition",
+        "Hard to achieve."
+      ]
+    },
+    {
+      "answer": "AMBULANCE",
+      "clues": [
+        "An emergency vehicle designed for transporting seriously ill or injured people to",
+        "A mobile field hospital.",
+        "A prairie wagon.",
+        "To transport by ambulance."
+      ]
+    },
+    {
+      "answer": "AMBUSH",
+      "clues": [
+        "The act of concealing oneself and lying in wait to attack by",
+        "An attack launched from a concealed position.",
+        "The troops posted in a concealed place, for attacking by surprise; those",
+        "To station in ambush with a view to surprise an enemy.",
+        "To attack by ambush; to waylay."
+      ]
+    },
+    {
+      "answer": "AMBUSHES",
+      "clues": [
+        "The act of concealing oneself and lying in wait to attack by",
+        "An attack launched from a concealed position.",
+        "The troops posted in a concealed place, for attacking by surprise; those",
+        "To station in ambush with a view to surprise an enemy.",
+        "To attack by ambush; to waylay."
+      ]
+    },
+    {
+      "answer": "AMENABLE",
+      "clues": [
+        "Willing to respond to persuasion or suggestions.",
+        "Willing to comply; easily led.",
+        "Liable to be brought to account; responsible; accountable.",
+        "(of a group) Being a locally compact topological group carrying a kind"
+      ]
+    },
+    {
+      "answer": "AMICI",
+      "clues": [
+        "Someone not a party to a case who submits a brief and/or"
+      ]
+    },
+    {
+      "answer": "AMICUS",
+      "clues": [
+        "Someone not a party to a case who submits a brief and/or"
+      ]
+    },
+    {
+      "answer": "AMIDE",
+      "clues": [
+        "Any derivative of an oxoacid in which the hydroxyl group has been",
+        "Any ionic derivative of ammonia in which a hydrogen atom has been"
+      ]
+    },
+    {
+      "answer": "AMIDST",
+      "clues": [
+        "In the midst or middle of; surrounded or encompassed by; among."
+      ]
+    },
+    {
+      "answer": "AMIGO",
+      "clues": [
+        "Friend",
+        "(chiefly California) Mexican",
+        "A native of the Philippines who was friendly toward the Spanish."
+      ]
+    },
+    {
+      "answer": "AMINE",
+      "clues": [
+        "A functional group formally derived from ammonia by replacing one, two or",
+        "Any organic compound containing an amine functional group."
+      ]
+    },
+    {
+      "answer": "AMINO",
+      "clues": [
+        "The amine functional group.",
+        "Relating to an amine."
+      ]
+    },
+    {
+      "answer": "AMITY",
+      "clues": [
+        "Friendship. The cooperative and supportive relationship between people, or animals. In this",
+        "Mutual understanding and a peaceful relationship, especially between nations; peace; accord."
+      ]
+    },
+    {
+      "answer": "AMMONIA",
+      "clues": [
+        "A gaseous compound of hydrogen and nitrogen, NH3, with a pungent smell",
+        "A solution of this compound in water used domestically as a cleaning"
+      ]
+    },
+    {
+      "answer": "AMMONIUM",
+      "clues": [
+        "The univalent NH4+ cation, derived by the protonation of ammonia",
+        "(especially in combination) Any similar cation formed by replacing one or more"
+      ]
+    },
+    {
+      "answer": "AMMUNITION",
+      "clues": [
+        "Articles used in charging firearms and ordnance of all kinds; as powder,",
+        "Military stores, or provisions of all kinds for attack or defense.",
+        "Arguments and information that can be used against the other party in",
+        "To supply with ammunition."
+      ]
+    },
+    {
+      "answer": "AMNESIA",
+      "clues": [
+        "Loss of memory; forgetfulness.",
+        "Forgetfulness."
+      ]
+    },
+    {
+      "answer": "AMNESTY",
+      "clues": [
+        "Forgetfulness; cessation of remembrance of wrong; oblivion.",
+        "An act of the sovereign power granting oblivion, or a general pardon,",
+        "To grant a pardon (to a group)"
+      ]
+    },
+    {
+      "answer": "AMOEBA",
+      "clues": [
+        "A member of the genus Amoeba of unicellular protozoa that moves by",
+        "The graph of the real part of the logarithms of a polynomial",
+        "An asexual."
+      ]
+    },
+    {
+      "answer": "AMONG",
+      "clues": [
+        "Denotes a mingling or intermixing with distinct or separable objects. (See Usage",
+        "Denotes a belonging of a person or a thing to a group.",
+        "Denotes a sharing of a common feature in a group."
+      ]
+    },
+    {
+      "answer": "AMONGST",
+      "clues": [
+        "Denotes a mingling or intermixing with distinct or separable objects. See usage"
+      ]
+    },
+    {
+      "answer": "AMORAL",
+      "clues": [
+        "(of acts) Neither moral nor immoral.",
+        "(of people) Not believing in or caring for morality and immorality."
+      ]
+    },
+    {
+      "answer": "AMOROUS",
+      "clues": [
+        "Inclined or having a propensity to love, or to sexual enjoyment.",
+        "Indicating love or sexual desire.",
+        "Of or relating to, or produced by, love.",
+        "Affected with love; in love; enamored."
+      ]
+    },
+    {
+      "answer": "AMORPHOUS",
+      "clues": [
+        "Lacking a definite form or clear shape.",
+        "(by extension) Being without definite character or nature.",
+        "(by extension) Lacking organization or unity.",
+        "In the non-crystalline solid state of a typically crystalline solid.",
+        "(of a set) Infinite and not the disjoint union of two infinite"
+      ]
+    },
+    {
+      "answer": "AMOUNT",
+      "clues": [
+        "The total, aggregate or sum of material (not applicable to discrete numbers",
+        "A quantity or volume.",
+        "(sometimes proscribed) The number (the sum) of elements in a set.",
+        "(followed by to) To total or evaluate.",
+        "(followed by to) To be the same as or equivalent to."
+      ]
+    },
+    {
+      "answer": "AMOUR",
+      "clues": [
+        "Love, affection.",
+        "Courtship; flirtation.",
+        "A love affair.",
+        "A lover."
+      ]
+    },
+    {
+      "answer": "AMP",
+      "clues": [
+        "Short for ampere.",
+        "Short for amplifier.",
+        "Short for ampoule.",
+        "Short for amputee.",
+        "Short for ampicillin."
+      ]
+    },
+    {
+      "answer": "AMPHIBIAN",
+      "clues": [
+        "An animal of the Amphibia; any four-legged vertebrate that does not have",
+        "A vehicle which can operate on land and water. See Wikipedia article",
+        "Of or relating to the class Amphibia.",
+        "Capable of operating on both land and water amphibious.",
+        "Having two natures."
+      ]
+    },
+    {
+      "answer": "AMPHIBIOUS",
+      "clues": [
+        "Capable of functioning on land or in water.",
+        "Occurring on both land and water."
+      ]
+    },
+    {
+      "answer": "AMPLE",
+      "clues": [
+        "Large; great in size, extent, capacity, or bulk; for example spacious, roomy",
+        "Fully sufficient; abundant; plenty",
+        "Not contracted or brief; not concise; extended; diffusive"
+      ]
+    },
+    {
+      "answer": "AMPLIFIED",
+      "clues": [
+        "Having been made the subject of amplification; more potent or stronger, louder",
+        "To render larger, more extended, or more intense.",
+        "To enlarge by addition or commenting; to treat copiously by adding particulars,",
+        "To increase the amplitude of something, especially of an electric current.",
+        "To add content that is not present in the source text to"
+      ]
+    },
+    {
+      "answer": "AMPLIFIER",
+      "clues": [
+        "Anything that amplifies, or makes something larger or more intense.",
+        "An adverb that adds intensity, such as \"really\" or \"totally\".",
+        "An appliance or circuit that increases the strength of a weak electrical",
+        "A portable encasement that houses a large speaker, used to amplify voices",
+        "A lens that enlarges the field of vision."
+      ]
+    },
+    {
+      "answer": "AMPLIFY",
+      "clues": [
+        "To render larger, more extended, or more intense.",
+        "To enlarge by addition or commenting; to treat copiously by adding particulars,",
+        "To increase the amplitude of something, especially of an electric current.",
+        "To add content that is not present in the source text to"
+      ]
+    },
+    {
+      "answer": "AMPLITUDE",
+      "clues": [
+        "The measure of something's size, especially in terms of width or breadth;",
+        "The maximum absolute value of the vertical component of a curve or",
+        "The maximum absolute value of some quantity that varies.",
+        "The arc of the horizon between the true east or west point",
+        "The horizontal line which measures the distance to which a projectile is"
+      ]
+    },
+    {
+      "answer": "AMPLY",
+      "clues": [
+        "In an ample manner."
+      ]
+    },
+    {
+      "answer": "AMPUTATED",
+      "clues": [
+        "To surgically remove a part of the body, especially a limb",
+        "Having been removed or cut off."
+      ]
+    },
+    {
+      "answer": "AMPUTEE",
+      "clues": [
+        "A person who has had one or more limbs removed."
+      ]
+    },
+    {
+      "answer": "AMRIT",
+      "clues": [
+        "The water of life; the drink of the Hindu gods."
+      ]
+    },
+    {
+      "answer": "AMULET",
+      "clues": [
+        "A kind of protective charm or ornament, often bearing magical symbols, worn"
+      ]
+    },
+    {
+      "answer": "AMUSE",
+      "clues": [
+        "To entertain or occupy in a pleasant manner; to stir with pleasing",
+        "To cause laughter or amusement; to be funny.",
+        "To keep in expectation; to beguile; to delude.",
+        "To occupy or engage the attention of; to lose in deep thought;"
+      ]
+    },
+    {
+      "answer": "AMUSEMENT",
+      "clues": [
+        "Entertainment.",
+        "An activity that is entertaining or amusing, such as dancing, gunning, or"
+      ]
+    },
+    {
+      "answer": "ANACONDA",
+      "clues": [
+        "Any of various large nonvenomous snakes of the genus Eunectes, found mainly",
+        "(by extension) A large penis.",
+        "A particular variety of stud poker."
+      ]
+    },
+    {
+      "answer": "ANAEROBIC",
+      "clues": [
+        "Without oxygen; especially of an environment or organism.",
+        "Of exercise, involving glycolysis (the conversion of glucose to adenosine triphosphate) rather",
+        "Of or relating to an anaerobe."
+      ]
+    },
+    {
+      "answer": "ANAGRAM",
+      "clues": [
+        "(of words) A word or phrase that is created by rearranging the",
+        "To form anagrams."
+      ]
+    },
+    {
+      "answer": "ANALOG",
+      "clues": [
+        "Something that bears an analogy to something else",
+        "An organ or structure that is similar in function to one in",
+        "A structural derivative of a parent compound that often differs from it",
+        "(of a device or system) in which the value of a data"
+      ]
+    },
+    {
+      "answer": "ANALOGOUS",
+      "clues": [
+        "Having analogy; corresponding to something else; bearing some resemblance or proportion (often",
+        "Functionally similar, but arising through convergent evolution rather than being homologous."
+      ]
+    },
+    {
+      "answer": "ANALOGUE",
+      "clues": [
+        "Something that bears an analogy to something else",
+        "An organ or structure that is similar in function to one in",
+        "A structural derivative of a parent compound that often differs from it",
+        "(of a device or system) in which the value of a data"
+      ]
+    },
+    {
+      "answer": "ANALYSE",
+      "clues": [
+        "To subject to analysis.",
+        "To resolve (anything complex) into its elements.",
+        "To separate into the constituent parts, for the purpose of an examination",
+        "To examine in such a manner as to ascertain the elements or"
+      ]
+    },
+    {
+      "answer": "ANALYSED",
+      "clues": [
+        "To subject to analysis.",
+        "To resolve (anything complex) into its elements.",
+        "To separate into the constituent parts, for the purpose of an examination",
+        "To examine in such a manner as to ascertain the elements or"
+      ]
+    },
+    {
+      "answer": "ANALYSING",
+      "clues": [
+        "To subject to analysis.",
+        "To resolve (anything complex) into its elements.",
+        "To separate into the constituent parts, for the purpose of an examination",
+        "To examine in such a manner as to ascertain the elements or"
+      ]
+    },
+    {
+      "answer": "ANALYSIS",
+      "clues": [
+        "Decomposition into components in order to study (a complex thing, concept, theory",
+        "The result of such a process.",
+        "The mathematical study of functions, sequences, series, limits, derivatives and integrals.",
+        "Proof by deduction from known truths.",
+        "The process of breaking down a substance into its constituent parts, or"
+      ]
+    },
+    {
+      "answer": "ANALYST",
+      "clues": [
+        "Someone who analyzes.",
+        "A mathematician who studies real analysis.",
+        "A systems analyst.",
+        "A practitioner of psychoanalysis.",
+        "A financial analyst; a business analyst."
+      ]
+    },
+    {
+      "answer": "ANALYTIC",
+      "clues": [
+        "Of, or relating to any form of analysis, or to analytics.",
+        "Of, or relating to division into elements or principles.",
+        "Having the ability to analyse.",
+        "(of a proposition) that follows necessarily; tautologous.",
+        "Of, or relating to algebra or a similar method of analysis."
+      ]
+    },
+    {
+      "answer": "ANALYTICAL",
+      "clues": [
+        "Of or pertaining to analysis; resolving into elements or constituent parts",
+        "Using analytic reasoning as opposed to synthetic."
+      ]
+    },
+    {
+      "answer": "ANALYZE",
+      "clues": [
+        "To subject to analysis.",
+        "To resolve (anything complex) into its elements.",
+        "To separate into the constituent parts, for the purpose of an examination",
+        "To examine in such a manner as to ascertain the elements or"
+      ]
+    },
+    {
+      "answer": "ANALYZED",
+      "clues": [
+        "To subject to analysis.",
+        "To resolve (anything complex) into its elements.",
+        "To separate into the constituent parts, for the purpose of an examination",
+        "To examine in such a manner as to ascertain the elements or",
+        "Having been subject to analysis; examined closely, carefully considered."
+      ]
+    },
+    {
+      "answer": "ANCESTRY",
+      "clues": [
+        "Condition as to ancestors; ancestral lineage; hence, birth or honorable descent.",
+        "A series of ancestors or progenitors; lineage, or those who compose the"
+      ]
+    },
+    {
+      "answer": "ANCHOR",
+      "clues": [
+        "A tool used to moor a vessel to the bottom of a",
+        "An iron device so shaped as to grip the bottom and hold",
+        "The combined anchoring gear (anchor, rode, bill/peak and fittings such as bitts,",
+        "Representation of the nautical tool, used as a heraldic charge.",
+        "Any instrument serving a purpose like that of a ship's anchor, such"
+      ]
+    },
+    {
+      "answer": "ANCIENT",
+      "clues": [
+        "A person who is very old.",
+        "A person who lived in ancient times.",
+        "One of the senior members of the Inns of Court or of",
+        "A senior; an elder; a predecessor.",
+        "Having lasted from a remote period; having been of long duration; of"
+      ]
+    },
+    {
+      "answer": "ANCILLARY",
+      "clues": [
+        "Something that serves an ancillary function, such as an easel for a",
+        "An auxiliary.",
+        "Subordinate; secondary; auxiliary"
+      ]
+    },
+    {
+      "answer": "AND",
+      "clues": [
+        "In rhythm, the second half of a divided beat.",
+        "As a coordinating conjunction; expressing two elements to be taken together or",
+        "(heading) Expressing a condition."
+      ]
+    },
+    {
+      "answer": "ANDANTE",
+      "clues": [
+        "A tempo mark directing that a passage is to be played in",
+        "A passage having this mark.",
+        "Describing a passage having this mark.",
+        "Played at a moderately slow tempo."
+      ]
+    },
+    {
+      "answer": "ANDROID",
+      "clues": [
+        "A robot that is designed to look and act like a human",
+        "Possessing human qualities.",
+        "(in pelvimetry) Of the pelvis, having a narrow anterior segment and a"
+      ]
+    },
+    {
+      "answer": "ANDROMEDA",
+      "clues": [
+        "Any shrub of the genus Pieris (family Ericaceae), having leathery leaves and",
+        "Bog rosemary."
+      ]
+    },
+    {
+      "answer": "ANECDOTAL",
+      "clues": [
+        "Of the nature of or relating to an anecdote.",
+        "Containing or abounding in anecdotes."
+      ]
+    },
+    {
+      "answer": "ANECDOTE",
+      "clues": [
+        "A short account of a real incident or person, often humorous or",
+        "An account which supports an argument, but which is not supported by",
+        "A previously untold secret account of an incident.",
+        "To tell anecdotes (about)."
+      ]
+    },
+    {
+      "answer": "ANEMONE",
+      "clues": [
+        "Any plant of the genus Anemone, of the Ranunculaceae (or buttercup) family,",
+        "A sea anemone."
+      ]
+    },
+    {
+      "answer": "ANGEL",
+      "clues": [
+        "An incorporeal and sometimes divine messenger from a deity, or other divine",
+        "(Abrahamic tradition) One of the lowest order of such beings, below virtues.",
+        "A person having the qualities attributed to angels, such as purity or",
+        "Attendant spirit; genius; demon.",
+        "(possibly obsolete) An official (a bishop, or sometimes a minister) who heads"
+      ]
+    },
+    {
+      "answer": "ANGELIC",
+      "clues": [
+        "Belonging to, or proceeding from, angels; resembling, characteristic of, or partaking of",
+        "Very sweet-natured or well-behaved.",
+        "Of or pertaining to angelic acid.",
+        "A regular Hausdorff space is said to be angelic if the closure"
+      ]
+    },
+    {
+      "answer": "ANGELICA",
+      "clues": [
+        "A tall plant, with hollow stems, genus Angelica, especially the garden angelica",
+        "Candied stems of the plant, used to decorate cookies.",
+        "Species of Aralia.",
+        "A plucked bowl lute with two necks and most often sixteen strings,"
+      ]
+    },
+    {
+      "answer": "ANGER",
+      "clues": [
+        "A strong feeling of displeasure, hostility or antagonism towards someone or something,",
+        "Pain or stinging.",
+        "To cause such a feeling of antagonism in.",
+        "To become angry."
+      ]
+    },
+    {
+      "answer": "ANGLE",
+      "clues": [
+        "A figure formed by two rays which start from a common point",
+        "The measure of such a figure. In the case of a plane",
+        "A corner where two walls intersect.",
+        "A change in direction.",
+        "A viewpoint; a way of looking at something."
+      ]
+    },
+    {
+      "answer": "ANGLED",
+      "clues": [
+        "(often in the passive) To place (something) at an angle.",
+        "To change direction rapidly.",
+        "To present or argue something in a particular way or from a",
+        "(cue sports) To hamper (oneself or one's opponent) by leaving the cue",
+        "To try to catch fish with a hook and line."
+      ]
+    },
+    {
+      "answer": "ANGLER",
+      "clues": [
+        "A person who fishes with a hook and line.",
+        "An angler fish, Lophius piscatorius.",
+        "Someone who tries to work an angle; a person who schemes or",
+        "(thieves' cant) A thief who uses a hooked stick to steal goods"
+      ]
+    },
+    {
+      "answer": "ANGLING",
+      "clues": [
+        "(often in the passive) To place (something) at an angle.",
+        "To change direction rapidly.",
+        "To present or argue something in a particular way or from a",
+        "(cue sports) To hamper (oneself or one's opponent) by leaving the cue",
+        "To try to catch fish with a hook and line."
+      ]
+    },
+    {
+      "answer": "ANGLO",
+      "clues": [
+        "An English person or person of English ancestry.",
+        "(sometimes offensive) an American, especially a white one (regardless of actual ethnicity),",
+        "An Anglo-Australian (as opposed to Australians of Mediterranean or Middle Eastern background).",
+        "An English-speaking Quebecer.",
+        "A white-skinned person."
+      ]
+    },
+    {
+      "answer": "ANGRILY",
+      "clues": [
+        "In an angry manner; under the influence of anger."
+      ]
+    },
+    {
+      "answer": "ANGRY",
+      "clues": [
+        "Displaying or feeling anger.",
+        "(said about a wound or a rash) Inflamed and painful.",
+        "(said about the elements, like the sky or the sea) Dark and"
+      ]
+    },
+    {
+      "answer": "ANGST",
+      "clues": [
+        "Emotional turmoil; painful sadness.",
+        "A feeling of acute but vague anxiety or apprehension often accompanied by",
+        "To suffer angst; to fret."
+      ]
+    },
+    {
+      "answer": "ANGUISH",
+      "clues": [
+        "Extreme pain, either of body or mind; excruciating distress."
+      ]
+    },
+    {
+      "answer": "ANGULAR",
+      "clues": [
+        "A bone in the base of the lower jaw of many birds,",
+        "Relating or pertaining to an angle or angles.",
+        "Having an angle or angles; forming an angle or corner",
+        "Sharp-cornered; pointed.",
+        "Measured by an angle."
+      ]
+    },
+    {
+      "answer": "ANI",
+      "clues": [
+        "A bird of the genus Crotophaga in the cuckoo family."
+      ]
+    },
+    {
+      "answer": "ANIMA",
+      "clues": [
+        "The soul or animating principle of a living thing, especially as contrasted",
+        "(Jungian psychology) The inner self (not the external persona) of a person",
+        "(Jungian psychology) The unconscious feminine aspect of a person."
+      ]
+    },
+    {
+      "answer": "ANION",
+      "clues": [
+        "A negatively charged ion."
+      ]
+    },
+    {
+      "answer": "ANKLE",
+      "clues": [
+        "The skeletal joint which connects the foot with the leg; the uppermost",
+        "To walk.",
+        "To cyclically angle the foot at the ankle while pedaling, to maximize"
+      ]
+    },
+    {
+      "answer": "ANNEX",
+      "clues": [
+        "An addition, an extension.",
+        "An appendix to a book or document.",
+        "An addition or extension to a building.",
+        "An addition to the territory of a country or state, from a"
+      ]
+    },
+    {
+      "answer": "ANNEXATION",
+      "clues": [
+        "Addition or incorporation of something, or territories that have been annexed.",
+        "A legal merging of a territory into another body."
+      ]
+    },
+    {
+      "answer": "ANNEXE",
+      "clues": [
+        "An addition, an extension.",
+        "An appendix to a book or document.",
+        "An addition or extension to a building.",
+        "An addition to the territory of a country or state, from a",
+        "Alternative spelling of annex"
+      ]
+    },
+    {
+      "answer": "ANNOTATED",
+      "clues": [
+        "To add annotation to.",
+        "Contains or is accompanied by annotations or labelled notes."
+      ]
+    },
+    {
+      "answer": "ANNOTATION",
+      "clues": [
+        "A critical or explanatory commentary or analysis",
+        "A comment added to a text",
+        "The process of writing such comment or commentary",
+        "Metadata added to a document or program",
+        "Information relating to the genetic structure of sequences of bases"
+      ]
+    },
+    {
+      "answer": "ANNOUNCE",
+      "clues": [
+        "To give public notice, especially for the first time; to make known",
+        "To pronounce; to declare by judicial sentence"
+      ]
+    },
+    {
+      "answer": "ANNOUNCED",
+      "clues": [
+        "To give public notice, especially for the first time; to make known",
+        "To pronounce; to declare by judicial sentence"
+      ]
+    },
+    {
+      "answer": "ANNOUNCER",
+      "clues": [
+        "One who makes announcements."
+      ]
+    },
+    {
+      "answer": "ANNOUNCING",
+      "clues": [
+        "To give public notice, especially for the first time; to make known",
+        "To pronounce; to declare by judicial sentence"
+      ]
+    },
+    {
+      "answer": "ANNOY",
+      "clues": [
+        "A feeling of discomfort or vexation caused by what one dislikes.",
+        "That which causes such a feeling.",
+        "To disturb or irritate, especially by continued or repeated acts; to bother",
+        "To do something to upset or anger someone; to be troublesome.",
+        "To molest; to harm; to injure."
+      ]
+    },
+    {
+      "answer": "ANNOYANCE",
+      "clues": [
+        "That which annoys.",
+        "An act or instance of annoying.",
+        "The psychological state of being annoyed or irritated."
+      ]
+    },
+    {
+      "answer": "ANNUAL",
+      "clues": [
+        "An annual publication; a book, periodical, journal, report, comic book, yearbook, etc.,",
+        "An annual plant; a plant with a life span of just one",
+        "A medical checkup taking place once a year.",
+        "A pantomime taking place once a year.",
+        "Happening once every year."
+      ]
+    },
+    {
+      "answer": "ANNUITY",
+      "clues": [
+        "A right to receive amounts of money regularly over a certain fixed"
+      ]
+    },
+    {
+      "answer": "ANNUL",
+      "clues": [
+        "To formally revoke the validity of.",
+        "To dissolve (a marital union) on the grounds that it is not"
+      ]
+    },
+    {
+      "answer": "ANNULAR",
+      "clues": [
+        "Pertaining to, or having the form of, a ring; ring-shaped; in the",
+        "Banded or marked with circles."
+      ]
+    },
+    {
+      "answer": "ANODE",
+      "clues": [
+        "An electrode, of a cell or other electrically polarized device, through which",
+        "(by extension) The electrode at which chemical oxidation of anions takes place,",
+        "The electrode which collects electrons emitted by the cathode in a vacuum",
+        "That electrode of a semiconductor device which is connected to the p-type"
+      ]
+    },
+    {
+      "answer": "ANOLE",
+      "clues": [
+        "Any of the Anolis genus of arboreal American lizards (such as the"
+      ]
+    },
+    {
+      "answer": "ANOMALOUS",
+      "clues": [
+        "Deviating from the normal; marked by incongruity or contradiction; aberrant or abnormal.",
+        "Of uncertain or unknown categorization; strange.",
+        "Having anomalies."
+      ]
+    },
+    {
+      "answer": "ANOMALY",
+      "clues": [
+        "A deviation from a rule or from what is regarded as normal;",
+        "Something or someone that is strange or unusual.",
+        "Any event or measurement that is out of the ordinary regardless of",
+        "Any of various angular distances.",
+        "A defect or malformation."
+      ]
+    },
+    {
+      "answer": "ANOMIE",
+      "clues": [
+        "Alienation or social instability caused by erosion of standards and values."
+      ]
+    },
+    {
+      "answer": "ANONYMITY",
+      "clues": [
+        "The quality or state of being anonymous; anonymousness.",
+        "That which is anonymous."
+      ]
+    },
+    {
+      "answer": "ANONYMOUS",
+      "clues": [
+        "Lacking a name; not named, for example an animal not assigned to",
+        "Without any name acknowledged of a person responsible",
+        "Of unknown name; whose name is withheld",
+        "Lacking individuality."
+      ]
+    },
+    {
+      "answer": "ANSWER",
+      "clues": [
+        "A response or reply; something said or done in reaction to a",
+        "A solution to a problem.",
+        "A document filed in response to a complaint, responding to each point"
+      ]
+    },
+    {
+      "answer": "AAH",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AAL",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ABB",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ABO",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ABY",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ACE",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ACH",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ADO",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AFF",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AFT",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AGA",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AGE",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AHA",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AHI",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AIA",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AID",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AIL",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AIM",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AIN",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AIR",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AIT",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AKA",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AKE",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ALA",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ALB",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ALE",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ALF",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ALP",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ALU",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AMA",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "AME",
+      "clues": [
+        "A 3-letter word"
+      ]
+    },
+    {
+      "answer": "ABAC",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ABBA",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ABBE",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ABET",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ABID",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ABLY",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ABRI",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ABUT",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACCA",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACER",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACHE",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACID",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACME",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACNE",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACRE",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACTA",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACYL",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ADDY",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ADIT",
+      "clues": [
+        "A 4-letter word"
+      ]
+    },
+    {
+      "answer": "ACCIDENTAL",
+      "clues": [
+        "A 10-letter word"
+      ]
+    },
+    {
+      "answer": "ACCOMPLICE",
+      "clues": [
+        "A 10-letter word"
+      ]
+    },
+    {
+      "answer": "ALIENATION",
+      "clues": [
+        "A 10-letter word"
+      ]
+    },
+    {
+      "answer": "ALTERATION",
+      "clues": [
+        "A 10-letter word"
+      ]
+    },
+    {
+      "answer": "ALTOGETHER",
+      "clues": [
+        "A 10-letter word"
+      ]
+    }
+  ]
+}

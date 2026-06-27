@@ -1,4 +1,5 @@
-import dictionaryData from "./dictionary.generated.json"
+import dictionaryData from "../shared/dictionary.target.json"
+import fullDictionaryData from "../shared/dictionary.full.json"
 import {
   isWordGuessLength,
   type WordGuessLength,
@@ -11,6 +12,8 @@ function getDictionaryWordsByLength(length: WordGuessLength): readonly string[] 
 }
 
 const WORD_GUESS_DICTIONARY: WordGuessDictionary = {
+  3: getDictionaryWordsByLength(3),
+  4: getDictionaryWordsByLength(4),
   5: getDictionaryWordsByLength(5),
   6: getDictionaryWordsByLength(6),
   7: getDictionaryWordsByLength(7),
@@ -19,10 +22,21 @@ const WORD_GUESS_DICTIONARY: WordGuessDictionary = {
   10: getDictionaryWordsByLength(10),
 }
 
+// Answer words — used to select the target word each round.
 const WORD_GUESS_DICTIONARY_SET = new Map<WordGuessLength, ReadonlySet<string>>(
   Object.entries(WORD_GUESS_DICTIONARY).map(([length, words]) => [
     Number(length) as WordGuessLength,
     new Set(words),
+  ]),
+)
+
+// Full word list — used to validate player input. Includes plurals, verb forms,
+// etc. so BANKS, RUNNING, and similar are accepted as guesses even though they
+// are not answer candidates.
+const WORD_GUESS_FULL_DICTIONARY_SET = new Map<WordGuessLength, ReadonlySet<string>>(
+  Object.entries(fullDictionaryData).map(([length, words]) => [
+    Number(length) as WordGuessLength,
+    new Set(words as string[]),
   ]),
 )
 
@@ -47,7 +61,7 @@ export function isWordGuessValidWord(
     return false
   }
 
-  return WORD_GUESS_DICTIONARY_SET.get(length)?.has(word) ?? false
+  return WORD_GUESS_FULL_DICTIONARY_SET.get(length)?.has(word) ?? false
 }
 
 export function isWordGuessDictionaryLength(value: number): value is WordGuessLength {

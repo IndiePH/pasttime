@@ -9,11 +9,13 @@
     ".": "./index.ts",
     "./daily": "./daily/index.ts",
     "./games": "./games/index.ts",
+    "./games/shared": "./games/shared/index.ts",
     "./games/*": "./games/*"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:corpus": "node games/crossword/scripts/build-corpus.mjs"
   },
   "devDependencies": {
     "typescript": "^5",

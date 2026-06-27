@@ -60,7 +60,7 @@ npm run build
 
 ### Known fixes (track until done)
 
-- [ ] **Crossword:** `available` in registry but no module — set `coming_soon` or add module + play UI
+- [x] **Crossword:** `available` in registry + module + play UI now implemented
 - [ ] **Solitaire:** play UI beyond placeholder before treating as fully live
 - [ ] Hub filter `?status=available` only lists games that pass checks above
 
