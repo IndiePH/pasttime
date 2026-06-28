@@ -7,7 +7,7 @@ import {
 } from "./settings"
 import { getCellKey } from "./types"
 
-const SIZES = [5, 7, 9, 11, 13, 15] as const
+const SIZES = [7, 9, 11, 13, 15] as const
 const FIXED_DATE = new Date("2026-06-17T00:00:00Z")
 
 const MAX_ANSWER_LENGTH = (corpusData as Array<{ answer: string; clue: string }>).reduce(

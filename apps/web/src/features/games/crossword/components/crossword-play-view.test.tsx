@@ -236,7 +236,7 @@ vi.mock("@/infrastructure/storage", () => ({
 }))
 
 function makeGameState(): CrosswordGameState {
-  return createCrosswordGameState(5, "random")
+  return createCrosswordGameState(7, "random")
 }
 
 const MOCK_GAME = {
@@ -266,7 +266,7 @@ describe("CrosswordPlaySession", () => {
         <CrosswordPlaySession
           game={MOCK_GAME as any}
           modeLabel="Test"
-          gridSize={5}
+          gridSize={7}
           mode="random"
         />
       </CrosswordPlayPreferencesProvider>,

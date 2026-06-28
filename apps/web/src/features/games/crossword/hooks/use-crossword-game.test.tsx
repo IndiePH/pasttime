@@ -125,7 +125,7 @@ function mountHook(initialState?: CrosswordGameState) {
   if (initialState) {
     storageMap.set(STORAGE_KEY, initialState)
   }
-  return renderHook(() => useCrosswordGame(5, "random"))
+  return renderHook(() => useCrosswordGame(7, "random"))
 }
 
 // ---------------------------------------------------------------------------

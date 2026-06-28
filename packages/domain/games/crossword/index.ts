@@ -1,4 +1,4 @@
-export { getCellKey, isCellFilled } from "./types"
+export { getCellKey, isCellFilled, CROSSWORD_DEFAULT_SIZE } from "./types"
 export type {
   CrosswordCell,
   CrosswordCellType,

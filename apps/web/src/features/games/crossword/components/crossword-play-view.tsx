@@ -159,7 +159,7 @@ export function CrosswordClues({
 type CrosswordPlaySessionProps = {
   game: GameDefinition
   modeLabel: string
-  gridSize: 5 | 7 | 9 | 11 | 13 | 15
+  gridSize: 7 | 9 | 11 | 13 | 15
   mode: "daily" | "random"
 }
 
@@ -364,7 +364,7 @@ export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
   const [size] = useQueryState("size", crosswordSearchParams.size)
   const [mode] = useQueryState("mode", crosswordSearchParams.mode)
 
-  const gridSize = (size ?? 15) as 5 | 7 | 9 | 11 | 13 | 15
+  const gridSize = (size ?? 7) as 7 | 9 | 11 | 13 | 15
   const playMode = (mode ?? "daily") as "daily" | "random"
   const sessionKey = `${playMode}:${gridSize}`
   const isMounted = useSyncExternalStore(

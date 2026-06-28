@@ -17,7 +17,7 @@ export function CrosswordModePicker({ game }: CrosswordModePickerProps) {
   const [sizeParam] = useQueryState("size", crosswordSearchParams.size)
   const [modeParam] = useQueryState("mode", crosswordSearchParams.mode)
 
-  const size = (sizeParam ?? 15) as 5 | 7 | 9 | 11 | 13 | 15
+  const size = (sizeParam ?? 7) as 7 | 9 | 11 | 13 | 15
   const mode = (modeParam ?? "daily") as "daily" | "random"
 
   return (
