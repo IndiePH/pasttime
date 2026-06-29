@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react"
+import { Component, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ErrorInfo, type ReactNode } from "react"
 import { useQueryState } from "nuqs"
 
 import { cn } from "@/lib/utils"
@@ -405,6 +405,60 @@ export function CrosswordPlaySession({
   )
 }
 
+// ---------------------------------------------------------------------------
+// Error boundary — catches generator failures from useCrosswordGame
+// ---------------------------------------------------------------------------
+interface CrosswordErrorState {
+  hasError: boolean
+}
+
+class CrosswordPlaySessionErrorBoundary extends Component<
+  { children: ReactNode; onRetry?: () => void },
+  CrosswordErrorState
+> {
+  constructor(props: { children: ReactNode; onRetry?: () => void }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError(): CrosswordErrorState {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: Error, _errorInfo: ErrorInfo) {
+    console.error("CrosswordPlaySession error:", error)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <Card className="mx-auto w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Could not generate puzzle</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Could not generate a puzzle for this size. Try a different size
+              or try again.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                this.setState({ hasError: false })
+                this.props.onRetry?.()
+              }}
+            >
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
+      )
+    }
+    return this.props.children
+  }
+}
+
 export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
   const [size] = useQueryState("size", crosswordSearchParams.size)
   const [mode] = useQueryState("mode", crosswordSearchParams.mode)
@@ -433,16 +487,22 @@ export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
     )
   }
 
+  const handleErrorRetry = useCallback(() => {
+    window.location.href = crosswordLaunchPath(gridSize)
+  }, [gridSize])
+
   return (
     <CrosswordPlayPreferencesProvider>
       <GamePlayShell layout="board">
-        <CrosswordPlaySession
-          key={sessionKey}
-          game={game}
-          modeLabel={modeLabel}
-          gridSize={gridSize}
-          mode={playMode}
-        />
+        <CrosswordPlaySessionErrorBoundary onRetry={handleErrorRetry}>
+          <CrosswordPlaySession
+            key={sessionKey}
+            game={game}
+            modeLabel={modeLabel}
+            gridSize={gridSize}
+            mode={playMode}
+          />
+        </CrosswordPlaySessionErrorBoundary>
       </GamePlayShell>
     </CrosswordPlayPreferencesProvider>
   )
