@@ -1,6 +1,7 @@
 export { GameDailyRolloverBanner } from "./game-daily-rollover-banner"
 export { GameContentPanel } from "./game-content-panel"
 export { GameHowToPlay } from "./game-how-to-play"
+export { GameLaunchActions } from "./game-launch-actions"
 export { GameLaunchSettings } from "./game-launch-settings"
 export { GamePageShell, gamePageShellClassName } from "./game-page-shell"
 export {
