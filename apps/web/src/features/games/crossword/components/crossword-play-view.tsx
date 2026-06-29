@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useSyncExternalStore, type CSSProperties } from "react"
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react"
 import { useQueryState } from "nuqs"
 
 import { cn } from "@/lib/utils"
@@ -21,7 +21,9 @@ import {
   type CrosswordClue,
   type CrosswordDirection,
 } from "@pasttime/domain/games/crossword"
+import { isNewDay } from "@pasttime/domain/daily"
 import { GameContentPanel } from "@/features/games/components/game-content-panel"
+import { GameDailyRolloverBanner } from "@/features/games/components"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
@@ -189,6 +191,36 @@ export function CrosswordPlaySession({
     activeClue,
   } = useCrosswordGame(gridSize, mode)
 
+  // Daily rollover detection (D-02, D-03)
+  const [showRollover, setShowRollover] = useState(false)
+  const dailySeedRef = useRef(Date.now())
+
+  useEffect(() => {
+    if (mode !== "daily") {
+      setShowRollover(false)
+      return
+    }
+
+    // Check on focus — common case: user returns to tab after midnight
+    const handleFocus = () => {
+      if (isNewDay(dailySeedRef.current, Date.now())) {
+        setShowRollover(true)
+      }
+    }
+
+    // Also check periodically (every 60s) for long-lived tabs
+    const interval = setInterval(handleFocus, 60_000)
+
+    // Initial check
+    handleFocus()
+
+    window.addEventListener("focus", handleFocus)
+    return () => {
+      window.removeEventListener("focus", handleFocus)
+      clearInterval(interval)
+    }
+  }, [mode])
+
   // Recompute status after each input when auto-check is on.
   useEffect(() => {
     if (autoCheck && gameState) {
@@ -273,8 +305,20 @@ export function CrosswordPlaySession({
         </GamePlayFooterActions>
       }
     >
-      <Card
-        className="crossword-vars mx-auto overflow-visible text-left"
+      <>
+        {showRollover && mode === "daily" && (
+          <div className="mx-auto mb-4 w-full max-w-md">
+            <GameDailyRolloverBanner
+              onNewPuzzle={() => {
+                newPuzzle()
+                setShowRollover(false)
+              }}
+              onDismiss={() => setShowRollover(false)}
+            />
+          </div>
+        )}
+        <Card
+          className="crossword-vars mx-auto overflow-visible text-left"
         style={{ "--crossword-grid-size": gridSize } as CSSProperties}
       >
         <CardHeader
@@ -356,6 +400,7 @@ export function CrosswordPlaySession({
           </div>
         </CardContent>
       </Card>
+      </>
     </GamePlaySection>
   )
 }
