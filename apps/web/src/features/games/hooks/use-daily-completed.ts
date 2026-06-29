@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useReducer } from "react"
+import { useEffect, useState } from "react"
 import { getDailySeed } from "@pasttime/domain/daily"
 import { useStorage } from "@/infrastructure/storage"
 
@@ -16,21 +16,30 @@ export function useDailyCompleted(
   variant: string,
 ): boolean {
   const storage = useStorage()
-  const [, refresh] = useReducer((c) => c + 1, 0)
 
   const key = `${gameId}:daily:${variant}:${getDailySeed(new Date())}`
 
-  // Refresh on focus/visibility changes (player may complete daily in another tab)
-  useEffect(() => {
-    const handler = () => refresh()
-    window.addEventListener("focus", handler)
-    document.addEventListener("visibilitychange", handler)
-    return () => {
-      window.removeEventListener("focus", handler)
-      document.removeEventListener("visibilitychange", handler)
-    }
-  }, [])
+  // Default to false during SSR/first render to avoid hydration mismatch.
+  // localStorage is not available during SSR, and reading it synchronously
+  // on the client would produce a different result than the server render.
+  const [completed, setCompleted] = useState(false)
 
-  const status = getStatus(storage.get(key))
-  return status === "won" || status === "lost"
+  useEffect(() => {
+    const status = getStatus(storage.get(key))
+    setCompleted(status === "won" || status === "lost")
+
+    // Refresh on focus/visibility changes (player may complete daily in another tab)
+    const refresh = () => {
+      const s = getStatus(storage.get(key))
+      setCompleted(s === "won" || s === "lost")
+    }
+    window.addEventListener("focus", refresh)
+    document.addEventListener("visibilitychange", refresh)
+    return () => {
+      window.removeEventListener("focus", refresh)
+      document.removeEventListener("visibilitychange", refresh)
+    }
+  }, [key, storage])
+
+  return completed
 }

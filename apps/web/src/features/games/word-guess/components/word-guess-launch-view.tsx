@@ -16,7 +16,7 @@ import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
 import { WordGuessSettingsWidget } from "@/features/games/word-guess/components/word-guess-settings-widget"
 import { wordGuessSearchParams } from "@/features/games/word-guess/search-params"
-import { useDailyCompleted } from "@/features/games/hooks/use-daily-completed"
+import { useWordGuessDailyCompleted } from "@/features/games/word-guess/hooks/use-word-guess-daily-completed"
 import { usePlatformRouter } from "@/platform/navigation"
 
 interface WordGuessLaunchViewProps {
@@ -29,7 +29,7 @@ export function WordGuessLaunchView({ game }: WordGuessLaunchViewProps) {
   const [modeParam] = useQueryState("mode", wordGuessSearchParams.mode)
   const wordLength = Number(lettersParam) as WordGuessLength
   const mode = modeParam as WordGuessRoundMode
-  const isDailyCompleted = useDailyCompleted("word-guess", String(wordLength))
+  const isDailyCompleted = useWordGuessDailyCompleted(wordLength)
   const playMode = isDailyCompleted ? "random" : "daily"
 
   function handleCreateRoom() {

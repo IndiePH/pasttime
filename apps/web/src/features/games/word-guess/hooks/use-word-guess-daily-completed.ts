@@ -17,11 +17,18 @@ export function useWordGuessDailyCompleted(
     () => getWordGuessSoloStorageKey(wordLength, "daily"),
     [wordLength],
   )
-  const [, refresh] = React.useReducer((count) => count + 1, 0)
+
+  // Default to false during SSR/first render to avoid hydration mismatch.
+  // localStorage is not available during SSR.
+  const [completed, setCompleted] = React.useState(false)
 
   React.useEffect(() => {
+    const stored = storage.get(storageKey)
+    setCompleted(isWordGuessDailyCompleted(stored, wordLength))
+
     function handleRefresh() {
-      refresh()
+      const s = storage.get(storageKey)
+      setCompleted(isWordGuessDailyCompleted(s, wordLength))
     }
 
     window.addEventListener("focus", handleRefresh)
@@ -30,7 +37,7 @@ export function useWordGuessDailyCompleted(
       window.removeEventListener("focus", handleRefresh)
       document.removeEventListener("visibilitychange", handleRefresh)
     }
-  }, [])
+  }, [storageKey, wordLength, storage])
 
-  return isWordGuessDailyCompleted(storage.get(storageKey), wordLength)
+  return completed
 }
