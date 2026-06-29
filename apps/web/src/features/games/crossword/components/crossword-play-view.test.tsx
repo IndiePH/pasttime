@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import React from "react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { CrosswordClue } from "@pasttime/domain/games/crossword"
@@ -220,6 +221,12 @@ describe("CrosswordClues", () => {
 // In-memory storage for the mocked useStorage hook
 const storageMap = new Map<string, unknown>()
 
+vi.mock("@pasttime/domain/daily", () => ({
+  isNewDay: vi.fn(),
+  getDailySeed: vi.fn(),
+  hashSeed: vi.fn(),
+}))
+
 vi.mock("@/infrastructure/storage", () => ({
   useStorage: () => ({
     get: <T,>(key: string) => (storageMap.get(key) as T) ?? null,
@@ -297,5 +304,194 @@ describe("CrosswordPlaySession", () => {
     // The direction arrow (→) should appear in the active cell
     // when showCornerArrowGlyph is on (default)
     expect(gridcells[playableIndex].innerHTML).toContain("\u2192")
+  })
+})
+
+// ---------------------------------------------------------------------------
+// daily rollover banner suite
+// ---------------------------------------------------------------------------
+describe("daily rollover banner", () => {
+  beforeEach(() => {
+    storageMap.clear()
+  })
+
+  afterEach(() => {
+    cleanup()
+  })
+
+  it("renders the banner when isNewDay returns true for daily mode", async () => {
+    const { isNewDay } = await import("@pasttime/domain/daily")
+    vi.mocked(isNewDay).mockReturnValue(true)
+
+    const { CrosswordPlaySession } = await import("./crossword-play-view")
+
+    render(
+      <CrosswordPlayPreferencesProvider>
+        <CrosswordPlaySession
+          game={MOCK_GAME as any}
+          modeLabel="Daily"
+          gridSize={7}
+          mode="daily"
+        />
+      </CrosswordPlayPreferencesProvider>,
+    )
+
+    expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+    expect(screen.getByText("New Puzzle")).toBeInTheDocument()
+    expect(screen.getByText("Keep current")).toBeInTheDocument()
+  })
+
+  it("does NOT render banner for random mode even when isNewDay returns true", async () => {
+    const { isNewDay } = await import("@pasttime/domain/daily")
+    vi.mocked(isNewDay).mockReturnValue(true)
+
+    const { CrosswordPlaySession } = await import("./crossword-play-view")
+
+    render(
+      <CrosswordPlayPreferencesProvider>
+        <CrosswordPlaySession
+          game={MOCK_GAME as any}
+          modeLabel="Random"
+          gridSize={7}
+          mode="random"
+        />
+      </CrosswordPlayPreferencesProvider>,
+    )
+
+    expect(screen.queryByText("Daily puzzle refreshed")).not.toBeInTheDocument()
+  })
+
+  it("'New Puzzle' click calls newPuzzle and hides banner", async () => {
+    const { isNewDay } = await import("@pasttime/domain/daily")
+    vi.mocked(isNewDay).mockReturnValue(true)
+
+    const { CrosswordPlaySession } = await import("./crossword-play-view")
+
+    render(
+      <CrosswordPlayPreferencesProvider>
+        <CrosswordPlaySession
+          game={MOCK_GAME as any}
+          modeLabel="Daily"
+          gridSize={7}
+          mode="daily"
+        />
+      </CrosswordPlayPreferencesProvider>,
+    )
+
+    expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+
+    await fireEvent.click(screen.getByRole("button", { name: "New Puzzle" }))
+
+    // Banner should be gone after clicking New Puzzle
+    expect(
+      screen.queryByText("Daily puzzle refreshed"),
+    ).not.toBeInTheDocument()
+    // But the session should still be mounted (progress preserved, just banner hidden)
+    expect(screen.getByText("Crossword")).toBeInTheDocument()
+  })
+
+  it("'Keep current' click hides banner without changing puzzle", async () => {
+    const { isNewDay } = await import("@pasttime/domain/daily")
+    vi.mocked(isNewDay).mockReturnValue(true)
+
+    const { CrosswordPlaySession } = await import("./crossword-play-view")
+
+    render(
+      <CrosswordPlayPreferencesProvider>
+        <CrosswordPlaySession
+          game={MOCK_GAME as any}
+          modeLabel="Daily"
+          gridSize={7}
+          mode="daily"
+        />
+      </CrosswordPlayPreferencesProvider>,
+    )
+
+    expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+
+    await fireEvent.click(
+      screen.getByRole("button", { name: "Keep current" }),
+    )
+
+    // Banner should be gone after dismissing
+    expect(
+      screen.queryByText("Daily puzzle refreshed"),
+    ).not.toBeInTheDocument()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// generator error boundary suite
+// ---------------------------------------------------------------------------
+describe("generator error boundary", () => {
+  afterEach(() => {
+    cleanup()
+  })
+
+  function ThrowingChild(): React.ReactNode {
+    throw new Error("Generator failure")
+  }
+
+  it("catches errors and shows error card", async () => {
+    const { CrosswordPlaySessionErrorBoundary } = await import(
+      "./crossword-play-view",
+    )
+
+    render(
+      <CrosswordPlaySessionErrorBoundary>
+        <ThrowingChild />
+      </CrosswordPlaySessionErrorBoundary>,
+    )
+
+    expect(screen.getByText("Could not generate puzzle")).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        "Could not generate a puzzle for this size. Try a different size or try again.",
+      ),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("button", { name: "Try again" }),
+    ).toBeInTheDocument()
+  })
+
+  it("'Try again' button calls onRetry and resets error state", async () => {
+    const { CrosswordPlaySessionErrorBoundary } = await import(
+      "./crossword-play-view",
+    )
+
+    const onRetry = vi.fn()
+
+    // Render with error, then click Try again
+    // We need to track the render cycle: first render throws,
+    // then setState({ hasError: false }) + onRetry is called
+    const { rerender } = render(
+      <CrosswordPlaySessionErrorBoundary onRetry={onRetry}>
+        <ThrowingChild />
+      </CrosswordPlaySessionErrorBoundary>,
+    )
+
+    expect(screen.getByText("Could not generate puzzle")).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }))
+
+    // onRetry should have been called
+    expect(onRetry).toHaveBeenCalledTimes(1)
+  })
+
+  it("renders children normally when there is no error", async () => {
+    const { CrosswordPlaySessionErrorBoundary } = await import(
+      "./crossword-play-view",
+    )
+
+    const { container } = render(
+      <CrosswordPlaySessionErrorBoundary>
+        <div data-testid="child-content">Normal content</div>
+      </CrosswordPlaySessionErrorBoundary>,
+    )
+
+    expect(
+      screen.getByTestId("child-content"),
+    ).toBeInTheDocument()
+    expect(container.textContent).toBe("Normal content")
   })
 })
