@@ -1,3 +1,4 @@
+export { GameDailyRolloverBanner } from "./game-daily-rollover-banner"
 export { GameContentPanel } from "./game-content-panel"
 export { GameHowToPlay } from "./game-how-to-play"
 export { GameLaunchSettings } from "./game-launch-settings"
