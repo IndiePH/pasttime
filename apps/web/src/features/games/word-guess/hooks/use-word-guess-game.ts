@@ -135,6 +135,7 @@ export function useWordGuessGame({
     storage.set(storageKey, {
       round,
       currentGuess,
+      status: round.status,
     })
   }, [currentGuess, round, storage, storageKey])
 

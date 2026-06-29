@@ -7,6 +7,8 @@ import type { WordGuessRoundState } from "./types"
 export interface StoredWordGuessGame {
   round: WordGuessRoundState
   currentGuess: string
+  /** Mirrors round.status for universal useDailyCompleted hook. */
+  status: WordGuessRoundState["status"]
 }
 
 function isWordGuessRoundState(
