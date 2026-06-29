@@ -44,7 +44,7 @@ export function CrosswordSettingsWidget({
       applyDisabled={!hasPendingChanges}
     >
       <div className="flex flex-wrap gap-2">
-        {[5, 7, 9, 11, 13, 15].map((s) => {
+        {[7, 9, 11, 13, 15].map((s) => {
           const isActive = draftSize === s
           return (
             <Button
