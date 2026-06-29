@@ -11,6 +11,7 @@ import type {
   CrosswordGridSize,
   CrosswordRoundMode,
 } from "@pasttime/domain/games/crossword"
+import { isNewDay } from "@pasttime/domain/daily"
 import {
   createCrosswordGameState,
   findClueAtCell,
@@ -66,10 +67,17 @@ export function useCrosswordGame(
       : "across",
   )
 
-  // Persist on every state change (like klondike).
+  // Track daily-rollover: false on initial mount (the current session is valid).
+  // The play view polls or checks on focus to detect rollover and show the banner.
+  const [dailyRolloverDetected, setDailyRolloverDetected] = useState(false)
+
+  // Persist on every state change for daily mode only (D-16).
+  // Endless mode is ephemeral — no state written to storage.
   useEffect(() => {
-    storage.set(storageKey, gameState)
-  }, [gameState, storage, storageKey])
+    if (mode === "daily") {
+      storage.set(storageKey, gameState)
+    }
+  }, [gameState, storage, storageKey, mode])
 
   // Derived activeClue — never persisted, recomputed on every render (D-09).
   const activeClue = useMemo(() => {
@@ -78,10 +86,21 @@ export function useCrosswordGame(
   }, [gameState.puzzle, gameState.activeCell, direction])
 
   const newPuzzle = useCallback(() => {
-    storage.remove(storageKey)
-    const next = createCrosswordGameState(size, mode)
-    setGameState(next)
-  }, [size, mode, storage, storageKey])
+    if (mode === "daily") {
+      // Daily mode: reset inputs but keep the same puzzle (D-14).
+      // The puzzle is deterministic from the date seed so it stays the same.
+      setGameState((prev) => ({
+        ...prev,
+        inputs: {},
+        status: "playing" as const,
+      }))
+    } else {
+      // Endless mode: generate a fresh random puzzle with a new seed (D-14).
+      storage.remove(storageKey)
+      const next = createCrosswordGameState(size, "random")
+      setGameState(next)
+    }
+  }, [mode, size, storage, storageKey])
 
   const updateInput = useCallback(
     (row: number, col: number, value: string) => {
@@ -142,6 +161,7 @@ export function useCrosswordGame(
     direction,
     setDirection,
     activeClue,
+    dailyRolloverDetected,
   }
 }
 
