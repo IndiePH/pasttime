@@ -115,8 +115,8 @@ function buildTestGameState(
   }
 }
 
-// The storage key the hook constructs for (5, "random").
-const STORAGE_KEY = "crossword:5:random"
+// The storage key the hook constructs for (7, "random").
+const STORAGE_KEY = "crossword:7:random"
 
 // ---------------------------------------------------------------------------
 // Helper: mount the hook inside renderHook and return the result + helpers.
@@ -335,5 +335,151 @@ describe("useCrosswordGame — direction + activeClue", () => {
 
     expect(result.current.direction).toBe(initialDirection)
     expect(result.current.activeClue!.id).toBe(initialClueId)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// mode-awareness: persistence (D-16)
+// ---------------------------------------------------------------------------
+describe("mode-awareness: persistence", () => {
+  beforeEach(() => {
+    storageMap.clear()
+  })
+
+  it("calls storage.set for daily mode after a state change (D-16)", () => {
+    const spy = vi.spyOn(storageMap, "set")
+    const { result } = renderHook(() => useCrosswordGame(7, "daily"))
+    spy.mockClear() // clear initial mount persistence
+
+    // Find the first letter cell in the generated puzzle
+    const grid = result.current.gameState.puzzle.grid
+    const letterRow = grid.findIndex((row) =>
+      row.some((c) => c.type === "letter"),
+    )
+    const letterCol = grid[letterRow].findIndex(
+      (c) => c.type === "letter",
+    )
+
+    act(() => {
+      result.current.updateInput(letterRow, letterCol, "A")
+    })
+
+    expect(spy).toHaveBeenCalled()
+    spy.mockRestore()
+  })
+
+  it("does NOT call storage.set for random mode after a state change — ephemeral (D-16)", () => {
+    const spy = vi.spyOn(storageMap, "set")
+    const { result } = renderHook(() => useCrosswordGame(7, "random"))
+    spy.mockClear() // clear initial mount persistence
+
+    const grid = result.current.gameState.puzzle.grid
+    const letterRow = grid.findIndex((row) =>
+      row.some((c) => c.type === "letter"),
+    )
+    const letterCol = grid[letterRow].findIndex(
+      (c) => c.type === "letter",
+    )
+
+    act(() => {
+      result.current.updateInput(letterRow, letterCol, "A")
+    })
+
+    // Currently this FAILS because the hook persists for random mode (RED)
+    expect(spy).not.toHaveBeenCalled()
+    spy.mockRestore()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// mode-awareness: newPuzzle (D-14)
+// ---------------------------------------------------------------------------
+describe("mode-awareness: newPuzzle", () => {
+  beforeEach(() => {
+    storageMap.clear()
+  })
+
+  it("daily mode: resets inputs but keeps the same puzzle (D-14)", () => {
+    const { result } = renderHook(() => useCrosswordGame(7, "daily"))
+
+    const puzzleIdBefore = result.current.gameState.puzzle.id
+
+    // Set some inputs first
+    const grid = result.current.gameState.puzzle.grid
+    const letterRow = grid.findIndex((row) =>
+      row.some((c) => c.type === "letter"),
+    )
+    const letterCol = grid[letterRow].findIndex(
+      (c) => c.type === "letter",
+    )
+
+    act(() => {
+      result.current.updateInput(letterRow, letterCol, "A")
+    })
+    expect(
+      Object.keys(result.current.gameState.inputs).length,
+    ).toBeGreaterThan(0)
+
+    // Call newPuzzle
+    act(() => {
+      result.current.newPuzzle()
+    })
+
+    // Puzzle should be the same (same seed — daily mode is deterministic)
+    expect(result.current.gameState.puzzle.id).toBe(puzzleIdBefore)
+    // Inputs should be reset
+    expect(result.current.gameState.inputs).toEqual({})
+    // Status should be "playing"
+    expect(result.current.gameState.status).toBe("playing")
+  })
+
+  it("endless mode: generates a fresh puzzle (D-14)", () => {
+    const { result } = renderHook(() => useCrosswordGame(7, "random"))
+
+    const puzzleIdBefore = result.current.gameState.puzzle.id
+
+    act(() => {
+      result.current.newPuzzle()
+    })
+
+    // Should have a different puzzle id (different random seed)
+    expect(result.current.gameState.puzzle.id).not.toBe(puzzleIdBefore)
+    // Inputs should be empty fresh state
+    expect(result.current.gameState.inputs).toEqual({})
+    expect(result.current.gameState.status).toBe("playing")
+  })
+
+  it("newPuzzle fires synchronously in both modes (no confirmation dialog — D-13)", async () => {
+    const { result: daily } = renderHook(() =>
+      useCrosswordGame(7, "daily"),
+    )
+    const { result: endless } = renderHook(() =>
+      useCrosswordGame(7, "random"),
+    )
+
+    // newPuzzle must not return a promise — capture direct return value
+    let dailyReturn: unknown
+    let endlessReturn: unknown
+    await act(() => {
+      dailyReturn = daily.current.newPuzzle()
+      endlessReturn = endless.current.newPuzzle()
+    })
+
+    expect(dailyReturn).toBeUndefined()
+    expect(endlessReturn).toBeUndefined()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// mode-awareness: dailyRolloverDetected
+// ---------------------------------------------------------------------------
+describe("mode-awareness: dailyRolloverDetected", () => {
+  beforeEach(() => {
+    storageMap.clear()
+  })
+
+  it("returns dailyRolloverDetected initially false", () => {
+    const { result } = renderHook(() => useCrosswordGame(7, "daily"))
+    expect(result.current.dailyRolloverDetected).toBe(false)
   })
 })
