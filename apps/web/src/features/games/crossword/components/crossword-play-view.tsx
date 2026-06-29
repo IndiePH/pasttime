@@ -412,7 +412,7 @@ interface CrosswordErrorState {
   hasError: boolean
 }
 
-class CrosswordPlaySessionErrorBoundary extends Component<
+export class CrosswordPlaySessionErrorBoundary extends Component<
   { children: ReactNode; onRetry?: () => void },
   CrosswordErrorState
 > {
