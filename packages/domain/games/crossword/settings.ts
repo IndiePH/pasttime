@@ -1,6 +1,6 @@
 import { getDailySeed } from "../../daily"
 
-import { generateCrosswordPuzzle, generateCrosswordPuzzleWithRetry } from "./generator"
+import { generateCrosswordPuzzleWithRetry } from "./generator"
 import type {
   CrosswordGameState,
   CrosswordGridSize,
@@ -33,9 +33,13 @@ export function createCrosswordPuzzle(
   date?: Date,
 ): CrosswordPuzzle {
   const seed = resolveSeed(mode, date)
-  // Use the base generator directly (fast, deterministic, no quality gating).
-  // Callers that need quality guarantees should use generateCrosswordPuzzleWithRetry.
-  return generateCrosswordPuzzle(size, seed)
+  const puzzle = generateCrosswordPuzzleWithRetry(size, seed)
+  if (!puzzle) {
+    throw new Error(
+      `Failed to generate a valid crossword puzzle (size=${size}, seed=${seed}) after 3 attempts`,
+    )
+  }
+  return puzzle
 }
 
 export function createCrosswordGameState(

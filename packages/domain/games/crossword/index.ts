@@ -28,6 +28,7 @@ export {
   writeCrosswordPlayPreferences,
 } from "./play-preferences"
 export type { CrosswordPlayPreferences } from "./play-preferences"
+export { generateCrosswordPuzzleWithRetry } from "./generator"
 export {
   isCrosswordComplete,
   isCrosswordSolved,

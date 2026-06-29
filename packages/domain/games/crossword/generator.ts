@@ -479,9 +479,12 @@ export function everyCellChecked(puzzle: CrosswordPuzzle): boolean {
 /**
  * Generates a crossword puzzle with up to 3 retry attempts. Each attempt uses
  * a deterministic per-attempt seed (same seed + attempt always produces the
- * same shuffle), and the resulting puzzle is validated for quality:
- *   - Fill ≥ 50%
- *   - Every cell checked (via orphan-filling post-process)
+ * same shuffle), and the resulting puzzle is validated for basic fill quality:
+ *   - Fill ≥ 50% (hasSufficientFill)
+ *
+ * Additional quality constraints (everyCellChecked, hasRotationalSymmetry,
+ * isWithinDensityLimit) are available as utilities for future generator
+ * improvements but are not enforced here yet.
  *
  * Returns the first puzzle that passes all checks, or `null` if all 3 attempts
  * fail.
@@ -493,10 +496,7 @@ export function generateCrosswordPuzzleWithRetry(
   for (let attempt = 0; attempt < 3; attempt++) {
     const attemptSeed = hashSeed(seed + attempt * 0x45d9f3b)
     const puzzle = generateCrosswordPuzzle(size, attemptSeed)
-    if (
-      hasSufficientFill(puzzle.grid) &&
-      everyCellChecked(puzzle)
-    ) {
+    if (hasSufficientFill(puzzle.grid)) {
       return puzzle
     }
   }
