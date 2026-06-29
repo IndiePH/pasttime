@@ -57,6 +57,7 @@ export function parseStoredWordGuessGame(
   return {
     round,
     currentGuess,
+    status: round.status,
   }
 }
 
