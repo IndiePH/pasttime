@@ -6,3 +6,4 @@ export {
   saveCompletions,
   addCompletion,
 } from "./persistence"
+export { computeStreak } from "./streak"
