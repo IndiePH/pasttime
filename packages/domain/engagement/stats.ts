@@ -74,6 +74,37 @@ export function computeStats(completions: DailyCompletion[]): StatsSnapshot {
  * Each distribution is an array where index i = number of solves in (i+1) tries.
  * Returns a single distribution summing across all input distributions.
  */
+/**
+ * Compute percentile rank of a player value against a distribution.
+ *
+ * @param playerValue - The player's metric value
+ * @param distribution - Sorted array of values from the player population
+ * @returns Number from 0 to 100 representing the percentage of population
+ *          whose value is <= playerValue
+ */
+export function computePercentile(
+  playerValue: number,
+  distribution: number[],
+): number {
+  if (distribution.length === 0) {
+    return 50 // Neutral fallback
+  }
+
+  let count = 0
+  for (const value of distribution) {
+    if (value <= playerValue) {
+      count++
+    }
+  }
+
+  return Math.round((count / distribution.length) * 100)
+}
+
+/**
+ * Aggregate multiple guess distributions into one.
+ * Each distribution is an array where index i = number of solves in (i+1) tries.
+ * Returns a single distribution summing across all input distributions.
+ */
 function aggregateDistributions(distributions: number[][]): number[] {
   const maxLen = Math.max(...distributions.map((d) => d.length), 0)
   const result = new Array(maxLen).fill(0)
