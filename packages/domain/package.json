@@ -10,7 +10,8 @@
     "./daily": "./daily/index.ts",
     "./games": "./games/index.ts",
     "./games/shared": "./games/shared/index.ts",
-    "./games/*": "./games/*"
+    "./games/*": "./games/*",
+    "./engagement": "./engagement/index.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
