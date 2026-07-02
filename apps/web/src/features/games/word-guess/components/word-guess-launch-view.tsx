@@ -27,8 +27,10 @@ export function WordGuessLaunchView({ game }: WordGuessLaunchViewProps) {
   const router = usePlatformRouter()
   const [lettersParam] = useQueryState("letters", wordGuessSearchParams.letters)
   const [modeParam] = useQueryState("mode", wordGuessSearchParams.mode)
+  const [hardModeParam] = useQueryState("hardMode", wordGuessSearchParams.hardMode)
   const wordLength = Number(lettersParam) as WordGuessLength
   const mode = modeParam as WordGuessRoundMode
+  const appliedHardMode: boolean = hardModeParam ?? false
   const isDailyCompleted = useWordGuessDailyCompleted(wordLength)
   const playMode = isDailyCompleted ? "random" : "daily"
 
@@ -42,11 +44,11 @@ export function WordGuessLaunchView({ game }: WordGuessLaunchViewProps) {
       <WordGuessSettingsWidget className="mt-6" />
       <GameLaunchActions
         game={game}
-        playHref={wordGuessPlayPath(wordLength, playMode)}
+        playHref={wordGuessPlayPath(wordLength, playMode, appliedHardMode || undefined)}
         dailyCompleted={isDailyCompleted}
         secondaryAction={
           isDailyCompleted
-            ? { label: "View today's results", href: wordGuessPlayPath(wordLength, "daily") }
+            ? { label: "View today's results", href: wordGuessPlayPath(wordLength, "daily", appliedHardMode ? true : undefined) }
             : undefined
         }
         onCreateRoom={handleCreateRoom}

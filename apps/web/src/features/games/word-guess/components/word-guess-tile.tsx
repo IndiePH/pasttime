@@ -10,6 +10,8 @@ export type WordGuessBoardTileState =
 interface WordGuessTileProps {
   letter: string
   state: WordGuessBoardTileState
+  flip?: boolean
+  flipIndex?: number
 }
 
 const TILE_STATE_CLASS_NAME: Record<WordGuessBoardTileState, string> = {
@@ -37,7 +39,7 @@ function tileStateLabel(state: WordGuessBoardTileState): string {
   return "empty"
 }
 
-export function WordGuessTile({ letter, state }: WordGuessTileProps) {
+export function WordGuessTile({ letter, state, flip = false, flipIndex = 0 }: WordGuessTileProps) {
   const normalizedLetter = letter.toUpperCase()
   const displayLetter = normalizedLetter || "\u00a0"
   const ariaLabel = normalizedLetter
@@ -49,6 +51,8 @@ export function WordGuessTile({ letter, state }: WordGuessTileProps) {
       className={cn(
         "flex size-11 items-center justify-center rounded border text-lg font-semibold tracking-wide uppercase transition-colors sm:size-12",
         TILE_STATE_CLASS_NAME[state],
+        flip && "word-guess-tile-flip",
+        flip && `word-guess-tile-flip-delay-${Math.min(flipIndex, 9)}`,
       )}
       aria-label={ariaLabel}
     >

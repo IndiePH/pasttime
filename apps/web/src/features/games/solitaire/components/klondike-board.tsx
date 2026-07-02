@@ -176,7 +176,7 @@ export function KlondikeBoard({
 
               <div className={CARD_WIDTH_CLASS}>
                 {state.waste.length > 0 ? (
-                  <div data-klondike-pile="waste" className="relative" style={{ width: "var(--game-card-w)" }}>
+                  <div data-klondike-pile="waste" className="relative" style={{ width: "var(--game-card-w)", height: CARD_HEIGHT }}>
                     {(() => {
                       const visibleCount = Math.min(state.waste.length, state.drawCount)
                       const visibleCards = state.waste.slice(-visibleCount)

@@ -10,6 +10,7 @@ const finishedDailyRound: WordGuessRoundState = {
   answer: "ABOUT",
   length: 5,
   mode: "daily",
+  hardMode: false,
   maxTries: 6,
   guesses: [],
   status: "won",
@@ -22,10 +23,18 @@ describe("getWordGuessSoloStorageKey", () => {
     expect(key).toBe("word-guess:solo:daily:5:20260611")
   })
 
-  it("uses session scope for random mode", () => {
+  it("uses single shared slot for random mode", () => {
     const key = getWordGuessSoloStorageKey(6, "random")
 
-    expect(key).toBe("word-guess:solo:random:6:session")
+    expect(key).toBe("word-guess:solo:random:session")
+  })
+
+  it("uses same slot regardless of word length for random mode", () => {
+    const key5 = getWordGuessSoloStorageKey(5, "random")
+    const key8 = getWordGuessSoloStorageKey(8, "random")
+
+    expect(key5).toBe("word-guess:solo:random:session")
+    expect(key8).toBe("word-guess:solo:random:session")
   })
 })
 

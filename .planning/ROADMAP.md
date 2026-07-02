@@ -63,7 +63,7 @@
 
 - [ ] **Phase 4: Engagement Foundation** — Shared domain package for per-game streaks and stats computation
 - [x] **Phase 5: Solitaire Klondike** — Complete playable Klondike with drag-and-drop, foundation moves, win detection (completed 2026-07-02)
-- [ ] **Phase 6: Word Guess** — Word-guessing game with visual feedback, daily+endless modes, hard mode
+- [x] **Phase 6: Word Guess** — Word-guessing game with visual feedback, daily+endless modes, hard mode (completed 2026-07-02)
 - [ ] **Phase 7: Streaks, Stats & Crossword Engagement** — Per-game streaks, stats pages, crossword engagement wiring
 - [ ] **Phase 8: Rankings & Share Cards** — Comparative rankings and post-solve sharing for all games
 
@@ -121,7 +121,14 @@
   5. Hard mode enforces that correctly placed letters must be reused in subsequent guesses
   6. Invalid words (not in dictionary) trigger shake feedback; daily mode state persists in localStorage
 
-**Plans**: TBD
+**Plans**: 3/3 complete
+
+- [x] 06-01-PLAN.md — Domain changes: hard mode, length range, persistence, tests
+- [x] 06-02-PLAN.md — Hook changes: hardMode option, flip animation, tile/board updates
+- [x] 06-03-PLAN.md — UI changes: settings toggles, hard mode badge, search params
+
+**Completed**: 2026-07-02
+
 **UI hint**: yes
 
 ### Phase 7: Streaks, Stats & Crossword Engagement
@@ -173,6 +180,6 @@
 | 3. Both Modes, Size Selection, and Grid Quality | v1.0 | 5/5 | Complete | 2026-06-29 |
 | 4. Engagement Foundation | v1.1 | 1/3 | In Progress|  |
 | 5. Solitaire Klondike | v1.1 | 2/2 | Complete    | 2026-07-02 |
-| 6. Word Guess | v1.1 | 0/0 | Not started | - |
+| 6. Word Guess | v1.1 | 3/3 | Complete    | 2026-07-02 |
 | 7. Streaks, Stats & Crossword Engagement | v1.1 | 0/0 | Not started | - |
 | 8. Rankings & Share Cards | v1.1 | 0/0 | Not started | - |

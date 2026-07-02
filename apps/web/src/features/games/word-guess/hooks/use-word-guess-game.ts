@@ -21,6 +21,7 @@ type KeyboardStates = Partial<Record<string, WordGuessLetterState>>
 interface UseWordGuessGameOptions {
   wordLength: WordGuessLength
   roundMode: WordGuessRoundMode
+  hardMode?: boolean
 }
 
 const LETTER_PATTERN = /^[A-Z]$/
@@ -31,8 +32,8 @@ const KEY_STATE_PRIORITY: Record<WordGuessLetterState, number> = {
   correct: 3,
 }
 
-function createRound(length: WordGuessLength, mode: WordGuessRoundMode): WordGuessRoundState {
-  return createWordGuessRound({ length, mode })
+function createRound(length: WordGuessLength, mode: WordGuessRoundMode, hardMode: boolean): WordGuessRoundState {
+  return createWordGuessRound({ length, mode, hardMode })
 }
 
 function buildBoardRows(
@@ -103,12 +104,17 @@ function messageForInvalidGuess(length: WordGuessLength, reason: string): string
     return "Word not in dictionary."
   }
 
+  if (reason === "locked-letters-violation") {
+    return "Must reuse correctly-placed letters in the same positions"
+  }
+
   return "Round is complete. Start a new one."
 }
 
 export function useWordGuessGame({
   wordLength,
   roundMode,
+  hardMode = false,
 }: UseWordGuessGameOptions) {
   const storage = useStorage()
   const storageKey = React.useMemo(
@@ -118,11 +124,11 @@ export function useWordGuessGame({
   const initialGame = React.useMemo(() => {
     return (
       parseStoredWordGuessGame(storage.get<unknown>(storageKey), wordLength, roundMode) ?? {
-        round: createRound(wordLength, roundMode),
+        round: createRound(wordLength, roundMode, hardMode),
         currentGuess: "",
       }
     )
-  }, [roundMode, storage, storageKey, wordLength])
+  }, [roundMode, storage, storageKey, wordLength, hardMode])
   const [round, setRound] = React.useState<WordGuessRoundState>(initialGame.round)
   const [currentGuess, setCurrentGuess] = React.useState(initialGame.currentGuess)
   const [feedback, setFeedback] = React.useState<string | null>(null)
@@ -173,9 +179,20 @@ export function useWordGuessGame({
     setFeedback(null)
   }, [isPlaying])
 
+  const [flipRowIndex, setFlipRowIndex] = React.useState<number | null>(null)
+  const [flipTrigger, setFlipTrigger] = React.useState(0)
+
   const submitGuess = React.useCallback(() => {
     const result = submitWordGuessGuess(round, currentGuess)
     if (!result.ok) {
+      if (result.reason === "locked-letters-violation") {
+        setFeedback("Must reuse correctly-placed letters in the same positions")
+        setInvalidWordShake((prev) => ({
+          rowIndex: round.guesses.length,
+          trigger: (prev?.trigger ?? 0) + 1,
+        }))
+        return
+      }
       setFeedback(messageForInvalidGuess(wordLength, result.reason))
       if (result.reason === "invalid-word") {
         setInvalidWordShake((prev) => ({
@@ -187,6 +204,8 @@ export function useWordGuessGame({
     }
 
     setInvalidWordShake(null)
+    setFlipRowIndex(result.round.guesses.length - 1)
+    setFlipTrigger((prev) => prev + 1)
     setRound(result.round)
     setCurrentGuess("")
     if (result.round.status === "won") {
@@ -202,11 +221,11 @@ export function useWordGuessGame({
   }, [currentGuess, round, wordLength])
 
   const resetRound = React.useCallback(() => {
-    setRound(createRound(wordLength, roundMode))
+    setRound(createRound(wordLength, roundMode, hardMode))
     setCurrentGuess("")
     setFeedback(null)
     setInvalidWordShake(null)
-  }, [roundMode, wordLength])
+  }, [roundMode, wordLength, hardMode])
 
   React.useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -260,6 +279,8 @@ export function useWordGuessGame({
     canSubmit: isPlaying && currentGuess.length === wordLength,
     currentGuess,
     feedback,
+    flipRowIndex,
+    flipTrigger,
     invalidWordShake,
     isPlaying,
     keyboardStates,

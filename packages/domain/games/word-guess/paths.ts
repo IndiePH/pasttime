@@ -9,6 +9,7 @@ import {
 type WordGuessPathOptions = {
   letters: WordGuessLength
   mode?: WordGuessRoundMode
+  hardMode?: boolean
 }
 
 function withWordGuessQuery(path: string, options: WordGuessPathOptions): string {
@@ -19,21 +20,27 @@ function withWordGuessQuery(path: string, options: WordGuessPathOptions): string
     query.set("mode", options.mode)
   }
 
+  if (options.hardMode) {
+    query.set("hardMode", "true")
+  }
+
   return `${path}?${query.toString()}`
 }
 
 export function wordGuessLaunchPath(
   letters: WordGuessLength,
   mode?: WordGuessRoundMode,
+  hardMode?: boolean,
 ): string {
-  return withWordGuessQuery(gameLaunchPath("word-guess"), { letters, mode })
+  return withWordGuessQuery(gameLaunchPath("word-guess"), { letters, mode, hardMode })
 }
 
 export function wordGuessPlayPath(
   letters: WordGuessLength,
   mode?: WordGuessRoundMode,
+  hardMode?: boolean,
 ): string {
-  return withWordGuessQuery(gamePlayPath("word-guess"), { letters, mode })
+  return withWordGuessQuery(gamePlayPath("word-guess"), { letters, mode, hardMode })
 }
 
 export function wordGuessRoomPath(

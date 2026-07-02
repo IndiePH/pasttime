@@ -4,21 +4,21 @@ milestone: v1.1
 milestone_name: Three Games + Engagement
 current_phase: 6
 current_phase_name: Word Guess
-status: completed
-stopped_at: Phase 5 complete — all 2 plans executed
-last_updated: "2026-07-02T07:30:07.066Z"
+status: complete
+stopped_at: Phase 6 execution complete — all 3 plans verified
+last_updated: "2026-07-02T20:12:00.000Z"
 last_activity: 2026-07-02
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
-  percent: 40
+  completed_phases: 3
+  total_plans: 11
+  completed_plans: 8
+  percent: 72.7
 ---
 
 # STATE: Pasttime — Three Games + Engagement
 
-**Milestone:** Three Games + Engagement — 🚧 v1.1 PLANNING
+**Milestone:** Three Games + Engagement — 🚧 v1.1 EXECUTING
 **Started:** 2026-07-01
 
 ---
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 **Core Value:** A player can open any of 3 games (crossword, solitaire, word guess), play a satisfying round, see their per-game streaks and stats, and know how they compare to the playerbase — all without logging in.
 
-**Current Focus:** Phase 5 — solitaire-klondike
+**Current Focus:** Phase 6 — word-guess
 
 ---
 
@@ -38,7 +38,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 | Item | Value |
 |------|-------|
 | Phase | 6 — Word Guess |
-| Plan | Not started |
+| Plan | Completed (3 plans) |
 | Status | Complete |
 | Last activity | 2026-07-02 |
 
@@ -47,10 +47,10 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 | Metric | Value |
 |--------|-------|
 | Phases total | 5 (Phases 4–8) |
-| Phases complete | 1 (Phase 4) |
+| Phases complete | 3 (Phases 4, 5, 6) |
 | Requirements total | 44 |
 | Requirements mapped | 44 |
-| Requirements complete | 5 (ENG-01—ENG-05) |
+| Requirements complete | 22 (ENG-01—ENG-05, SOL-01—SOL-09, WRD-01—WRD-08) |
 
 ---
 
@@ -60,7 +60,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 |-------|------|--------------|--------|
 | 4 — Engagement Foundation | Shared domain package for per-game streaks and stats | 5 (ENG-01—ENG-05) | ✅ Complete |
 | 5 — Solitaire Klondike | Complete playable Klondike with draw-1/draw-3 modes | 9 (SOL-01—SOL-09) | ✅ Complete |
-| 6 — Word Guess | Word-guessing game with all modes | 8 (WRD-01—WRD-08) | Not started |
+| 6 — Word Guess | Word-guessing game with all modes | 8 (WRD-01—WRD-08) | ✅ Complete |
 | 7 — Streaks, Stats & Crossword Engagement | Per-game streaks, stats pages, crossword wiring | 13 (STK-01—STK-05, STA-01—STA-05, ENH-01—ENH-03) | Not started |
 | 8 — Rankings & Share Cards | Comparative rankings and share cards | 9 (CMP-01—CMP-04, SHR-01—SHR-05) | Not started |
 
@@ -100,12 +100,12 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 ## Session Continuity
 
-**Resume file:** .planning/phases/05-solitaire-klondike/05-01-PLAN.md
+**Resume file:** .planning/phases/06-word-guess/06-CONTEXT.md
 
-**Last session:** 2026-07-02T07:23:20.695Z
+**Last session:** 2026-07-02T17:00:00.000Z
 **Current session:** 2026-07-02
-**Stopped at:** Phase 5 complete — all 2 plans executed
-**Next action:** Phase 6 is actionable. Move to word-guess implementation.
+**Stopped at:** Phase 6 context gathered — ready to plan
+**Next action:** Execute Phase 6. Plans ready at: `.planning/phases/06-word-guess/06-01-PLAN.md`, `06-02-PLAN.md`, `06-03-PLAN.md`. Use `/gsd-execute-phase 6`.
 
 ---
 
@@ -135,6 +135,19 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 - **Plan 02:** Current streak requires most recent completion to be today or yesterday (UTC) — broken if older
 - **Phase 4:** Engagement package exported from `@pasttime/domain/engagement` — pure domain, no React/IO — follows existing domain package convention
 - **Phase 4:** Package scaffolding at packages/domain/engagement/ with types, persistence helpers, and subpath export — follows existing domain package convention
+
+### Phase 6 — Word Guess
+
+- Hard mode (`WRD-06`): `hardMode: boolean` on round state, default `false`. Landing view toggle (off by default). Badge-only signaling in play view. Shake + helper text for violation: "Must reuse correctly-placed letters in the same positions".
+- Word length range (`WRD-03`): Narrow to 5-10 (dictionary JSONs untouched — 3-4 entries dormant).
+- Endless mode persistence (`WRD-07`): Single shared slot `word-guess:solo:random:session`. Same length → resume; different length → replace.
+- Flip-to-reveal animation: Toggle in play view settings, default OFF. CSS rotateX flip, staggered per tile, respects `prefers-reduced-motion`.
+- Hard mode visual feedback: Same row shake as invalid word. Helper text explains violation. No special tile colors.
+- Hard mode toggle uses Button component (On/Off) instead of Switch — Switch/Label components not available in UI library.
+- Flip animation toggle also uses Button component with `aria-pressed` for accessibility.
+- `parseAsBoolean` from nuqs is used without `()` call (it's a pre-built parser, not a factory).
+- `hardMode` search param has no `.withDefault()` — absent param resolves to `null`, treated as `false` via `??`.
+- WordGuessPlaySettingsWidget has optional `flipEnabled`/`onFlipToggle` props with defaults — compatible with `RegisteredGamePlaySettings` generic usage.
 
 ### Phase 5 — Solitaire Klondike
 

@@ -7,10 +7,161 @@ const baseRound: WordGuessRoundState = {
   answer: "ABOUT",
   length: 5,
   mode: "random",
+  hardMode: false,
   maxTries: 6,
   guesses: [],
   status: "playing",
 }
+
+describe("hard mode validation", () => {
+  it("allows any valid guess when hardMode is false", () => {
+    const result = submitWordGuessGuess(baseRound, "APPLE")
+    expect(result.ok).toBe(true)
+  })
+
+  it("rejects guess that fails to reuse a correctly-placed letter", () => {
+    const playedRound: WordGuessRoundState = {
+      ...baseRound,
+      hardMode: true,
+      guesses: [
+        {
+          guess: "AWARE",
+          letters: [
+            { letter: "A", state: "correct" },
+            { letter: "W", state: "absent" },
+            { letter: "A", state: "absent" },
+            { letter: "R", state: "absent" },
+            { letter: "E", state: "present" },
+          ],
+          isCorrect: false,
+        },
+      ],
+    }
+    // "MAGIC" is a valid dictionary word but violates position 0 (needs 'A')
+    const result = submitWordGuessGuess(playedRound, "MAGIC")
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.reason).toBe("locked-letters-violation")
+    }
+  })
+
+  it("allows guess that correctly reuses all locked letters in same positions", () => {
+    const playedRound: WordGuessRoundState = {
+      ...baseRound,
+      hardMode: true,
+      guesses: [
+        {
+          guess: "AWARE",
+          letters: [
+            { letter: "A", state: "correct" },
+            { letter: "W", state: "absent" },
+            { letter: "A", state: "absent" },
+            { letter: "R", state: "absent" },
+            { letter: "E", state: "present" },
+          ],
+          isCorrect: false,
+        },
+      ],
+    }
+    const result = submitWordGuessGuess(playedRound, "ALBUM")
+    expect(result.ok).toBe(true)
+  })
+
+  it("enforces hard mode across multiple previous guesses", () => {
+    const playedRound: WordGuessRoundState = {
+      ...baseRound,
+      hardMode: true,
+      guesses: [
+        {
+          guess: "AWARE",
+          letters: [
+            { letter: "A", state: "correct" },
+            { letter: "W", state: "absent" },
+            { letter: "A", state: "absent" },
+            { letter: "R", state: "absent" },
+            { letter: "E", state: "present" },
+          ],
+          isCorrect: false,
+        },
+        {
+          guess: "ABOUT",
+          letters: [
+            { letter: "A", state: "correct" },
+            { letter: "B", state: "correct" },
+            { letter: "O", state: "absent" },
+            { letter: "U", state: "absent" },
+            { letter: "T", state: "absent" },
+          ],
+          isCorrect: false,
+        },
+      ],
+    }
+    // "ALPHA" is a valid word but violates position 1 (needs 'B')
+    const result = submitWordGuessGuess(playedRound, "ALPHA")
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.reason).toBe("locked-letters-violation")
+    }
+  })
+
+  it("allows guess when all locked letters are correctly reused across multiple guesses", () => {
+    const playedRound: WordGuessRoundState = {
+      ...baseRound,
+      hardMode: true,
+      guesses: [
+        {
+          guess: "AWARE",
+          letters: [
+            { letter: "A", state: "correct" },
+            { letter: "W", state: "absent" },
+            { letter: "A", state: "absent" },
+            { letter: "R", state: "absent" },
+            { letter: "E", state: "present" },
+          ],
+          isCorrect: false,
+        },
+        {
+          guess: "ABOUT",
+          letters: [
+            { letter: "A", state: "correct" },
+            { letter: "B", state: "correct" },
+            { letter: "O", state: "absent" },
+            { letter: "U", state: "absent" },
+            { letter: "T", state: "absent" },
+          ],
+          isCorrect: false,
+        },
+      ],
+    }
+    const result = submitWordGuessGuess(playedRound, "ABIDE")
+    expect(result.ok).toBe(true)
+  })
+
+  it("does not interfere with non-hard-mode round even when guesses exist", () => {
+    const playedRound: WordGuessRoundState = {
+      ...baseRound,
+      hardMode: false,
+      guesses: [
+        {
+          guess: "AWARE",
+          letters: [
+            { letter: "A", state: "correct" },
+            { letter: "W", state: "absent" },
+            { letter: "A", state: "absent" },
+            { letter: "R", state: "absent" },
+            { letter: "E", state: "present" },
+          ],
+          isCorrect: false,
+        },
+      ],
+    }
+    const result = submitWordGuessGuess(playedRound, "ZZZZZ")
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.reason).toBe("invalid-word")
+    }
+  })
+})
 
 describe("submitWordGuessGuess", () => {
   it("rejects invalid-length guesses", () => {

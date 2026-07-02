@@ -21,14 +21,14 @@ Requirements for shipping Solitaire and Word Guess alongside crossword, with a s
 
 ### Word Guess
 
-- [ ] **WRD-01**: Player can guess a word in 6 tries with 🟩🟨⬜ visual feedback per letter
-- [ ] **WRD-02**: On-screen keyboard updates with per-letter state colors
-- [ ] **WRD-03**: Player can choose word size (5–10 letters) on the launch view
-- [ ] **WRD-04**: Daily mode — one shared word per day (seed from date, deterministic)
-- [ ] **WRD-05**: Endless/random mode — random word on demand with chosen length
-- [ ] **WRD-06**: Hard mode — correctly placed letters must be reused in subsequent guesses
-- [ ] **WRD-07**: Daily mode game state persists in localStorage; endless mode is ephemeral
-- [ ] **WRD-08**: Invalid word detection (not in dictionary) shows visual feedback (shake)
+- [x] **WRD-01**: Player can guess a word in 6 tries with 🟩🟨⬜ visual feedback per letter
+- [x] **WRD-02**: On-screen keyboard updates with per-letter state colors
+- [x] **WRD-03**: Player can choose word size (5–10 letters) on the launch view
+- [x] **WRD-04**: Daily mode — one shared word per day (seed from date, deterministic)
+- [x] **WRD-05**: Endless/random mode — random word on demand with chosen length
+- [x] **WRD-06**: Hard mode — correctly placed letters must be reused in subsequent guesses
+- [x] **WRD-07**: Daily mode game state persists in localStorage; endless mode is ephemeral
+- [x] **WRD-08**: Invalid word detection (not in dictionary) shows visual feedback (shake)
 
 ### Engagement Package (`@pasttime/domain/engagement`)
 
@@ -107,14 +107,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SOL-07 | Phase 5 | Complete |
 | SOL-08 | Phase 5 | Complete |
 | SOL-09 | Phase 5 | Complete |
-| WRD-01 | Phase 6 | Pending |
-| WRD-02 | Phase 6 | Pending |
-| WRD-03 | Phase 6 | Pending |
-| WRD-04 | Phase 6 | Pending |
-| WRD-05 | Phase 6 | Pending |
-| WRD-06 | Phase 6 | Pending |
-| WRD-07 | Phase 6 | Pending |
-| WRD-08 | Phase 6 | Pending |
+| WRD-01 | Phase 6 | Complete |
+| WRD-02 | Phase 6 | Complete |
+| WRD-03 | Phase 6 | Complete |
+| WRD-04 | Phase 6 | Complete |
+| WRD-05 | Phase 6 | Complete |
+| WRD-06 | Phase 6 | Complete |
+| WRD-07 | Phase 6 | Complete |
+| WRD-08 | Phase 6 | Complete |
 | ENG-01 | Phase 4 | Complete |
 | ENG-02 | Phase 4 | Complete |
 | ENG-03 | Phase 4 | Complete |

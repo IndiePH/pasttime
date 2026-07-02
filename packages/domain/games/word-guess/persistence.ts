@@ -25,6 +25,7 @@ function isWordGuessRoundState(
     typeof record.answer === "string" &&
     record.length === length &&
     record.mode === mode &&
+    (record.hardMode === undefined || typeof record.hardMode === "boolean") &&
     typeof record.maxTries === "number" &&
     Array.isArray(record.guesses) &&
     (record.status === "playing" ||
@@ -77,7 +78,10 @@ export function getWordGuessSoloStorageKey(
   mode: WordGuessRoundMode,
   date = new Date(),
 ): string {
-  return `word-guess:solo:${mode}:${wordLength}:${getWordGuessStorageScope(mode, date)}`
+  if (mode === "random") {
+    return "word-guess:solo:random:session"
+  }
+  return `word-guess:solo:daily:${wordLength}:${getWordGuessStorageScope(mode, date)}`
 }
 
 export function isWordGuessDailyRoundFinished(

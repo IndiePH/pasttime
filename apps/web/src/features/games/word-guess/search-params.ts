@@ -1,5 +1,6 @@
 import {
   createSearchParamsCache,
+  parseAsBoolean,
   parseAsStringLiteral,
 } from "nuqs/server"
 
@@ -24,6 +25,7 @@ export const wordGuessSearchParams = {
   mode: parseAsStringLiteral(MODE_QUERY_VALUES)
     .withDefault(WORD_GUESS_ROUND_MODE_DEFAULT)
     .withOptions({ scroll: false, shallow: true }),
+  hardMode: parseAsBoolean.withOptions({ scroll: false, shallow: true }),
 }
 
 export const wordGuessSearchParamsCache = createSearchParamsCache(
