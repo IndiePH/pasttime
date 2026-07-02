@@ -41,6 +41,7 @@ export interface KlondikeState {
   status: KlondikeStatus
   moves: number
   seed: number | null
+  drawCount: 1 | 3
 }
 
 export type KlondikeMove =

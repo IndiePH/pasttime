@@ -42,6 +42,7 @@ function baseState(overrides: TestOverrides = {}): KlondikeState {
     status: "playing",
     moves: 0,
     seed: 42,
+    drawCount: 1,
     ...(rest as Partial<KlondikeState>),
   }
 }
