@@ -91,7 +91,6 @@ export function KlondikeBoard({
   const { resolvedTheme } = useTheme()
   const backVariant = resolvedTheme === "dark" ? "light" : "dark"
   const stockTop = state.stock[state.stock.length - 1]
-  const wasteTop = state.waste[state.waste.length - 1]
   const columnGapClass = "gap-[var(--game-card-gap)]"
 
   const {
@@ -176,27 +175,56 @@ export function KlondikeBoard({
               </div>
 
               <div className={CARD_WIDTH_CLASS}>
-                {wasteTop ? (
-                  <div data-klondike-pile="waste">
-                    <PlayingCard
-                      card={wasteTop}
-                      variant={cardVariant}
-                      backVariant={backVariant}
-                      selected={isSelected(selection, "waste")}
-                      dragSourceHidden={
-                        isDragSourceHidden(wasteFrom) ||
-                        hiddenCardIds.has(wasteTop.id)
-                      }
-                    onClick={() => {
-                      if (consumeSuppressedClick()) {
-                        return
-                      }
-                      handleWasteClick()
-                    }}
-                    onDoubleClick={() => autoFoundation({ pile: "waste" })}
-                    ariaLabel="Waste pile top card"
-                    {...getDragSourceProps(wasteFrom, 1)}
-                  />
+                {state.waste.length > 0 ? (
+                  <div data-klondike-pile="waste" className="relative" style={{ width: "var(--game-card-w)" }}>
+                    {(() => {
+                      const visibleCount = Math.min(state.waste.length, state.drawCount)
+                      const visibleCards = state.waste.slice(-visibleCount)
+                      const fanStep = "calc(var(--game-card-w) * 0.15)"
+
+                      return visibleCards.map((card, i, arr) => {
+                        const isTop = i === arr.length - 1
+                        return (
+                          <div
+                            key={card.id}
+                            className="absolute top-0"
+                            style={{
+                              left: `calc(${i} * ${fanStep})`,
+                              zIndex: i,
+                            }}
+                          >
+                            {isTop ? (
+                              <PlayingCard
+                                card={card}
+                                variant={cardVariant}
+                                backVariant={backVariant}
+                                selected={isSelected(selection, "waste")}
+                                dragSourceHidden={
+                                  isDragSourceHidden(wasteFrom) ||
+                                  hiddenCardIds.has(card.id)
+                                }
+                                onClick={() => {
+                                  if (consumeSuppressedClick()) {
+                                    return
+                                  }
+                                  handleWasteClick()
+                                }}
+                                onDoubleClick={() => autoFoundation({ pile: "waste" })}
+                                ariaLabel="Waste pile top card"
+                                {...getDragSourceProps(wasteFrom, 1)}
+                              />
+                            ) : (
+                              <PlayingCard
+                                card={card}
+                                variant={cardVariant}
+                                backVariant={backVariant}
+                                className="pointer-events-none"
+                              />
+                            )}
+                          </div>
+                        )
+                      })
+                    })()}
                   </div>
                 ) : (
                   <CardSlot ariaLabel="Empty waste pile" />
