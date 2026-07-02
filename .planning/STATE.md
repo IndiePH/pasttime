@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Three Games + Engagement
 current_phase: 5
-status: context
-stopped_at: Phase 5 context gathered
-last_updated: "2026-07-02T16:00:00.000Z"
+status: planning
+stopped_at: Phase 5 planning complete — 2 plans ready
+last_updated: "2026-07-02T18:00:00.000Z"
 last_activity: 2026-07-02
-last_activity_desc: Phase 5 context gathered
+last_activity_desc: Phase 5 domain + UI plans created
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
+  total_plans: 5
   completed_plans: 3
   percent: 20
 current_phase_name: solitaire-klondike
@@ -38,10 +38,10 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 | Item | Value |
 |------|-------|
-| Phase | 5 — Context gathered |
-| Plan | 0 of 0 |
-| Status | Phase 5 context gathered |
-| Last activity | 2026-07-02 — Phase 5 context gathered |
+| Phase | 5 — Plans created |
+| Plan | 2 of 2 |
+| Status | Planning complete |
+| Last activity | 2026-07-02 — Phase 5 plans created (domain + UI) |
 
 ## Milestone Overview
 
@@ -101,12 +101,14 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 ## Session Continuity
 
-**Resume file:** .planning/phases/05-solitaire-klondike/05-CONTEXT.md
+**Resume file:** .planning/phases/05-solitaire-klondike/05-UI-SPEC.md
 
-**Last session:** 2026-07-02T16:00:00.000Z
+**Last session:** 2026-07-02T16:42:00.000Z
 **Current session:** 2026-07-02
-**Stopped at:** Phase 5 context gathered
-**Next action:** Discuss phase 6 (Word Guess) or plan phase 5 (Solitaire Klondike)
+**Stopped at:** Phase 5 UI-SPEC approved
+**Next action:** `/gsd-plan-phase 5` — the only next step. Phase 6 is not actionable until Phase 5 is complete.
+
+**Reminder for orchestrator:** Do not suggest downstream phases in `Also available` blocks until the current phase is verified and complete.
 
 ---
 
