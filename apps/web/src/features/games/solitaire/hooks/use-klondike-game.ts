@@ -140,9 +140,11 @@ export function useKlondikeGame(drawCount: 1 | 3) {
       return
     }
 
+    let feedback: string | null = null
+
     setState((current) => {
       let nextState = current
-      let feedback: string | null = null
+      let fb: string | null = null
 
       for (const move of moves) {
         const next = applyUserMove(nextState, move)
@@ -152,13 +154,17 @@ export function useKlondikeGame(drawCount: 1 | 3) {
 
         nextState = next.state
         if (next.feedback) {
-          feedback = next.feedback
+          fb = next.feedback
         }
       }
 
-      setFeedback(feedback)
+      feedback = fb
       return nextState
     })
+
+    if (feedback !== null) {
+      setFeedback(feedback)
+    }
     setSelection(null)
   }, [])
 

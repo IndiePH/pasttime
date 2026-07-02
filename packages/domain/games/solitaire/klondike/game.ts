@@ -95,7 +95,7 @@ function flipTopTableauCard(state: KlondikeState, index: number): void {
   const column = state.tableau[index]
   const top = column[column.length - 1]
   if (top && !top.faceUp) {
-    top.faceUp = true
+    column[column.length - 1] = { ...top, faceUp: true }
   }
 }
 
@@ -151,12 +151,8 @@ export function applyKlondikeMove(
     }
 
     const count = Math.min(next.stock.length, next.drawCount)
-    for (let i = 0; i < count; i++) {
-      const drawn = next.stock.pop()
-      if (drawn) {
-        next.waste.push({ ...drawn, faceUp: true })
-      }
-    }
+    const drawn = next.stock.splice(-count, count)
+    next.waste.push(...drawn.map((card) => ({ ...card, faceUp: true })))
 
     return { ok: true, state: finalizeState(withMove(next)) }
   }
