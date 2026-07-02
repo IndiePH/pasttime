@@ -98,7 +98,7 @@ export function SolitairePlayView({ game, modeLabel }: SolitairePlayViewProps) {
   return (
     <GamePlayShell layout={isBoardLayout ? "board" : "default"}>
       {isBoardLayout ? (
-        <KlondikePlaySection game={game} mode={mode} modeLabel={modeLabel} />
+        <KlondikePlaySection key={mode} game={game} mode={mode} modeLabel={modeLabel} />
       ) : (
         <GamePlaySection
           game={game}
