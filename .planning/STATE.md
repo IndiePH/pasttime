@@ -2,19 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Three Games + Engagement
-current_phase: 5
-status: planning
-stopped_at: Phase 5 planning complete — 2 plans ready
-last_updated: "2026-07-02T18:00:00.000Z"
+current_phase: 6
+current_phase_name: Word Guess
+status: completed
+stopped_at: Phase 5 complete — all 2 plans executed
+last_updated: "2026-07-02T07:30:07.066Z"
 last_activity: 2026-07-02
-last_activity_desc: Phase 5 domain + UI plans created
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 5
-  completed_plans: 3
-  percent: 20
-current_phase_name: solitaire-klondike
+  completed_plans: 5
+  percent: 40
 ---
 
 # STATE: Pasttime — Three Games + Engagement
@@ -38,10 +37,10 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 | Item | Value |
 |------|-------|
-| Phase | 5 — Plans created |
-| Plan | 2 of 2 |
-| Status | Planning complete |
-| Last activity | 2026-07-02 — Phase 5 plans created (domain + UI) |
+| Phase | 6 — Word Guess |
+| Plan | Not started |
+| Status | Complete |
+| Last activity | 2026-07-02 |
 
 ## Milestone Overview
 
@@ -60,7 +59,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 | Phase | Goal | Requirements | Status |
 |-------|------|--------------|--------|
 | 4 — Engagement Foundation | Shared domain package for per-game streaks and stats | 5 (ENG-01—ENG-05) | ✅ Complete |
-| 5 — Solitaire Klondike | Complete playable Klondike with draw-1/draw-3 modes | 9 (SOL-01—SOL-09) | 🗂️ Context |
+| 5 — Solitaire Klondike | Complete playable Klondike with draw-1/draw-3 modes | 9 (SOL-01—SOL-09) | ✅ Complete |
 | 6 — Word Guess | Word-guessing game with all modes | 8 (WRD-01—WRD-08) | Not started |
 | 7 — Streaks, Stats & Crossword Engagement | Per-game streaks, stats pages, crossword wiring | 13 (STK-01—STK-05, STA-01—STA-05, ENH-01—ENH-03) | Not started |
 | 8 — Rankings & Share Cards | Comparative rankings and share cards | 9 (CMP-01—CMP-04, SHR-01—SHR-05) | Not started |
@@ -101,14 +100,12 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 ## Session Continuity
 
-**Resume file:** .planning/phases/05-solitaire-klondike/05-UI-SPEC.md
+**Resume file:** .planning/phases/05-solitaire-klondike/05-01-PLAN.md
 
-**Last session:** 2026-07-02T16:42:00.000Z
+**Last session:** 2026-07-02T07:23:20.695Z
 **Current session:** 2026-07-02
-**Stopped at:** Phase 5 UI-SPEC approved
-**Next action:** `/gsd-plan-phase 5` — the only next step. Phase 6 is not actionable until Phase 5 is complete.
-
-**Reminder for orchestrator:** Do not suggest downstream phases in `Also available` blocks until the current phase is verified and complete.
+**Stopped at:** Phase 5 complete — all 2 plans executed
+**Next action:** Phase 6 is actionable. Move to word-guess implementation.
 
 ---
 
@@ -126,6 +123,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 ## Decisions
 
 ### Phase 4 — Engagement Foundation
+
 - **Plan 03:** `computeStats` returns empty StatsSnapshot ({}) for empty completions — safe default, consumers check existence
 - **Plan 03:** `winRate` rounded to 3 decimal places (0.750 style) — consistent across games
 - **Plan 03:** `averageTime: null` when no time data — distinguishes "not applicable" from "not yet collected"
@@ -139,6 +137,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 - **Phase 4:** Package scaffolding at packages/domain/engagement/ with types, persistence helpers, and subpath export — follows existing domain package convention
 
 ### Phase 5 — Solitaire Klondike
+
 - `SOLITAIRE_MODES` replaces `"klondike"` with `"klondike-draw1"` and `"klondike-draw3"`
 - Default mode is `"klondike-draw1"`
 - `KlondikeState` gains `drawCount: 1 | 3`, set at deal time
@@ -147,3 +146,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 - Outdated saved states (missing `drawCount`) are cleared — fresh game starts
 - Win celebration remains text-only for v1.1; Phase 7 adds proper celebration
 - Pure random deals (Math.random), no seed input
+- `useKlondikeGame(drawCount)` accepts draw count parameter and validates persisted state (Plan 02)
+- `isKlondikeState` enhanced to check `drawCount` field and optionally match expected (Plan 02)
+- Draw action produces screen-reader-friendly feedback: 'Drew 1 card' / 'Drew N cards' (Plan 02)
+- Waste fan step uses `calc(var(--game-card-w) * 0.15)` for proportional scaling (Plan 02)

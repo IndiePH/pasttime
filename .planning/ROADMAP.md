@@ -62,7 +62,7 @@
 <summary>🚧 v1.1 Three Games + Engagement (Phases 4–8) — PLANNING</summary>
 
 - [ ] **Phase 4: Engagement Foundation** — Shared domain package for per-game streaks and stats computation
-- [ ] **Phase 5: Solitaire Klondike** — Complete playable Klondike with drag-and-drop, foundation moves, win detection
+- [x] **Phase 5: Solitaire Klondike** — Complete playable Klondike with drag-and-drop, foundation moves, win detection (completed 2026-07-02)
 - [ ] **Phase 6: Word Guess** — Word-guessing game with visual feedback, daily+endless modes, hard mode
 - [ ] **Phase 7: Streaks, Stats & Crossword Engagement** — Per-game streaks, stats pages, crossword engagement wiring
 - [ ] **Phase 8: Rankings & Share Cards** — Comparative rankings and post-solve sharing for all games
@@ -172,7 +172,7 @@
 | 2. Full Gameplay UX | v1.0 | 5/5 | Complete | 2026-06-27 |
 | 3. Both Modes, Size Selection, and Grid Quality | v1.0 | 5/5 | Complete | 2026-06-29 |
 | 4. Engagement Foundation | v1.1 | 1/3 | In Progress|  |
-| 5. Solitaire Klondike | v1.1 | 2/2 | Planning | - |
+| 5. Solitaire Klondike | v1.1 | 2/2 | Complete    | 2026-07-02 |
 | 6. Word Guess | v1.1 | 0/0 | Not started | - |
 | 7. Streaks, Stats & Crossword Engagement | v1.1 | 0/0 | Not started | - |
 | 8. Rankings & Share Cards | v1.1 | 0/0 | Not started | - |
