@@ -1,4 +1,3 @@
-import { WORD_GUESS_MAX_TRIES } from "@pasttime/domain/games/word-guess"
 import { cn } from "@/lib/utils"
 import {
   type WordGuessBoardTileState,
@@ -16,6 +15,8 @@ interface WordGuessBoardProps {
   className?: string
   shakeRowIndex?: number | null
   shakeTrigger?: number
+  flipRowIndex?: number | null
+  flipTrigger?: number
 }
 
 export function WordGuessBoard({
@@ -23,15 +24,18 @@ export function WordGuessBoard({
   className,
   shakeRowIndex = null,
   shakeTrigger = 0,
+  flipRowIndex = null,
+  flipTrigger = 0,
 }: WordGuessBoardProps) {
   return (
     <div
       className={cn("flex flex-col items-center gap-1.5", className)}
       role="grid"
-      aria-label={`Word Guess board with ${WORD_GUESS_MAX_TRIES} rows`}
+      aria-label={`Word Guess board with ${rows.length} rows`}
     >
       {rows.map((row, rowIndex) => {
         const shouldShake = rowIndex === shakeRowIndex && shakeTrigger > 0
+        const shouldFlip = rowIndex === flipRowIndex && flipTrigger > 0
 
         return (
           <div
@@ -42,7 +46,12 @@ export function WordGuessBoard({
           >
             {row.letters.map((letter, columnIndex) => (
               <div key={`${row.id}-${columnIndex}`} role="gridcell">
-                <WordGuessTile letter={letter} state={row.states[columnIndex]} />
+                <WordGuessTile
+                  letter={letter}
+                  state={row.states[columnIndex]}
+                  flip={shouldFlip}
+                  flipIndex={columnIndex}
+                />
               </div>
             ))}
           </div>

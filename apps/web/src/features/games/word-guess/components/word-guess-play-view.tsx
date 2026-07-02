@@ -27,6 +27,7 @@ import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
 import { WordGuessBoard } from "@/features/games/word-guess/components/word-guess-board"
 import { WordGuessKeyboard } from "@/features/games/word-guess/components/word-guess-keyboard"
+import { WordGuessPlaySettingsWidget } from "@/features/games/word-guess/components/word-guess-play-settings-widget"
 import { useWordGuessGame } from "@/features/games/word-guess/hooks/use-word-guess-game"
 import { wordGuessSearchParams } from "@/features/games/word-guess/search-params"
 
@@ -46,13 +47,21 @@ function WordGuessPlayCard({
   wordLength,
   roundMode,
   session,
+  hardMode = false,
+  flipEnabled = false,
+  setFlipEnabled,
 }: WordGuessPlayCardProps & {
   session: ReturnType<typeof useWordGuessGame>
+  hardMode?: boolean
+  flipEnabled?: boolean
+  setFlipEnabled: (v: boolean) => void
 }) {
   const {
     attemptsUsed,
     boardRows,
     feedback,
+    flipRowIndex,
+    flipTrigger,
     invalidWordShake,
     isPlaying,
     keyboardStates,
@@ -92,6 +101,11 @@ function WordGuessPlayCard({
           <Badge variant="outline" className="leading-normal">
             {formatWordLengthLabel(wordLength)}
           </Badge>
+          {hardMode && (
+            <Badge variant="default" className="leading-normal">
+              Hard mode
+            </Badge>
+          )}
         </div>
       </CardHeader>
       <CardContent className="space-y-4 px-0 pt-4 pb-2 landscape:space-y-3 landscape:pt-3 landscape:pb-2">
@@ -101,6 +115,8 @@ function WordGuessPlayCard({
               rows={boardRows}
               shakeRowIndex={shakeRowIndex}
               shakeTrigger={shakeTrigger}
+              flipRowIndex={flipEnabled ? flipRowIndex : null}
+              flipTrigger={flipTrigger}
             />
           </div>
         </GameContentPanel>
@@ -147,7 +163,10 @@ function WordGuessPlaySession({
   game: GameDefinition
   modeLabel: string
 }) {
-  const session = useWordGuessGame({ wordLength, roundMode })
+  const [hardModeParam] = useQueryState("hardMode", wordGuessSearchParams.hardMode)
+  const appliedHardMode: boolean = hardModeParam ?? false
+  const [flipEnabled, setFlipEnabled] = React.useState(false)
+  const session = useWordGuessGame({ wordLength, roundMode, hardMode: appliedHardMode })
 
   const modeLabelText = formatWordGuessRoundModeLabel(roundMode)
 
@@ -166,11 +185,11 @@ function WordGuessPlaySession({
               className="w-full"
               onClick={session.resetRound}
             >
-              Play again
+              New game
             </Button>
           )}
           <Button variant="outline" className="w-full" asChild>
-            <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode)}>
+            <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode, appliedHardMode ? true : undefined)}>
               Back to setup
             </PlatformLink>
           </Button>
@@ -180,7 +199,15 @@ function WordGuessPlaySession({
       <WordGuessPlayCard
         wordLength={wordLength}
         roundMode={roundMode}
+        hardMode={appliedHardMode}
         session={session}
+        flipEnabled={flipEnabled}
+        setFlipEnabled={setFlipEnabled}
+      />
+      <WordGuessPlaySettingsWidget
+        className="mt-4"
+        flipEnabled={flipEnabled}
+        onFlipToggle={setFlipEnabled}
       />
     </GamePlaySection>
   )

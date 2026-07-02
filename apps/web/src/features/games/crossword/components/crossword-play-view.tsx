@@ -289,14 +289,16 @@ export function CrosswordPlaySession({
       contentLayout="board"
       footer={
         <GamePlayFooterActions>
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={newPuzzle}
-          >
-            New puzzle
-          </Button>
+          {mode !== "daily" || gameState.status === "won" ? (
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={newPuzzle}
+            >
+              New game
+            </Button>
+          ) : null}
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={crosswordLaunchPath(gridSize)}>
               Back to setup
