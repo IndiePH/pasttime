@@ -41,7 +41,8 @@ function KlondikePlayInner({
   mode: SolitaireMode
   modeLabel: string
 }) {
-  const klondike = useKlondikeGame()
+  const drawCount: 1 | 3 = mode === "klondike-draw3" ? 3 : 1
+  const klondike = useKlondikeGame(drawCount)
 
   return (
     <GamePlaySection
@@ -92,7 +93,7 @@ export function SolitairePlayView({ game, modeLabel }: SolitairePlayViewProps) {
   const [modeParam] = useQueryState("mode", solitaireSearchParams.mode)
   const mode = parseSolitaireMode(modeParam)
   const { tagline } = SOLITAIRE_MODE_INFO[mode]
-  const isBoardLayout = mode === "klondike"
+  const isBoardLayout = mode === "klondike-draw1" || mode === "klondike-draw3"
 
   return (
     <GamePlayShell layout={isBoardLayout ? "board" : "default"}>
