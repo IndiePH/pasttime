@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { Button } from "@/components/ui/button"
 import type { GameDefinition } from "@pasttime/domain/games"
+import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GameHowToPlay } from "@/features/games/components/game-how-to-play"
 import { JoinRoomPanel } from "@/features/games/components/join-room-panel"
 import { PlatformLink } from "@/platform/navigation"
@@ -21,6 +22,8 @@ interface GameLaunchActionsProps {
     label: string
     href: string
   }
+  /** Optional href for the stats page link. */
+  statsHref?: string
   /** Multiplayer: create room handler. */
   onCreateRoom?: () => void
   /** Multiplayer: join room handler. */
@@ -33,6 +36,7 @@ export function GameLaunchActions({
   playLabel: playLabelProp,
   dailyCompleted,
   secondaryAction,
+  statsHref,
   onCreateRoom,
   onJoinRoom,
 }: GameLaunchActionsProps) {
@@ -70,7 +74,7 @@ export function GameLaunchActions({
           roomHrefForCode={() => ""}
           onCancel={handleJoinCancel}
         />
-        <Button variant="outline" className="mt-6 w-full max-w-xs self-center" asChild>
+        <Button variant="outline" className="mt-6 w-60 self-center" asChild>
           <PlatformLink href="/">Back to catalog</PlatformLink>
         </Button>
       </>
@@ -79,7 +83,7 @@ export function GameLaunchActions({
 
   return (
     <>
-      <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
+      <div className="mt-8 flex w-60 flex-col gap-3">
         <GameHowToPlay game={game} />
         <Button type="button" className="w-full" asChild>
           <PlatformLink href={playHref}>{playLabel}</PlatformLink>
@@ -112,9 +116,16 @@ export function GameLaunchActions({
           </Button>
         ) : null}
       </div>
-      <Button variant="outline" className="mt-6" asChild>
-        <PlatformLink href="/">Back to catalog</PlatformLink>
-      </Button>
+      <GamePlayFooterActions className="mt-3">
+        {statsHref ? (
+          <Button variant="outline" className="w-full" asChild>
+            <PlatformLink href={statsHref}>Stats</PlatformLink>
+          </Button>
+        ) : null}
+        <Button variant="outline" className="w-full" asChild>
+          <PlatformLink href="/">Back to catalog</PlatformLink>
+        </Button>
+      </GamePlayFooterActions>
     </>
   )
 }

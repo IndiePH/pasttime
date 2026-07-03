@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 
 export const gamePlayFooterActionsClassName =
-  "mt-6 flex w-full max-w-xs flex-col items-center gap-3 self-center landscape:mt-4"
+  "mt-6 flex w-60 flex-col items-center gap-3 self-center landscape:mt-4"
 
 export function GamePlayFooterActions({
   children,

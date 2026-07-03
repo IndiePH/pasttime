@@ -55,8 +55,11 @@ export function parseStoredWordGuessGame(
     return null
   }
 
+  // Normalise hardMode so it's always defined, not undefined
+  const normalizedRound = { ...round, hardMode: round.hardMode ?? false }
+
   return {
-    round,
+    round: normalizedRound,
     currentGuess,
     status: round.status,
   }

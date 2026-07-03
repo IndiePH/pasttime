@@ -31,6 +31,7 @@ import { CrosswordPlayPreferencesProvider, useCrosswordPlayPreferences } from "@
 import { IS_CROSSWORD_DEV } from "@/features/games/crossword/context/dev-flag"
 import { CrosswordGrid } from "@/features/games/crossword/components/crossword-grid"
 import { useCrosswordGame } from "@/features/games/crossword/hooks/use-crossword-game"
+import { PostSolveRanking } from "@/features/games/components/game-post-solve-ranking"
 import { crosswordSearchParams } from "@/features/games/crossword/search-params"
 
 interface CrosswordPlayViewProps {
@@ -368,16 +369,47 @@ export function CrosswordPlaySession({
                   puzzle={gameState.puzzle}
                 />
               </GameContentPanel>
-              <p
-                className="min-h-5 w-full text-center text-sm text-muted-foreground"
-                style={{ paddingInline: SIDE_INSET }}
-                role="status"
-                aria-live="polite"
-              >
-                {gameState.status === "won"
-                  ? "Puzzle solved — nice work!"
-                  : `${gameState.puzzle.across.length + gameState.puzzle.down.length} clues to solve.`}
-              </p>
+              {(() => {
+                if (gameState.status === "won" && mode === "daily") {
+                  return (
+                    <div className="flex w-full flex-col items-center gap-2">
+                      <p
+                        className="text-sm text-muted-foreground"
+                        role="status"
+                        aria-live="polite"
+                      >
+                        Puzzle solved — nice work!
+                      </p>
+                      <PostSolveRanking
+                        gameId="crossword"
+                        gameTitle="Crossword"
+                      />
+                    </div>
+                  )
+                }
+                if (gameState.status === "won") {
+                  return (
+                    <p
+                      className="min-h-5 w-full text-center text-sm text-muted-foreground"
+                      style={{ paddingInline: SIDE_INSET }}
+                      role="status"
+                      aria-live="polite"
+                    >
+                      Puzzle solved — nice work!
+                    </p>
+                  )
+                }
+                return (
+                  <p
+                    className="min-h-5 w-full text-center text-sm text-muted-foreground"
+                    style={{ paddingInline: SIDE_INSET }}
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {`${gameState.puzzle.across.length + gameState.puzzle.down.length} clues to solve.`}
+                  </p>
+                )
+              })()}
             </div>
 
             <div
@@ -474,6 +506,10 @@ export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
     () => false,
   )
 
+  const handleErrorRetry = useCallback(() => {
+    window.location.href = crosswordLaunchPath(gridSize)
+  }, [gridSize])
+
   if (!isMounted) {
     return (
       <GamePlayShell layout="board">
@@ -488,10 +524,6 @@ export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
       </GamePlayShell>
     )
   }
-
-  const handleErrorRetry = useCallback(() => {
-    window.location.href = crosswordLaunchPath(gridSize)
-  }, [gridSize])
 
   return (
     <CrosswordPlayPreferencesProvider>

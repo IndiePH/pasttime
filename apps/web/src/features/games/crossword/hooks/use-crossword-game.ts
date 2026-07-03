@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 
+import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
 import { useStorage } from "@/infrastructure/storage"
 import type {
   CrosswordCell,
@@ -150,6 +151,14 @@ export function useCrosswordGame(
           .filter((x): x is { row: number; col: number } => x !== null),
       )
     : []
+
+  // Record daily completions for engagement tracking
+  useEngagementRecorder({
+    gameId: "crossword",
+    variant: String(size),
+    status: gameState.status,
+    isDaily: mode === "daily",
+  })
 
   return {
     gameState,

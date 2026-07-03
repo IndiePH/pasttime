@@ -26,6 +26,7 @@ export function SolitaireLaunchView({ game }: SolitaireLaunchViewProps) {
         game={game}
         playHref={solitairePlayPath(mode)}
         playLabel="Play"
+        statsHref="/games/solitaire/stats"
       />
     </GamePageShell>
   )

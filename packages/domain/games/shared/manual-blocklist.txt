@@ -1448,3 +1448,13 @@ ZONA
 ZOOT
 ZULU
 ZZZ
+
+# Words excluded from enriched dictionary (added 2026-07-03)
+# Reason: All available definitions still contained the word itself
+ERG
+LAC
+SOC
+GRAM
+KANA
+ROMA
+NEATH

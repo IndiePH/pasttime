@@ -188,7 +188,7 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
         </CardContent>
       </Card>
 
-      <Button variant="outline" className="mt-6 w-full max-w-xs" asChild>
+      <Button variant="outline" className="mt-6 w-60" asChild>
         <PlatformLink href={launchHref}>Leave room</PlatformLink>
       </Button>
 

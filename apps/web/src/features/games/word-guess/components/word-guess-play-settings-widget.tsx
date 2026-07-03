@@ -4,21 +4,21 @@ import * as React from "react"
 
 import { GameSettingsWidget } from "@/features/games/components/game-settings-widget"
 import { Switch } from "@/components/ui/switch"
+import { useWordGuessPlayPreferences } from "@/features/games/word-guess/context/word-guess-play-preferences-context"
 
 interface WordGuessPlaySettingsWidgetProps {
   className?: string
-  flipEnabled?: boolean
-  onFlipToggle?: (enabled: boolean) => void
 }
 
 export function WordGuessPlaySettingsWidget({
   className,
-  flipEnabled = false,
-  onFlipToggle = () => {},
 }: WordGuessPlaySettingsWidgetProps) {
+  const { flipEnabled, setFlipEnabled } = useWordGuessPlayPreferences()
+
   const [draftFlip, setDraftFlip] = React.useState(flipEnabled)
   const hasPendingChanges = draftFlip !== flipEnabled
 
+  // Sync draft to actual whenever flipEnabled changes (e.g. undo via dismiss)
   React.useEffect(() => {
     setDraftFlip(flipEnabled)
   }, [flipEnabled])
@@ -32,8 +32,8 @@ export function WordGuessPlaySettingsWidget({
   }, [flipEnabled])
 
   const handleApply = React.useCallback(() => {
-    onFlipToggle(draftFlip)
-  }, [draftFlip, onFlipToggle])
+    setFlipEnabled(draftFlip)
+  }, [draftFlip, setFlipEnabled])
 
   return (
     <GameSettingsWidget

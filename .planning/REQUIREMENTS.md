@@ -42,19 +42,19 @@ Shared domain package for per-game streak and stats computation. Game-agnostic �
 
 ### Per-Game Streaks
 
-- [ ] **STK-01**: Crossword tracks its own daily streak (current + longest)
-- [ ] **STK-02**: Solitaire tracks its own daily streak (if daily mode added in future — for now, random-mode solitaire does not have streaks)
-- [ ] **STK-03**: Word Guess tracks its own daily streak (current + longest)
-- [ ] **STK-04**: Streak lost when a daily puzzle is not completed before the next UTC day
-- [ ] **STK-05**: Streak data persisted per game in localStorage
+- [x] **STK-01**: Crossword tracks its own daily streak (current + longest)
+- [x] **STK-02**: Solitaire tracks its own daily streak (if daily mode added in future — for now, random-mode solitaire does not have streaks)
+- [x] **STK-03**: Word Guess tracks its own daily streak (current + longest)
+- [x] **STK-04**: Streak lost when a daily puzzle is not completed before the next UTC day
+- [x] **STK-05**: Streak data persisted per game in localStorage
 
 ### Per-Game Stats
 
-- [ ] **STA-01**: Crossword stats page — total solves, win rate, average solve time, streak, comparative ranking
-- [ ] **STA-02**: Solitaire stats page — total wins/games, win rate, average time (when timer added), streak
-- [ ] **STA-03**: Word Guess stats page — total solves, win rate, guess distribution, streak, comparative ranking
-- [ ] **STA-04**: Stats page accessible from each game's launch view
-- [ ] **STA-05**: Stats persist per game in localStorage
+- [x] **STA-01**: Crossword stats page — total solves, win rate, average solve time, streak, comparative ranking
+- [x] **STA-02**: Solitaire stats page — total wins/games, win rate, average time (when timer added), streak
+- [x] **STA-03**: Word Guess stats page — total solves, win rate, guess distribution, streak, comparative ranking
+- [x] **STA-04**: Stats page accessible from each game's launch view
+- [x] **STA-05**: Stats persist per game in localStorage
 
 ### Comparative Rankings ("Better than X%")
 
@@ -73,9 +73,9 @@ Shared domain package for per-game streak and stats computation. Game-agnostic �
 
 ### Crossword Engagement Hooks
 
-- [ ] **ENH-01**: Crossword daily solve is recorded in streak/stats (integrates with engagement package)
-- [ ] **ENH-02**: Crossword stats page is accessible from launch/play view
-- [ ] **ENH-03**: Crossword stats show comparative ranking after daily solve
+- [x] **ENH-01**: Crossword daily solve is recorded in streak/stats (integrates with engagement package)
+- [x] **ENH-02**: Crossword stats page is accessible from launch/play view
+- [x] **ENH-03**: Crossword stats show comparative ranking after daily solve
 
 ## Out of Scope
 
@@ -120,16 +120,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ENG-03 | Phase 4 | Complete |
 | ENG-04 | Phase 4 | Complete |
 | ENG-05 | Phase 4 | Complete |
-| STK-01 | Phase 7 | Pending |
-| STK-02 | Phase 7 | Pending |
-| STK-03 | Phase 7 | Pending |
-| STK-04 | Phase 7 | Pending |
-| STK-05 | Phase 7 | Pending |
-| STA-01 | Phase 7 | Pending |
-| STA-02 | Phase 7 | Pending |
-| STA-03 | Phase 7 | Pending |
-| STA-04 | Phase 7 | Pending |
-| STA-05 | Phase 7 | Pending |
+| STK-01 | Phase 7 | Complete |
+| STK-02 | Phase 7 | Complete |
+| STK-03 | Phase 7 | Complete |
+| STK-04 | Phase 7 | Complete |
+| STK-05 | Phase 7 | Complete |
+| STA-01 | Phase 7 | Complete |
+| STA-02 | Phase 7 | Complete |
+| STA-03 | Phase 7 | Complete |
+| STA-04 | Phase 7 | Complete |
+| STA-05 | Phase 7 | Complete |
 | CMP-01 | Phase 8 | Pending |
 | CMP-02 | Phase 8 | Pending |
 | CMP-03 | Phase 8 | Pending |
@@ -139,9 +139,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SHR-03 | Phase 8 | Pending |
 | SHR-04 | Phase 8 | Pending |
 | SHR-05 | Phase 8 | Pending |
-| ENH-01 | Phase 7 | Pending |
-| ENH-02 | Phase 7 | Pending |
-| ENH-03 | Phase 7 | Pending |
+| ENH-01 | Phase 7 | Complete |
+| ENH-02 | Phase 7 | Complete |
+| ENH-03 | Phase 7 | Complete |
 
 **Coverage:**
 

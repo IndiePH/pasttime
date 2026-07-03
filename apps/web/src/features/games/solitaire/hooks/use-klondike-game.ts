@@ -14,6 +14,7 @@ import {
   type KlondikeState,
   type KlondikeTableauIndex,
 } from "@pasttime/domain/games/solitaire"
+import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
 import { useStorage } from "@/infrastructure/storage"
 import { useKlondikeFoundationFly } from "@/features/games/solitaire/hooks/use-klondike-foundation-fly"
 import { useSolitairePlayPreferencesContext } from "@/features/games/solitaire/context/solitaire-play-preferences-context"
@@ -439,6 +440,16 @@ export function useKlondikeGame(drawCount: 1 | 3) {
     setSelection(null)
     setFeedback(null)
   }, [cancelFoundationFlyQueue, clearFoundationFlyMode, drawCount])
+
+  // Engagement recorder — disabled until solitaire gains a daily mode (STD-01).
+  // Passing isDaily: false means no completions are recorded.
+  useEngagementRecorder({
+    gameId: "solitaire",
+    variant: "klondike",
+    status: state.status,
+    isDaily: false,
+    moves: state.moves,
+  })
 
   return {
     state,

@@ -11,6 +11,7 @@ import {
   type GameSettingsWidgetProps,
 } from "@/features/games/game-settings-registry"
 import type { GamePlayLayout } from "@/features/games/components/game-play-shell"
+import { GameStatsView } from "@/features/games/components/game-stats-view"
 import { solitaireSearchParamsCache } from "@/features/games/solitaire/search-params"
 import { wordGuessSearchParamsCache } from "@/features/games/word-guess/search-params"
 import { crosswordSearchParamsCache } from "@/features/games/crossword/search-params"
@@ -28,11 +29,16 @@ type GamePlayViewProps = {
   modeLabel: string
 }
 
+type GameStatsViewProps = {
+  game: GameDefinition
+}
+
 export type GameModule = {
   LaunchView?: ComponentType<GameLaunchViewProps>
   PlayView?: ComponentType<GamePlayViewProps>
   SettingsWidget?: ComponentType<GameSettingsWidgetProps>
   HowToPlayContent?: ComponentType<GameHowToPlayContentProps>
+  StatsView?: ComponentType<GameStatsViewProps>
   /** Expansive play layout for board-style games (cards, grids, etc.). */
   playLayout?: GamePlayLayout
   parseSearchParams?: (searchParams: SearchParamsInput) => Promise<void>
@@ -78,6 +84,7 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   solitaire: {
     LaunchView: SolitaireLaunchView,
     PlayView: SolitairePlayView,
+    StatsView: GameStatsView,
     SettingsWidget: GAME_SETTINGS_WIDGETS.solitaire,
     playLayout: "board",
     parseSearchParams: async (searchParams) => {
@@ -87,6 +94,7 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   "word-guess": {
     LaunchView: WordGuessLaunchView,
     PlayView: WordGuessPlayView,
+    StatsView: GameStatsView,
     SettingsWidget: GAME_SETTINGS_WIDGETS["word-guess"],
     HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT["word-guess"],
     parseSearchParams: async (searchParams) => {
@@ -96,6 +104,7 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   crossword: {
     LaunchView: CrosswordLaunchView,
     PlayView: CrosswordPlayView,
+    StatsView: GameStatsView,
     SettingsWidget: GAME_SETTINGS_WIDGETS.crossword,
     HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT.crossword,
     playLayout: "board",

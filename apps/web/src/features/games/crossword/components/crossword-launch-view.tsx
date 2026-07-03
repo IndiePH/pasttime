@@ -28,6 +28,7 @@ export function CrosswordLaunchView({ game }: CrosswordLaunchViewProps) {
         game={game}
         playHref={crosswordPlayPath(resolvedSize, isDailyCompleted ? "random" : "daily")}
         dailyCompleted={isDailyCompleted}
+        statsHref="/games/crossword/stats"
       />
     </GamePageShell>
   )

@@ -13,6 +13,7 @@ import {
   type WordGuessRoundMode,
   type WordGuessRoundState,
 } from "@pasttime/domain/games/word-guess"
+import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
 import { useStorage } from "@/infrastructure/storage"
 import type { WordGuessBoardRow } from "@/features/games/word-guess/components/word-guess-board"
 
@@ -122,12 +123,19 @@ export function useWordGuessGame({
     [roundMode, wordLength],
   )
   const initialGame = React.useMemo(() => {
-    return (
-      parseStoredWordGuessGame(storage.get<unknown>(storageKey), wordLength, roundMode) ?? {
-        round: createRound(wordLength, roundMode, hardMode),
-        currentGuess: "",
-      }
+    const stored = parseStoredWordGuessGame(
+      storage.get<unknown>(storageKey),
+      wordLength,
+      roundMode,
     )
+    // Only reuse stored game if hardMode matches — otherwise start fresh
+    if (stored && stored.round.hardMode === hardMode) {
+      return stored
+    }
+    return {
+      round: createRound(wordLength, roundMode, hardMode),
+      currentGuess: "",
+    }
   }, [roundMode, storage, storageKey, wordLength, hardMode])
   const [round, setRound] = React.useState<WordGuessRoundState>(initialGame.round)
   const [currentGuess, setCurrentGuess] = React.useState(initialGame.currentGuess)
@@ -213,7 +221,7 @@ export function useWordGuessGame({
       return
     }
     if (result.round.status === "lost") {
-      setFeedback(`Round over. Answer was ${result.round.answer}.`)
+      setFeedback("Round over.")
       return
     }
 
@@ -272,6 +280,24 @@ export function useWordGuessGame({
     () => buildKeyboardStates(round.guesses),
     [round.guesses],
   )
+
+  // Guess distribution for engagement recording: array of length maxTries
+  // where index = guesses.length - 1 has value 1 (solved in N tries)
+  const guessDistribution = React.useMemo(() => {
+    if (round.status !== "won") return undefined
+    const dist = new Array(round.maxTries).fill(0)
+    dist[round.guesses.length - 1] = 1
+    return dist
+  }, [round.status, round.guesses.length, round.maxTries])
+
+  // Record daily completions for engagement tracking
+  useEngagementRecorder({
+    gameId: "word-guess",
+    variant: String(wordLength),
+    status: round.status,
+    isDaily: roundMode === "daily",
+    guessDistribution,
+  })
 
   return {
     attemptsUsed,

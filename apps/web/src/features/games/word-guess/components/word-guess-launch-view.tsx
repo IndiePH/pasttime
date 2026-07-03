@@ -51,6 +51,7 @@ export function WordGuessLaunchView({ game }: WordGuessLaunchViewProps) {
             ? { label: "View today's results", href: wordGuessPlayPath(wordLength, "daily", appliedHardMode ? true : undefined) }
             : undefined
         }
+        statsHref="/games/word-guess/stats"
         onCreateRoom={handleCreateRoom}
         onJoinRoom={() => {}}
       />

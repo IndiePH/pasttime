@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Three Games + Engagement
-current_phase: 6
-current_phase_name: Word Guess
-status: complete
-stopped_at: Phase 6 execution complete — all 3 plans verified
-last_updated: "2026-07-02T20:12:00.000Z"
-last_activity: 2026-07-02
+current_phase: 8
+current_phase_name: Rankings & Share Cards
+status: not_started
+stopped_at: Phase 7 complete — ready for Phase 8
+last_updated: "2026-07-03T00:00:00.000Z"
+last_activity: 2026-07-03
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 11
-  completed_plans: 8
-  percent: 72.7
+  completed_plans: 11
+  percent: 90.9
 ---
 
 # STATE: Pasttime — Three Games + Engagement
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 **Core Value:** A player can open any of 3 games (crossword, solitaire, word guess), play a satisfying round, see their per-game streaks and stats, and know how they compare to the playerbase — all without logging in.
 
-**Current Focus:** Phase 6 — word-guess
+**Current Focus:** Phase 7 — Streaks, Stats & Crossword Engagement
 
 ---
 
@@ -37,20 +37,20 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 | Item | Value |
 |------|-------|
-| Phase | 6 — Word Guess |
-| Plan | Completed (3 plans) |
-| Status | Complete |
-| Last activity | 2026-07-02 |
+| Phase | 8 — Rankings & Share Cards |
+| Plans | TBD |
+| Status | Not started |
+| Last activity | 2026-07-03 |
 
 ## Milestone Overview
 
 | Metric | Value |
 |--------|-------|
 | Phases total | 5 (Phases 4–8) |
-| Phases complete | 3 (Phases 4, 5, 6) |
+| Phases complete | 4 (Phases 4, 5, 6, 7) |
 | Requirements total | 44 |
 | Requirements mapped | 44 |
-| Requirements complete | 22 (ENG-01—ENG-05, SOL-01—SOL-09, WRD-01—WRD-08) |
+| Requirements complete | 35 (ENG-01—ENG-05, SOL-01—SOL-09, WRD-01—WRD-08, STK-01—STK-05, STA-01—STA-05, ENH-01—ENH-03) |
 
 ---
 
@@ -61,7 +61,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 | 4 — Engagement Foundation | Shared domain package for per-game streaks and stats | 5 (ENG-01—ENG-05) | ✅ Complete |
 | 5 — Solitaire Klondike | Complete playable Klondike with draw-1/draw-3 modes | 9 (SOL-01—SOL-09) | ✅ Complete |
 | 6 — Word Guess | Word-guessing game with all modes | 8 (WRD-01—WRD-08) | ✅ Complete |
-| 7 — Streaks, Stats & Crossword Engagement | Per-game streaks, stats pages, crossword wiring | 13 (STK-01—STK-05, STA-01—STA-05, ENH-01—ENH-03) | Not started |
+| 7 — Streaks, Stats & Crossword Engagement | Per-game streaks, stats pages, crossword wiring | 13 (STK-01—STK-05, STA-01—STA-05, ENH-01—ENH-03) | ✅ Complete |
 | 8 — Rankings & Share Cards | Comparative rankings and share cards | 9 (CMP-01—CMP-04, SHR-01—SHR-05) | Not started |
 
 ---
@@ -100,12 +100,12 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 ## Session Continuity
 
-**Resume file:** .planning/phases/06-word-guess/06-CONTEXT.md
+**Resume file:** .planning/phases/07-streaks-stats-crossword-engagement/ (to be created)
 
-**Last session:** 2026-07-02T17:00:00.000Z
-**Current session:** 2026-07-02
-**Stopped at:** Phase 6 context gathered — ready to plan
-**Next action:** Execute Phase 6. Plans ready at: `.planning/phases/06-word-guess/06-01-PLAN.md`, `06-02-PLAN.md`, `06-03-PLAN.md`. Use `/gsd-execute-phase 6`.
+**Last session:** 2026-07-03T00:00:00.000Z
+**Current session:** 2026-07-03
+**Stopped at:** Phase 7 complete
+**Next action:** Start Phase 8 planning. Run `/gsd-plan-phase 8` or `/gsd-discuss-phase 8`.
 
 ---
 
