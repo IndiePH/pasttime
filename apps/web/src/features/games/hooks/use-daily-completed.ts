@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import { getDailySeed } from "@pasttime/domain/daily"
 import { useStorage } from "@/infrastructure/storage"
 
@@ -11,6 +11,20 @@ function getStatus(stored: unknown): string | null {
   return typeof status === "string" ? status : null
 }
 
+/**
+ * Subscribe to store-change signals. The daily completion value is derived
+ * from localStorage, so we re-read whenever the tab regains focus or becomes
+ * visible (player may complete the daily in another tab).
+ */
+function subscribe(onStoreChange: () => void): () => void {
+  window.addEventListener("focus", onStoreChange)
+  document.addEventListener("visibilitychange", onStoreChange)
+  return () => {
+    window.removeEventListener("focus", onStoreChange)
+    document.removeEventListener("visibilitychange", onStoreChange)
+  }
+}
+
 export function useDailyCompleted(
   gameId: string,
   variant: string,
@@ -19,27 +33,17 @@ export function useDailyCompleted(
 
   const key = `${gameId}:daily:${variant}:${getDailySeed(new Date())}`
 
-  // Default to false during SSR/first render to avoid hydration mismatch.
-  // localStorage is not available during SSR, and reading it synchronously
-  // on the client would produce a different result than the server render.
-  const [completed, setCompleted] = useState(false)
-
-  useEffect(() => {
-    const status = getStatus(storage.get(key))
-    setCompleted(status === "won" || status === "lost")
-
-    // Refresh on focus/visibility changes (player may complete daily in another tab)
-    const refresh = () => {
-      const s = getStatus(storage.get(key))
-      setCompleted(s === "won" || s === "lost")
-    }
-    window.addEventListener("focus", refresh)
-    document.addEventListener("visibilitychange", refresh)
-    return () => {
-      window.removeEventListener("focus", refresh)
-      document.removeEventListener("visibilitychange", refresh)
-    }
-  }, [key, storage])
+  // Default to false during SSR/first render to avoid hydration mismatch;
+  // useSyncExternalStore's getServerSnapshot keeps the server and the first
+  // client render in sync, then re-reads from storage after hydration.
+  const completed = useSyncExternalStore(
+    subscribe,
+    () => {
+      const status = getStatus(storage.get(key))
+      return status === "won" || status === "lost"
+    },
+    () => false,
+  )
 
   return completed
 }

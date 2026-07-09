@@ -4,7 +4,6 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import type {
   CrosswordCell,
   CrosswordClue,
-  CrosswordDirection,
   CrosswordPuzzle,
 } from "@pasttime/domain/games/crossword"
 import { CrosswordGrid } from "./crossword-grid"
@@ -88,15 +87,6 @@ const AT_CLUE: CrosswordClue = {
 
 const CAD_CLUE: CrosswordClue = {
   id: "d1", number: 1, direction: "down", text: "Bad driver", answer: "CAD", row: 0, col: 0,
-}
-
-const TS_CLUE: CrosswordClue = {
-  id: "d3", number: 3, direction: "down", text: "Stamps", answer: "TS", row: 0, col: 2,
-}
-
-// Shared puzzle fixture reference (rebuilt every test for isolation)
-function makePuzzle() {
-  return buildTestPuzzle()
 }
 
 // Default prefs — all indicators off so tests don't depend on indicator rendering

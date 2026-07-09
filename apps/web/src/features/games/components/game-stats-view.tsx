@@ -16,7 +16,6 @@ import { GamePlayFooterActions } from "@/features/games/components/game-play-foo
 import {
   loadCompletions,
   computeStats,
-  type StatsSnapshot,
 } from "@pasttime/domain/engagement"
 import { useStorage } from "@/infrastructure/storage"
 import { GamePageShell } from "@/features/games/components/game-page-shell"
@@ -38,7 +37,12 @@ export function GameStatsView({ game }: GameStatsViewProps) {
   const storage = useStorage()
   const [completions, setCompletions] = React.useState<ReturnType<typeof loadCompletions>>([])
 
+  // SSR-safe external-store read: storage is unavailable during SSR, so we
+  // read after mount. loadCompletions returns a fresh array, so it can't be
+  // a useSyncExternalStore snapshot without a caching layer; snapshot caching
+  // is a separate refactor.
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional post-mount external store read
     setCompletions(loadCompletions(storage, game.id))
   }, [storage, game.id])
 

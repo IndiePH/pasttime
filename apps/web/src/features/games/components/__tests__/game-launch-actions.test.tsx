@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 import { GameLaunchActions } from "../game-launch-actions"
 import type { GameDefinition } from "@pasttime/domain/games"

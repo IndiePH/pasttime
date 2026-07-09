@@ -3,10 +3,7 @@ import React from "react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { CrosswordClue } from "@pasttime/domain/games/crossword"
-import {
-  createCrosswordGameState,
-  type CrosswordGameState,
-} from "@pasttime/domain/games/crossword"
+import type { GameDefinition } from "@pasttime/domain/games"
 import { CrosswordClues } from "./crossword-play-view"
 import { CrosswordPlayPreferencesProvider } from "@/features/games/crossword/context/crossword-play-preferences-context"
 
@@ -242,17 +239,14 @@ vi.mock("@/infrastructure/storage", () => ({
   }),
 }))
 
-function makeGameState(): CrosswordGameState {
-  return createCrosswordGameState(7, "random")
-}
-
-const MOCK_GAME = {
+const MOCK_GAME: GameDefinition = {
   id: "crossword",
-  slug: "crossword",
-  name: "Crossword",
+  title: "Crossword",
   description: "Test game",
+  status: "available",
   icon: "crossword",
-} as const
+  tags: [],
+}
 
 describe("CrosswordPlaySession", () => {
   beforeEach(() => {
@@ -271,7 +265,7 @@ describe("CrosswordPlaySession", () => {
     return render(
       <CrosswordPlayPreferencesProvider>
         <CrosswordPlaySession
-          game={MOCK_GAME as any}
+          game={MOCK_GAME}
           modeLabel="Test"
           gridSize={7}
           mode="random"
@@ -328,7 +322,7 @@ describe("daily rollover banner", () => {
     render(
       <CrosswordPlayPreferencesProvider>
         <CrosswordPlaySession
-          game={MOCK_GAME as any}
+          game={MOCK_GAME}
           modeLabel="Daily"
           gridSize={7}
           mode="daily"
@@ -350,7 +344,7 @@ describe("daily rollover banner", () => {
     render(
       <CrosswordPlayPreferencesProvider>
         <CrosswordPlaySession
-          game={MOCK_GAME as any}
+          game={MOCK_GAME}
           modeLabel="Random"
           gridSize={7}
           mode="random"
@@ -370,7 +364,7 @@ describe("daily rollover banner", () => {
     render(
       <CrosswordPlayPreferencesProvider>
         <CrosswordPlaySession
-          game={MOCK_GAME as any}
+          game={MOCK_GAME}
           modeLabel="Daily"
           gridSize={7}
           mode="daily"
@@ -386,8 +380,10 @@ describe("daily rollover banner", () => {
     expect(
       screen.queryByText("Daily puzzle refreshed"),
     ).not.toBeInTheDocument()
-    // But the session should still be mounted (progress preserved, just banner hidden)
-    expect(screen.getByText("Crossword")).toBeInTheDocument()
+    // But the session should still be mounted (progress preserved, just banner hidden).
+    // Both the page header (game.title) and the board card title render "Crossword",
+    // so assert at least one match instead of an exact single-element query.
+    expect(screen.getAllByText("Crossword").length).toBeGreaterThan(0)
   })
 
   it("'Keep current' click hides banner without changing puzzle", async () => {
@@ -399,7 +395,7 @@ describe("daily rollover banner", () => {
     render(
       <CrosswordPlayPreferencesProvider>
         <CrosswordPlaySession
-          game={MOCK_GAME as any}
+          game={MOCK_GAME}
           modeLabel="Daily"
           gridSize={7}
           mode="daily"
@@ -464,7 +460,7 @@ describe("generator error boundary", () => {
     // Render with error, then click Try again
     // We need to track the render cycle: first render throws,
     // then setState({ hasError: false }) + onRetry is called
-    const { rerender } = render(
+    render(
       <CrosswordPlaySessionErrorBoundary onRetry={onRetry}>
         <ThrowingChild />
       </CrosswordPlaySessionErrorBoundary>,

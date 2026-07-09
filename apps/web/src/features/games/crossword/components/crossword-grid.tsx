@@ -17,7 +17,6 @@ import {
   nextClueInDirection,
   previousCellInWord,
   previousClueInDirection,
-  resolveDirection,
 } from "@pasttime/domain/games/crossword"
 
 interface CrosswordGridProps {

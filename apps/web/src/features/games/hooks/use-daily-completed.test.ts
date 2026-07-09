@@ -2,6 +2,7 @@ import { renderHook, act } from "@testing-library/react"
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest"
 import { useDailyCompleted } from "./use-daily-completed"
 import { useStorage } from "@/infrastructure/storage"
+import type { StorageAdapter } from "@pasttime/storage"
 import { getDailySeed } from "@pasttime/domain/daily"
 
 vi.mock("@/infrastructure/storage", () => ({
@@ -14,7 +15,13 @@ describe("useDailyCompleted", () => {
   const mockGet = vi.fn()
 
   beforeEach(() => {
-    vi.mocked(useStorage).mockReturnValue({ get: mockGet } as any)
+    const adapter: StorageAdapter = {
+      get: mockGet,
+      set: vi.fn(),
+      remove: vi.fn(),
+      clear: vi.fn(),
+    }
+    vi.mocked(useStorage).mockReturnValue(adapter)
   })
 
   afterEach(() => {

@@ -49,6 +49,7 @@ export function WordGuessTile({
   flipIndex = 0,
 }: WordGuessTileProps) {
   const [revealed, setRevealed] = React.useState(false)
+  const [prevFlip, setPrevFlip] = React.useState(flip)
   const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Detect reduced motion preference
@@ -59,9 +60,15 @@ export function WordGuessTile({
 
   // When a new flip animation starts, hold the "filled" state
   // until the midpoint of the stagger-delayed animation (200ms + stagger).
+  // Reset the reveal state during render when the flip prop changes (the
+  // React "adjust state during render" pattern) so the effect below only
+  // schedules the reveal timer without calling setState synchronously.
+  if (flip !== prevFlip) {
+    setPrevFlip(flip)
+    if (flip) setRevealed(false)
+  }
   React.useEffect(() => {
-    if (flip) {
-      setRevealed(false)
+    if (!flip) return
 
       // Reveal color at the midpoint of the flip animation.
       // The CSS keyframe reaches 50% (rotateX -90°) at 200ms, which is
@@ -73,7 +80,6 @@ export function WordGuessTile({
       return () => {
         if (timerRef.current) clearTimeout(timerRef.current)
       }
-    }
   }, [flip, flipIndex])
 
   // During an active flip, show "filled" until the midpoint reveal

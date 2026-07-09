@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useMemo, useSyncExternalStore } from "react"
 
 import {
   getWordGuessSoloStorageKey,
@@ -9,35 +9,37 @@ import {
 } from "@pasttime/domain/games/word-guess/persistence"
 import { useStorage } from "@/infrastructure/storage"
 
+/**
+ * Subscribe to store-change signals. The daily completion value is derived
+ * from localStorage, so we re-read whenever the tab regains focus or becomes
+ * visible (player may complete the daily in another tab).
+ */
+function subscribe(onStoreChange: () => void): () => void {
+  window.addEventListener("focus", onStoreChange)
+  document.addEventListener("visibilitychange", onStoreChange)
+  return () => {
+    window.removeEventListener("focus", onStoreChange)
+    document.removeEventListener("visibilitychange", onStoreChange)
+  }
+}
+
 export function useWordGuessDailyCompleted(
   wordLength: WordGuessLength,
 ): boolean {
   const storage = useStorage()
-  const storageKey = React.useMemo(
+  const storageKey = useMemo(
     () => getWordGuessSoloStorageKey(wordLength, "daily"),
     [wordLength],
   )
 
-  // Default to false during SSR/first render to avoid hydration mismatch.
-  // localStorage is not available during SSR.
-  const [completed, setCompleted] = React.useState(false)
-
-  React.useEffect(() => {
-    const stored = storage.get(storageKey)
-    setCompleted(isWordGuessDailyCompleted(stored, wordLength))
-
-    function handleRefresh() {
-      const s = storage.get(storageKey)
-      setCompleted(isWordGuessDailyCompleted(s, wordLength))
-    }
-
-    window.addEventListener("focus", handleRefresh)
-    document.addEventListener("visibilitychange", handleRefresh)
-    return () => {
-      window.removeEventListener("focus", handleRefresh)
-      document.removeEventListener("visibilitychange", handleRefresh)
-    }
-  }, [storageKey, wordLength, storage])
+  // Default to false during SSR/first render to avoid hydration mismatch;
+  // useSyncExternalStore's getServerSnapshot keeps the server and the first
+  // client render in sync, then re-reads from storage after hydration.
+  const completed = useSyncExternalStore(
+    subscribe,
+    () => isWordGuessDailyCompleted(storage.get(storageKey), wordLength),
+    () => false,
+  )
 
   return completed
 }

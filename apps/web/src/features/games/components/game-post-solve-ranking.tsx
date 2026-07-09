@@ -17,7 +17,6 @@ import {
 
 interface PostSolveRankingProps {
   gameId: string
-  gameTitle: string
 }
 
 /**
@@ -28,10 +27,7 @@ interface PostSolveRankingProps {
  * Returns null when there are no completions, no distribution data,
  * or no metrics with both values and distributions.
  */
-export function PostSolveRanking({
-  gameId,
-  gameTitle,
-}: PostSolveRankingProps) {
+export function PostSolveRanking({ gameId }: PostSolveRankingProps) {
   const storage = useStorage()
   const completions = useMemo(
     () => loadCompletions(storage, gameId),
@@ -42,50 +38,49 @@ export function PostSolveRanking({
 
   if (!distributions) return null
 
-  const rankings = useMemo(() => {
-    const items: { label: string; percentile: number }[] = []
+  // Compute rankings during render (React Compiler memoises automatically).
+  // Previously a conditional `useMemo` here violated the rules of hooks and
+  // defeated the compiler's manual-memo preservation.
+  const rankings: { label: string; percentile: number }[] = []
 
-    if (
-      stats.dailyStreak &&
-      stats.dailyStreak.current > 0 &&
-      distributions.streak
-    ) {
-      items.push({
-        label: "Your streak is longer than",
-        percentile: computePercentile(
-          stats.dailyStreak.current,
-          distributions.streak,
-        ),
-      })
-    }
+  if (
+    stats.dailyStreak &&
+    stats.dailyStreak.current > 0 &&
+    distributions.streak
+  ) {
+    rankings.push({
+      label: "Your streak is longer than",
+      percentile: computePercentile(
+        stats.dailyStreak.current,
+        distributions.streak,
+      ),
+    })
+  }
 
-    if (
-      stats.winRate !== undefined &&
-      stats.winRate > 0 &&
-      distributions.winRate
-    ) {
-      items.push({
-        label: "Your win rate beats",
-        percentile: computePercentile(stats.winRate, distributions.winRate),
-      })
-    }
+  if (
+    stats.winRate !== undefined &&
+    stats.winRate > 0 &&
+    distributions.winRate
+  ) {
+    rankings.push({
+      label: "Your win rate beats",
+      percentile: computePercentile(stats.winRate, distributions.winRate),
+    })
+  }
 
-    if (
-      stats.averageTime !== undefined &&
-      stats.averageTime !== null &&
-      distributions.solveTime
-    ) {
-      items.push({
-        label: "Your solve time is faster than",
-        percentile: computePercentile(
-          stats.averageTime,
-          distributions.solveTime,
-        ),
-      })
-    }
-
-    return items
-  }, [stats, distributions])
+  if (
+    stats.averageTime !== undefined &&
+    stats.averageTime !== null &&
+    distributions.solveTime
+  ) {
+    rankings.push({
+      label: "Your solve time is faster than",
+      percentile: computePercentile(
+        stats.averageTime,
+        distributions.solveTime,
+      ),
+    })
+  }
 
   if (rankings.length === 0) return null
 

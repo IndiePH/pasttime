@@ -6,13 +6,11 @@ import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-rec
 import { useStorage } from "@/infrastructure/storage"
 import type {
   CrosswordCell,
-  CrosswordClue,
   CrosswordDirection,
   CrosswordGameState,
   CrosswordGridSize,
   CrosswordRoundMode,
 } from "@pasttime/domain/games/crossword"
-import { isNewDay } from "@pasttime/domain/daily"
 import {
   createCrosswordGameState,
   findClueAtCell,
@@ -70,7 +68,7 @@ export function useCrosswordGame(
 
   // Track daily-rollover: false on initial mount (the current session is valid).
   // The play view polls or checks on focus to detect rollover and show the banner.
-  const [dailyRolloverDetected, setDailyRolloverDetected] = useState(false)
+  const [dailyRolloverDetected] = useState(false)
 
   // Persist on every state change for daily mode only (D-16).
   // Endless mode is ephemeral — no state written to storage.

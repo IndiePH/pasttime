@@ -74,16 +74,18 @@ function WordGuessPlayCard({
   // Prevent stale flip animation when flipEnabled is toggled ON after guesses
   // were already made with it OFF. Track the flipTrigger value at the moment
   // flipEnabled becomes true — only newer triggers (from new guesses) animate.
-  const prevFlipEnabledRef = React.useRef(flipEnabled)
-  const flipEpochTriggerRef = React.useRef(0)
-  if (flipEnabled && !prevFlipEnabledRef.current) {
-    flipEpochTriggerRef.current = flipTrigger
+  // Uses the React "adjust state during render" pattern (recognised by the
+  // compiler) instead of reading/writing refs during render.
+  const [prevFlipEnabled, setPrevFlipEnabled] = React.useState(flipEnabled)
+  const [flipEpochTrigger, setFlipEpochTrigger] = React.useState(flipTrigger)
+  if (flipEnabled && !prevFlipEnabled) {
+    setFlipEpochTrigger(flipTrigger)
   }
-  prevFlipEnabledRef.current = flipEnabled
+  if (prevFlipEnabled !== flipEnabled) {
+    setPrevFlipEnabled(flipEnabled)
+  }
   const effectiveFlipRowIndex =
-    flipEnabled && flipTrigger > flipEpochTriggerRef.current
-      ? flipRowIndex
-      : null
+    flipEnabled && flipTrigger > flipEpochTrigger ? flipRowIndex : null
   const modeLabelText = formatWordGuessRoundModeLabel(roundMode)
   const attemptDisplay = Math.min(
     isPlaying ? attemptsUsed + 1 : attemptsUsed,
@@ -189,7 +191,6 @@ function WordGuessPlaySession({
 }) {
   const [hardModeParam] = useQueryState("hardMode", wordGuessSearchParams.hardMode)
   const appliedHardMode: boolean = hardModeParam ?? false
-  const { flipEnabled } = useWordGuessPlayPreferences()
   const session = useWordGuessGame({ wordLength, roundMode, hardMode: appliedHardMode })
 
   const modeLabelText = formatWordGuessRoundModeLabel(roundMode)

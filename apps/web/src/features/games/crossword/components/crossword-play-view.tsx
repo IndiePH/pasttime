@@ -1,6 +1,6 @@
 "use client"
 
-import { Component, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ErrorInfo, type ReactNode } from "react"
+import { Component, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react"
 import { useQueryState } from "nuqs"
 
 import { cn } from "@/lib/utils"
@@ -194,17 +194,27 @@ export function CrosswordPlaySession({
 
   // Daily rollover detection (D-02, D-03)
   const [showRollover, setShowRollover] = useState(false)
-  const dailySeedRef = useRef(Date.now())
+  // Reset the banner when switching away from daily mode (adjust state during
+  // render — the React-recognised pattern, avoids setState-in-effect).
+  const [prevMode, setPrevMode] = useState<"daily" | "random">(mode)
+  if (mode !== prevMode) {
+    setPrevMode(mode)
+    if (mode !== "daily") setShowRollover(false)
+  }
+  // Seed initialised lazily inside the effect to avoid calling Date.now during
+  // render (impure).
+  const dailySeedRef = useRef<number | null>(null)
 
   useEffect(() => {
-    if (mode !== "daily") {
-      setShowRollover(false)
-      return
+    if (mode !== "daily") return
+
+    if (dailySeedRef.current === null) {
+      dailySeedRef.current = Date.now()
     }
 
     // Check on focus — common case: user returns to tab after midnight
     const handleFocus = () => {
-      if (isNewDay(dailySeedRef.current, Date.now())) {
+      if (dailySeedRef.current !== null && isNewDay(dailySeedRef.current, Date.now())) {
         setShowRollover(true)
       }
     }
@@ -380,10 +390,7 @@ export function CrosswordPlaySession({
                       >
                         Puzzle solved — nice work!
                       </p>
-                      <PostSolveRanking
-                        gameId="crossword"
-                        gameTitle="Crossword"
-                      />
+                      <PostSolveRanking gameId="crossword" />
                     </div>
                   )
                 }
@@ -459,7 +466,7 @@ export class CrosswordPlaySessionErrorBoundary extends Component<
     return { hasError: true }
   }
 
-  componentDidCatch(error: Error, _errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error) {
     console.error("CrosswordPlaySession error:", error)
   }
 

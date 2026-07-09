@@ -16,12 +16,15 @@ export function WordGuessPlaySettingsWidget({
   const { flipEnabled, setFlipEnabled } = useWordGuessPlayPreferences()
 
   const [draftFlip, setDraftFlip] = React.useState(flipEnabled)
-  const hasPendingChanges = draftFlip !== flipEnabled
-
-  // Sync draft to actual whenever flipEnabled changes (e.g. undo via dismiss)
-  React.useEffect(() => {
+  // Sync draft to actual whenever flipEnabled changes (e.g. undo via dismiss).
+  // Uses the React "adjust state during render" pattern (recognised by the
+  // compiler) instead of setState-in-effect.
+  const [prevFlipEnabled, setPrevFlipEnabled] = React.useState(flipEnabled)
+  if (flipEnabled !== prevFlipEnabled) {
+    setPrevFlipEnabled(flipEnabled)
     setDraftFlip(flipEnabled)
-  }, [flipEnabled])
+  }
+  const hasPendingChanges = draftFlip !== flipEnabled
 
   const handleOpen = React.useCallback(() => {
     setDraftFlip(flipEnabled)
