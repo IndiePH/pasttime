@@ -72,3 +72,4 @@ firebase-debug.log
 *.tsbuildinfo
 next-env.d.ts
 
+.pi-subagents/
