@@ -27,6 +27,7 @@ import {
   useWordDefinition,
   useWordGuessLexicon,
 } from "@/features/games/lexicon/use-word-guess-lexicon"
+import { GameBoardLoading } from "@/features/games/components/game-board-loading"
 import { GameContentPanel } from "@/features/games/components/game-content-panel"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlaySection } from "@/features/games/components/game-play-section"
@@ -200,16 +201,7 @@ function WordGuessPlaySession({
   const lexicon = useWordGuessLexicon(wordLength)
 
   if (lexicon.status === "loading") {
-    return (
-      <Card className="word-guess-vars mx-auto w-full text-left">
-        <CardHeader>
-          <CardTitle>Loading dictionary…</CardTitle>
-          <CardDescription>
-            Fetching word lists for this session.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    )
+    return <GameBoardLoading label="Loading dictionary…" />
   }
 
   if (lexicon.status === "error") {
@@ -330,14 +322,7 @@ export function WordGuessPlayView({ game, modeLabel }: WordGuessPlayViewProps) {
   if (!isMounted) {
     return (
       <GamePlayShell layout="board">
-        <Card className="word-guess-vars mx-auto w-full text-left">
-          <CardHeader>
-            <CardTitle>Loading game…</CardTitle>
-            <CardDescription>
-              Preparing your board and saved progress.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        <GameBoardLoading label="Loading game…" />
       </GamePlayShell>
     )
   }

@@ -1,4 +1,3 @@
-import { AdPanel } from "@/components/shared/ad-panel"
 import { SiteShell } from "@/components/shared/site-shell"
 
 interface StaticPageSection {
@@ -24,7 +23,6 @@ export function StaticPage({
           <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
           <p className="text-lg text-muted-foreground">{description}</p>
         </header>
-        <AdPanel slot="static-below-header" variant="box" className="mt-8" />
         <div className="mt-10 space-y-10">
           {sections.map((section) => (
             <section key={section.title} className="space-y-3">

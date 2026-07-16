@@ -45,46 +45,74 @@ async function readDevCrosswordAnswers(): Promise<string[]> {
   return parsed.map((entry) => entry.answer.toUpperCase())
 }
 
-async function readDevDefinition(word: string): Promise<WordDefinition | null> {
+type EnrichedEntry = {
+  word: string
+  definition: string | null
+  synonyms: string[]
+  antonyms: string[]
+}
+
+let enrichedByWord: Map<string, WordDefinition> | null = null
+
+async function loadDevDefinitionIndex(): Promise<Map<string, WordDefinition>> {
+  if (enrichedByWord) {
+    return enrichedByWord
+  }
+
   const raw = await readFile(
     join(DOMAIN_ROOT, "shared", "dictionary.full.enriched.json"),
     "utf8",
   )
-  const parsed = JSON.parse(raw) as Record<
-    string,
-    Array<{
-      word: string
-      definition: string | null
-      synonyms: string[]
-      antonyms: string[]
-    }>
-  >
-  const normalized = word.toUpperCase()
+  const parsed = JSON.parse(raw) as Record<string, EnrichedEntry[]>
+  const index = new Map<string, WordDefinition>()
   for (const entries of Object.values(parsed)) {
-    const match = entries.find((entry) => entry.word.toUpperCase() === normalized)
-    if (match?.definition) {
-      return {
-        word: match.word.toUpperCase(),
-        definition: match.definition,
-        synonyms: match.synonyms ?? [],
-        antonyms: match.antonyms ?? [],
+    for (const entry of entries) {
+      if (!entry.definition) continue
+      const word = entry.word.toUpperCase()
+      if (!index.has(word)) {
+        index.set(word, {
+          word,
+          definition: entry.definition,
+          synonyms: entry.synonyms ?? [],
+          antonyms: entry.antonyms ?? [],
+        })
       }
     }
   }
-  return null
+  enrichedByWord = index
+  return index
+}
+
+async function readDevDefinitions(
+  words: readonly string[],
+): Promise<WordDefinition[]> {
+  const index = await loadDevDefinitionIndex()
+  const defs: WordDefinition[] = []
+  for (const word of words) {
+    const definition = index.get(word.toUpperCase())
+    if (definition) {
+      defs.push(definition)
+    }
+  }
+  return defs
 }
 
 async function readR2Text(key: string): Promise<string | null> {
-  const { env } = await getCloudflareContext({ async: true })
-  const bucket = env.CONTENT_R2
-  if (!bucket) {
+  try {
+    const { env } = await getCloudflareContext({ async: true })
+    const bucket = env.CONTENT_R2
+    if (!bucket) {
+      return null
+    }
+    const object = await bucket.get(key)
+    if (!object) {
+      return null
+    }
+    return object.text()
+  } catch (error) {
+    console.warn("R2 lexicon read failed; falling back to local files", error)
     return null
   }
-  const object = await bucket.get(key)
-  if (!object) {
-    return null
-  }
-  return object.text()
 }
 
 export async function fetchLexiconAnswers(length: number): Promise<string[]> {
@@ -121,41 +149,56 @@ export async function fetchWordDefinitions(
     return []
   }
 
-  const { env } = await getCloudflareContext({ async: true })
-  const db = env.LEXICON_DB
-  if (db) {
-    const placeholders = normalized.map(() => "?").join(", ")
-    const result = await db
-      .prepare(
-        `SELECT word, definition, synonyms, antonyms FROM word_definitions WHERE word IN (${placeholders})`,
-      )
-      .bind(...normalized)
-      .all<{
+  let fromD1: WordDefinition[] | null = null
+  try {
+    const { env } = await getCloudflareContext({ async: true })
+    const db = env.LEXICON_DB
+    if (db) {
+      const placeholders = normalized.map(() => "?").join(", ")
+      const result = await db
+        .prepare(
+          `SELECT word, definition, synonyms, antonyms FROM word_definitions WHERE word IN (${placeholders})`,
+        )
+        .bind(...normalized)
+        .all<{
+          word: string
+          definition: string
+          synonyms: string | null
+          antonyms: string | null
+        }>()
+
+      fromD1 = (result.results ?? []).map((row: {
         word: string
         definition: string
         synonyms: string | null
         antonyms: string | null
-      }>()
+      }) => ({
+        word: row.word,
+        definition: row.definition,
+        synonyms: row.synonyms ? (JSON.parse(row.synonyms) as string[]) : [],
+        antonyms: row.antonyms ? (JSON.parse(row.antonyms) as string[]) : [],
+      }))
 
-    return (result.results ?? []).map((row: {
-      word: string
-      definition: string
-      synonyms: string | null
-      antonyms: string | null
-    }) => ({
-      word: row.word,
-      definition: row.definition,
-      synonyms: row.synonyms ? (JSON.parse(row.synonyms) as string[]) : [],
-      antonyms: row.antonyms ? (JSON.parse(row.antonyms) as string[]) : [],
-    }))
-  }
-
-  const defs: WordDefinition[] = []
-  for (const word of normalized) {
-    const definition = await readDevDefinition(word)
-    if (definition) {
-      defs.push(definition)
+      // Prefer D1 when it has hits. Empty local D1 (migrated, not seeded)
+      // falls through to domain JSON for next dev.
+      if (fromD1.length > 0) {
+        return fromD1
+      }
     }
+  } catch (error) {
+    // Local next dev often has the D1 binding but an unmigrated/empty DB.
+    console.warn("D1 lexicon lookup failed; falling back to local files", error)
   }
-  return defs
+
+  try {
+    const fromFiles = await readDevDefinitions(normalized)
+    if (fromFiles.length > 0) {
+      return fromFiles
+    }
+  } catch (error) {
+    // Production Workers have no domain JSON on disk — keep D1 result.
+    console.warn("Local lexicon file fallback failed", error)
+  }
+
+  return fromD1 ?? []
 }
