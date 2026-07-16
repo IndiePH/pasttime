@@ -18,7 +18,6 @@ export {
   wordGuessRoomPath,
 } from "./paths"
 export {
-  getWordGuessDictionaryByLength,
   isWordGuessValidWord,
   normalizeWordGuessWord,
 } from "./dictionary"

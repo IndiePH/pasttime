@@ -17,9 +17,11 @@ import { PlatformLink } from "@/platform/navigation"
 import type { GameDefinition } from "@pasttime/domain/games"
 import {
   crosswordLaunchPath,
+  CROSSWORD_GRID_SIZE_DEFAULT,
   findClueAtCell,
   type CrosswordClue,
   type CrosswordDirection,
+  type CrosswordGridSize,
 } from "@pasttime/domain/games/crossword"
 import { isNewDay } from "@pasttime/domain/daily"
 import { GameContentPanel } from "@/features/games/components/game-content-panel"
@@ -162,7 +164,7 @@ export function CrosswordClues({
 type CrosswordPlaySessionProps = {
   game: GameDefinition
   modeLabel: string
-  gridSize: 7 | 9 | 11 | 13 | 15
+  gridSize: CrosswordGridSize
   mode: "daily" | "random"
 }
 
@@ -172,6 +174,83 @@ export function CrosswordPlaySession({
   gridSize,
   mode,
 }: CrosswordPlaySessionProps) {
+  const crossword = useCrosswordGame(gridSize, mode)
+
+  if (crossword.loadStatus === "loading") {
+    return (
+      <Card className="crossword-vars mx-auto w-full text-left">
+        <CardHeader>
+          <CardTitle>Loading crossword…</CardTitle>
+          <CardDescription>
+            Fetching answers and clues for this puzzle.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    )
+  }
+
+  if (crossword.loadStatus === "error" || !crossword.gameState) {
+    return (
+      <Card className="crossword-vars mx-auto w-full text-left">
+        <CardHeader>
+          <CardTitle>Could not load crossword</CardTitle>
+          <CardDescription>{crossword.loadError ?? "Unknown error"}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button type="button" onClick={crossword.retryLoad}>
+            Retry
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <CrosswordPlaySessionReady
+      game={game}
+      modeLabel={modeLabel}
+      gridSize={gridSize}
+      mode={mode}
+      gameState={crossword.gameState}
+      newPuzzle={crossword.newPuzzle}
+      updateInput={crossword.updateInput}
+      recheckStatus={crossword.recheckStatus}
+      blocks={crossword.blocks}
+      setActiveCell={crossword.setActiveCell}
+      direction={crossword.direction}
+      setDirection={crossword.setDirection}
+      activeClue={crossword.activeClue}
+    />
+  )
+}
+
+type CrosswordPlaySessionReadyProps = CrosswordPlaySessionProps & {
+  gameState: NonNullable<ReturnType<typeof useCrosswordGame>["gameState"]>
+  newPuzzle: ReturnType<typeof useCrosswordGame>["newPuzzle"]
+  updateInput: ReturnType<typeof useCrosswordGame>["updateInput"]
+  recheckStatus: ReturnType<typeof useCrosswordGame>["recheckStatus"]
+  blocks: ReturnType<typeof useCrosswordGame>["blocks"]
+  setActiveCell: ReturnType<typeof useCrosswordGame>["setActiveCell"]
+  direction: ReturnType<typeof useCrosswordGame>["direction"]
+  setDirection: ReturnType<typeof useCrosswordGame>["setDirection"]
+  activeClue: ReturnType<typeof useCrosswordGame>["activeClue"]
+}
+
+function CrosswordPlaySessionReady({
+  game,
+  modeLabel,
+  gridSize,
+  mode,
+  gameState,
+  newPuzzle,
+  updateInput,
+  recheckStatus,
+  blocks,
+  setActiveCell,
+  direction,
+  setDirection,
+  activeClue,
+}: CrosswordPlaySessionReadyProps) {
   const {
     showErrors,
     autoCheck,
@@ -180,17 +259,6 @@ export function CrosswordPlaySession({
     showDirectionBorderColor,
     blinkActiveClue,
   } = useCrosswordPlayPreferences()
-  const {
-    gameState,
-    newPuzzle,
-    updateInput,
-    recheckStatus,
-    blocks,
-    setActiveCell,
-    direction,
-    setDirection,
-    activeClue,
-  } = useCrosswordGame(gridSize, mode)
 
   // Daily rollover detection (D-02, D-03)
   const [showRollover, setShowRollover] = useState(false)
@@ -234,7 +302,7 @@ export function CrosswordPlaySession({
 
   // Recompute status after each input when auto-check is on.
   useEffect(() => {
-    if (autoCheck && gameState) {
+    if (autoCheck) {
       recheckStatus()
     }
   }, [autoCheck, gameState, recheckStatus])
@@ -504,7 +572,7 @@ export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
   const [size] = useQueryState("size", crosswordSearchParams.size)
   const [mode] = useQueryState("mode", crosswordSearchParams.mode)
 
-  const gridSize = (size ?? 7) as 7 | 9 | 11 | 13 | 15
+  const gridSize = (size ?? CROSSWORD_GRID_SIZE_DEFAULT) as CrosswordGridSize
   const playMode = (mode ?? "daily") as "daily" | "random"
   const sessionKey = `${playMode}:${gridSize}`
   const isMounted = useSyncExternalStore(

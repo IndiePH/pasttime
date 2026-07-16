@@ -1,6 +1,5 @@
 import { getDailySeed, hashSeed } from "../../daily"
 
-import { getEnrichedWordsByLength } from "../shared/enriched-dictionary"
 import type { WordGuessLength, WordGuessRoundMode } from "./settings"
 
 export function getWordGuessRoundSeed(
@@ -17,10 +16,10 @@ export function getWordGuessRoundSeed(
 export function pickWordGuessAnswer(
   length: WordGuessLength,
   mode: WordGuessRoundMode,
+  answerWords: readonly string[],
   date = new Date(),
 ): string {
-  const enriched = getEnrichedWordsByLength(length)
-  const words = enriched.map((e) => e.word)
+  const words = answerWords.map((word) => word.toUpperCase())
 
   if (words.length === 0) {
     throw new Error(`No dictionary words found for length ${length}`)

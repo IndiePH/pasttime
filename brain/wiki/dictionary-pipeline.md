@@ -3,6 +3,10 @@ updated: 2026-07-03
 tags: [architecture, data-pipeline, crossword, word-guess]
 related: [engineering-decisions]
 
+> **Runtime (2026-07-16):** Large lexicon JSON must not be Worker-bundled. Planned
+> publish path is R2 (length shards) + D1 (definitions). Implementation handoff:
+> `docs/CONTENT-STORAGE-HANDOFF.md`.
+
 ## Data Flow
 
 ```

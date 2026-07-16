@@ -1,5 +1,5 @@
 # Wiki Index
-updated: 2026-06-17
+updated: 2026-07-16
 
 Master list of all wiki pages. One line per page.
 Keep entries sorted alphabetically. Add a page here whenever you create one.

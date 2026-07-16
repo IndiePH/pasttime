@@ -3,7 +3,7 @@
 import * as React from "react"
 import { useQueryState } from "nuqs"
 
-import { Button } from "@/components/ui/button"
+import { CROSSWORD_GRID_SIZE_DEFAULT } from "@pasttime/domain/games/crossword"
 import { GameSettingsWidget } from "@/features/games/components/game-settings-widget"
 import { crosswordSearchParams } from "@/features/games/crossword/search-params"
 
@@ -14,52 +14,27 @@ interface CrosswordSettingsWidgetProps {
 export function CrosswordSettingsWidget({
   className,
 }: CrosswordSettingsWidgetProps) {
-  const [draftSize, setDraftSize] = React.useState<7 | 9 | 11 | 13 | 15>(15)
-  const [sizeParam, setSizeParam] = useQueryState("size", crosswordSearchParams.size)
-  const appliedSize = (sizeParam ?? 7) as 7 | 9 | 11 | 13 | 15
-  const hasPendingChanges = draftSize !== appliedSize
+  const [, setSizeParam] = useQueryState("size", crosswordSearchParams.size)
 
-  const handleOpen = React.useCallback(() => {
-    setDraftSize(appliedSize)
-  }, [appliedSize])
-
-  const handleApply = React.useCallback(() => {
-    void setSizeParam(draftSize)
-  }, [draftSize, setSizeParam])
-
-  const handleDismiss = React.useCallback(() => {
-    setDraftSize(appliedSize)
-  }, [appliedSize])
+  React.useEffect(() => {
+    void setSizeParam(CROSSWORD_GRID_SIZE_DEFAULT)
+  }, [setSizeParam])
 
   return (
     <GameSettingsWidget
       className={className}
       panelClassName="w-[min(100vw-2rem,22rem)]"
       panelId="crossword-settings-panel"
-      description="Grid size for this session."
-      summary={`${appliedSize}x${appliedSize} grid`}
-      onOpen={handleOpen}
-      onDismiss={handleDismiss}
-      onApply={handleApply}
-      applyDisabled={!hasPendingChanges}
+      description="Standard 15×15 crossword grid."
+      summary="15×15 grid"
+      applyDisabled
+      onOpen={() => {}}
+      onDismiss={() => {}}
+      onApply={() => {}}
     >
-      <div className="flex flex-wrap gap-2">
-        {[7, 9, 11, 13, 15].map((s) => {
-          const isActive = draftSize === s
-          return (
-            <Button
-              key={s}
-              type="button"
-              variant={isActive ? "default" : "outline"}
-              size="sm"
-              aria-pressed={isActive}
-              onClick={() => setDraftSize(s as typeof draftSize)}
-            >
-              {s}x{s}
-            </Button>
-          )
-        })}
-      </div>
+      <p className="text-sm text-muted-foreground">
+        Crossword uses a fixed 15×15 grid.
+      </p>
     </GameSettingsWidget>
   )
 }

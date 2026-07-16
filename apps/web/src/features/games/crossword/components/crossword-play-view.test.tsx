@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import React from "react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -6,6 +6,43 @@ import type { CrosswordClue } from "@pasttime/domain/games/crossword"
 import type { GameDefinition } from "@pasttime/domain/games"
 import { CrosswordClues } from "./crossword-play-view"
 import { CrosswordPlayPreferencesProvider } from "@/features/games/crossword/context/crossword-play-preferences-context"
+
+const mockCreateHydratedCrosswordGameState = vi.fn()
+
+vi.mock("@/lib/lexicon/crossword-state", () => ({
+  createHydratedCrosswordGameState: (...args: unknown[]) =>
+    mockCreateHydratedCrosswordGameState(...args),
+}))
+
+function buildMockCrosswordState() {
+  return {
+    puzzle: {
+      id: "test-puzzle-15",
+      grid: Array.from({ length: 15 }, (_, row) =>
+        Array.from({ length: 15 }, (_, col) => ({
+          type: (row === col ? "letter" : "block") as "letter" | "block",
+          row,
+          col,
+          ...(row === col ? { answerLetter: "A", clueNumber: row === 0 ? 1 : undefined } : {}),
+        })),
+      ),
+      across: [
+        {
+          id: "across-1",
+          number: 1,
+          direction: "across" as const,
+          text: "Diagonal letter",
+          answer: "A",
+          row: 0,
+          col: 0,
+        },
+      ],
+      down: [],
+    },
+    inputs: {},
+    status: "playing" as const,
+  }
+}
 
 const ACROSS_CLUES: CrosswordClue[] = [
   {
@@ -252,6 +289,7 @@ describe("CrosswordPlaySession", () => {
   beforeEach(() => {
     storageMap.clear()
     Element.prototype.scrollIntoView = vi.fn()
+    mockCreateHydratedCrosswordGameState.mockResolvedValue(buildMockCrosswordState())
   })
 
   afterEach(() => {
@@ -262,16 +300,22 @@ describe("CrosswordPlaySession", () => {
   async function renderSession() {
     const { CrosswordPlaySession } = await import("./crossword-play-view")
 
-    return render(
+    const view = render(
       <CrosswordPlayPreferencesProvider>
         <CrosswordPlaySession
           game={MOCK_GAME}
           modeLabel="Test"
-          gridSize={7}
+          gridSize={15}
           mode="random"
         />
       </CrosswordPlayPreferencesProvider>,
     )
+
+    await waitFor(() => {
+      expect(screen.queryByText("Loading crossword…")).not.toBeInTheDocument()
+    })
+
+    return view
   }
 
   it("renders grid cells and clue sections", async () => {
@@ -307,6 +351,9 @@ describe("CrosswordPlaySession", () => {
 describe("daily rollover banner", () => {
   beforeEach(() => {
     storageMap.clear()
+    mockCreateHydratedCrosswordGameState.mockResolvedValue(
+      buildMockCrosswordState(),
+    )
   })
 
   afterEach(() => {
@@ -324,13 +371,19 @@ describe("daily rollover banner", () => {
         <CrosswordPlaySession
           game={MOCK_GAME}
           modeLabel="Daily"
-          gridSize={7}
+          gridSize={15}
           mode="daily"
         />
       </CrosswordPlayPreferencesProvider>,
     )
 
-    expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByText("Loading crossword…")).not.toBeInTheDocument()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+    })
     expect(screen.getByText("New Puzzle")).toBeInTheDocument()
     expect(screen.getByText("Keep current")).toBeInTheDocument()
   })
@@ -346,7 +399,7 @@ describe("daily rollover banner", () => {
         <CrosswordPlaySession
           game={MOCK_GAME}
           modeLabel="Random"
-          gridSize={7}
+          gridSize={15}
           mode="random"
         />
       </CrosswordPlayPreferencesProvider>,
@@ -366,13 +419,19 @@ describe("daily rollover banner", () => {
         <CrosswordPlaySession
           game={MOCK_GAME}
           modeLabel="Daily"
-          gridSize={7}
+          gridSize={15}
           mode="daily"
         />
       </CrosswordPlayPreferencesProvider>,
     )
 
-    expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByText("Loading crossword…")).not.toBeInTheDocument()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+    })
 
     await fireEvent.click(screen.getByRole("button", { name: "New Puzzle" }))
 
@@ -397,13 +456,19 @@ describe("daily rollover banner", () => {
         <CrosswordPlaySession
           game={MOCK_GAME}
           modeLabel="Daily"
-          gridSize={7}
+          gridSize={15}
           mode="daily"
         />
       </CrosswordPlayPreferencesProvider>,
     )
 
-    expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByText("Loading crossword…")).not.toBeInTheDocument()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
+    })
 
     await fireEvent.click(
       screen.getByRole("button", { name: "Keep current" }),

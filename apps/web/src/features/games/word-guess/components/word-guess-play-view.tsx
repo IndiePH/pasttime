@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import type { GameDefinition } from "@pasttime/domain/games"
-import { getEnrichedWord } from "@pasttime/domain/games/shared"
 import {
   formatWordGuessRoundModeLabel,
   formatWordLengthLabel,
@@ -23,6 +22,11 @@ import {
   type WordGuessLength,
   type WordGuessRoundMode,
 } from "@pasttime/domain/games/word-guess"
+
+import {
+  useWordDefinition,
+  useWordGuessLexicon,
+} from "@/features/games/lexicon/use-word-guess-lexicon"
 import { GameContentPanel } from "@/features/games/components/game-content-panel"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlaySection } from "@/features/games/components/game-play-section"
@@ -94,8 +98,10 @@ function WordGuessPlayCard({
   const shakeRowIndex = isPlaying ? (invalidWordShake?.rowIndex ?? null) : null
   const shakeTrigger = invalidWordShake?.trigger ?? 0
 
-  // Look up the answer definition for the post-game reveal
-  const answerEntry = round.status !== "playing" ? getEnrichedWord(round.answer) : null
+  const answerEntry = useWordDefinition(
+    round.answer,
+    round.status !== "playing",
+  )
   const answerDefinition = answerEntry?.definition ?? null
 
   return (
@@ -191,7 +197,72 @@ function WordGuessPlaySession({
 }) {
   const [hardModeParam] = useQueryState("hardMode", wordGuessSearchParams.hardMode)
   const appliedHardMode: boolean = hardModeParam ?? false
-  const session = useWordGuessGame({ wordLength, roundMode, hardMode: appliedHardMode })
+  const lexicon = useWordGuessLexicon(wordLength)
+
+  if (lexicon.status === "loading" || lexicon.status === "idle") {
+    return (
+      <Card className="word-guess-vars mx-auto w-full text-left">
+        <CardHeader>
+          <CardTitle>Loading dictionary…</CardTitle>
+          <CardDescription>
+            Fetching word lists for this session.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    )
+  }
+
+  if (lexicon.status === "error") {
+    return (
+      <Card className="word-guess-vars mx-auto w-full text-left">
+        <CardHeader>
+          <CardTitle>Could not load dictionary</CardTitle>
+          <CardDescription>{lexicon.error}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button type="button" onClick={lexicon.retry}>
+            Retry
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <WordGuessPlaySessionReady
+      game={game}
+      modeLabel={modeLabel}
+      wordLength={wordLength}
+      roundMode={roundMode}
+      appliedHardMode={appliedHardMode}
+      answerWords={lexicon.answerWords}
+      guessableSet={lexicon.guessableSet}
+    />
+  )
+}
+
+function WordGuessPlaySessionReady({
+  game,
+  modeLabel,
+  wordLength,
+  roundMode,
+  appliedHardMode,
+  answerWords,
+  guessableSet,
+}: WordGuessPlayCardProps & {
+  game: GameDefinition
+  modeLabel: string
+  appliedHardMode: boolean
+  answerWords: readonly string[]
+  guessableSet: ReadonlySet<string>
+}) {
+  const session = useWordGuessGame({
+    wordLength,
+    roundMode,
+    hardMode: appliedHardMode,
+    answerWords,
+    guessableSet,
+  })
 
   const modeLabelText = formatWordGuessRoundModeLabel(roundMode)
 

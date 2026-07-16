@@ -1,22 +1,36 @@
 import { describe, expect, it } from "vitest"
 
 import {
-  ENRICHED_WORD_COUNT,
-  getEnrichedWord,
-  getEnrichedWordsByLength,
-  hasEnrichedWord,
+  buildEnrichedWordIndex,
+  getEnrichedWordFromIndex,
   isEnrichedWordLength,
   normalizeEnrichedWord,
 } from "./enriched-dictionary"
 
-describe("enriched dictionary loader", () => {
-  it("loads at least one entry from the committed data", () => {
-    expect(ENRICHED_WORD_COUNT).toBeGreaterThan(0)
+const FIXTURE = buildEnrichedWordIndex([
+  {
+    word: "ACE",
+    definition: "A single point or spot on a playing card or die.",
+    synonyms: ["pip"],
+    antonyms: [],
+  },
+  {
+    word: "AGE",
+    definition: "The whole duration of a being.",
+    synonyms: [],
+    antonyms: [],
+  },
+])
+
+describe("enriched dictionary helpers", () => {
+  it("indexes entries by word and length", () => {
+    expect(FIXTURE.byWord.size).toBe(2)
+    expect(FIXTURE.byLength.get(3)?.length).toBe(2)
   })
 
   it("looks up known words case-insensitively", () => {
-    const upper = getEnrichedWord("ACE")
-    const lower = getEnrichedWord("age")
+    const upper = getEnrichedWordFromIndex("ACE", FIXTURE.byWord)
+    const lower = getEnrichedWordFromIndex("age", FIXTURE.byWord)
 
     expect(upper).toBeDefined()
     expect(upper?.word).toBe("ACE")
@@ -25,26 +39,16 @@ describe("enriched dictionary loader", () => {
   })
 
   it("returns undefined for unknown words instead of throwing", () => {
-    expect(getEnrichedWord("QXZYP")).toBeUndefined()
-    expect(hasEnrichedWord("QXZYP")).toBe(false)
+    expect(getEnrichedWordFromIndex("QXZYP", FIXTURE.byWord)).toBeUndefined()
   })
 
-  it("normalizes and reports presence consistently", () => {
+  it("normalizes consistently", () => {
     expect(normalizeEnrichedWord("  ace ")).toBe("ACE")
-    expect(hasEnrichedWord("  ace ")).toBe(true)
-  })
-
-  it("exposes a read-only list per length", () => {
-    const three = getEnrichedWordsByLength(3)
-
-    expect(Array.isArray(three)).toBe(true)
-    expect(three.length).toBeGreaterThan(0)
-    expect(three.every((e) => e.word.length === 3)).toBe(true)
   })
 
   it("validates supported lengths", () => {
     expect(isEnrichedWordLength(5)).toBe(true)
-    expect(isEnrichedWordLength(2)).toBe(false)
+    expect(isEnrichedWordLength(4)).toBe(false)
     expect(isEnrichedWordLength(11)).toBe(false)
     expect(isEnrichedWordLength(3.5)).toBe(false)
   })

@@ -1,10 +1,11 @@
 # Engineering Decisions
-updated: 2026-07-03
+updated: 2026-07-16
 tags: [decision, architecture, tradeoff, rule-override, technical-debt]
-related: []
+related: [dictionary-pipeline]
 
 | date | type | scope | summary | rationale | rules | skills | decision-maker |
 |------|------|-------|---------|-----------|-------|--------|----------------|
+| 2026-07-16 | architecture | shared | Lexicon runtime: R2 shards + D1 defs; no giant JSON in Worker | Free Workers 3 MiB script limit; static-import of full/enriched/corpus JSON exceeds it. Lists = bulk fetch once; defs/clues = keyed D1. Load at length/mode confirm before play. Multiplayer stays on Node for now. | No runtime import of dictionary.full / enriched / corpus into Worker graph; WG one length shard; crossword multi-length or answers pack then batch clues; see docs/CONTENT-STORAGE-HANDOFF.md | cloudflare, r2, d1, opennext | user |
 | 2026-07-03 | architecture | shared | Enriched dict is single source of truth for crossword clues | `corpus.json` regenerated exclusively from `dictionary.full.enriched.json`, removing mixed-source clues from hand-crafted/Wiktionary/Apify. Ensures clue consistency and maintainability. | rebuild-corpus.mjs regenerates corpus.json; corpus.json imported directly by crossword generator | crossword, enriched-dictionary | user |
 | 2026-07-03 | tooling | shared | Batch-fix self-referential defs via local WordNet CLI | Used `wn.exe -syns{pos} -g` to replace 1,052 circular definitions (e.g. "Deployment" → "Place troops or weapons in battle formation") with proper ones from WordNet, plus 515 manually reviewed. 7 words removed (blocklisted) — all available defs still contained the word. | Per-POS query: try verb→noun→adj→adv; validate target word in synset; skip defs containing the word | wordnet, enriched-dictionary | user |
 | 2026-07-03 | ui | shared | Uniform button width via centralized `GamePlayFooterActions` | Bottom-center action buttons across landing, play, stats views now use fixed `w-60` (240px) instead of `w-full max-w-xs` (320px). Rationale: `w-full` resolves to parent width which differs across views (`GamePageShell` max-w-lg vs `GamePlayShell` w-fit). Fixed `w-60` decouples from parent layout for cross-view consistency. `gap-3` within sections, `mt-3` between sections on landing view. | All button containers use `w-60`; `GamePlayFooterActions` is the central wrapper for footer button groups. Standalone buttons also updated individually. | tailwind, shadcn, layout | user |

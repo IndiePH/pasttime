@@ -17,7 +17,7 @@ interface CrosswordLaunchViewProps {
 
 export function CrosswordLaunchView({ game }: CrosswordLaunchViewProps) {
   const [size] = useQueryState("size", crosswordSearchParams.size)
-  const resolvedSize = size ?? 7
+  const resolvedSize = size ?? 15
   const isDailyCompleted = useDailyCompleted("crossword", String(resolvedSize))
 
   return (

@@ -9,8 +9,10 @@ import {
 } from "./generator"
 import { generateCrosswordPuzzle } from "./generator"
 import type { CrosswordGrid, CrosswordPuzzle } from "./types"
+import { loadCommittedCorpusPool } from "../test-fixtures/load-committed-lexicon"
 
-const SIZES = [7, 9, 11, 13, 15] as const
+const POOL = loadCommittedCorpusPool()
+const SIZES = [15] as const
 const SEEDS = [42, 12345, 999_999]
 
 // ---- Helper: hand-crafted grids for validation helper tests ----
@@ -201,7 +203,7 @@ describe("everyCellChecked", () => {
 describe("generateCrosswordPuzzleWithRetry", () => {
   it.each(SIZES)("returns a valid puzzle for size %i at multiple seeds", (size) => {
     for (const seed of SEEDS) {
-      const puzzle = generateCrosswordPuzzleWithRetry(size, seed)
+      const puzzle = generateCrosswordPuzzleWithRetry(size, seed, POOL)
       // May return null if no seed produces a quality puzzle
       if (puzzle !== null) {
         expect(puzzle.grid).toHaveLength(size)
@@ -213,9 +215,9 @@ describe("generateCrosswordPuzzleWithRetry", () => {
   })
 
   it("is deterministic: same seed+size returns identical puzzle across calls", () => {
-    const a = generateCrosswordPuzzleWithRetry(7, 42)
-    const b = generateCrosswordPuzzleWithRetry(7, 42)
-    const c = generateCrosswordPuzzleWithRetry(7, 42)
+    const a = generateCrosswordPuzzleWithRetry(15, 42, POOL)
+    const b = generateCrosswordPuzzleWithRetry(15, 42, POOL)
+    const c = generateCrosswordPuzzleWithRetry(15, 42, POOL)
     // If non-null, all must be identical
     if (a !== null && b !== null && c !== null) {
       expect(a.id).toBe(b.id)
@@ -226,8 +228,8 @@ describe("generateCrosswordPuzzleWithRetry", () => {
   })
 
   it("produces different puzzles for different seeds", () => {
-    const a = generateCrosswordPuzzleWithRetry(7, 100)
-    const b = generateCrosswordPuzzleWithRetry(7, 101)
+    const a = generateCrosswordPuzzleWithRetry(15, 100, POOL)
+    const b = generateCrosswordPuzzleWithRetry(15, 101, POOL)
     if (a !== null && b !== null) {
       expect(a.id).not.toBe(b.id)
     }
@@ -237,7 +239,7 @@ describe("generateCrosswordPuzzleWithRetry", () => {
     // Try many seeds — at least one should succeed
     let found = false
     for (let seed = 0; seed < 100; seed++) {
-      const puzzle = generateCrosswordPuzzleWithRetry(7, seed)
+      const puzzle = generateCrosswordPuzzleWithRetry(15, seed, POOL)
       if (puzzle !== null) {
         found = true
         break
@@ -255,8 +257,8 @@ describe("generateCrosswordPuzzleWithRetry", () => {
 
   it("returns null for seeds that produce insufficient fill", () => {
     // Use a size/seeds that may fail — verify the null path works
-    const result = generateCrosswordPuzzleWithRetry(7, 0)
+    const result = generateCrosswordPuzzleWithRetry(15, 0, POOL)
     // May or may not be null depending on seed
-    expect(result === null || result.grid.length === 7).toBe(true)
+    expect(result === null || result.grid.length === 15).toBe(true)
   })
 })
