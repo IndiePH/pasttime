@@ -1,4 +1,4 @@
-import type { StorageAdapter } from "@pasttime/storage"
+import type { StorageAdapter } from "@pasttime/storage/types"
 import type { DailyCompletion } from "./types"
 
 // --- Helpers ---
