@@ -16,6 +16,7 @@ interface CreateWordGuessRoundOptions {
   mode: WordGuessRoundMode
   hardMode?: boolean
   date?: Date
+  answerWords: readonly string[]
 }
 
 export function createWordGuessRound({
@@ -23,9 +24,10 @@ export function createWordGuessRound({
   mode,
   hardMode = false,
   date,
+  answerWords,
 }: CreateWordGuessRoundOptions): WordGuessRoundState {
   return {
-    answer: pickWordGuessAnswer(length, mode, date),
+    answer: pickWordGuessAnswer(length, mode, answerWords, date),
     length,
     mode,
     hardMode,
@@ -58,6 +60,7 @@ function checkHardModeViolation(
 export function submitWordGuessGuess(
   round: WordGuessRoundState,
   guessRaw: string,
+  guessableSet: ReadonlySet<string>,
 ): WordGuessSubmitGuessResult {
   if (!canSubmitWordGuess(round)) {
     return {
@@ -76,7 +79,7 @@ export function submitWordGuessGuess(
     }
   }
 
-  if (!isWordGuessValidWord(guess, round.length)) {
+  if (!isWordGuessValidWord(guess, round.length, guessableSet)) {
     return {
       ok: false,
       round,

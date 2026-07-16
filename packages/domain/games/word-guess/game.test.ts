@@ -3,6 +3,20 @@ import { describe, expect, it } from "vitest"
 import { submitWordGuessGuess } from "./game"
 import type { WordGuessRoundState } from "./types"
 
+const GUESSABLE = new Set([
+  "ABOUT",
+  "APPLE",
+  "AWARE",
+  "MAGIC",
+  "ALBUM",
+  "ALPHA",
+  "ABIDE",
+  "STONE",
+  "PLANT",
+  "HOUSE",
+  "MANGO",
+])
+
 const baseRound: WordGuessRoundState = {
   answer: "ABOUT",
   length: 5,
@@ -15,7 +29,7 @@ const baseRound: WordGuessRoundState = {
 
 describe("hard mode validation", () => {
   it("allows any valid guess when hardMode is false", () => {
-    const result = submitWordGuessGuess(baseRound, "APPLE")
+    const result = submitWordGuessGuess(baseRound, "APPLE", GUESSABLE)
     expect(result.ok).toBe(true)
   })
 
@@ -38,7 +52,7 @@ describe("hard mode validation", () => {
       ],
     }
     // "MAGIC" is a valid dictionary word but violates position 0 (needs 'A')
-    const result = submitWordGuessGuess(playedRound, "MAGIC")
+    const result = submitWordGuessGuess(playedRound, "MAGIC", GUESSABLE)
     expect(result.ok).toBe(false)
     if (!result.ok) {
       expect(result.reason).toBe("locked-letters-violation")
@@ -63,7 +77,7 @@ describe("hard mode validation", () => {
         },
       ],
     }
-    const result = submitWordGuessGuess(playedRound, "ALBUM")
+    const result = submitWordGuessGuess(playedRound, "ALBUM", GUESSABLE)
     expect(result.ok).toBe(true)
   })
 
@@ -97,7 +111,7 @@ describe("hard mode validation", () => {
       ],
     }
     // "ALPHA" is a valid word but violates position 1 (needs 'B')
-    const result = submitWordGuessGuess(playedRound, "ALPHA")
+    const result = submitWordGuessGuess(playedRound, "ALPHA", GUESSABLE)
     expect(result.ok).toBe(false)
     if (!result.ok) {
       expect(result.reason).toBe("locked-letters-violation")
@@ -133,7 +147,7 @@ describe("hard mode validation", () => {
         },
       ],
     }
-    const result = submitWordGuessGuess(playedRound, "ABIDE")
+    const result = submitWordGuessGuess(playedRound, "ABIDE", GUESSABLE)
     expect(result.ok).toBe(true)
   })
 
@@ -155,7 +169,7 @@ describe("hard mode validation", () => {
         },
       ],
     }
-    const result = submitWordGuessGuess(playedRound, "ZZZZZ")
+    const result = submitWordGuessGuess(playedRound, "ZZZZZ", GUESSABLE)
     expect(result.ok).toBe(false)
     if (!result.ok) {
       expect(result.reason).toBe("invalid-word")
@@ -165,7 +179,7 @@ describe("hard mode validation", () => {
 
 describe("submitWordGuessGuess", () => {
   it("rejects invalid-length guesses", () => {
-    const result = submitWordGuessGuess(baseRound, "TREE")
+    const result = submitWordGuessGuess(baseRound, "TREE", GUESSABLE)
 
     expect(result.ok).toBe(false)
     if (!result.ok) {
@@ -174,7 +188,7 @@ describe("submitWordGuessGuess", () => {
   })
 
   it("rejects dictionary-missing guesses", () => {
-    const result = submitWordGuessGuess(baseRound, "ZZZZZ")
+    const result = submitWordGuessGuess(baseRound, "ZZZZZ", GUESSABLE)
 
     expect(result.ok).toBe(false)
     if (!result.ok) {
@@ -183,7 +197,7 @@ describe("submitWordGuessGuess", () => {
   })
 
   it("wins when guess matches answer", () => {
-    const result = submitWordGuessGuess(baseRound, "ABOUT")
+    const result = submitWordGuessGuess(baseRound, "ABOUT", GUESSABLE)
 
     expect(result.ok).toBe(true)
     if (result.ok) {
@@ -254,7 +268,7 @@ describe("submitWordGuessGuess", () => {
       ],
     }
 
-    const result = submitWordGuessGuess(nearlyDone, "ABIDE")
+    const result = submitWordGuessGuess(nearlyDone, "ABIDE", GUESSABLE)
 
     expect(result.ok).toBe(true)
     if (result.ok) {

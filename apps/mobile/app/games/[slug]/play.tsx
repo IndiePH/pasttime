@@ -14,33 +14,60 @@ import {
   submitWordGuessGuess,
   type WordGuessRoundState,
 } from "@pasttime/domain/games/word-guess"
+import { wordSetFromList } from "@pasttime/domain/games/shared/lexicon-types"
 import { mobileStorage } from "@/lib/storage"
 
 const STORAGE_KEY = "word-guess:mobile:round"
+const API_BASE = process.env.EXPO_PUBLIC_WEB_ORIGIN ?? "https://gamehub.pasttime.xyz"
+
+async function loadMobileLexicon(length: number) {
+  const [answersRes, guessableRes] = await Promise.all([
+    fetch(`${API_BASE}/api/lexicon/answers/${length}`),
+    fetch(`${API_BASE}/api/lexicon/guessable/${length}`),
+  ])
+  if (!answersRes.ok || !guessableRes.ok) {
+    throw new Error("Failed to load lexicon")
+  }
+  const answersPayload = (await answersRes.json()) as { words: string[] }
+  const guessablePayload = (await guessableRes.json()) as { words: string[] }
+  return {
+    answerWords: answersPayload.words,
+    guessableSet: wordSetFromList(guessablePayload.words),
+  }
+}
 
 export default function GamePlayScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
   const game = getGameById(slug ?? "")
   const [round, setRound] = useState<WordGuessRoundState | null>(null)
+  const [guessableSet, setGuessableSet] = useState<ReadonlySet<string>>(new Set())
   const [guess, setGuess] = useState("")
   const [message, setMessage] = useState<string | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   useEffect(() => {
     if (game?.id !== "word-guess") {
       return
     }
     void (async () => {
-      const saved = await mobileStorage.get<WordGuessRoundState>(STORAGE_KEY)
-      if (saved && saved.status === "playing") {
-        setRound(saved)
-        return
+      try {
+        const lexicon = await loadMobileLexicon(5)
+        setGuessableSet(lexicon.guessableSet)
+        const saved = await mobileStorage.get<WordGuessRoundState>(STORAGE_KEY)
+        if (saved && saved.status === "playing") {
+          setRound(saved)
+          return
+        }
+        const next = createWordGuessRound({
+          length: 5,
+          mode: "random",
+          answerWords: lexicon.answerWords,
+        })
+        setRound(next)
+        await mobileStorage.set(STORAGE_KEY, next)
+      } catch (error) {
+        setLoadError(error instanceof Error ? error.message : "Failed to load dictionary")
       }
-      const next = createWordGuessRound({
-        length: 5,
-        mode: "random",
-      })
-      setRound(next)
-      await mobileStorage.set(STORAGE_KEY, next)
     })()
   }, [game?.id])
 
@@ -48,7 +75,7 @@ export default function GamePlayScreen() {
     if (!round || game?.id !== "word-guess") {
       return
     }
-    const result = submitWordGuessGuess(round, guess)
+    const result = submitWordGuessGuess(round, guess, guessableSet)
     if (!result.ok) {
       setMessage(result.reason)
       return
@@ -57,7 +84,7 @@ export default function GamePlayScreen() {
     setGuess("")
     setRound(result.round)
     await mobileStorage.set(STORAGE_KEY, result.round)
-  }, [round, guess, game?.id])
+  }, [round, guess, game?.id, guessableSet])
 
   if (!game) {
     return (
@@ -75,6 +102,15 @@ export default function GamePlayScreen() {
           Mobile play UI for this game is coming soon. Open the web app to
           play now.
         </Text>
+      </View>
+    )
+  }
+
+  if (loadError) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Could not load dictionary</Text>
+        <Text style={styles.description}>{loadError}</Text>
       </View>
     )
   }

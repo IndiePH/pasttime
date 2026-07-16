@@ -1,10 +1,9 @@
 export {
-  getEnrichedWord,
-  hasEnrichedWord,
-  getEnrichedWordsByLength,
-  normalizeEnrichedWord,
+  buildEnrichedWordIndex,
+  getEnrichedWordFromIndex,
   isEnrichedWordLength,
-  ENRICHED_WORD_COUNT,
+  normalizeLexiconWord as normalizeEnrichedWord,
   type EnrichedWordEntry,
   type EnrichedWordLength,
-} from "./enriched-dictionary"
+  type WordDefinition,
+} from "./lexicon-types"

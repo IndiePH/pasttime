@@ -25,6 +25,49 @@ Worker name in Cloudflare: **`gamehub`** (product brand remains Pasttime).
 Gotchas:
 - `next.config.ts` calls `initOpenNextCloudflareForDev()` at the bottom — leave it.
 - `wrangler.jsonc` self-references the worker as service `gamehub` (name must match).
+- **Worker script size (3 MiB free):** large lexicon JSON is served from R2 +
+  D1 at runtime — see [`CONTENT-STORAGE-HANDOFF.md`](./CONTENT-STORAGE-HANDOFF.md).
+
+## Lexicon publish (R2 + D1)
+
+Runtime keys use the product-scoped prefix `shared/lexicon/v1/` in bucket
+`pasttime-content`. D1 database: `pasttime-lexicon` (binding `LEXICON_DB`).
+
+**First-time production ship** (infra + migrate + publish + deploy; fails fast on
+any error; requires `wrangler login`):
+
+```bash
+npm run lexicon:ship
+```
+
+`lexicon:ship` now includes a **first-run safety check** and exits early if
+`pasttime-content` or `pasttime-lexicon` already exists. This avoids accidentally
+re-running the first-time setup path.
+
+**After lexicon JSON changes** (skip bucket/DB create; still migrate + publish + deploy):
+
+```bash
+npm run lexicon:ship:content
+```
+
+| Command | What it does |
+|---------|--------------|
+| `npm run lexicon:ship` | Create R2/D1 if missing → migrate → publish → deploy |
+| `npm run lexicon:ship:content` | Same, but skips infra create (repeatable content refresh) |
+| `npm run lexicon:publish` | Publish only (R2 shards + D1 seed) |
+| `npm run lexicon:migrate` | Apply D1 migrations to remote |
+| `npm run lexicon:migrate:local` | Apply D1 migrations locally (preview) |
+| `npm run cf-typegen` | Regenerate `cloudflare-env.d.ts` after binding changes |
+
+`lexicon:ship` flags (via `node apps/web/scripts/lexicon/ship-lexicon.mjs`):
+
+- `--skip-setup` — skip R2/D1 create (used by `lexicon:ship:content`)
+- `--no-migrate` — publish (+ deploy) without running migrations
+- `--no-deploy` — infra + migrate + publish only
+- `--allow-existing-setup` — bypass first-run safety check in setup mode
+
+Local `next dev` falls back to reading `packages/domain` JSON when R2/D1
+bindings are unavailable.
 
 ## Data-build scripts (not part of CI)
 

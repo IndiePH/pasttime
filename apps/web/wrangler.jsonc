@@ -19,5 +19,19 @@
 	"images": {
 		// https://opennext.js.org/cloudflare/howtos/image
 		"binding": "IMAGES"
-	}
+	},
+	"r2_buckets": [
+		{
+			"binding": "CONTENT_R2",
+			"bucket_name": "pasttime-content"
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "LEXICON_DB",
+			"database_name": "pasttime-lexicon",
+			"database_id": "697cf152-bc49-4be7-9239-dbce9f1be8d1",
+			"migrations_dir": "migrations"
+		}
+	]
 }

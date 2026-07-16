@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
+import { createHydratedCrosswordGameState } from "@/lib/lexicon/crossword-state"
 import { useStorage } from "@/infrastructure/storage"
 import type {
   CrosswordCell,
@@ -12,7 +13,6 @@ import type {
   CrosswordRoundMode,
 } from "@pasttime/domain/games/crossword"
 import {
-  createCrosswordGameState,
   findClueAtCell,
   getCellKey,
   isCellFilled,
@@ -26,6 +26,8 @@ const CROSSWORD_STORAGE_KEY = (
 ) => `crossword:${size}:${mode}`
 
 const VALID_STATUSES = new Set(["playing", "won", "lost", "abandoned"])
+
+type LoadStatus = "loading" | "ready" | "error"
 
 function isCrosswordGameState(value: unknown): value is CrosswordGameState {
   if (!value || typeof value !== "object") return false
@@ -47,64 +49,94 @@ export function useCrosswordGame(
     [size, mode],
   )
 
-  // Synchronous initialisation — mirrors klondike. localStorage reads are
-  // synchronous so there is no loading gate needed.
-  const initialState = useMemo(() => {
+  const [gameState, setGameState] = useState<CrosswordGameState | null>(null)
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading")
+  const [loadError, setLoadError] = useState<string | null>(null)
+  const [retryCount, setRetryCount] = useState(0)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoadStatus("loading")
+    setLoadError(null)
+
     const stored = storage.get<unknown>(storageKey)
-    return isCrosswordGameState(stored)
-      ? stored
-      : createCrosswordGameState(size, mode)
-  }, [storageKey, size, mode]) // eslint-disable-line react-hooks/exhaustive-deps
+    if (isCrosswordGameState(stored)) {
+      setGameState(stored)
+      setLoadStatus("ready")
+      return () => {
+        cancelled = true
+      }
+    }
 
-  const [gameState, setGameState] = useState<CrosswordGameState>(initialState)
+    void createHydratedCrosswordGameState(size, mode)
+      .then((state) => {
+        if (cancelled) return
+        setGameState(state)
+        setLoadStatus("ready")
+      })
+      .catch((cause: unknown) => {
+        if (cancelled) return
+        setLoadStatus("error")
+        setLoadError(
+          cause instanceof Error ? cause.message : "Failed to load crossword",
+        )
+      })
 
-  // Ephemeral direction state — re-derived on reload (D-09). Lazy-initialises
-  // across-first from the persisted activeCell (D-03).
-  const [direction, setDirection] = useState<CrosswordDirection>(() =>
-    gameState.activeCell
-      ? resolveDirection(gameState.puzzle, gameState.activeCell, "across")
-      : "across",
-  )
+    return () => {
+      cancelled = true
+    }
+  }, [size, mode, storageKey, retryCount]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Track daily-rollover: false on initial mount (the current session is valid).
-  // The play view polls or checks on focus to detect rollover and show the banner.
+  const [direction, setDirection] = useState<CrosswordDirection>("across")
+
   const [dailyRolloverDetected] = useState(false)
 
-  // Persist on every state change for daily mode only (D-16).
-  // Endless mode is ephemeral — no state written to storage.
   useEffect(() => {
-    if (mode === "daily") {
+    if (mode === "daily" && gameState) {
       storage.set(storageKey, gameState)
     }
-  }, [gameState, storage, storageKey, mode])
+  }, [gameState, storageKey, mode]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Derived activeClue — never persisted, recomputed on every render (D-09).
+  useEffect(() => {
+    if (!gameState?.activeCell) return
+    setDirection((current) =>
+      resolveDirection(gameState.puzzle, gameState.activeCell!, current),
+    )
+  }, [gameState?.activeCell, gameState?.puzzle])
+
   const activeClue = useMemo(() => {
-    if (!gameState.activeCell) return null
+    if (!gameState?.activeCell) return null
     return findClueAtCell(gameState.puzzle, gameState.activeCell, direction)
-  }, [gameState.puzzle, gameState.activeCell, direction])
+  }, [gameState?.puzzle, gameState?.activeCell, direction])
+
+  const retryLoad = useCallback(() => {
+    setRetryCount((count) => count + 1)
+  }, [])
 
   const newPuzzle = useCallback(() => {
+    if (!gameState) return
+
     if (mode === "daily") {
-      // Daily mode: reset inputs but keep the same puzzle (D-14).
-      // The puzzle is deterministic from the date seed so it stays the same.
-      setGameState((prev) => ({
-        ...prev,
-        inputs: {},
-        status: "playing" as const,
-      }))
-    } else {
-      // Endless mode: generate a fresh random puzzle with a new seed (D-14).
-      storage.remove(storageKey)
-      const next = createCrosswordGameState(size, "random")
-      setGameState(next)
+      setGameState((prev) =>
+        prev
+          ? {
+              ...prev,
+              inputs: {},
+              status: "playing" as const,
+            }
+          : prev,
+      )
+      return
     }
-  }, [mode, size, storage, storageKey])
+
+    storage.remove(storageKey)
+    void createHydratedCrosswordGameState(size, "random").then(setGameState)
+  }, [gameState, mode, size, storageKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateInput = useCallback(
     (row: number, col: number, value: string) => {
       setGameState((prev) => {
-        if (!isCellFilled(prev.puzzle, row, col)) return prev
+        if (!prev || !isCellFilled(prev.puzzle, row, col)) return prev
 
         const cellKey = getCellKey(row, col)
         const newInputs = { ...prev.inputs }
@@ -114,7 +146,11 @@ export function useCrosswordGame(
           delete newInputs[cellKey]
         }
 
-        return { ...prev, inputs: newInputs, status: resolveCrosswordStatus(prev.puzzle, newInputs, prev.status) }
+        return {
+          ...prev,
+          inputs: newInputs,
+          status: resolveCrosswordStatus(prev.puzzle, newInputs, prev.status),
+        }
       })
     },
     [],
@@ -122,6 +158,7 @@ export function useCrosswordGame(
 
   const recheckStatus = useCallback(() => {
     setGameState((prev) => {
+      if (!prev) return prev
       const next = resolveCrosswordStatus(prev.puzzle, prev.inputs, prev.status)
       return next === prev.status ? prev : { ...prev, status: next }
     })
@@ -129,37 +166,36 @@ export function useCrosswordGame(
 
   const setActiveCell = useCallback(
     (cell: { row: number; col: number } | null) => {
-      setGameState((prev) => ({
-        ...prev,
-        activeCell: cell ?? undefined,
-      }))
-      if (cell) {
-        setDirection((d) => resolveDirection(gameState.puzzle, cell, d))
-      }
+      setGameState((prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          activeCell: cell ?? undefined,
+        }
+      })
     },
-    [gameState.puzzle],
+    [],
   )
 
-  const blocks = gameState
-    ? gameState.puzzle.grid.flatMap((row, r) =>
-        row
-          .map((cell, c) =>
-            cell.type === "block" ? { row: r, col: c } : null,
-          )
-          .filter((x): x is { row: number; col: number } => x !== null),
-      )
-    : []
+  const blocks =
+    gameState?.puzzle.grid.flatMap((row, r) =>
+      row
+        .map((cell, c) => (cell.type === "block" ? { row: r, col: c } : null))
+        .filter((x): x is { row: number; col: number } => x !== null),
+    ) ?? []
 
-  // Record daily completions for engagement tracking
   useEngagementRecorder({
     gameId: "crossword",
     variant: String(size),
-    status: gameState.status,
+    status: gameState?.status ?? "playing",
     isDaily: mode === "daily",
   })
 
   return {
     gameState,
+    loadStatus,
+    loadError,
+    retryLoad,
     newPuzzle,
     updateInput,
     recheckStatus,
@@ -172,5 +208,4 @@ export function useCrosswordGame(
   }
 }
 
-// Re-export for the grid component's type usage.
 export type { CrosswordCell }

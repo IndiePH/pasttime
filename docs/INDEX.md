@@ -264,6 +264,8 @@ Typed REST + WebSocket multiplayer client (shared web/mobile).
 | `docs/GAMES.md` | Game catalog overview |
 | `docs/SOLITAIRE.md` | Solitaire spec |
 | `docs/CARD-ASSETS.md` | Card SVG asset spec |
+| `docs/DEPLOY.md` | Cloudflare deploy + data-build scripts |
+| `docs/CONTENT-STORAGE-HANDOFF.md` | R2 + D1 lexicon migration plan (Worker size) |
 | `docs/INDEX.md` | This file |
 
 ---

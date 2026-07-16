@@ -1,9 +1,16 @@
-import { act, renderHook } from "@testing-library/react"
+import { act, renderHook, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { CrosswordGameState } from "@pasttime/domain/games/crossword"
 
 import { useCrosswordGame } from "./use-crossword-game"
+
+const mockCreateHydratedCrosswordGameState = vi.fn()
+
+vi.mock("@/lib/lexicon/crossword-state", () => ({
+  createHydratedCrosswordGameState: (...args: unknown[]) =>
+    mockCreateHydratedCrosswordGameState(...args),
+}))
 
 // ---------------------------------------------------------------------------
 // Mock @/infrastructure/storage with a simple Map so we can inspect persisted
@@ -115,17 +122,23 @@ function buildTestGameState(
   }
 }
 
-// The storage key the hook constructs for (7, "random").
-const STORAGE_KEY = "crossword:7:random"
+// The storage key the hook constructs for (15, "random").
+const STORAGE_KEY = "crossword:15:random"
 
 // ---------------------------------------------------------------------------
 // Helper: mount the hook inside renderHook and return the result + helpers.
 // ---------------------------------------------------------------------------
-function mountHook(initialState?: CrosswordGameState) {
+async function mountHook(initialState?: CrosswordGameState) {
   if (initialState) {
     storageMap.set(STORAGE_KEY, initialState)
   }
-  return renderHook(() => useCrosswordGame(7, "random"))
+  const hook = renderHook(() => useCrosswordGame(15, "random"))
+  await waitFor(() => expect(hook.result.current.loadStatus).toBe("ready"))
+  return hook
+}
+
+async function mountReadyHook(initialState?: CrosswordGameState) {
+  return mountHook(initialState)
 }
 
 // ---------------------------------------------------------------------------
@@ -134,37 +147,38 @@ function mountHook(initialState?: CrosswordGameState) {
 describe("useCrosswordGame — direction + activeClue", () => {
   beforeEach(() => {
     storageMap.clear()
+    mockCreateHydratedCrosswordGameState.mockResolvedValue(buildTestGameState())
   })
 
   // ---- Initialisation ----------------------------------------------------
 
-  it("initialises direction to 'across' when there is no activeCell", () => {
-    const { result } = mountHook()
+  it("initialises direction to 'across' when there is no activeCell", async () => {
+    const { result } = await mountReadyHook()
     expect(result.current.direction).toBe("across")
   })
 
-  it("initialises direction via across-first when activeCell exists", () => {
+  it("initialises direction via across-first when activeCell exists", async () => {
     const seed = buildTestGameState({ row: 0, col: 0 })
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     // Cell (0,0) has both an across and down word → across-first → "across"
     expect(result.current.direction).toBe("across")
   })
 
-  it("initialises direction to the only available word when activeCell is only-down", () => {
+  it("initialises direction to the only available word when activeCell is only-down", async () => {
     const seed = buildTestGameState({ row: 1, col: 0 })
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     // Cell (1,0) is only in the down clue → resolves to "down"
     expect(result.current.direction).toBe("down")
   })
 
-  it("returns activeClue = null when there is no activeCell", () => {
-    const { result } = mountHook()
+  it("returns activeClue = null when there is no activeCell", async () => {
+    const { result } = await mountHook()
     expect(result.current.activeClue).toBeNull()
   })
 
-  it("returns the correct activeClue when activeCell + direction resolve", () => {
+  it("returns the correct activeClue when activeCell + direction resolve", async () => {
     const seed = buildTestGameState({ row: 0, col: 0 })
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     expect(result.current.activeClue).not.toBeNull()
     expect(result.current.activeClue!.id).toBe("1-across")
     expect(result.current.activeClue!.text).toBe("First")
@@ -172,9 +186,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
 
   // ---- setActiveCell — across-first (D-03) --------------------------------
 
-  it("keeps direction 'across' when cell has both across and down (D-03)", () => {
+  it("keeps direction 'across' when cell has both across and down (D-03)", async () => {
     const seed = buildTestGameState()
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     act(() => {
       result.current.setActiveCell({ row: 0, col: 0 })
     })
@@ -184,9 +198,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
     expect(result.current.activeClue!.id).toBe("1-across")
   })
 
-  it("flips direction to 'down' when cell is only-down (D-03)", () => {
+  it("flips direction to 'down' when cell is only-down (D-03)", async () => {
     const seed = buildTestGameState()
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     act(() => {
       result.current.setActiveCell({ row: 1, col: 0 })
     })
@@ -197,9 +211,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
     expect(result.current.activeClue!.text).toBe("Ultimate")
   })
 
-  it("keeps current direction when cell is only-across", () => {
+  it("keeps current direction when cell is only-across", async () => {
     const seed = buildTestGameState()
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     // Start by clicking a both-direction cell → direction is "across"
     act(() => {
       result.current.setActiveCell({ row: 0, col: 0 })
@@ -215,9 +229,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
 
   // ---- setDirection ------------------------------------------------------
 
-  it("setDirection('down') flips direction and updates activeClue", () => {
+  it("setDirection('down') flips direction and updates activeClue", async () => {
     const seed = buildTestGameState({ row: 0, col: 0 })
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     expect(result.current.direction).toBe("across")
     expect(result.current.activeClue!.id).toBe("1-across")
 
@@ -229,9 +243,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
     expect(result.current.activeClue!.id).toBe("1-down")
   })
 
-  it("setDirection('across') flips back and updates activeClue", () => {
+  it("setDirection('across') flips back and updates activeClue", async () => {
     const seed = buildTestGameState({ row: 0, col: 0 })
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
 
     act(() => {
       result.current.setDirection("down")
@@ -245,8 +259,8 @@ describe("useCrosswordGame — direction + activeClue", () => {
     expect(result.current.activeClue!.id).toBe("1-across")
   })
 
-  it("returns activeClue = null when activeCell is null, regardless of direction", () => {
-    const { result } = mountHook()
+  it("returns activeClue = null when activeCell is null, regardless of direction", async () => {
+    const { result } = await mountHook()
     act(() => {
       result.current.setDirection("down")
     })
@@ -260,9 +274,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
 
   // ---- Reload re-derivation (D-09) ---------------------------------------
 
-  it("re-derives direction to across-first on reload from persisted activeCell (D-09)", () => {
+  it("re-derives direction to across-first on reload from persisted activeCell (D-09)", async () => {
     const seed = buildTestGameState({ row: 0, col: 0 })
-    const { result: first, unmount } = mountHook(seed)
+    const { result: first, unmount } = await mountHook(seed)
 
     // Switch to down before unmount
     act(() => {
@@ -274,17 +288,17 @@ describe("useCrosswordGame — direction + activeClue", () => {
 
     // Re-mount — the hook reads the persisted gameState which still has
     // activeCell = (0,0) but direction is NOT persisted → re-derived
-    const { result: second } = mountHook()
+    const { result: second } = await mountHook()
     expect(second.current.direction).toBe("across")
     expect(second.current.activeClue).not.toBeNull()
     expect(second.current.activeClue!.id).toBe("1-across")
   })
 
-  it("re-derives to the only available direction when persisted activeCell is only-down (D-09)", () => {
+  it("re-derives to the only available direction when persisted activeCell is only-down (D-09)", async () => {
     const seed = buildTestGameState({ row: 1, col: 0 })
-    mountHook(seed).unmount()
+    ;(await mountHook(seed)).unmount()
 
-    const { result } = mountHook()
+    const { result } = await mountHook()
     // Cell (1,0) only has a down word → resolves to "down"
     expect(result.current.direction).toBe("down")
     expect(result.current.activeClue!.id).toBe("1-down")
@@ -292,9 +306,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
 
   // ---- D-09 — direction/activeClue NOT persisted -------------------------
 
-  it("does NOT persist direction or activeClue in storage (D-09)", () => {
+  it("does NOT persist direction or activeClue in storage (D-09)", async () => {
     const seed = buildTestGameState({ row: 0, col: 0 })
-    mountHook(seed).unmount()
+    ;(await mountHook(seed)).unmount()
 
     const persisted = storageMap.get(STORAGE_KEY) as Record<string, unknown>
     expect(persisted).not.toHaveProperty("direction")
@@ -308,9 +322,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
 
   // ---- setActiveCell with null (deselect) --------------------------------
 
-  it("sets activeClue to null when setActiveCell(null) is called", () => {
+  it("sets activeClue to null when setActiveCell(null) is called", async () => {
     const seed = buildTestGameState({ row: 0, col: 0 })
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     expect(result.current.activeClue).not.toBeNull()
 
     act(() => {
@@ -323,9 +337,9 @@ describe("useCrosswordGame — direction + activeClue", () => {
 
   // ---- updateInput does not affect direction/activeClue -------------------
 
-  it("updateInput does not change direction or activeClue", () => {
+  it("updateInput does not change direction or activeClue", async () => {
     const seed = buildTestGameState({ row: 0, col: 0 })
-    const { result } = mountHook(seed)
+    const { result } = await mountHook(seed)
     const initialDirection = result.current.direction
     const initialClueId = result.current.activeClue!.id
 
@@ -344,15 +358,17 @@ describe("useCrosswordGame — direction + activeClue", () => {
 describe("mode-awareness: persistence", () => {
   beforeEach(() => {
     storageMap.clear()
+    mockCreateHydratedCrosswordGameState.mockResolvedValue(buildTestGameState())
   })
 
-  it("calls storage.set for daily mode after a state change (D-16)", () => {
+  it("calls storage.set for daily mode after a state change (D-16)", async () => {
     const spy = vi.spyOn(storageMap, "set")
-    const { result } = renderHook(() => useCrosswordGame(7, "daily"))
+    const { result } = renderHook(() => useCrosswordGame(15, "daily"))
+    await waitFor(() => expect(result.current.loadStatus).toBe("ready"))
     spy.mockClear() // clear initial mount persistence
 
     // Find the first letter cell in the generated puzzle
-    const grid = result.current.gameState.puzzle.grid
+    const grid = result.current.gameState!.puzzle.grid
     const letterRow = grid.findIndex((row) =>
       row.some((c) => c.type === "letter"),
     )
@@ -368,12 +384,13 @@ describe("mode-awareness: persistence", () => {
     spy.mockRestore()
   })
 
-  it("does NOT call storage.set for random mode after a state change — ephemeral (D-16)", () => {
+  it("does NOT call storage.set for random mode after a state change — ephemeral (D-16)", async () => {
     const spy = vi.spyOn(storageMap, "set")
-    const { result } = renderHook(() => useCrosswordGame(7, "random"))
+    const { result } = renderHook(() => useCrosswordGame(15, "random"))
+    await waitFor(() => expect(result.current.loadStatus).toBe("ready"))
     spy.mockClear() // clear initial mount persistence
 
-    const grid = result.current.gameState.puzzle.grid
+    const grid = result.current.gameState!.puzzle.grid
     const letterRow = grid.findIndex((row) =>
       row.some((c) => c.type === "letter"),
     )
@@ -397,15 +414,17 @@ describe("mode-awareness: persistence", () => {
 describe("mode-awareness: newPuzzle", () => {
   beforeEach(() => {
     storageMap.clear()
+    mockCreateHydratedCrosswordGameState.mockResolvedValue(buildTestGameState())
   })
 
-  it("daily mode: resets inputs but keeps the same puzzle (D-14)", () => {
-    const { result } = renderHook(() => useCrosswordGame(7, "daily"))
+  it("daily mode: resets inputs but keeps the same puzzle (D-14)", async () => {
+    const { result } = renderHook(() => useCrosswordGame(15, "daily"))
+    await waitFor(() => expect(result.current.loadStatus).toBe("ready"))
 
-    const puzzleIdBefore = result.current.gameState.puzzle.id
+    const puzzleIdBefore = result.current.gameState!.puzzle.id
 
     // Set some inputs first
-    const grid = result.current.gameState.puzzle.grid
+    const grid = result.current.gameState!.puzzle.grid
     const letterRow = grid.findIndex((row) =>
       row.some((c) => c.type === "letter"),
     )
@@ -417,7 +436,7 @@ describe("mode-awareness: newPuzzle", () => {
       result.current.updateInput(letterRow, letterCol, "A")
     })
     expect(
-      Object.keys(result.current.gameState.inputs).length,
+      Object.keys(result.current.gameState!.inputs).length,
     ).toBeGreaterThan(0)
 
     // Call newPuzzle
@@ -426,36 +445,46 @@ describe("mode-awareness: newPuzzle", () => {
     })
 
     // Puzzle should be the same (same seed — daily mode is deterministic)
-    expect(result.current.gameState.puzzle.id).toBe(puzzleIdBefore)
+    expect(result.current.gameState!.puzzle.id).toBe(puzzleIdBefore)
     // Inputs should be reset
-    expect(result.current.gameState.inputs).toEqual({})
+    expect(result.current.gameState!.inputs).toEqual({})
     // Status should be "playing"
-    expect(result.current.gameState.status).toBe("playing")
+    expect(result.current.gameState!.status).toBe("playing")
   })
 
-  it("endless mode: generates a fresh puzzle (D-14)", () => {
-    const { result } = renderHook(() => useCrosswordGame(7, "random"))
+  it("endless mode: generates a fresh puzzle (D-14)", async () => {
+    mockCreateHydratedCrosswordGameState
+      .mockResolvedValueOnce(buildTestGameState())
+      .mockResolvedValueOnce({
+        ...buildTestGameState(),
+        puzzle: { ...buildTestGameState().puzzle, id: "test-puzzle-5b" },
+      })
+    const { result } = renderHook(() => useCrosswordGame(15, "random"))
+    await waitFor(() => expect(result.current.loadStatus).toBe("ready"))
 
-    const puzzleIdBefore = result.current.gameState.puzzle.id
+    const puzzleIdBefore = result.current.gameState!.puzzle.id
 
     act(() => {
       result.current.newPuzzle()
     })
 
-    // Should have a different puzzle id (different random seed)
-    expect(result.current.gameState.puzzle.id).not.toBe(puzzleIdBefore)
+    await waitFor(() => {
+      expect(result.current.gameState!.puzzle.id).not.toBe(puzzleIdBefore)
+    })
     // Inputs should be empty fresh state
-    expect(result.current.gameState.inputs).toEqual({})
-    expect(result.current.gameState.status).toBe("playing")
+    expect(result.current.gameState!.inputs).toEqual({})
+    expect(result.current.gameState!.status).toBe("playing")
   })
 
   it("newPuzzle fires synchronously in both modes (no confirmation dialog — D-13)", async () => {
     const { result: daily } = renderHook(() =>
-      useCrosswordGame(7, "daily"),
+      useCrosswordGame(15, "daily"),
     )
     const { result: endless } = renderHook(() =>
-      useCrosswordGame(7, "random"),
+      useCrosswordGame(15, "random"),
     )
+    await waitFor(() => expect(daily.current.loadStatus).toBe("ready"))
+    await waitFor(() => expect(endless.current.loadStatus).toBe("ready"))
 
     // newPuzzle must not return a promise — capture direct return value
     let dailyReturn: unknown
@@ -476,10 +505,12 @@ describe("mode-awareness: newPuzzle", () => {
 describe("mode-awareness: dailyRolloverDetected", () => {
   beforeEach(() => {
     storageMap.clear()
+    mockCreateHydratedCrosswordGameState.mockResolvedValue(buildTestGameState())
   })
 
-  it("returns dailyRolloverDetected initially false", () => {
-    const { result } = renderHook(() => useCrosswordGame(7, "daily"))
+  it("returns dailyRolloverDetected initially false", async () => {
+    const { result } = renderHook(() => useCrosswordGame(15, "daily"))
+    await waitFor(() => expect(result.current.loadStatus).toBe("ready"))
     expect(result.current.dailyRolloverDetected).toBe(false)
   })
 })

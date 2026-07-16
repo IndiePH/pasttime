@@ -3,6 +3,19 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useWordGuessGame } from "@/features/games/word-guess/hooks/use-word-guess-game"
 
+const TEST_ANSWERS = ["ABOUT", "APPLE", "STONE", "PLANT"]
+const TEST_GUESSABLE = new Set([
+  "ABOUT",
+  "APPLE",
+  "STONE",
+  "PLANT",
+  "ABIDE",
+  "MAGIC",
+  "ALBUM",
+  "ALPHA",
+  "AWARE",
+])
+
 const storageMap = new Map<string, unknown>()
 
 vi.mock("@/infrastructure/storage", () => {
@@ -26,6 +39,8 @@ function HookHarness() {
   const game = useWordGuessGame({
     wordLength: 5,
     roundMode: "random",
+    answerWords: TEST_ANSWERS,
+    guessableSet: TEST_GUESSABLE,
   })
 
   return (
@@ -74,6 +89,8 @@ function HardModeHookHarness() {
     wordLength: 5,
     roundMode: "random",
     hardMode: true,
+    answerWords: TEST_ANSWERS,
+    guessableSet: TEST_GUESSABLE,
   })
 
   return (

@@ -16,6 +16,8 @@ export {
   CROSSWORD_GRID_SIZE_DEFAULT,
   CROSSWORD_ROUND_MODE_DEFAULT,
   createCrosswordPuzzle,
+  type CreateCrosswordGameStateOptions,
+  type CreateCrosswordPuzzleOptions,
 } from "./settings"
 export {
   crosswordLaunchPath,
@@ -28,7 +30,12 @@ export {
   writeCrosswordPlayPreferences,
 } from "./play-preferences"
 export type { CrosswordPlayPreferences } from "./play-preferences"
-export { generateCrosswordPuzzleWithRetry } from "./generator"
+export {
+  buildCrosswordPool,
+  generateCrosswordPuzzleWithRetry,
+  hydrateCrosswordClues,
+  type CrosswordPoolWord,
+} from "./generator"
 export {
   isCrosswordComplete,
   isCrosswordSolved,

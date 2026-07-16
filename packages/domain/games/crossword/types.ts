@@ -43,10 +43,10 @@ export interface CrosswordGameState {
   status: CrosswordStatus
 }
 
-const GRID_SIZES = [7, 9, 11, 13, 15] as const
+const GRID_SIZES = [15] as const
 export type CrosswordGridSize = (typeof GRID_SIZES)[number]
 
-export const CROSSWORD_DEFAULT_SIZE: CrosswordGridSize = 7
+export const CROSSWORD_DEFAULT_SIZE: CrosswordGridSize = 15
 
 const ROUND_MODES = ["daily", "random"] as const
 export type CrosswordRoundMode = (typeof ROUND_MODES)[number]

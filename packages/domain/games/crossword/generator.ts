@@ -1,6 +1,5 @@
 import { hashSeed } from "../../daily"
 
-import corpusData from "./corpus.json"
 import type {
   CrosswordCell,
   CrosswordClue,
@@ -11,12 +10,12 @@ import type {
 
 type Direction = "across" | "down"
 
-interface PoolWord {
+export interface CrosswordPoolWord {
   answer: string
   clue: string
 }
 
-interface PlacedWord extends PoolWord {
+interface PlacedWord extends CrosswordPoolWord {
   row: number
   col: number
   direction: Direction
@@ -26,30 +25,50 @@ const MIN_WORD_LENGTH = 3
 const MAX_WORD_LENGTH = 10
 const LETTERS_ONLY = /^[A-Z]+$/
 
-/**
- * Curated corpus — hand-written clues. Answers here are the only words the
- * generator may place (the test suite enforces this), keeping clue quality
- * high. Each word keeps a single clue chosen up front so output is stable.
- */
-const POOL: readonly PoolWord[] = (
-  corpusData as Array<{ answer: string; clue: string }>
-)
-  .map((entry) => ({
-    answer: entry.answer.toUpperCase(),
-    clue: entry.clue ?? "",
-  }))
-  .filter(
-    (w) =>
-      LETTERS_ONLY.test(w.answer) &&
-      w.answer.length >= MIN_WORD_LENGTH &&
-      w.answer.length <= MAX_WORD_LENGTH &&
-      w.clue.length > 0,
-  )
+/** Build an in-memory answer pool for generation (clues optional until hydrate). */
+export function buildCrosswordPool(
+  answers: readonly string[],
+  cluesByAnswer?: ReadonlyMap<string, string>,
+): readonly CrosswordPoolWord[] {
+  const seen = new Set<string>()
+  const pool: CrosswordPoolWord[] = []
 
-/** Pool words indexed by answer for O(1) lookup. */
-const poolByAnswer = new Map<string, PoolWord>(
-  POOL.map((w) => [w.answer, w]),
-)
+  for (const raw of answers) {
+    const answer = raw.toUpperCase()
+    if (
+      !LETTERS_ONLY.test(answer) ||
+      answer.length < MIN_WORD_LENGTH ||
+      answer.length > MAX_WORD_LENGTH ||
+      seen.has(answer)
+    ) {
+      continue
+    }
+    seen.add(answer)
+    pool.push({
+      answer,
+      clue: cluesByAnswer?.get(answer) ?? "",
+    })
+  }
+
+  return pool
+}
+
+/** Attach clue text after a D1 batch lookup. */
+export function hydrateCrosswordClues(
+  puzzle: CrosswordPuzzle,
+  cluesByAnswer: ReadonlyMap<string, string>,
+): CrosswordPuzzle {
+  const hydrate = (clue: CrosswordClue): CrosswordClue => ({
+    ...clue,
+    text: cluesByAnswer.get(clue.answer) ?? clue.text,
+  })
+
+  return {
+    ...puzzle,
+    across: puzzle.across.map(hydrate),
+    down: puzzle.down.map(hydrate),
+  }
+}
 
 /** Deterministic LCG seeded through the shared daily-seed hash. */
 function makeRng(seed: number): () => number {
@@ -191,11 +210,12 @@ function mirrorPosition(
 export function generateCrosswordPuzzle(
   size: CrosswordGridSize,
   seed: number,
+  answerPool: readonly CrosswordPoolWord[],
 ): CrosswordPuzzle {
   const rand = makeRng(seed)
   const maxLen = Math.min(MAX_WORD_LENGTH, size)
   const pool = shuffled(
-    POOL.filter((w) => w.answer.length <= maxLen),
+    answerPool.filter((w) => w.answer.length <= maxLen),
     rand,
   )
 
@@ -222,7 +242,7 @@ export function generateCrosswordPuzzle(
   }
 
   // Seed word: longest pooled word that fits, placed across near the centre.
-  const first = pool.reduce<PoolWord | null>(
+  const first = pool.reduce<CrosswordPoolWord | null>(
     (best, w) =>
       w.answer.length <= size && (!best || w.answer.length > best.answer.length)
         ? w
@@ -287,7 +307,7 @@ export function generateCrosswordPuzzle(
 function tryPlaceCrossing(
   letters: (string | null)[][],
   size: number,
-  w: PoolWord,
+  w: CrosswordPoolWord,
   cellsByLetter: Map<string, Array<[number, number]>>,
   place: (word: string, row: number, col: number, dir: Direction) => void,
   placed: PlacedWord[],
@@ -492,10 +512,11 @@ export function everyCellChecked(puzzle: CrosswordPuzzle): boolean {
 export function generateCrosswordPuzzleWithRetry(
   size: CrosswordGridSize,
   seed: number,
+  answerPool: readonly CrosswordPoolWord[],
 ): CrosswordPuzzle | null {
   for (let attempt = 0; attempt < 3; attempt++) {
     const attemptSeed = hashSeed(seed + attempt * 0x45d9f3b)
-    const puzzle = generateCrosswordPuzzle(size, attemptSeed)
+    const puzzle = generateCrosswordPuzzle(size, attemptSeed, answerPool)
     if (hasSufficientFill(puzzle.grid)) {
       return puzzle
     }
