@@ -7,6 +7,13 @@ Load this file when the task involves deploying, previewing, or regenerating gam
 
 Web is deployed as a Cloudflare Worker via OpenNext, **not** `next start`.
 
+| Environment | URL |
+|-------------|-----|
+| Production (custom domain) | https://gamehub.pasttime.xyz |
+| Workers.dev | https://gamehub.xent-xent.workers.dev/ |
+
+Worker name in Cloudflare: **`gamehub`** (product brand remains Pasttime).
+
 | Command | What it does |
 |---------|--------------|
 | `npm run preview` | Build + local `workerd` preview |
@@ -17,7 +24,7 @@ Web is deployed as a Cloudflare Worker via OpenNext, **not** `next start`.
 
 Gotchas:
 - `next.config.ts` calls `initOpenNextCloudflareForDev()` at the bottom — leave it.
-- `wrangler.jsonc` self-references the worker as service `pasttime` (name must match).
+- `wrangler.jsonc` self-references the worker as service `gamehub` (name must match).
 
 ## Data-build scripts (not part of CI)
 
