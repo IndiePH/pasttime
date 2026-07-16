@@ -50,3 +50,31 @@ Read `brain/schema.md` for the full contract. Rules:
 | [percentile-ranking-patterns](brain/wiki/percentile-ranking-patterns.md) | Anonymous comparative ranking styles |
 
 Add to this wiki as new knowledge is accumulated.
+
+## Cursor Cloud specific instructions
+
+Node version gotcha: this repo requires Node >=24 (`.nvmrc` = 24), but the VM's
+`/exec-daemon` directory injects Node 22 ahead of nvm in `PATH`. The agent's
+`~/.bashrc` prepends any installed Node 24 toolchain so interactive login shells
+resolve `node`/`npm` to v24 automatically. If you spawn a non-login shell and see
+Node 22, either start a login shell (`bash -l`) or run
+`export PATH="$HOME/.nvm/versions/node/v24.*/bin:$PATH"`.
+
+Services (all commands run from repo root; see README "Scripts" table):
+- Web (`@pasttime/web`, Next.js) is the primary app — `npm run dev` on
+  http://localhost:3000. This is the only service needed to play the games
+  (crossword, solitaire, word guess); games are anonymous/localStorage-backed.
+- Multiplayer API (`@pasttime/server`, Express + WS) is optional —
+  `npm run server:dev` on http://localhost:4000 (`/health` returns `{"ok":true}`).
+  Only needed for live room sync; set `NEXT_PUBLIC_API_URL=http://localhost:4000`
+  in `apps/web/.env.local` to wire the web app to it.
+- Desktop (Electron) just loads the web URL; Mobile is Expo. Neither is needed to
+  exercise core gameplay.
+
+Quality gates (match CI in `.github/workflows/ci.yml`): `npm run lint`,
+`npm run typecheck`, `npm run test`, `npm run build`. `lint`/`build` target only
+the web app; `typecheck`/`test` run across all workspaces.
+
+The `npm ci`/`npm install` "allow-scripts ... not yet covered" warnings (esbuild,
+sharp, workerd, etc.) are informational only — the required prebuilt binaries are
+installed and tests/dev server work; no `npm approve-scripts` step is needed.
