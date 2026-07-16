@@ -1,10 +1,11 @@
 # Engineering Decisions
-updated: 2026-07-16
+updated: 2026-07-17
 tags: [decision, architecture, tradeoff, rule-override, technical-debt]
-related: [dictionary-pipeline]
+related: [dictionary-pipeline, adsense-manual-units]
 
 | date | type | scope | summary | rationale | rules | skills | decision-maker |
 |------|------|-------|---------|-----------|-------|--------|----------------|
+| 2026-07-17 | monetization | web | Manual AdSense only; apex `pasttime.xyz` + `gamehub` subdomain both on Worker; Google CMP 3-choice | AdSense Sites requires TLD; subdomain alone rejected. Apex custom domain required for ads.txt/verify/review. Responsive units + reserved CSS; no Auto ads/side rails. CMP: Google 3-choice for EEA/UK/CH. | Keep pasttime.xyz on gamehub Worker during review; NEXT_PUBLIC_* need redeploy; see adsense-manual-units wiki | adsense, cloudflare, cmp | user |
 | 2026-07-16 | architecture | shared | Lexicon runtime: R2 shards + D1 defs; no giant JSON in Worker | Free Workers 3 MiB script limit; static-import of full/enriched/corpus JSON exceeds it. Lists = bulk fetch once; defs/clues = keyed D1. Load at length/mode confirm before play. Multiplayer stays on Node for now. | No runtime import of dictionary.full / enriched / corpus into Worker graph; WG one length shard; crossword multi-length or answers pack then batch clues; see docs/CONTENT-STORAGE-HANDOFF.md | cloudflare, r2, d1, opennext | user |
 | 2026-07-03 | architecture | shared | Enriched dict is single source of truth for crossword clues | `corpus.json` regenerated exclusively from `dictionary.full.enriched.json`, removing mixed-source clues from hand-crafted/Wiktionary/Apify. Ensures clue consistency and maintainability. | rebuild-corpus.mjs regenerates corpus.json; corpus.json imported directly by crossword generator | crossword, enriched-dictionary | user |
 | 2026-07-03 | tooling | shared | Batch-fix self-referential defs via local WordNet CLI | Used `wn.exe -syns{pos} -g` to replace 1,052 circular definitions (e.g. "Deployment" → "Place troops or weapons in battle formation") with proper ones from WordNet, plus 515 manually reviewed. 7 words removed (blocklisted) — all available defs still contained the word. | Per-POS query: try verb→noun→adj→adv; validate target word in synset; skip defs containing the word | wordnet, enriched-dictionary | user |
