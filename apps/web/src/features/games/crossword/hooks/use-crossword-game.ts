@@ -50,19 +50,23 @@ export function useCrosswordGame(
   )
 
   const [gameState, setGameState] = useState<CrosswordGameState | null>(null)
-  const [loadStatus, setLoadStatus] = useState<LoadStatus>("loading")
+  const [loadedKey, setLoadedKey] = useState<string | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [retryCount, setRetryCount] = useState(0)
+  const [preferredDirection, setDirection] =
+    useState<CrosswordDirection>("across")
 
   useEffect(() => {
     let cancelled = false
-    setLoadStatus("loading")
-    setLoadError(null)
 
     const stored = storage.get<unknown>(storageKey)
     if (isCrosswordGameState(stored)) {
-      setGameState(stored)
-      setLoadStatus("ready")
+      queueMicrotask(() => {
+        if (cancelled) return
+        setGameState(stored)
+        setLoadedKey(storageKey)
+        setLoadError(null)
+      })
       return () => {
         cancelled = true
       }
@@ -72,11 +76,12 @@ export function useCrosswordGame(
       .then((state) => {
         if (cancelled) return
         setGameState(state)
-        setLoadStatus("ready")
+        setLoadedKey(storageKey)
+        setLoadError(null)
       })
       .catch((cause: unknown) => {
         if (cancelled) return
-        setLoadStatus("error")
+        setLoadedKey(null)
         setLoadError(
           cause instanceof Error ? cause.message : "Failed to load crossword",
         )
@@ -87,8 +92,6 @@ export function useCrosswordGame(
     }
   }, [size, mode, storageKey, retryCount]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [direction, setDirection] = useState<CrosswordDirection>("across")
-
   const [dailyRolloverDetected] = useState(false)
 
   useEffect(() => {
@@ -97,19 +100,29 @@ export function useCrosswordGame(
     }
   }, [gameState, storageKey, mode]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (!gameState?.activeCell) return
-    setDirection((current) =>
-      resolveDirection(gameState.puzzle, gameState.activeCell!, current),
-    )
-  }, [gameState?.activeCell, gameState?.puzzle])
+  const puzzle = gameState?.puzzle
+  const activeCell = gameState?.activeCell
+
+  const direction = useMemo(() => {
+    if (!puzzle || !activeCell) return preferredDirection
+    return resolveDirection(puzzle, activeCell, preferredDirection)
+  }, [puzzle, activeCell, preferredDirection])
 
   const activeClue = useMemo(() => {
-    if (!gameState?.activeCell) return null
-    return findClueAtCell(gameState.puzzle, gameState.activeCell, direction)
-  }, [gameState?.puzzle, gameState?.activeCell, direction])
+    if (!puzzle || !activeCell) return null
+    return findClueAtCell(puzzle, activeCell, direction)
+  }, [puzzle, activeCell, direction])
+
+  const isStale = loadedKey !== storageKey
+  const loadStatus: LoadStatus = loadError
+    ? "error"
+    : isStale || gameState === null
+      ? "loading"
+      : "ready"
 
   const retryLoad = useCallback(() => {
+    setLoadedKey(null)
+    setLoadError(null)
     setRetryCount((count) => count + 1)
   }, [])
 
@@ -130,7 +143,11 @@ export function useCrosswordGame(
     }
 
     storage.remove(storageKey)
-    void createHydratedCrosswordGameState(size, "random").then(setGameState)
+    void createHydratedCrosswordGameState(size, "random").then((state) => {
+      setGameState(state)
+      setLoadedKey(storageKey)
+      setLoadError(null)
+    })
   }, [gameState, mode, size, storageKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateInput = useCallback(
@@ -192,18 +209,18 @@ export function useCrosswordGame(
   })
 
   return {
-    gameState,
+    gameState: isStale ? null : gameState,
     loadStatus,
     loadError,
     retryLoad,
     newPuzzle,
     updateInput,
     recheckStatus,
-    blocks,
+    blocks: isStale ? [] : blocks,
     setActiveCell,
     direction,
     setDirection,
-    activeClue,
+    activeClue: isStale ? null : activeClue,
     dailyRolloverDetected,
   }
 }

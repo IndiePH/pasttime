@@ -21,15 +21,6 @@ function parseShardPayload(raw: string): string[] {
   return parsed.words ?? []
 }
 
-async function readDevShard(relativePath: string): Promise<string[]> {
-  const raw = await readFile(join(DOMAIN_ROOT, relativePath), "utf8")
-  const parsed = JSON.parse(raw) as Record<string, string[]> | string[]
-  if (Array.isArray(parsed)) {
-    return parsed
-  }
-  return Object.values(parsed).flat()
-}
-
 async function readDevAnswersByLength(length: number): Promise<string[]> {
   const raw = await readFile(
     join(DOMAIN_ROOT, "shared", "dictionary.target.json"),

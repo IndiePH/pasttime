@@ -199,7 +199,7 @@ function WordGuessPlaySession({
   const appliedHardMode: boolean = hardModeParam ?? false
   const lexicon = useWordGuessLexicon(wordLength)
 
-  if (lexicon.status === "loading" || lexicon.status === "idle") {
+  if (lexicon.status === "loading") {
     return (
       <Card className="word-guess-vars mx-auto w-full text-left">
         <CardHeader>
