@@ -38,7 +38,6 @@ apps/mobile/ios/
 .planning/
 
 # tooling / deploy caches
-.fallow/
 .wrangler/
 .open-next/
 .turbo/
@@ -48,10 +47,6 @@ apps/mobile/ios/
 
 # game clue generation cache
 packages/domain/games/crossword/clues.cache.json
-
-# skills tool artifacts
-skills-lock.json
-/skills/
 
 # misc
 .DS_Store
@@ -76,14 +71,5 @@ firebase-debug.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-# AI agent infrastructure (local only)
-/.cursor
-/.agents
-/agents
-/rules
-/domains
-/.claude
-/.opencode
-capability_index.md
-CLAUDE.md
-AGENTS.md
+
+.pi-subagents/

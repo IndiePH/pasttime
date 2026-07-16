@@ -19,6 +19,7 @@ export interface WordGuessRoundState {
   answer: string
   length: WordGuessLength
   mode: WordGuessRoundMode
+  hardMode: boolean
   maxTries: number
   guesses: WordGuessGuessEvaluation[]
   status: WordGuessRoundStatus
@@ -28,6 +29,7 @@ export type WordGuessSubmitErrorCode =
   | "round-complete"
   | "invalid-length"
   | "invalid-word"
+  | "locked-letters-violation"
 
 export type WordGuessSubmitGuessResult =
   | {

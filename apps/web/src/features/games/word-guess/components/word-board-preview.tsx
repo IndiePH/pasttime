@@ -1,5 +1,5 @@
 import {
-  WORD_GUESS_MAX_TRIES,
+  getWordGuessMaxTries,
   type WordGuessLength,
 } from "@pasttime/domain/games/word-guess"
 import { cn } from "@/lib/utils"
@@ -18,7 +18,7 @@ export function WordBoardPreview({
       className={cn("flex flex-col items-center gap-1.5", className)}
       aria-hidden
     >
-      {Array.from({ length: WORD_GUESS_MAX_TRIES }, (_, row) => (
+      {Array.from({ length: getWordGuessMaxTries(wordLength) }, (_, row) => (
         <div key={row} className="flex gap-1.5">
           {Array.from({ length: wordLength }, (_, col) => (
             <div

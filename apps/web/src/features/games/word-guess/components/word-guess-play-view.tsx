@@ -14,9 +14,11 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import type { GameDefinition } from "@pasttime/domain/games"
+import { getEnrichedWord } from "@pasttime/domain/games/shared"
 import {
   formatWordGuessRoundModeLabel,
   formatWordLengthLabel,
+  getWordGuessSoloStorageKey,
   wordGuessLaunchPath,
   type WordGuessLength,
   type WordGuessRoundMode,
@@ -27,8 +29,10 @@ import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
 import { WordGuessBoard } from "@/features/games/word-guess/components/word-guess-board"
 import { WordGuessKeyboard } from "@/features/games/word-guess/components/word-guess-keyboard"
+import { WordGuessPlayPreferencesProvider, useWordGuessPlayPreferences } from "@/features/games/word-guess/context/word-guess-play-preferences-context"
 import { useWordGuessGame } from "@/features/games/word-guess/hooks/use-word-guess-game"
 import { wordGuessSearchParams } from "@/features/games/word-guess/search-params"
+import { useStorage } from "@/infrastructure/storage"
 
 interface WordGuessPlayViewProps {
   game: GameDefinition
@@ -46,13 +50,18 @@ function WordGuessPlayCard({
   wordLength,
   roundMode,
   session,
+  hardMode = false,
 }: WordGuessPlayCardProps & {
   session: ReturnType<typeof useWordGuessGame>
+  hardMode?: boolean
 }) {
+  const { flipEnabled } = useWordGuessPlayPreferences()
   const {
     attemptsUsed,
     boardRows,
     feedback,
+    flipRowIndex,
+    flipTrigger,
     invalidWordShake,
     isPlaying,
     keyboardStates,
@@ -61,6 +70,22 @@ function WordGuessPlayCard({
     removeLetter,
     submitGuess,
   } = session
+
+  // Prevent stale flip animation when flipEnabled is toggled ON after guesses
+  // were already made with it OFF. Track the flipTrigger value at the moment
+  // flipEnabled becomes true — only newer triggers (from new guesses) animate.
+  // Uses the React "adjust state during render" pattern (recognised by the
+  // compiler) instead of reading/writing refs during render.
+  const [prevFlipEnabled, setPrevFlipEnabled] = React.useState(flipEnabled)
+  const [flipEpochTrigger, setFlipEpochTrigger] = React.useState(flipTrigger)
+  if (flipEnabled && !prevFlipEnabled) {
+    setFlipEpochTrigger(flipTrigger)
+  }
+  if (prevFlipEnabled !== flipEnabled) {
+    setPrevFlipEnabled(flipEnabled)
+  }
+  const effectiveFlipRowIndex =
+    flipEnabled && flipTrigger > flipEpochTrigger ? flipRowIndex : null
   const modeLabelText = formatWordGuessRoundModeLabel(roundMode)
   const attemptDisplay = Math.min(
     isPlaying ? attemptsUsed + 1 : attemptsUsed,
@@ -68,6 +93,10 @@ function WordGuessPlayCard({
   )
   const shakeRowIndex = isPlaying ? (invalidWordShake?.rowIndex ?? null) : null
   const shakeTrigger = invalidWordShake?.trigger ?? 0
+
+  // Look up the answer definition for the post-game reveal
+  const answerEntry = round.status !== "playing" ? getEnrichedWord(round.answer) : null
+  const answerDefinition = answerEntry?.definition ?? null
 
   return (
     <Card className="word-guess-vars mx-auto overflow-visible text-left">
@@ -92,6 +121,11 @@ function WordGuessPlayCard({
           <Badge variant="outline" className="leading-normal">
             {formatWordLengthLabel(wordLength)}
           </Badge>
+          {hardMode && (
+            <Badge variant="default" className="leading-normal">
+              Hard mode
+            </Badge>
+          )}
         </div>
       </CardHeader>
       <CardContent className="space-y-4 px-0 pt-4 pb-2 landscape:space-y-3 landscape:pt-3 landscape:pb-2">
@@ -101,6 +135,8 @@ function WordGuessPlayCard({
               rows={boardRows}
               shakeRowIndex={shakeRowIndex}
               shakeTrigger={shakeTrigger}
+              flipRowIndex={effectiveFlipRowIndex}
+              flipTrigger={flipTrigger}
             />
           </div>
         </GameContentPanel>
@@ -120,6 +156,12 @@ function WordGuessPlayCard({
           {round.status === "lost" ? (
             <p className="text-center text-sm text-muted-foreground">
               Answer: <strong>{round.answer}</strong>
+            </p>
+          ) : null}
+
+          {answerDefinition ? (
+            <p className="mx-auto max-w-sm text-center text-xs italic text-muted-foreground/80">
+              {answerDefinition}
             </p>
           ) : null}
         </div>
@@ -147,7 +189,9 @@ function WordGuessPlaySession({
   game: GameDefinition
   modeLabel: string
 }) {
-  const session = useWordGuessGame({ wordLength, roundMode })
+  const [hardModeParam] = useQueryState("hardMode", wordGuessSearchParams.hardMode)
+  const appliedHardMode: boolean = hardModeParam ?? false
+  const session = useWordGuessGame({ wordLength, roundMode, hardMode: appliedHardMode })
 
   const modeLabelText = formatWordGuessRoundModeLabel(roundMode)
 
@@ -166,11 +210,11 @@ function WordGuessPlaySession({
               className="w-full"
               onClick={session.resetRound}
             >
-              Play again
+              New game
             </Button>
           )}
           <Button variant="outline" className="w-full" asChild>
-            <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode)}>
+            <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode, appliedHardMode ? true : undefined)}>
               Back to setup
             </PlatformLink>
           </Button>
@@ -180,6 +224,7 @@ function WordGuessPlaySession({
       <WordGuessPlayCard
         wordLength={wordLength}
         roundMode={roundMode}
+        hardMode={appliedHardMode}
         session={session}
       />
     </GamePlaySection>
@@ -200,6 +245,16 @@ export function WordGuessPlayView({ game, modeLabel }: WordGuessPlayViewProps) {
     () => true,
     () => false,
   )
+  const storage = useStorage()
+
+  // When entering daily mode, clear any lingering endless-mode session
+  // so the player starts fresh when they return to endless later.
+  React.useEffect(() => {
+    if (roundMode === "daily") {
+      const randomKey = getWordGuessSoloStorageKey(wordLength, "random")
+      storage.remove(randomKey)
+    }
+  }, [roundMode, wordLength, storage])
 
   if (!isMounted) {
     return (
@@ -218,13 +273,15 @@ export function WordGuessPlayView({ game, modeLabel }: WordGuessPlayViewProps) {
 
   return (
     <GamePlayShell layout="board">
-      <WordGuessPlaySession
-        key={sessionKey}
-        game={game}
-        modeLabel={modeLabel}
-        wordLength={wordLength}
-        roundMode={roundMode}
-      />
+      <WordGuessPlayPreferencesProvider>
+        <WordGuessPlaySession
+          key={sessionKey}
+          game={game}
+          modeLabel={modeLabel}
+          wordLength={wordLength}
+          roundMode={roundMode}
+        />
+      </WordGuessPlayPreferencesProvider>
     </GamePlayShell>
   )
 }

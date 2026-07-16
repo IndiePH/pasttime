@@ -1,6 +1,7 @@
 /** Solitaire layouts exposed in launch settings (implement gameplay per mode later). */
 export const SOLITAIRE_MODES = [
-  "klondike",
+  "klondike-draw1",
+  "klondike-draw3",
   "pyramid",
   "tripeaks",
   "freecell",
@@ -8,7 +9,7 @@ export const SOLITAIRE_MODES = [
 
 export type SolitaireMode = (typeof SOLITAIRE_MODES)[number]
 
-export const SOLITAIRE_MODE_DEFAULT: SolitaireMode = "klondike"
+export const SOLITAIRE_MODE_DEFAULT: SolitaireMode = "klondike-draw1"
 
 const MODE_SET = new Set<string>(SOLITAIRE_MODES)
 
@@ -32,9 +33,13 @@ export interface SolitaireModeInfo {
 }
 
 export const SOLITAIRE_MODE_INFO: Record<SolitaireMode, SolitaireModeInfo> = {
-  klondike: {
-    label: "Klondike",
-    tagline: "Classic seven-column tableau and four foundations.",
+  "klondike-draw1": {
+    label: "Klondike Draw 1",
+    tagline: "Draw one card at a time from stock.",
+  },
+  "klondike-draw3": {
+    label: "Klondike Draw 3",
+    tagline: "Draw three cards at a time from stock.",
   },
   pyramid: {
     label: "Pyramid",

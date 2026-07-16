@@ -46,6 +46,11 @@ const POOL: readonly PoolWord[] = (
       w.clue.length > 0,
   )
 
+/** Pool words indexed by answer for O(1) lookup. */
+const poolByAnswer = new Map<string, PoolWord>(
+  POOL.map((w) => [w.answer, w]),
+)
+
 /** Deterministic LCG seeded through the shared daily-seed hash. */
 function makeRng(seed: number): () => number {
   let state = hashSeed(seed) & 0x7fffffff
@@ -150,9 +155,38 @@ function canPlace(
 }
 
 /**
+ * Compute the 180°-rotated mirror position for a word placed at (row,col)
+ * in `dir` with length L. Returns null if the mirror is out of bounds.
+ */
+function mirrorPosition(
+  row: number,
+  col: number,
+  dir: Direction,
+  length: number,
+  size: number,
+): { row: number; col: number } | null {
+  let mr: number
+  let mc: number
+  if (dir === "across") {
+    mr = size - 1 - row
+    mc = size - 1 - (col + length - 1)
+  } else {
+    mr = size - 1 - (row + length - 1)
+    mc = size - 1 - col
+  }
+  if (mr < 0 || mr >= size || mc < 0 || mc >= size) return null
+  return { row: mr, col: mc }
+}
+
+/**
  * Build a crossword by placing real interlocking words from the corpus onto an
  * empty grid, all driven by `seed`. Deterministic: identical seed and size
  * always yield an identical puzzle.
+ *
+ * Two-phase growth:
+ *   Phase 1 — Place ALL possible crossing words (maximises density)
+ *   Phase 2 — For each placed word, also place a word at its 180°-rotated
+ *             mirror position (maximises symmetry)
  */
 export function generateCrosswordPuzzle(
   size: CrosswordGridSize,
@@ -203,7 +237,7 @@ export function generateCrosswordPuzzle(
     used.add(first.answer)
   }
 
-  // Grow by crossing words into existing letters until a full pass adds none.
+  // ---- Phase 1: Grow by crossing words ----
   let progress = true
   while (progress) {
     progress = false
@@ -212,6 +246,36 @@ export function generateCrosswordPuzzle(
       if (tryPlaceCrossing(letters, size, w, cellsByLetter, place, placed)) {
         used.add(w.answer)
         progress = true
+      }
+    }
+  }
+
+  // ---- Phase 2: Place mirror words for symmetry ----
+  // Snapshot the placed list before Phase 2 to avoid infinite cycles
+  // (Phase 2 additions may themselves have mirrors, but we only process
+  // Phase 1 words).
+  const phase1Placed = [...placed]
+  for (const pw of phase1Placed) {
+    const mirror = mirrorPosition(pw.row, pw.col, pw.direction, pw.answer.length, size)
+    if (!mirror) continue
+
+    // Skip if the mirror position already has a word starting here
+    const existingStart = placed.find(
+      (p) => p.row === mirror.row && p.col === mirror.col && p.direction === pw.direction,
+    )
+    if (existingStart) continue
+
+    // Try to find a word to place at the mirror position. The mirror word
+    // must be unused and of the same length, and canPlace must accept it.
+    // canPlace will validate crossings against existing grid letters.
+    for (const candidate of pool) {
+      if (used.has(candidate.answer)) continue
+      if (candidate.answer.length !== pw.answer.length) continue
+      if (canPlace(letters, size, candidate.answer, mirror.row, mirror.col, pw.direction, true)) {
+        place(candidate.answer, mirror.row, mirror.col, pw.direction)
+        placed.push({ ...candidate, row: mirror.row, col: mirror.col, direction: pw.direction })
+        used.add(candidate.answer)
+        break
       }
     }
   }
@@ -318,4 +382,123 @@ function finalize(
   down.sort((a, b) => a.number - b.number)
 
   return { id: `crossword-${size}-${seed}`, grid, across, down }
+}
+
+// ---- Quality validation helpers ----
+
+/**
+ * Returns true when the grid has 180° rotational symmetry:
+ * grid[r][c].type === grid[size-1-r][size-1-c].type for all cells.
+ */
+export function hasRotationalSymmetry(grid: CrosswordGrid): boolean {
+  const size = grid.length
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (grid[r][c].type !== grid[size - 1 - r][size - 1 - c].type) {
+        return false
+      }
+    }
+  }
+  return true
+}
+
+/**
+ * Returns true when block density ≤ 25% (blocks / total cells <= 0.25).
+ */
+export function isWithinDensityLimit(grid: CrosswordGrid): boolean {
+  const size = grid.length
+  let blockCount = 0
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (grid[r][c].type === "block") blockCount++
+    }
+  }
+  return blockCount / (size * size) <= 0.25
+}
+
+/**
+ * Returns true when at least 50% of cells are letter cells.
+ */
+export function hasSufficientFill(grid: CrosswordGrid): boolean {
+  const size = grid.length
+  let letterCount = 0
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (grid[r][c].type === "letter") letterCount++
+    }
+  }
+  return letterCount / (size * size) >= 0.5
+}
+
+/**
+ * Returns true when every letter cell in the grid belongs to both an across
+ * and a down word (no orphan / unchecked cells). Builds cell-position sets
+ * from the across and down clue lists, then verifies every letter cell is
+ * present in both.
+ */
+export function everyCellChecked(puzzle: CrosswordPuzzle): boolean {
+  const { grid, across, down } = puzzle
+  const size = grid.length
+
+  // Build set of "r,c" keys for cells covered by across clues.
+  const acrossCells = new Set<string>()
+  for (const clue of across) {
+    for (let i = 0; i < clue.answer.length; i++) {
+      const r = clue.direction === "down" ? clue.row + i : clue.row
+      const c = clue.direction === "across" ? clue.col + i : clue.col
+      acrossCells.add(`${r},${c}`)
+    }
+  }
+
+  // Build set of "r,c" keys for cells covered by down clues.
+  const downCells = new Set<string>()
+  for (const clue of down) {
+    for (let i = 0; i < clue.answer.length; i++) {
+      const r = clue.direction === "down" ? clue.row + i : clue.row
+      const c = clue.direction === "across" ? clue.col + i : clue.col
+      downCells.add(`${r},${c}`)
+    }
+  }
+
+  // Every letter cell must appear in BOTH sets.
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (grid[r][c].type !== "letter") continue
+      const key = `${r},${c}`
+      if (!acrossCells.has(key) || !downCells.has(key)) {
+        return false
+      }
+    }
+  }
+
+  return true
+}
+
+// ---- Retry wrapper ----
+
+/**
+ * Generates a crossword puzzle with up to 3 retry attempts. Each attempt uses
+ * a deterministic per-attempt seed (same seed + attempt always produces the
+ * same shuffle), and the resulting puzzle is validated for basic fill quality:
+ *   - Fill ≥ 50% (hasSufficientFill)
+ *
+ * Additional quality constraints (everyCellChecked, hasRotationalSymmetry,
+ * isWithinDensityLimit) are available as utilities for future generator
+ * improvements but are not enforced here yet.
+ *
+ * Returns the first puzzle that passes all checks, or `null` if all 3 attempts
+ * fail.
+ */
+export function generateCrosswordPuzzleWithRetry(
+  size: CrosswordGridSize,
+  seed: number,
+): CrosswordPuzzle | null {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const attemptSeed = hashSeed(seed + attempt * 0x45d9f3b)
+    const puzzle = generateCrosswordPuzzle(size, attemptSeed)
+    if (hasSufficientFill(puzzle.grid)) {
+      return puzzle
+    }
+  }
+  return null
 }

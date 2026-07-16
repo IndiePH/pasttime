@@ -1,7 +1,7 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { Switch } from "@/components/ui/switch"
 
 interface SettingsToggleFieldProps {
   className?: string
@@ -27,32 +27,11 @@ export function SettingsToggleField({
             <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
           ) : null}
         </div>
-        <div
-          className="flex shrink-0 gap-1"
-          role="group"
-          aria-label={label}
-        >
-          <Button
-            type="button"
-            size="sm"
-            variant={value ? "outline" : "default"}
-            className="min-w-12"
-            aria-pressed={!value}
-            onClick={() => onValueChange(false)}
-          >
-            Off
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant={value ? "default" : "outline"}
-            className="min-w-12"
-            aria-pressed={value}
-            onClick={() => onValueChange(true)}
-          >
-            On
-          </Button>
-        </div>
+        <Switch
+          checked={value}
+          onCheckedChange={onValueChange}
+          className="shrink-0"
+        />
       </div>
     </div>
   )

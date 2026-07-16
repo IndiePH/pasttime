@@ -1,10 +1,12 @@
-/** Maximum guesses per Word Guess round. */
-export const WORD_GUESS_MAX_TRIES = 6
-
 /** Allowed word lengths for Word Guess sessions. */
-export const WORD_GUESS_LENGTHS = [3, 4, 5, 6, 7, 8, 9, 10] as const
+export const WORD_GUESS_LENGTHS = [5, 6, 7, 8, 9, 10] as const
 
 export type WordGuessLength = (typeof WORD_GUESS_LENGTHS)[number]
+
+/** Maximum guesses per round scales with word length: length + 1. */
+export function getWordGuessMaxTries(length: WordGuessLength): number {
+  return length + 1
+}
 
 export const WORD_GUESS_LENGTH_DEFAULT: WordGuessLength = 5
 

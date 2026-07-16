@@ -1,3 +1,6 @@
+"use client"
+
+import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export type WordGuessBoardTileState =
@@ -10,6 +13,8 @@ export type WordGuessBoardTileState =
 interface WordGuessTileProps {
   letter: string
   state: WordGuessBoardTileState
+  flip?: boolean
+  flipIndex?: number
 }
 
 const TILE_STATE_CLASS_NAME: Record<WordGuessBoardTileState, string> = {
@@ -37,7 +42,49 @@ function tileStateLabel(state: WordGuessBoardTileState): string {
   return "empty"
 }
 
-export function WordGuessTile({ letter, state }: WordGuessTileProps) {
+export function WordGuessTile({
+  letter,
+  state,
+  flip = false,
+  flipIndex = 0,
+}: WordGuessTileProps) {
+  const [revealed, setRevealed] = React.useState(false)
+  const [prevFlip, setPrevFlip] = React.useState(flip)
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Detect reduced motion preference
+  const prefersReducedMotion = React.useRef(
+    typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  )
+
+  // When a new flip animation starts, hold the "filled" state
+  // until the midpoint of the stagger-delayed animation (200ms + stagger).
+  // Reset the reveal state during render when the flip prop changes (the
+  // React "adjust state during render" pattern) so the effect below only
+  // schedules the reveal timer without calling setState synchronously.
+  if (flip !== prevFlip) {
+    setPrevFlip(flip)
+    if (flip) setRevealed(false)
+  }
+  React.useEffect(() => {
+    if (!flip) return
+
+      // Reveal color at the midpoint of the flip animation.
+      // The CSS keyframe reaches 50% (rotateX -90°) at 200ms, which is
+      // the ideal moment to swap the visible face.
+      // For reduced motion, reveal immediately (no animation to wait for).
+      const revealMs = prefersReducedMotion.current ? 0 : flipIndex * 80 + 200
+      timerRef.current = setTimeout(() => setRevealed(true), revealMs)
+
+      return () => {
+        if (timerRef.current) clearTimeout(timerRef.current)
+      }
+  }, [flip, flipIndex])
+
+  // During an active flip, show "filled" until the midpoint reveal
+  const displayState = flip && !revealed ? "filled" : state
+
   const normalizedLetter = letter.toUpperCase()
   const displayLetter = normalizedLetter || "\u00a0"
   const ariaLabel = normalizedLetter
@@ -48,7 +95,9 @@ export function WordGuessTile({ letter, state }: WordGuessTileProps) {
     <span
       className={cn(
         "flex size-11 items-center justify-center rounded border text-lg font-semibold tracking-wide uppercase transition-colors sm:size-12",
-        TILE_STATE_CLASS_NAME[state],
+        TILE_STATE_CLASS_NAME[displayState],
+        flip && "word-guess-tile-flip",
+        flip && `word-guess-tile-flip-delay-${Math.min(flipIndex, 9)}`,
       )}
       aria-label={ariaLabel}
     >

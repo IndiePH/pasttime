@@ -7,6 +7,8 @@ import type { WordGuessRoundState } from "./types"
 export interface StoredWordGuessGame {
   round: WordGuessRoundState
   currentGuess: string
+  /** Mirrors round.status for universal useDailyCompleted hook. */
+  status: WordGuessRoundState["status"]
 }
 
 function isWordGuessRoundState(
@@ -23,6 +25,7 @@ function isWordGuessRoundState(
     typeof record.answer === "string" &&
     record.length === length &&
     record.mode === mode &&
+    (record.hardMode === undefined || typeof record.hardMode === "boolean") &&
     typeof record.maxTries === "number" &&
     Array.isArray(record.guesses) &&
     (record.status === "playing" ||
@@ -52,9 +55,13 @@ export function parseStoredWordGuessGame(
     return null
   }
 
+  // Normalise hardMode so it's always defined, not undefined
+  const normalizedRound = { ...round, hardMode: round.hardMode ?? false }
+
   return {
-    round,
+    round: normalizedRound,
     currentGuess,
+    status: round.status,
   }
 }
 
@@ -74,7 +81,10 @@ export function getWordGuessSoloStorageKey(
   mode: WordGuessRoundMode,
   date = new Date(),
 ): string {
-  return `word-guess:solo:${mode}:${wordLength}:${getWordGuessStorageScope(mode, date)}`
+  if (mode === "random") {
+    return "word-guess:solo:random:session"
+  }
+  return `word-guess:solo:daily:${wordLength}:${getWordGuessStorageScope(mode, date)}`
 }
 
 export function isWordGuessDailyRoundFinished(

@@ -6,7 +6,7 @@ import {
 
 import { CROSSWORD_GRID_SIZE_DEFAULT } from "@pasttime/domain/games/crossword"
 
-const MODE_QUERY_VALUES = ["daily", "random"] as [string, ...string[]]
+const MODE_QUERY_VALUES = ["daily", "random"] as const
 
 export const crosswordSearchParams = {
   size: parseAsInteger.withDefault(CROSSWORD_GRID_SIZE_DEFAULT).withOptions({ scroll: false }),

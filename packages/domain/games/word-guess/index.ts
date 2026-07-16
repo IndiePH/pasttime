@@ -1,6 +1,7 @@
 export {
   formatWordGuessRoundModeLabel,
   formatWordLengthLabel,
+  getWordGuessMaxTries,
   isWordGuessRoundMode,
   isWordGuessLength,
   parseWordGuessRoundMode,
@@ -9,7 +10,6 @@ export {
   WORD_GUESS_ROUND_MODES,
   WORD_GUESS_LENGTH_DEFAULT,
   WORD_GUESS_LENGTHS,
-  WORD_GUESS_MAX_TRIES,
 } from "./settings"
 export type { WordGuessLength, WordGuessRoundMode } from "./settings"
 export {

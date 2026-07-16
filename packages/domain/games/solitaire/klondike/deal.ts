@@ -1,7 +1,7 @@
 import { createKlondikeDeck, shuffleKlondikeDeck } from "./deck"
 import type { KlondikeState } from "./types"
 
-export function dealKlondikeState(seed: number | null): KlondikeState {
+export function dealKlondikeState(seed: number | null, drawCount: 1 | 3 = 1): KlondikeState {
   const shuffled = shuffleKlondikeDeck(createKlondikeDeck(), seed)
   const tableau: KlondikeState["tableau"] = [[], [], [], [], [], [], []]
   let cursor = 0
@@ -34,5 +34,6 @@ export function dealKlondikeState(seed: number | null): KlondikeState {
     status: "playing",
     moves: 0,
     seed,
+    drawCount,
   }
 }

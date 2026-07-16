@@ -15,6 +15,14 @@ export interface CrosswordPlayPreferencesContextValue {
   setShowErrors: (value: boolean) => void
   autoCheck: boolean
   setAutoCheck: (value: boolean) => void
+  showWordSpanHighlight: boolean
+  setShowWordSpanHighlight: (value: boolean) => void
+  showCornerArrowGlyph: boolean
+  setShowCornerArrowGlyph: (value: boolean) => void
+  showDirectionBorderColor: boolean
+  setShowDirectionBorderColor: (value: boolean) => void
+  blinkActiveClue: boolean
+  setBlinkActiveClue: (value: boolean) => void
 }
 
 const CrosswordPlayPreferencesContext =
@@ -55,14 +63,79 @@ export function CrosswordPlayPreferencesProvider({
     [storage],
   )
 
+  const setShowWordSpanHighlight = React.useCallback(
+    (value: boolean) => {
+      setPrefs((prev) => {
+        const next = { ...prev, showWordSpanHighlight: value }
+        writeCrosswordPlayPreferences(storage.set.bind(storage), next)
+        return next
+      })
+    },
+    [storage],
+  )
+
+  const setShowCornerArrowGlyph = React.useCallback(
+    (value: boolean) => {
+      setPrefs((prev) => {
+        const next = { ...prev, showCornerArrowGlyph: value }
+        writeCrosswordPlayPreferences(storage.set.bind(storage), next)
+        return next
+      })
+    },
+    [storage],
+  )
+
+  const setShowDirectionBorderColor = React.useCallback(
+    (value: boolean) => {
+      setPrefs((prev) => {
+        const next = { ...prev, showDirectionBorderColor: value }
+        writeCrosswordPlayPreferences(storage.set.bind(storage), next)
+        return next
+      })
+    },
+    [storage],
+  )
+
+  const setBlinkActiveClue = React.useCallback(
+    (value: boolean) => {
+      setPrefs((prev) => {
+        const next = { ...prev, blinkActiveClue: value }
+        writeCrosswordPlayPreferences(storage.set.bind(storage), next)
+        return next
+      })
+    },
+    [storage],
+  )
+
   const value = React.useMemo(
     () => ({
       showErrors: prefs.showErrors,
       setShowErrors,
       autoCheck: prefs.autoCheck,
       setAutoCheck,
+      showWordSpanHighlight: prefs.showWordSpanHighlight,
+      setShowWordSpanHighlight,
+      showCornerArrowGlyph: prefs.showCornerArrowGlyph,
+      setShowCornerArrowGlyph,
+      showDirectionBorderColor: prefs.showDirectionBorderColor,
+      setShowDirectionBorderColor,
+      blinkActiveClue: prefs.blinkActiveClue,
+      setBlinkActiveClue,
     }),
-    [prefs.showErrors, prefs.autoCheck, setShowErrors, setAutoCheck],
+    [
+      prefs.showErrors,
+      prefs.autoCheck,
+      setShowErrors,
+      setAutoCheck,
+      prefs.showWordSpanHighlight,
+      prefs.showCornerArrowGlyph,
+      prefs.showDirectionBorderColor,
+      prefs.blinkActiveClue,
+      setShowWordSpanHighlight,
+      setShowCornerArrowGlyph,
+      setShowDirectionBorderColor,
+      setBlinkActiveClue,
+    ],
   )
 
   return (

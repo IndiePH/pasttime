@@ -12,8 +12,6 @@ function getDictionaryWordsByLength(length: WordGuessLength): readonly string[] 
 }
 
 const WORD_GUESS_DICTIONARY: WordGuessDictionary = {
-  3: getDictionaryWordsByLength(3),
-  4: getDictionaryWordsByLength(4),
   5: getDictionaryWordsByLength(5),
   6: getDictionaryWordsByLength(6),
   7: getDictionaryWordsByLength(7),

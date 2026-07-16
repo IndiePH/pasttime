@@ -24,6 +24,7 @@ export interface KlondikeAutoCompleteMove {
 
 interface CreateKlondikeGameOptions {
   seed?: number | null
+  drawCount?: 1 | 3
 }
 
 function cloneState(state: KlondikeState): KlondikeState {
@@ -94,7 +95,7 @@ function flipTopTableauCard(state: KlondikeState, index: number): void {
   const column = state.tableau[index]
   const top = column[column.length - 1]
   if (top && !top.faceUp) {
-    top.faceUp = true
+    column[column.length - 1] = { ...top, faceUp: true }
   }
 }
 
@@ -123,8 +124,8 @@ function appendCards(
 export function createKlondikeGame(
   options: CreateKlondikeGameOptions = {},
 ): KlondikeState {
-  const seed = options.seed ?? null
-  return dealKlondikeState(seed)
+  const { seed = null, drawCount = 1 } = options
+  return dealKlondikeState(seed, drawCount)
 }
 
 export function canApplyKlondikeMove(
@@ -149,12 +150,10 @@ export function applyKlondikeMove(
       return reject("empty-stock")
     }
 
-    const drawn = next.stock.pop()
-    if (!drawn) {
-      return reject("empty-stock")
-    }
+    const count = Math.min(next.stock.length, next.drawCount)
+    const drawn = next.stock.splice(-count, count)
+    next.waste.push(...drawn.map((card) => ({ ...card, faceUp: true })))
 
-    next.waste.push({ ...drawn, faceUp: true })
     return { ok: true, state: finalizeState(withMove(next)) }
   }
 

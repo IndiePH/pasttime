@@ -69,6 +69,49 @@ function HookHarness() {
   )
 }
 
+function HardModeHookHarness() {
+  const game = useWordGuessGame({
+    wordLength: 5,
+    roundMode: "random",
+    hardMode: true,
+  })
+
+  return (
+    <div>
+      <p data-testid="guess-count">{game.round.guesses.length}</p>
+      <p data-testid="feedback">{game.feedback ?? ""}</p>
+      <p data-testid="hard-mode">{game.round.hardMode ? "true" : "false"}</p>
+      <button type="button" onClick={() => game.addLetter("A")}>
+        A
+      </button>
+      <button type="button" onClick={() => game.addLetter("P")}>
+        P
+      </button>
+      <button type="button" onClick={() => game.addLetter("P")}>
+        P
+      </button>
+      <button type="button" onClick={() => game.addLetter("L")}>
+        L
+      </button>
+      <button type="button" onClick={() => game.addLetter("E")}>
+        E
+      </button>
+      <button type="button" onClick={() => game.addLetter("X")}>
+        X
+      </button>
+      <button type="button" onClick={() => game.addLetter("Z")}>
+        Z
+      </button>
+      <button type="button" onClick={game.submitGuess}>
+        Submit
+      </button>
+      <button type="button" onClick={game.removeLetter}>
+        Remove
+      </button>
+    </div>
+  )
+}
+
 describe("useWordGuessGame", () => {
   beforeEach(() => {
     storageMap.clear()
@@ -104,5 +147,22 @@ describe("useWordGuessGame", () => {
 
     expect(screen.getByTestId("guess-count").textContent).toBe("0")
     expect(screen.getByTestId("feedback").textContent).toBe("Word not in dictionary.")
+  })
+})
+
+describe("hard mode", () => {
+  beforeEach(() => {
+    storageMap.clear()
+  })
+
+  afterEach(() => {
+    cleanup()
+  })
+
+  it("propagates hardMode through the hook to round state", () => {
+    render(<HardModeHookHarness />)
+
+    const feedbackEl = screen.getByTestId("hard-mode")
+    expect(feedbackEl.textContent).toBe("true")
   })
 })

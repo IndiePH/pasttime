@@ -68,7 +68,7 @@ async function main() {
   // 1. canonical word universe (for length bucketing / validation)
   const target = await readJson(TARGET_PATH)
   const targetWords = new Set()
-  for (const [len, words] of Object.entries(target)) {
+  for (const words of Object.values(target)) {
     for (const w of words) targetWords.add(String(w).toUpperCase())
   }
   console.log(`   target universe: ${targetWords.size} words`)

@@ -14,9 +14,9 @@ interface CrosswordSettingsWidgetProps {
 export function CrosswordSettingsWidget({
   className,
 }: CrosswordSettingsWidgetProps) {
-  const [draftSize, setDraftSize] = React.useState<5 | 7 | 9 | 11 | 13 | 15>(15)
+  const [draftSize, setDraftSize] = React.useState<7 | 9 | 11 | 13 | 15>(15)
   const [sizeParam, setSizeParam] = useQueryState("size", crosswordSearchParams.size)
-  const appliedSize = (sizeParam ?? 15) as 5 | 7 | 9 | 11 | 13 | 15
+  const appliedSize = (sizeParam ?? 7) as 7 | 9 | 11 | 13 | 15
   const hasPendingChanges = draftSize !== appliedSize
 
   const handleOpen = React.useCallback(() => {
@@ -44,7 +44,7 @@ export function CrosswordSettingsWidget({
       applyDisabled={!hasPendingChanges}
     >
       <div className="flex flex-wrap gap-2">
-        {[5, 7, 9, 11, 13, 15].map((s) => {
+        {[7, 9, 11, 13, 15].map((s) => {
           const isActive = draftSize === s
           return (
             <Button

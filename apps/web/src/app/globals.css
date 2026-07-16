@@ -156,6 +156,44 @@
   animation: word-guess-row-shake 320ms ease-in-out;
 }
 
+/* ── Word Guess tile flip animation ────────────────────────────── */
+
+@keyframes word-guess-tile-flip {
+  0% {
+    transform: perspective(400px) rotateX(0deg);
+  }
+  50% {
+    transform: perspective(400px) rotateX(-90deg);
+  }
+  100% {
+    transform: perspective(400px) rotateX(0deg);
+  }
+}
+
+.word-guess-tile-flip {
+  animation: word-guess-tile-flip 400ms ease-in-out;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Stagger animation delay for tile columns */
+.word-guess-tile-flip-delay-0 { animation-delay: 0ms; }
+.word-guess-tile-flip-delay-1 { animation-delay: 80ms; }
+.word-guess-tile-flip-delay-2 { animation-delay: 160ms; }
+.word-guess-tile-flip-delay-3 { animation-delay: 240ms; }
+.word-guess-tile-flip-delay-4 { animation-delay: 320ms; }
+.word-guess-tile-flip-delay-5 { animation-delay: 400ms; }
+.word-guess-tile-flip-delay-6 { animation-delay: 480ms; }
+.word-guess-tile-flip-delay-7 { animation-delay: 560ms; }
+.word-guess-tile-flip-delay-8 { animation-delay: 640ms; }
+.word-guess-tile-flip-delay-9 { animation-delay: 720ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .word-guess-tile-flip {
+    animation: none;
+  }
+}
+
 /* Board play pages: hug measured content, grow vertically when taller. */
 .game-play-board {
   box-sizing: border-box;

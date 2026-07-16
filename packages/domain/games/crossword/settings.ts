@@ -1,6 +1,6 @@
 import { getDailySeed } from "../../daily"
 
-import { generateCrosswordPuzzle } from "./generator"
+import { generateCrosswordPuzzleWithRetry } from "./generator"
 import type {
   CrosswordGameState,
   CrosswordGridSize,
@@ -10,7 +10,7 @@ import type {
 
 export type { CrosswordGridSize, CrosswordRoundMode } from "./types"
 
-export const CROSSWORD_GRID_SIZE_DEFAULT: CrosswordGridSize = 15
+export const CROSSWORD_GRID_SIZE_DEFAULT: CrosswordGridSize = 7
 
 export const CROSSWORD_ROUND_MODE_DEFAULT: CrosswordRoundMode = "daily"
 
@@ -32,7 +32,14 @@ export function createCrosswordPuzzle(
   mode?: CrosswordRoundMode,
   date?: Date,
 ): CrosswordPuzzle {
-  return generateCrosswordPuzzle(size, resolveSeed(mode, date))
+  const seed = resolveSeed(mode, date)
+  const puzzle = generateCrosswordPuzzleWithRetry(size, seed)
+  if (!puzzle) {
+    throw new Error(
+      `Failed to generate a valid crossword puzzle (size=${size}, seed=${seed}) after 3 attempts`,
+    )
+  }
+  return puzzle
 }
 
 export function createCrosswordGameState(

@@ -11,6 +11,7 @@ import {
 import { GameSettingsWidget } from "@/features/games/components/game-settings-widget"
 import { WordLengthPicker } from "@/features/games/word-guess/components/word-length-picker"
 import { wordGuessSearchParams } from "@/features/games/word-guess/search-params"
+import { Switch } from "@/components/ui/switch"
 
 interface WordGuessSettingsWidgetProps {
   className?: string
@@ -21,27 +22,35 @@ export function WordGuessSettingsWidget({
 }: WordGuessSettingsWidgetProps) {
   const [draftLength, setDraftLength] =
     React.useState<WordGuessLength>(WORD_GUESS_LENGTH_DEFAULT)
+  const [draftHardMode, setDraftHardMode] = React.useState(false)
   const [lettersParam, setLettersParam] = useQueryState(
     "letters",
     wordGuessSearchParams.letters,
   )
+  const [hardModeParam, setHardModeParam] = useQueryState(
+    "hardMode",
+    wordGuessSearchParams.hardMode,
+  )
   const appliedLength = Number(lettersParam) as WordGuessLength
-  const hasPendingChanges = draftLength !== appliedLength
+  const appliedHardMode: boolean = hardModeParam ?? false
+  const hasPendingChanges = draftLength !== appliedLength || draftHardMode !== appliedHardMode
 
   const handleOpen = React.useCallback(() => {
     setDraftLength(appliedLength)
-  }, [appliedLength])
+    setDraftHardMode(appliedHardMode)
+  }, [appliedLength, appliedHardMode])
 
   const handleApply = React.useCallback(() => {
     setLettersParam(String(draftLength))
-  }, [draftLength, setLettersParam])
+    setHardModeParam(draftHardMode || null)
+  }, [draftLength, draftHardMode, setLettersParam, setHardModeParam])
 
   return (
     <GameSettingsWidget
       className={className}
       panelId="word-guess-settings-panel"
       description="Word length for this session."
-      summary={formatWordLengthLabel(appliedLength)}
+      summary={`${formatWordLengthLabel(appliedLength)}${appliedHardMode ? " · Hard mode" : ""}`}
       onOpen={handleOpen}
       onApply={handleApply}
       applyDisabled={!hasPendingChanges}
@@ -51,6 +60,22 @@ export function WordGuessSettingsWidget({
         value={draftLength}
         onValueChange={setDraftLength}
       />
+
+      <div className="flex items-center justify-between gap-4 rounded-lg border p-3">
+        <div className="space-y-0.5">
+          <p className="text-sm font-medium">
+            Hard mode
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Correctly placed letters must be reused in the same positions for
+            all subsequent guesses.
+          </p>
+        </div>
+        <Switch
+          checked={draftHardMode}
+          onCheckedChange={setDraftHardMode}
+        />
+      </div>
     </GameSettingsWidget>
   )
 }

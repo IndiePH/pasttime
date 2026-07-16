@@ -1,4 +1,4 @@
-export { getCellKey, isCellFilled } from "./types"
+export { getCellKey, isCellFilled, CROSSWORD_DEFAULT_SIZE } from "./types"
 export type {
   CrosswordCell,
   CrosswordCellType,
@@ -28,6 +28,7 @@ export {
   writeCrosswordPlayPreferences,
 } from "./play-preferences"
 export type { CrosswordPlayPreferences } from "./play-preferences"
+export { generateCrosswordPuzzleWithRetry } from "./generator"
 export {
   isCrosswordComplete,
   isCrosswordSolved,

@@ -42,6 +42,7 @@ function baseState(overrides: TestOverrides = {}): KlondikeState {
     status: "playing",
     moves: 0,
     seed: 42,
+    drawCount: 1,
     ...(rest as Partial<KlondikeState>),
   }
 }
@@ -436,5 +437,103 @@ describe("applyKlondikeAutoStack", () => {
     expect(next.tableau[0]).toHaveLength(0)
     expect(next.tableau[1]).toHaveLength(0)
     expect(next.moves).toBeGreaterThan(0)
+  })
+})
+
+describe("draw-3 behavior", () => {
+  it("draws 3 cards from stock when drawCount is 3", () => {
+    const state = baseState({
+      stock: [
+        card("s1", "club", 1, false),
+        card("s2", "diamond", 2, false),
+        card("s3", "heart", 3, false),
+        card("s4", "spade", 4, false),
+        card("s5", "club", 5, false),
+      ],
+      waste: [],
+      drawCount: 3,
+    })
+
+    const result = applyKlondikeMove(state, { type: "draw" })
+
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.state.stock).toHaveLength(2)
+      expect(result.state.waste).toHaveLength(3)
+      expect(result.state.waste.map((c) => c.faceUp)).toEqual([true, true, true])
+      expect(result.state.moves).toBe(1)
+    }
+  })
+
+  it("draws remaining cards when stock < drawCount (partial draw)", () => {
+    const state = baseState({
+      stock: [
+        card("s1", "club", 1, false),
+      ],
+      waste: [],
+      drawCount: 3,
+    })
+
+    const result = applyKlondikeMove(state, { type: "draw" })
+
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.state.stock).toHaveLength(0)
+      expect(result.state.waste).toHaveLength(1)
+      expect(result.state.waste[0]?.faceUp).toBe(true)
+    }
+  })
+
+  it("draw-1 with drawCount 1 draws a single card (unchanged behavior)", () => {
+    const state = baseState({
+      stock: [
+        card("s1", "club", 1, false),
+        card("s2", "diamond", 2, false),
+      ],
+      waste: [],
+      drawCount: 1,
+    })
+
+    const result = applyKlondikeMove(state, { type: "draw" })
+
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.state.stock).toHaveLength(1)
+      expect(result.state.waste).toHaveLength(1)
+    }
+  })
+
+  it("recycle is unaffected by drawCount after draw-3", () => {
+    const state = baseState({
+      stock: [],
+      waste: [
+        card("w1", "heart", 3, true),
+        card("w2", "club", 9, true),
+        card("w3", "diamond", 5, true),
+      ],
+      drawCount: 3,
+    })
+
+    const result = applyKlondikeMove(state, { type: "recycle" })
+
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.state.waste).toHaveLength(0)
+      expect(result.state.stock).toHaveLength(3)
+      expect(result.state.stock.every((c) => !c.faceUp)).toBe(true)
+      // Reversed order
+      expect(result.state.stock[0]?.id).toBe("w3")
+      expect(result.state.stock[2]?.id).toBe("w1")
+    }
+  })
+
+  it("createKlondikeGame accepts drawCount option", () => {
+    const state = createKlondikeGame({ seed: 42, drawCount: 3 })
+    expect(state.drawCount).toBe(3)
+  })
+
+  it("drawCount defaults to 1 when not provided", () => {
+    const state = createKlondikeGame({ seed: 42 })
+    expect(state.drawCount).toBe(1)
   })
 })

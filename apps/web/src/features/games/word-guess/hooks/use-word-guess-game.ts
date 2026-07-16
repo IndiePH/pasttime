@@ -13,6 +13,7 @@ import {
   type WordGuessRoundMode,
   type WordGuessRoundState,
 } from "@pasttime/domain/games/word-guess"
+import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
 import { useStorage } from "@/infrastructure/storage"
 import type { WordGuessBoardRow } from "@/features/games/word-guess/components/word-guess-board"
 
@@ -21,6 +22,7 @@ type KeyboardStates = Partial<Record<string, WordGuessLetterState>>
 interface UseWordGuessGameOptions {
   wordLength: WordGuessLength
   roundMode: WordGuessRoundMode
+  hardMode?: boolean
 }
 
 const LETTER_PATTERN = /^[A-Z]$/
@@ -31,8 +33,8 @@ const KEY_STATE_PRIORITY: Record<WordGuessLetterState, number> = {
   correct: 3,
 }
 
-function createRound(length: WordGuessLength, mode: WordGuessRoundMode): WordGuessRoundState {
-  return createWordGuessRound({ length, mode })
+function createRound(length: WordGuessLength, mode: WordGuessRoundMode, hardMode: boolean): WordGuessRoundState {
+  return createWordGuessRound({ length, mode, hardMode })
 }
 
 function buildBoardRows(
@@ -103,12 +105,17 @@ function messageForInvalidGuess(length: WordGuessLength, reason: string): string
     return "Word not in dictionary."
   }
 
+  if (reason === "locked-letters-violation") {
+    return "Must reuse correctly-placed letters in the same positions"
+  }
+
   return "Round is complete. Start a new one."
 }
 
 export function useWordGuessGame({
   wordLength,
   roundMode,
+  hardMode = false,
 }: UseWordGuessGameOptions) {
   const storage = useStorage()
   const storageKey = React.useMemo(
@@ -116,13 +123,20 @@ export function useWordGuessGame({
     [roundMode, wordLength],
   )
   const initialGame = React.useMemo(() => {
-    return (
-      parseStoredWordGuessGame(storage.get<unknown>(storageKey), wordLength, roundMode) ?? {
-        round: createRound(wordLength, roundMode),
-        currentGuess: "",
-      }
+    const stored = parseStoredWordGuessGame(
+      storage.get<unknown>(storageKey),
+      wordLength,
+      roundMode,
     )
-  }, [roundMode, storage, storageKey, wordLength])
+    // Only reuse stored game if hardMode matches — otherwise start fresh
+    if (stored && stored.round.hardMode === hardMode) {
+      return stored
+    }
+    return {
+      round: createRound(wordLength, roundMode, hardMode),
+      currentGuess: "",
+    }
+  }, [roundMode, storage, storageKey, wordLength, hardMode])
   const [round, setRound] = React.useState<WordGuessRoundState>(initialGame.round)
   const [currentGuess, setCurrentGuess] = React.useState(initialGame.currentGuess)
   const [feedback, setFeedback] = React.useState<string | null>(null)
@@ -135,6 +149,7 @@ export function useWordGuessGame({
     storage.set(storageKey, {
       round,
       currentGuess,
+      status: round.status,
     })
   }, [currentGuess, round, storage, storageKey])
 
@@ -172,9 +187,20 @@ export function useWordGuessGame({
     setFeedback(null)
   }, [isPlaying])
 
+  const [flipRowIndex, setFlipRowIndex] = React.useState<number | null>(null)
+  const [flipTrigger, setFlipTrigger] = React.useState(0)
+
   const submitGuess = React.useCallback(() => {
     const result = submitWordGuessGuess(round, currentGuess)
     if (!result.ok) {
+      if (result.reason === "locked-letters-violation") {
+        setFeedback("Must reuse correctly-placed letters in the same positions")
+        setInvalidWordShake((prev) => ({
+          rowIndex: round.guesses.length,
+          trigger: (prev?.trigger ?? 0) + 1,
+        }))
+        return
+      }
       setFeedback(messageForInvalidGuess(wordLength, result.reason))
       if (result.reason === "invalid-word") {
         setInvalidWordShake((prev) => ({
@@ -186,6 +212,8 @@ export function useWordGuessGame({
     }
 
     setInvalidWordShake(null)
+    setFlipRowIndex(result.round.guesses.length - 1)
+    setFlipTrigger((prev) => prev + 1)
     setRound(result.round)
     setCurrentGuess("")
     if (result.round.status === "won") {
@@ -193,7 +221,7 @@ export function useWordGuessGame({
       return
     }
     if (result.round.status === "lost") {
-      setFeedback(`Round over. Answer was ${result.round.answer}.`)
+      setFeedback("Round over.")
       return
     }
 
@@ -201,11 +229,11 @@ export function useWordGuessGame({
   }, [currentGuess, round, wordLength])
 
   const resetRound = React.useCallback(() => {
-    setRound(createRound(wordLength, roundMode))
+    setRound(createRound(wordLength, roundMode, hardMode))
     setCurrentGuess("")
     setFeedback(null)
     setInvalidWordShake(null)
-  }, [roundMode, wordLength])
+  }, [roundMode, wordLength, hardMode])
 
   React.useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -253,12 +281,32 @@ export function useWordGuessGame({
     [round.guesses],
   )
 
+  // Guess distribution for engagement recording: array of length maxTries
+  // where index = guesses.length - 1 has value 1 (solved in N tries)
+  const guessDistribution = React.useMemo(() => {
+    if (round.status !== "won") return undefined
+    const dist = new Array(round.maxTries).fill(0)
+    dist[round.guesses.length - 1] = 1
+    return dist
+  }, [round.status, round.guesses.length, round.maxTries])
+
+  // Record daily completions for engagement tracking
+  useEngagementRecorder({
+    gameId: "word-guess",
+    variant: String(wordLength),
+    status: round.status,
+    isDaily: roundMode === "daily",
+    guessDistribution,
+  })
+
   return {
     attemptsUsed,
     boardRows,
     canSubmit: isPlaying && currentGuess.length === wordLength,
     currentGuess,
     feedback,
+    flipRowIndex,
+    flipTrigger,
     invalidWordShake,
     isPlaying,
     keyboardStates,

@@ -5,7 +5,7 @@ import { useQueryState } from "nuqs"
 import type { GameDefinition } from "@pasttime/domain/games"
 import {
   formatWordLengthLabel,
-  WORD_GUESS_MAX_TRIES,
+  getWordGuessMaxTries,
   type WordGuessLength,
 } from "@pasttime/domain/games/word-guess"
 import { cn } from "@/lib/utils"
@@ -48,13 +48,13 @@ export function WordGuessHowToPlay({ game }: { game: GameDefinition }) {
     wordGuessSearchParams.letters,
   )
   const wordLength = Number(lettersParam) as WordGuessLength
+  const maxTries = getWordGuessMaxTries(wordLength)
 
   return (
     <div className="space-y-5 text-sm">
       <p className="text-muted-foreground">
-        Guess the hidden {formatWordLengthLabel(wordLength)} in{" "}
-        {WORD_GUESS_MAX_TRIES} tries. Each guess must be a real word with the
-        same number of letters.
+        Guess the hidden {formatWordLengthLabel(wordLength)} in {maxTries}{" "}
+        tries. Each guess must be a real word with the same number of letters.
       </p>
 
       <section>
@@ -67,7 +67,7 @@ export function WordGuessHowToPlay({ game }: { game: GameDefinition }) {
           </li>
           <li>
             Win by finding the word before you run out of rows; lose if all{" "}
-            {WORD_GUESS_MAX_TRIES} guesses are used.
+            {maxTries} guesses are used.
           </li>
         </ol>
       </section>

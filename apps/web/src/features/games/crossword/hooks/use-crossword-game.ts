@@ -2,18 +2,22 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 
+import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
 import { useStorage } from "@/infrastructure/storage"
 import type {
   CrosswordCell,
+  CrosswordDirection,
   CrosswordGameState,
   CrosswordGridSize,
   CrosswordRoundMode,
 } from "@pasttime/domain/games/crossword"
 import {
   createCrosswordGameState,
+  findClueAtCell,
   getCellKey,
   isCellFilled,
   resolveCrosswordStatus,
+  resolveDirection,
 } from "@pasttime/domain/games/crossword"
 
 const CROSSWORD_STORAGE_KEY = (
@@ -54,16 +58,48 @@ export function useCrosswordGame(
 
   const [gameState, setGameState] = useState<CrosswordGameState>(initialState)
 
-  // Persist on every state change (like klondike).
+  // Ephemeral direction state — re-derived on reload (D-09). Lazy-initialises
+  // across-first from the persisted activeCell (D-03).
+  const [direction, setDirection] = useState<CrosswordDirection>(() =>
+    gameState.activeCell
+      ? resolveDirection(gameState.puzzle, gameState.activeCell, "across")
+      : "across",
+  )
+
+  // Track daily-rollover: false on initial mount (the current session is valid).
+  // The play view polls or checks on focus to detect rollover and show the banner.
+  const [dailyRolloverDetected] = useState(false)
+
+  // Persist on every state change for daily mode only (D-16).
+  // Endless mode is ephemeral — no state written to storage.
   useEffect(() => {
-    storage.set(storageKey, gameState)
-  }, [gameState, storage, storageKey])
+    if (mode === "daily") {
+      storage.set(storageKey, gameState)
+    }
+  }, [gameState, storage, storageKey, mode])
+
+  // Derived activeClue — never persisted, recomputed on every render (D-09).
+  const activeClue = useMemo(() => {
+    if (!gameState.activeCell) return null
+    return findClueAtCell(gameState.puzzle, gameState.activeCell, direction)
+  }, [gameState.puzzle, gameState.activeCell, direction])
 
   const newPuzzle = useCallback(() => {
-    storage.remove(storageKey)
-    const next = createCrosswordGameState(size, mode)
-    setGameState(next)
-  }, [size, mode, storage, storageKey])
+    if (mode === "daily") {
+      // Daily mode: reset inputs but keep the same puzzle (D-14).
+      // The puzzle is deterministic from the date seed so it stays the same.
+      setGameState((prev) => ({
+        ...prev,
+        inputs: {},
+        status: "playing" as const,
+      }))
+    } else {
+      // Endless mode: generate a fresh random puzzle with a new seed (D-14).
+      storage.remove(storageKey)
+      const next = createCrosswordGameState(size, "random")
+      setGameState(next)
+    }
+  }, [mode, size, storage, storageKey])
 
   const updateInput = useCallback(
     (row: number, col: number, value: string) => {
@@ -97,8 +133,11 @@ export function useCrosswordGame(
         ...prev,
         activeCell: cell ?? undefined,
       }))
+      if (cell) {
+        setDirection((d) => resolveDirection(gameState.puzzle, cell, d))
+      }
     },
-    [],
+    [gameState.puzzle],
   )
 
   const blocks = gameState
@@ -111,6 +150,14 @@ export function useCrosswordGame(
       )
     : []
 
+  // Record daily completions for engagement tracking
+  useEngagementRecorder({
+    gameId: "crossword",
+    variant: String(size),
+    status: gameState.status,
+    isDaily: mode === "daily",
+  })
+
   return {
     gameState,
     newPuzzle,
@@ -118,6 +165,10 @@ export function useCrosswordGame(
     recheckStatus,
     blocks,
     setActiveCell,
+    direction,
+    setDirection,
+    activeClue,
+    dailyRolloverDetected,
   }
 }
 

@@ -14,6 +14,7 @@ import {
   type KlondikeState,
   type KlondikeTableauIndex,
 } from "@pasttime/domain/games/solitaire"
+import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
 import { useStorage } from "@/infrastructure/storage"
 import { useKlondikeFoundationFly } from "@/features/games/solitaire/hooks/use-klondike-foundation-fly"
 import { useSolitairePlayPreferencesContext } from "@/features/games/solitaire/context/solitaire-play-preferences-context"
@@ -28,7 +29,10 @@ const STORAGE_KEY = "solitaire:klondike:session"
 
 type FoundationFlyQueueMode = "auto-stack" | "auto-complete" | null
 
-function isKlondikeState(value: unknown): value is KlondikeState {
+function isKlondikeState(
+  value: unknown,
+  expectedDrawCount?: 1 | 3,
+): value is KlondikeState {
   if (!value || typeof value !== "object") {
     return false
   }
@@ -40,7 +44,9 @@ function isKlondikeState(value: unknown): value is KlondikeState {
     Array.isArray(record.foundations) &&
     Array.isArray(record.tableau) &&
     (record.status === "playing" || record.status === "won") &&
-    typeof record.moves === "number"
+    typeof record.moves === "number" &&
+    (record.drawCount === 1 || record.drawCount === 3) &&
+    (expectedDrawCount === undefined || record.drawCount === expectedDrawCount)
   )
 }
 
@@ -70,11 +76,20 @@ function applyUserMove(
     return { state, feedback: null, ok: false }
   }
 
-  if (result.state.status === "won") {
-    return { state: result.state, feedback: "You won!", ok: true }
+  let feedback: string | null = null
+
+  if (move.type === "draw" && result.ok) {
+    const cardsDrawn = result.state.waste.length - state.waste.length
+    if (cardsDrawn > 0) {
+      feedback = cardsDrawn === 1 ? "Drew 1 card" : `Drew ${cardsDrawn} cards`
+    }
   }
 
-  return { state: result.state, feedback: null, ok: true }
+  if (result.state.status === "won") {
+    feedback = "You won!"
+  }
+
+  return { state: result.state, feedback, ok: true }
 }
 
 function shouldQueueAutoStack(
@@ -89,13 +104,16 @@ function shouldQueueAutoStack(
   )
 }
 
-export function useKlondikeGame() {
+export function useKlondikeGame(drawCount: 1 | 3) {
   const storage = useStorage()
   const { autoStackEnabled } = useSolitairePlayPreferencesContext()
   const initialState = React.useMemo(() => {
     const stored = storage.get<unknown>(STORAGE_KEY)
-    return isKlondikeState(stored) ? stored : createKlondikeGame()
-  }, [storage])
+    if (isKlondikeState(stored, drawCount)) {
+      return stored
+    }
+    return createKlondikeGame({ drawCount })
+  }, [storage, drawCount])
   const [state, setState] = React.useState<KlondikeState>(initialState)
   const stateRef = React.useRef(state)
   const foundationFlyModeRef = React.useRef<FoundationFlyQueueMode>(null)
@@ -123,9 +141,11 @@ export function useKlondikeGame() {
       return
     }
 
+    let feedback: string | null = null
+
     setState((current) => {
       let nextState = current
-      let feedback: string | null = null
+      let fb: string | null = null
 
       for (const move of moves) {
         const next = applyUserMove(nextState, move)
@@ -135,13 +155,17 @@ export function useKlondikeGame() {
 
         nextState = next.state
         if (next.feedback) {
-          feedback = next.feedback
+          fb = next.feedback
         }
       }
 
-      setFeedback(feedback)
+      feedback = fb
       return nextState
     })
+
+    if (feedback !== null) {
+      setFeedback(feedback)
+    }
     setSelection(null)
   }, [])
 
@@ -412,10 +436,20 @@ export function useKlondikeGame() {
   const newGame = React.useCallback(() => {
     cancelFoundationFlyQueue()
     clearFoundationFlyMode()
-    setState(createKlondikeGame())
+    setState(createKlondikeGame({ drawCount }))
     setSelection(null)
     setFeedback(null)
-  }, [cancelFoundationFlyQueue, clearFoundationFlyMode])
+  }, [cancelFoundationFlyQueue, clearFoundationFlyMode, drawCount])
+
+  // Engagement recorder — disabled until solitaire gains a daily mode (STD-01).
+  // Passing isDaily: false means no completions are recorded.
+  useEngagementRecorder({
+    gameId: "solitaire",
+    variant: "klondike",
+    status: state.status,
+    isDaily: false,
+    moves: state.moves,
+  })
 
   return {
     state,
