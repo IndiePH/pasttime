@@ -45,6 +45,9 @@ Read `brain/schema.md` for the full contract. Rules:
 
 | Page | Purpose |
 |------|---------|
+| [adsense-manual-units](brain/wiki/adsense-manual-units.md) | AdSense slots, apex vs gamehub domains, ads.txt/CMP/review |
+| [classic-game-conventions](brain/wiki/classic-game-conventions.md) | Solitaire/Word Guess conventions and innovation ideas |
+| [dictionary-pipeline](brain/wiki/dictionary-pipeline.md) | Dictionary, crossword corpus, and definition pipeline |
 | [engineering-decisions](brain/wiki/engineering-decisions.md) | Architectural and tradeoff decision log |
 | [nyt-engagement-patterns](brain/wiki/nyt-engagement-patterns.md) | NYT Games engagement features analysis |
 | [percentile-ranking-patterns](brain/wiki/percentile-ranking-patterns.md) | Anonymous comparative ranking styles |
