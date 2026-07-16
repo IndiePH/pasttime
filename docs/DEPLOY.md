@@ -28,6 +28,19 @@ Gotchas:
 - **Worker script size (3 MiB free):** large lexicon JSON is served from R2 +
   D1 at runtime — see [`CONTENT-STORAGE-HANDOFF.md`](./CONTENT-STORAGE-HANDOFF.md).
 
+### AdSense (production)
+
+Set these **plain-text** Worker variables for `gamehub` (Cloudflare dashboard → Workers → gamehub → Settings → Variables, or your usual OpenNext/CF env flow). Values are public in the client bundle.
+
+| Variable | Value |
+|----------|--------|
+| `NEXT_PUBLIC_ADSENSE_CLIENT` | `ca-pub-…` (add `ca-` if AdSense shows only `pub-…`) |
+| `NEXT_PUBLIC_ADSENSE_SLOT_TOP` | Display unit ID for top strip |
+| `NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM` | Display unit ID for bottom strip |
+| `NEXT_PUBLIC_ADSENSE_SLOT_HUB` | Display unit ID for hub grid card |
+
+After deploy, check `https://gamehub.pasttime.xyz/ads.txt` — it should list your `pub-…` line. Units may stay empty until the site is approved in AdSense. Leave vars unset to keep dashed placeholders.
+
 ## Lexicon publish (R2 + D1)
 
 Runtime keys use the product-scoped prefix `shared/lexicon/v1/` in bucket
@@ -67,7 +80,8 @@ npm run lexicon:ship:content
 - `--allow-existing-setup` — bypass first-run safety check in setup mode
 
 Local `next dev` falls back to reading `packages/domain` JSON when R2/D1
-bindings are unavailable.
+bindings are unavailable, **or** when local D1 is bound but empty/unmigrated
+(common after `initOpenNextCloudflareForDev()` wires bindings without a seed).
 
 ## Data-build scripts (not part of CI)
 

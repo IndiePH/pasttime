@@ -24,6 +24,7 @@ import {
   type CrosswordGridSize,
 } from "@pasttime/domain/games/crossword"
 import { isNewDay } from "@pasttime/domain/daily"
+import { GameBoardLoading } from "@/features/games/components/game-board-loading"
 import { GameContentPanel } from "@/features/games/components/game-content-panel"
 import { GameDailyRolloverBanner } from "@/features/games/components"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
@@ -177,16 +178,7 @@ export function CrosswordPlaySession({
   const crossword = useCrosswordGame(gridSize, mode)
 
   if (crossword.loadStatus === "loading") {
-    return (
-      <Card className="crossword-vars mx-auto w-full text-left">
-        <CardHeader>
-          <CardTitle>Loading crossword…</CardTitle>
-          <CardDescription>
-            Fetching answers and clues for this puzzle.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    )
+    return <GameBoardLoading label="Loading crossword…" />
   }
 
   if (crossword.loadStatus === "error" || !crossword.gameState) {
@@ -588,14 +580,7 @@ export function CrosswordPlayView({ game, modeLabel }: CrosswordPlayViewProps) {
   if (!isMounted) {
     return (
       <GamePlayShell layout="board">
-        <Card className="crossword-vars mx-auto w-full text-left">
-          <CardHeader>
-            <CardTitle>Loading game…</CardTitle>
-            <CardDescription>
-              Preparing your board and saved progress.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+        <GameBoardLoading label="Loading crossword…" />
       </GamePlayShell>
     )
   }

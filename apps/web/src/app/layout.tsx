@@ -5,6 +5,7 @@ import Script from "next/script"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import "./globals.css"
+import { AdSenseScript } from "@/components/shared/adsense-script"
 import { ThemeProvider } from "@/components/theme-provider"
 import { StorageProvider } from "@/infrastructure/storage"
 import { cn } from "@/lib/utils"
@@ -53,6 +54,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body>
+        <AdSenseScript />
         <ThemeProvider>
           <StorageProvider>
             <NuqsAdapter>{children}</NuqsAdapter>

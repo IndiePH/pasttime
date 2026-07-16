@@ -1,4 +1,5 @@
 export { GameDailyRolloverBanner } from "./game-daily-rollover-banner"
+export { GameBoardLoading } from "./game-board-loading"
 export { GameContentPanel } from "./game-content-panel"
 export { GameHowToPlay } from "./game-how-to-play"
 export { GameLaunchActions } from "./game-launch-actions"

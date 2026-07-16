@@ -143,11 +143,20 @@ export function useCrosswordGame(
     }
 
     storage.remove(storageKey)
-    void createHydratedCrosswordGameState(size, "random").then((state) => {
-      setGameState(state)
-      setLoadedKey(storageKey)
-      setLoadError(null)
-    })
+    setLoadedKey(null)
+    setLoadError(null)
+    void createHydratedCrosswordGameState(size, "random")
+      .then((state) => {
+        setGameState(state)
+        setLoadedKey(storageKey)
+        setLoadError(null)
+      })
+      .catch((cause: unknown) => {
+        setLoadedKey(null)
+        setLoadError(
+          cause instanceof Error ? cause.message : "Failed to load crossword",
+        )
+      })
   }, [gameState, mode, size, storageKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateInput = useCallback(

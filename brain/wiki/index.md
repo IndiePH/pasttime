@@ -11,3 +11,4 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 | [percentile-ranking-patterns](percentile-ranking-patterns.md) | Anonymous percentile-based ranking styles (Wordle, Duolingo, Spotify Wrapped patterns) |
 | [classic-game-conventions](classic-game-conventions.md) | Original rules and UX of Solitaire Klondike and Word Guess, with Pasttime innovation ideas |
 | [dictionary-pipeline](dictionary-pipeline.md) | Data flow, files, and tooling for the enriched dictionary, crossword corpus, and definition fixing pipeline |
+| [adsense-manual-units](adsense-manual-units.md) | Desktop AdSense manual slots, env vars, and ads.txt for gamehub |
