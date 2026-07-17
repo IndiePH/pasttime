@@ -22,6 +22,8 @@ export function FeedbackWidget() {
   const [message, setMessage] = React.useState("")
   const [email, setEmail] = React.useState("")
   const [isSubmitted, setIsSubmitted] = React.useState(false)
+  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [submitError, setSubmitError] = React.useState<string | null>(null)
   const panelRef = React.useRef<HTMLDivElement>(null)
   const triggerRef = React.useRef<HTMLButtonElement>(null)
 
@@ -30,6 +32,8 @@ export function FeedbackWidget() {
     setMessage("")
     setEmail("")
     setIsSubmitted(false)
+    setIsSubmitting(false)
+    setSubmitError(null)
   }, [])
 
   const handleClose = React.useCallback(() => {
@@ -41,17 +45,48 @@ export function FeedbackWidget() {
   const handleOpen = React.useCallback(() => {
     setIsOpen(true)
     setIsSubmitted(false)
+    setSubmitError(null)
   }, [])
 
   const handleSubmit = React.useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
+    async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-      if (!message.trim()) {
+      if (!message.trim() || isSubmitting) {
         return
       }
-      setIsSubmitted(true)
+
+      setIsSubmitting(true)
+      setSubmitError(null)
+
+      try {
+        const response = await fetch("/api/feedback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            category,
+            message: message.trim(),
+            email: email.trim() || undefined,
+          }),
+        })
+
+        if (!response.ok) {
+          const payload = (await response.json().catch(() => null)) as
+            | { error?: string }
+            | null
+          setSubmitError(
+            payload?.error ?? "Something went wrong. Please try again.",
+          )
+          return
+        }
+
+        setIsSubmitted(true)
+      } catch {
+        setSubmitError("Network error. Please try again.")
+      } finally {
+        setIsSubmitting(false)
+      }
     },
-    [message],
+    [category, email, isSubmitting, message],
   )
 
   React.useEffect(() => {
@@ -186,16 +221,22 @@ export function FeedbackWidget() {
                 />
               </div>
 
+              {submitError ? (
+                <p className="text-xs text-destructive" role="alert">
+                  {submitError}
+                </p>
+              ) : null}
+
               <div className="flex justify-end">
                 <Button
                   type="submit"
                   variant="ghost"
                   size="sm"
                   className="text-muted-foreground hover:text-foreground"
-                  disabled={!message.trim()}
+                  disabled={!message.trim() || isSubmitting}
                 >
                   <Send className="size-3.5" />
-                  Submit Feedback
+                  {isSubmitting ? "Sending…" : "Submit Feedback"}
                 </Button>
               </div>
             </form>

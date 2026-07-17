@@ -36,7 +36,7 @@ export default function PrivacyPage() {
         {
           title: "Contact",
           content:
-            "Privacy-related inquiries contact details. Will link to the contact page or a dedicated privacy email.",
+            "Privacy-related inquiries: use the Feedback button in the site footer, or email feedback@pasttime.xyz.",
         },
       ]}
     />

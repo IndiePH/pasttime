@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/download",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/contact",
+        destination: "/",
+        permanent: true,
+      },
+      {
         source: "/games/sample-word",
         destination: "/games/word-guess",
         permanent: true,
