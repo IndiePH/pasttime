@@ -1,10 +1,11 @@
 # Engineering Decisions
-updated: 2026-07-17
+updated: 2026-07-18
 tags: [decision, architecture, tradeoff, rule-override, technical-debt]
 related: [dictionary-pipeline, adsense-manual-units]
 
 | date | type | scope | summary | rationale | rules | skills | decision-maker |
 |------|------|-------|---------|-----------|-------|--------|----------------|
+| 2026-07-18 | product | web | Feedback via Resend; remove Contact page | Footer Feedback modal posts to `/api/feedback` → Resend to `xent.xent@gmail.com` from `feedback@pasttime.xyz`. Contact page redundant. Secrets: `RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `FEEDBACK_FROM_EMAIL` in `.env.local` / Worker secrets only. | Never commit real Resend keys; never `NEXT_PUBLIC_*` for Resend; domain must be verified in Resend | resend, nextjs-api | user |
 | 2026-07-17 | monetization | web | Manual AdSense only; apex `pasttime.xyz` + `gamehub` subdomain both on Worker; Google CMP 3-choice | AdSense Sites requires TLD; subdomain alone rejected. Apex custom domain required for ads.txt/verify/review. Responsive units + reserved CSS; no Auto ads/side rails. CMP: Google 3-choice for EEA/UK/CH. | Keep pasttime.xyz on gamehub Worker during review; NEXT_PUBLIC_* need redeploy; see adsense-manual-units wiki | adsense, cloudflare, cmp | user |
 | 2026-07-16 | architecture | shared | Lexicon runtime: R2 shards + D1 defs; no giant JSON in Worker | Free Workers 3 MiB script limit; static-import of full/enriched/corpus JSON exceeds it. Lists = bulk fetch once; defs/clues = keyed D1. Load at length/mode confirm before play. Multiplayer stays on Node for now. | No runtime import of dictionary.full / enriched / corpus into Worker graph; WG one length shard; crossword multi-length or answers pack then batch clues; see docs/CONTENT-STORAGE-HANDOFF.md | cloudflare, r2, d1, opennext | user |
 | 2026-07-03 | architecture | shared | Enriched dict is single source of truth for crossword clues | `corpus.json` regenerated exclusively from `dictionary.full.enriched.json`, removing mixed-source clues from hand-crafted/Wiktionary/Apify. Ensures clue consistency and maintainability. | rebuild-corpus.mjs regenerates corpus.json; corpus.json imported directly by crossword generator | crossword, enriched-dictionary | user |

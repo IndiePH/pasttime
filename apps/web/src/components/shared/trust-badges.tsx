@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils"
 const TRUST_ITEMS = [
   "Instant play",
   "No download",
-  "Mobile & desktop",
   "Free to play",
 ] as const
 
