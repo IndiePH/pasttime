@@ -6,9 +6,19 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
+    --font-heading: var(--font-heading);
     --font-sans: var(--font-sans);
     --font-game-title: var(--font-game-title);
+    --font-head: var(--font-head);
+    --color-primary-hover: var(--primary-hover);
+    --shadow-2xs: var(--app-shadow-2xs);
+    --shadow-xs: var(--app-shadow-xs);
+    --shadow-sm: var(--app-shadow-sm);
+    --shadow: var(--app-shadow);
+    --shadow-md: var(--app-shadow-md);
+    --shadow-lg: var(--app-shadow-lg);
+    --shadow-xl: var(--app-shadow-xl);
+    --shadow-2xl: var(--app-shadow-2xl);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -56,6 +66,7 @@
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.141 0.005 285.823);
     --primary: oklch(0.21 0.006 285.885);
+    --primary-hover: oklch(0.274 0.006 286.033);
     --primary-foreground: oklch(0.985 0 0);
     --secondary: oklch(0.967 0.001 286.375);
     --secondary-foreground: oklch(0.21 0.006 285.885);
@@ -64,6 +75,7 @@
     --accent: oklch(0.967 0.001 286.375);
     --accent-foreground: oklch(0.21 0.006 285.885);
     --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.985 0 0);
     --game-card-surface: oklch(0.955 0.006 286);
     --border: oklch(0.92 0.004 286.32);
     --input: oklch(0.92 0.004 286.32);
@@ -84,6 +96,16 @@
     --sidebar-ring: oklch(0.705 0.015 286.067);
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
+    --font-heading: var(--font-sans);
+    --font-head: var(--font-sans);
+    --app-shadow-2xs: 0 1px 0 rgb(0 0 0 / 0.05);
+    --app-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --app-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --app-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --app-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --app-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --app-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --app-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
 .dark {
@@ -95,6 +117,7 @@
     --popover: oklch(0.21 0.006 285.885);
     --popover-foreground: oklch(0.985 0 0);
     --primary: oklch(0.92 0.004 286.32);
+    --primary-hover: oklch(0.985 0 0);
     --primary-foreground: oklch(0.21 0.006 285.885);
     --secondary: oklch(0.274 0.006 286.033);
     --secondary-foreground: oklch(0.985 0 0);
@@ -103,6 +126,7 @@
     --accent: oklch(0.274 0.006 286.033);
     --accent-foreground: oklch(0.985 0 0);
     --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.985 0 0);
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.552 0.016 285.938);
@@ -119,6 +143,88 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+
+/* RetroUI full skin — https://retroui.dev/docs/installation */
+[data-theme="retro-light"],
+[data-theme="retro-dark"] {
+    --radius: 0;
+    --font-sans: var(--font-retro-sans);
+    --font-heading: var(--font-retro-head);
+    --font-head: var(--font-retro-head);
+    --font-game-title: var(--font-retro-head);
+    --app-shadow-2xs: 1px 1px 0 0 var(--border);
+    --app-shadow-xs: 1px 1px 0 0 var(--border);
+    --app-shadow-sm: 2px 2px 0 0 var(--border);
+    --app-shadow: 3px 3px 0 0 var(--border);
+    --app-shadow-md: 4px 4px 0 0 var(--border);
+    --app-shadow-lg: 6px 6px 0 0 var(--border);
+    --app-shadow-xl: 10px 10px 0 1px var(--border);
+    --app-shadow-2xl: 16px 16px 0 1px var(--border);
+}
+
+[data-theme="retro-light"] {
+    --background: #fff7e8;
+    --foreground: #000;
+    --card: #fff;
+    --card-foreground: #000;
+    --popover: #fff;
+    --popover-foreground: #000;
+    --primary: #ffdc58;
+    --primary-hover: #ffd12e;
+    --primary-foreground: #000;
+    --secondary: #000;
+    --secondary-foreground: #fff;
+    --muted: #efe7d6;
+    --muted-foreground: #6b6355;
+    --accent: #ffe7a3;
+    --accent-foreground: #000;
+    --destructive: #e63946;
+    --destructive-foreground: #fff;
+    --game-card-surface: #fff;
+    --border: #000;
+    --input: #fff;
+    --ring: #000;
+    --sidebar: #fff7e8;
+    --sidebar-foreground: #000;
+    --sidebar-primary: #ffdc58;
+    --sidebar-primary-foreground: #000;
+    --sidebar-accent: #ffe7a3;
+    --sidebar-accent-foreground: #000;
+    --sidebar-border: #000;
+    --sidebar-ring: #000;
+}
+
+[data-theme="retro-dark"] {
+    --background: #1a1815;
+    --foreground: #f5f0e6;
+    --card: #262320;
+    --card-foreground: #f5f0e6;
+    --popover: #262320;
+    --popover-foreground: #f5f0e6;
+    --primary: #ffdc58;
+    --primary-hover: #ffd12e;
+    --primary-foreground: #000;
+    --secondary: #3a352f;
+    --secondary-foreground: #f5f0e6;
+    --muted: #2e2a24;
+    --muted-foreground: #b3ac9e;
+    --accent: #38342b;
+    --accent-foreground: #f5f0e6;
+    --destructive: #ff6b6b;
+    --destructive-foreground: #1a1815;
+    --game-card-surface: #262320;
+    --border: #000;
+    --input: #262320;
+    --ring: #ffdc58;
+    --sidebar: #1a1815;
+    --sidebar-foreground: #f5f0e6;
+    --sidebar-primary: #ffdc58;
+    --sidebar-primary-foreground: #000;
+    --sidebar-accent: #38342b;
+    --sidebar-accent-foreground: #f5f0e6;
+    --sidebar-border: #000;
+    --sidebar-ring: #ffdc58;
 }
 
 @layer base {
