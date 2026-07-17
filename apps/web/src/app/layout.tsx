@@ -1,5 +1,11 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono, Roboto_Slab } from "next/font/google"
+import {
+  Archivo_Black,
+  Geist,
+  Geist_Mono,
+  Roboto_Slab,
+  Space_Grotesk,
+} from "next/font/google"
 import Script from "next/script"
 
 import { NuqsAdapter } from "nuqs/adapters/next/app"
@@ -10,7 +16,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { StorageProvider } from "@/infrastructure/storage"
 import { cn } from "@/lib/utils"
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'})
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata: Metadata = {
   title: {
@@ -31,6 +37,21 @@ const robotoSlab = Roboto_Slab({
   variable: "--font-game-title",
 })
 
+const archivoBlack = Archivo_Black({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-retro-head",
+  display: "swap",
+})
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-retro-sans",
+  display: "swap",
+})
+
+const themeInitScript = `(function(){try{var KEY="pasttime-theme";var LEGACY="theme";var available={default:1};var raw=localStorage.getItem(KEY);if(!raw){var legacy=localStorage.getItem(LEGACY);if(legacy==="light"||legacy==="dark"||legacy==="system"){raw=JSON.stringify({family:"default",mode:legacy});try{localStorage.setItem(KEY,raw)}catch(e){}}else{raw=JSON.stringify({family:"default",mode:"system"})}}var pref;try{pref=JSON.parse(raw)}catch(e){pref={family:"default",mode:"system"}}var family=pref&&typeof pref.family==="string"?pref.family:"default";if(!available[family])family="default";var mode=pref&&(pref.mode==="light"||pref.mode==="dark"||pref.mode==="system")?pref.mode:"system";var system=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var desired=mode==="system"?system:mode;var id=family+"-"+desired;var known={"default-light":1,"default-dark":1};if(!known[id]){id="default-"+desired;if(!known[id])id="default-light";desired=id.endsWith("dark")?"dark":"light"}var root=document.documentElement;root.setAttribute("data-theme",id);root.classList.remove("light","dark");root.classList.add(desired);root.style.colorScheme=desired}catch(e){}})();`
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -44,13 +65,15 @@ export default function RootLayout({
         "antialiased",
         fontMono.variable,
         robotoSlab.variable,
+        archivoBlack.variable,
+        spaceGrotesk.variable,
         "font-sans",
         geist.variable,
       )}
     >
       <head>
         <Script id="pasttime-theme-init" strategy="beforeInteractive">
-          {`(function(){try{var t=localStorage.getItem("theme")||"system";var r=t==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;document.documentElement.classList.remove("light","dark");document.documentElement.classList.add(r);document.documentElement.style.colorScheme=r;}catch(e){}})();`}
+          {themeInitScript}
         </Script>
       </head>
       <body>

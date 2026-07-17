@@ -2,38 +2,135 @@
 
 import * as React from "react"
 
-const STORAGE_KEY = "theme"
+import {
+  AVAILABLE_THEME_FAMILIES,
+  DEFAULT_PREFERENCE,
+  STORAGE_KEY,
+  LEGACY_STORAGE_KEY,
+  applyResolvedPreset,
+  getSystemMode,
+  isFamilyAvailable,
+  modesForFamily,
+  parseStoredPreference,
+  resolvePreset,
+  type ColorMode,
+  type ModePreference,
+  type ThemeFamily,
+  type ThemePreference,
+  type ThemePreset,
+} from "@/lib/theme/presets"
 
-export type Theme = "light" | "dark" | "system"
-export type ResolvedTheme = "light" | "dark"
+/** @deprecated Prefer ModePreference — kept for callers that only care about mode. */
+export type Theme = ModePreference
+export type ResolvedTheme = ColorMode
 
 type ThemeContextValue = {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-  resolvedTheme: ResolvedTheme
+  preference: ThemePreference
+  /** Mode preference (light | dark | system). Alias for preference.mode. */
+  theme: ModePreference
+  setTheme: (mode: ModePreference) => void
+  setMode: (mode: ModePreference) => void
+  setFamily: (family: string) => void
+  resolvedTheme: ColorMode
+  resolvedMode: ColorMode
+  resolvedPreset: ThemePreset
+  families: readonly ThemeFamily[]
+  modesForCurrentFamily: ColorMode[]
 }
 
 const ThemeContext = React.createContext<ThemeContextValue | null>(null)
 
 const themeListeners = new Set<() => void>()
 
+let cachedPreference: ThemePreference = DEFAULT_PREFERENCE
+let cachedResolvedPreset: ThemePreset = resolvePreset(DEFAULT_PREFERENCE, "light")
+let cachedSystemMode: ColorMode = "light"
+let cacheHydrated = false
+
 function emitThemeChange() {
   themeListeners.forEach((listener) => listener())
+}
+
+function readStoredPreference(): ThemePreference {
+  try {
+    const modern = localStorage.getItem(STORAGE_KEY)
+    if (modern) return parseStoredPreference(modern)
+
+    const legacy = localStorage.getItem(LEGACY_STORAGE_KEY)
+    if (legacy) {
+      const migrated = parseStoredPreference(legacy)
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated))
+      } catch {
+        /* ignore */
+      }
+      return migrated
+    }
+  } catch {
+    /* ignore */
+  }
+  return DEFAULT_PREFERENCE
+}
+
+function writePreference(preference: ThemePreference) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(preference))
+  } catch {
+    /* ignore */
+  }
+}
+
+function applyPreference(preference: ThemePreference): ThemePreset {
+  const preset = resolvePreset(preference, getSystemMode())
+  applyResolvedPreset(preset)
+  return preset
+}
+
+function preferencesEqual(a: ThemePreference, b: ThemePreference): boolean {
+  return a.family === b.family && a.mode === b.mode
+}
+
+function syncCacheFromStorage(): void {
+  const nextPreference = readStoredPreference()
+  if (!preferencesEqual(nextPreference, cachedPreference)) {
+    cachedPreference = nextPreference
+  }
+
+  const systemMode = getSystemMode()
+  const nextPreset = resolvePreset(cachedPreference, systemMode)
+  if (
+    nextPreset.id !== cachedResolvedPreset.id ||
+    systemMode !== cachedSystemMode
+  ) {
+    cachedResolvedPreset = nextPreset
+    cachedSystemMode = systemMode
+  }
+
+  cacheHydrated = true
+}
+
+function updateCache(preference: ThemePreference, preset: ThemePreset): void {
+  cachedPreference = preference
+  cachedResolvedPreset = preset
+  cachedSystemMode = getSystemMode()
+  cacheHydrated = true
 }
 
 function subscribeTheme(onStoreChange: () => void) {
   themeListeners.add(onStoreChange)
 
   const onStorage = (event: StorageEvent) => {
-    if (event.key === STORAGE_KEY) {
+    if (event.key === STORAGE_KEY || event.key === LEGACY_STORAGE_KEY) {
+      syncCacheFromStorage()
       onStoreChange()
     }
   }
 
   const media = window.matchMedia("(prefers-color-scheme: dark)")
   const onMedia = () => {
-    if (readStoredTheme() === "system") {
-      applyTheme("system")
+    if (cachedPreference.mode === "system" || readStoredPreference().mode === "system") {
+      syncCacheFromStorage()
+      applyPreference(cachedPreference)
       onStoreChange()
     }
   }
@@ -48,71 +145,80 @@ function subscribeTheme(onStoreChange: () => void) {
   }
 }
 
-function getSystemTheme(): ResolvedTheme {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light"
-}
-
-function resolveTheme(theme: Theme): ResolvedTheme {
-  return theme === "system" ? getSystemTheme() : theme
-}
-
-function applyTheme(theme: Theme): ResolvedTheme {
-  const resolved = resolveTheme(theme)
-  const root = document.documentElement
-  root.classList.remove("light", "dark")
-  root.classList.add(resolved)
-  root.style.colorScheme = resolved
-  return resolved
-}
-
-function readStoredTheme(): Theme {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored === "light" || stored === "dark" || stored === "system") {
-      return stored
-    }
-  } catch {
-    /* ignore */
+function getPreferenceSnapshot(): ThemePreference {
+  if (!cacheHydrated) {
+    syncCacheFromStorage()
   }
-  return "system"
+  return cachedPreference
 }
 
-function getThemeSnapshot(): Theme {
-  return readStoredTheme()
+function getResolvedPresetSnapshot(): ThemePreset {
+  if (!cacheHydrated) {
+    syncCacheFromStorage()
+  }
+  return cachedResolvedPreset
 }
 
-function getResolvedSnapshot(): ResolvedTheme {
-  return resolveTheme(readStoredTheme())
-}
+const serverPreferenceSnapshot = DEFAULT_PREFERENCE
+const serverPresetSnapshot = resolvePreset(DEFAULT_PREFERENCE, "light")
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const theme = React.useSyncExternalStore<Theme>(
+  const preference = React.useSyncExternalStore(
     subscribeTheme,
-    getThemeSnapshot,
-    () => "system",
+    getPreferenceSnapshot,
+    () => serverPreferenceSnapshot,
   )
 
-  const resolvedTheme = React.useSyncExternalStore<ResolvedTheme>(
+  const resolvedPreset = React.useSyncExternalStore(
     subscribeTheme,
-    getResolvedSnapshot,
-    () => "light",
+    getResolvedPresetSnapshot,
+    () => serverPresetSnapshot,
   )
 
-  const setTheme = React.useCallback((next: Theme) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, next)
-    } catch {
-      /* ignore */
-    }
-    applyTheme(next)
+  const setPreference = React.useCallback((next: ThemePreference) => {
+    writePreference(next)
+    const preset = applyPreference(next)
+    updateCache(next, preset)
     emitThemeChange()
   }, [])
 
-  const value = React.useMemo(
-    () => ({ theme, setTheme, resolvedTheme }),
-    [theme, setTheme, resolvedTheme],
+  const setMode = React.useCallback(
+    (mode: ModePreference) => {
+      setPreference({ ...cachedPreference, mode })
+    },
+    [setPreference],
+  )
+
+  const setFamily = React.useCallback(
+    (family: string) => {
+      if (!isFamilyAvailable(family)) return
+      const current = cachedPreference
+      const supported = modesForFamily(family)
+      const nextMode =
+        current.mode === "system"
+          ? "system"
+          : supported.includes(current.mode)
+            ? current.mode
+            : (supported[0] ?? "light")
+      setPreference({ family, mode: nextMode })
+    },
+    [setPreference],
+  )
+
+  const value = React.useMemo<ThemeContextValue>(
+    () => ({
+      preference,
+      theme: preference.mode,
+      setTheme: setMode,
+      setMode,
+      setFamily,
+      resolvedTheme: resolvedPreset.mode,
+      resolvedMode: resolvedPreset.mode,
+      resolvedPreset,
+      families: AVAILABLE_THEME_FAMILIES,
+      modesForCurrentFamily: modesForFamily(preference.family),
+    }),
+    [preference, resolvedPreset, setMode, setFamily],
   )
 
   return (
@@ -121,9 +227,16 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 const fallbackThemeContext: ThemeContextValue = {
+  preference: DEFAULT_PREFERENCE,
   theme: "system",
   setTheme: () => {},
+  setMode: () => {},
+  setFamily: () => {},
   resolvedTheme: "light",
+  resolvedMode: "light",
+  resolvedPreset: serverPresetSnapshot,
+  families: AVAILABLE_THEME_FAMILIES,
+  modesForCurrentFamily: modesForFamily("default"),
 }
 
 function useTheme(): ThemeContextValue {
@@ -132,3 +245,4 @@ function useTheme(): ThemeContextValue {
 }
 
 export { ThemeProvider, useTheme }
+export type { ThemePreference, ThemePreset, ModePreference, ColorMode }

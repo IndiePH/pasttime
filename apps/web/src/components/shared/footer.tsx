@@ -2,9 +2,7 @@ import { FeedbackWidget } from "@/components/shared/feedback-widget"
 import { PlatformLink } from "@/platform/navigation"
 
 const footerLinks = [
-  { href: "/download", label: "Download" },
   { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
 ] as const

@@ -1,6 +1,7 @@
 import { PlatformLink } from "@/platform/navigation"
 
 import { ModeToggle } from "@/components/shared/mode-toggle"
+import { SkinToggle } from "@/components/shared/skin-toggle"
 import { cn } from "@/lib/utils"
 
 export function Header({ className }: { className?: string }) {
@@ -18,15 +19,10 @@ export function Header({ className }: { className?: string }) {
         >
           Pasttime
         </PlatformLink>
-        <nav className="flex items-center gap-1" aria-label="Main">
-          <PlatformLink
-            href="/"
-            className="rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            Browse
-          </PlatformLink>
+        <div className="flex items-center gap-1">
+          <SkinToggle />
           <ModeToggle />
-        </nav>
+        </div>
       </div>
     </header>
   )
