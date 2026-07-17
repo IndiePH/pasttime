@@ -1,5 +1,5 @@
 # Dictionary Pipeline
-updated: 2026-07-03
+updated: 2026-07-17
 tags: [architecture, data-pipeline, crossword, word-guess]
 related: [engineering-decisions]
 
@@ -71,3 +71,17 @@ Reads every word with a definition from `dictionary.full.enriched.json` and writ
 - Self-referential defs fixed manually: 515
 - Words removed (blocklisted): 7 (ERG, LAC, SOC, GRAM, KANA, ROMA, NEATH)
 - Remaining self-referential: 0
+
+## Selective sync from word-guess (2026-07-17)
+
+Word-guess mobile added a Play Console policy blocklist (~163 words beyond Pastime).
+Pastime did **not** blind-copy those dictionaries (would drop 3–4 letter words and
+over-filter crossword vocabulary).
+
+Synced recommendation A only (48 words): slurs/hate variants, crude sexual/porn
+slang, hard-drug slang. Added to `manual-blocklist.txt` + `profanity-blocklist.txt`
+and stripped from `dictionary.full.json` (guessable). None were in enriched/target.
+
+Explicitly **not** synced: everyday/medical English (`DRUNK`, `HOLOCAUST`,
+`GENOCIDE`, `URINE`, `VAGINAL`, `TOBACCO`, `SEXISM`, `CRIPPLE*`, etc.) and mild
+body/alcohol terms.
