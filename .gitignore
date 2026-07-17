@@ -44,6 +44,7 @@ apps/mobile/ios/
 .kilo/
 .kilocode/
 .clawhub/
+.cursor/
 
 # game clue generation cache
 packages/domain/games/crossword/clues.cache.json
