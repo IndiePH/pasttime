@@ -1,5 +1,5 @@
 # AdSense manual units
-updated: 2026-07-17
+updated: 2026-07-18
 tags: [monetization, adsense, devops, cloudflare]
 related: [engineering-decisions]
 
@@ -44,10 +44,17 @@ Code: `apps/web/src/lib/adsense.ts`, `AdPanel`, `AdSenseScript`, `app/ads.txt/ro
 
 Google requires a **certified CMP** for personalized ads in EEA/UK/CH. Choice for Pasttime: **Google’s CMP**, **3 choices** (Consent / Do not consent / Manage options) — not a third-party CMP yet. See [AdSense CMP requirements](https://support.google.com/adsense/answer/13554116).
 
+## Site review / Publisher Policies
+
+Google Publisher Policies ([support article](https://support.google.com/adsense/answer/10502938)) require a real privacy policy that discloses AdSense-related data use (cookies / web beacons / IP, third parties placing cookies) and preferably links [How Google uses data](https://policies.google.com/technologies/partner-sites).
+
+Pasttime legal pages (`/privacy`, `/about`, `/terms`) must stay **substantive** — not placeholders. Placeholders were a likely review failure mode (privacy disclosures + thin inventory signals). After content fixes: redeploy apex, then request another review in AdSense Sites.
+
 ## Operator checklist
 
 1. Create 3 Display (Responsive) units when Ads → By ad unit is available (hidden until account/UI ready).
 2. Set four Cloudflare env vars on Worker `gamehub` → redeploy.
 3. Confirm `https://pasttime.xyz/ads.txt` and gamehub variant.
-4. AdSense Sites = apex; submit for review; wait Ready (ads may stay empty until then).
-5. Keep Google CMP consent message published for future sites.
+4. Confirm `/privacy` discloses AdSense + Google partner-sites link; `/about` and `/terms` are real copy.
+5. AdSense Sites = apex; submit for review; wait Ready (ads may stay empty until then).
+6. Keep Google CMP consent message published for future sites.

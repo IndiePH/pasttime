@@ -318,7 +318,8 @@ Expected: PASS
 - [ ] Create 3 Display (responsive) units in AdSense
 - [ ] Set Cloudflare Worker env for `gamehub` with client + 3 slot IDs
 - [ ] Deploy (`npm run deploy` from web / root per project scripts)
-- [ ] Confirm `/ads.txt` and that units request ads (may be blank until site approval)
+- [ ] Confirm `/ads.txt` on apex + gamehub; units may be blank until site approval
+- [ ] Confirm `/privacy`, `/about`, `/terms` are substantive (Publisher Policies / privacy disclosures) before requesting review on `pasttime.xyz`
 
 ---
 

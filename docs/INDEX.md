@@ -71,7 +71,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `games/[slug]/play/page.tsx` | Game play |
 | `games/[slug]/room/[code]/page.tsx` | Multiplayer room |
 | `games/[slug]/{loading,error,not-found}.tsx` | Route segments |
-| `about/`, `contact/`, `download/`, `privacy/`, `terms/` | Static pages |
+| `about/`, `privacy/`, `terms/` | Static pages (substantive copy for AdSense review; not placeholders) |
 | `favicon.ico` | Favicon |
 
 **L3 — Shared UI** (`src/components/`)

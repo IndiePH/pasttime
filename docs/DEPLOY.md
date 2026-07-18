@@ -39,7 +39,9 @@ Set these **plain-text** Worker variables for `gamehub` (Cloudflare dashboard �
 | `NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM` | Display unit ID for bottom strip |
 | `NEXT_PUBLIC_ADSENSE_SLOT_HUB` | Display unit ID for hub grid card |
 
-After deploy, check `https://gamehub.pasttime.xyz/ads.txt` — it should list your `pub-…` line. Units may stay empty until the site is approved in AdSense. Leave vars unset to keep dashed placeholders.
+After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime.xyz/ads.txt` — each should list your `pub-…` line. Units may stay empty until the site is approved in AdSense. Leave vars unset to keep dashed placeholders.
+
+**Site review:** Google Publisher Policies require a real Privacy Policy that discloses AdSense/cookie use (and preferably links [How Google uses data](https://policies.google.com/technologies/partner-sites)). Keep `/privacy`, `/about`, and `/terms` substantive — not placeholders — then request review on the **apex** site (`pasttime.xyz`). See `brain/wiki/adsense-manual-units.md`.
 
 ## Lexicon publish (R2 + D1)
 
