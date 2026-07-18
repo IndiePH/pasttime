@@ -369,6 +369,28 @@
   }
 }
 
+/* ── Sudoku board sizing ──────────────────────────────────────────── */
+
+/* Fixed 9×9 grid — cell size only needs to scale with viewport width. */
+.sudoku-vars {
+  --sudoku-cell-w: clamp(1.85rem, 8vw, 2.75rem);
+}
+
+.sudoku-grid {
+  width: fit-content;
+}
+
+.sudoku-cell {
+  width: var(--sudoku-cell-w);
+  height: var(--sudoku-cell-w);
+}
+
+@media (orientation: landscape) and (min-height: 320px) {
+  .sudoku-vars {
+    --sudoku-cell-w: clamp(2rem, 4.5vw, 3rem);
+  }
+}
+
 /* ── Landscape board overrides (shared) ──────────────────────────── */
 
 @media (orientation: landscape) and (min-height: 320px) {
