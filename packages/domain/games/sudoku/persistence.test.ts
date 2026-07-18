@@ -65,11 +65,23 @@ describe("parseStoredSudokuGame", () => {
     expect(parseStoredSudokuGame(stored, "easy", "random")).toBeNull()
   })
 
-  it("returns null when difficulty does not match", () => {
+  it("returns null when the stored difficulty exceeds the requested ceiling", () => {
     const state = buildValidState()
     const stored = JSON.parse(JSON.stringify(state))
+    stored.difficulty = "hard"
+    stored.puzzle.difficulty = "hard"
 
-    expect(parseStoredSudokuGame(stored, "hard", "daily")).toBeNull()
+    expect(parseStoredSudokuGame(stored, "easy", "daily")).toBeNull()
+  })
+
+  it("accepts a stored difficulty below the requested ceiling (a fallback puzzle labeled with its actual rating)", () => {
+    const state = buildValidState() // built with difficulty "easy"
+    const stored = JSON.parse(JSON.stringify(state))
+
+    const parsed = parseStoredSudokuGame(stored, "hard", "daily")
+
+    expect(parsed?.difficulty).toBe("easy")
+    expect(parsed?.puzzle.difficulty).toBe("easy")
   })
 
   it("returns null when status is not a valid enum value", () => {
@@ -139,7 +151,9 @@ describe("parseStoredSudokuGame", () => {
     const state = buildValidState()
     const stored = JSON.parse(JSON.stringify(state))
 
-    const parsed = parseStoredSudokuGame(stored, "easy", "daily")
+    // Pass the original `now` explicitly so the (intentional) startedAt
+    // reset for a still-playing round doesn't shift the value being compared.
+    const parsed = parseStoredSudokuGame(stored, "easy", "daily", 1000)
 
     expect(parsed).toEqual(state)
   })
@@ -149,8 +163,49 @@ describe("parseStoredSudokuGame", () => {
     const state = createSudokuGame(puzzle, "random", { now: 2000 })
     const stored = JSON.parse(JSON.stringify(state))
 
-    const parsed = parseStoredSudokuGame(stored, "easy", "random")
+    const parsed = parseStoredSudokuGame(stored, "easy", "random", 2000)
 
     expect(parsed).toEqual(state)
+  })
+})
+
+describe("parseStoredSudokuGame — timer hydration", () => {
+  it("resets startedAt to `now` for a playing round instead of continuing from a stale wall-clock timestamp", () => {
+    const puzzle = buildPuzzle(SOLUTION, [0])
+    const state = createSudokuGame(puzzle, "daily", { now: 1_000 })
+    const stored = JSON.parse(JSON.stringify(state))
+
+    // Simulate reopening the app 6 hours later.
+    const sixHoursLater = 1_000 + 6 * 60 * 60 * 1000
+    const parsed = parseStoredSudokuGame(stored, "easy", "daily", sixHoursLater)
+
+    expect(parsed?.startedAt).toBe(sixHoursLater)
+    // elapsedMs is the already-elapsed base carried over as-is — it must
+    // never be inflated by the away-time between sessions.
+    expect(parsed?.elapsedMs).toBe(state.elapsedMs)
+  })
+
+  it("carries over an accumulated elapsedMs base across a hydrate instead of losing in-session progress", () => {
+    const puzzle = buildPuzzle(SOLUTION, [0])
+    const state = { ...createSudokuGame(puzzle, "daily", { now: 1_000 }), elapsedMs: 45_000 }
+    const stored = JSON.parse(JSON.stringify(state))
+
+    const parsed = parseStoredSudokuGame(stored, "easy", "daily", 999_999)
+
+    expect(parsed?.elapsedMs).toBe(45_000)
+    expect(parsed?.startedAt).toBe(999_999)
+  })
+
+  it("leaves startedAt untouched for a won round (timer is frozen, not ticking)", () => {
+    const puzzle = buildPuzzle(SOLUTION, [40])
+    let state = createSudokuGame(puzzle, "daily", { now: 1_000 })
+    state = selectSudokuCell(state, 40)
+    state = placeSudokuDigit(state, puzzle.solution[40] as never)
+    expect(state.status).toBe("won")
+    const stored = JSON.parse(JSON.stringify(state))
+
+    const parsed = parseStoredSudokuGame(stored, "easy", "daily", 999_999_999)
+
+    expect(parsed?.startedAt).toBe(state.startedAt)
   })
 })

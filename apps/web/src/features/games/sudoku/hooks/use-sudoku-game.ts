@@ -34,9 +34,13 @@ function randomSudokuSeed(): number {
 }
 
 /**
- * Applies a domain mutation and reconciles the live timer around
- * playing/non-playing transitions:
- * - playing -> won/abandoned: freeze `elapsedMs` to the total elapsed so far.
+ * Applies a domain mutation and reconciles the live timer:
+ * - while playing (including a playing -> won/abandoned transition): flush
+ *   the segment since `startedAt` into `elapsedMs` and refresh `startedAt`
+ *   to `now`. This runs on *every* mutation, not just status transitions, so
+ *   `elapsedMs` in the persisted state is always an accurate "already played"
+ *   base — a later hydrate only ever loses the (typically tiny) gap between
+ *   the last mutation and the tab closing, never the whole session.
  * - won/abandoned -> playing (e.g. undo after a win): start a fresh segment
  *   from `now`, keeping the already-accumulated `elapsedMs`.
  */
@@ -48,10 +52,10 @@ function applySudokuMutation(
   if (next === state) return state
 
   const now = Date.now()
-  if (state.status === "playing" && next.status !== "playing") {
-    return { ...next, elapsedMs: next.elapsedMs + (now - next.startedAt) }
+  if (state.status === "playing") {
+    return { ...next, elapsedMs: next.elapsedMs + (now - state.startedAt), startedAt: now }
   }
-  if (state.status !== "playing" && next.status === "playing") {
+  if (next.status === "playing") {
     return { ...next, startedAt: now }
   }
   return next

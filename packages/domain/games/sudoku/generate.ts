@@ -2,19 +2,13 @@ import { hashSeed } from "../../daily"
 import { boxIndex, indexToRowCol, peerIndexes } from "./board"
 import { createSudokuRng, type SudokuRng } from "./rng"
 import { rateSudoku, type SudokuRating } from "./rate"
-import type { SudokuDifficulty } from "./settings"
+import { SUDOKU_DIFFICULTY_RANK as DIFFICULTY_RANK, type SudokuDifficulty } from "./settings"
 import type { SudokuCell, SudokuGrid, SudokuPuzzle } from "./types"
 
 export const SUDOKU_GENERATE_MAX_ATTEMPTS = 50
 
 /** Seed mixing stride between generation attempts (arbitrary large prime). */
 const ATTEMPT_SEED_STRIDE = 9973
-
-const DIFFICULTY_RANK: Record<SudokuDifficulty, number> = {
-  easy: 0,
-  medium: 1,
-  hard: 2,
-}
 
 export interface GenerateSudokuOptions {
   difficulty: SudokuDifficulty
@@ -185,6 +179,11 @@ export function createGameCellsFromPuzzle(puzzle: SudokuPuzzle): SudokuCell[] {
  * when its carved rating matches the target difficulty exactly. If every
  * attempt falls short, the best candidate at or below the ceiling (closest
  * to the target) is returned instead of exceeding it.
+ *
+ * The returned puzzle's `difficulty` always reflects its *actual rated*
+ * difficulty (per `rateSudoku`), never the requested target — a fallback
+ * puzzle that undershoots the target must not be mislabeled as harder than
+ * it really is.
  */
 export function generateSudoku(options: GenerateSudokuOptions): SudokuPuzzle {
   const { difficulty, seed } = options
@@ -200,7 +199,7 @@ export function generateSudoku(options: GenerateSudokuOptions): SudokuPuzzle {
     const { givens, rating } = carve(solution, rng, difficulty)
 
     if (rating.difficulty === difficulty) {
-      return buildPuzzle(givens, solution, difficulty, seed, rating)
+      return buildPuzzle(givens, solution, seed, rating)
     }
 
     if (rating.solvable && rating.difficulty !== "unrated") {
@@ -213,7 +212,7 @@ export function generateSudoku(options: GenerateSudokuOptions): SudokuPuzzle {
   }
 
   if (best) {
-    return buildPuzzle(best.givens, best.solution, difficulty, seed, best.rating)
+    return buildPuzzle(best.givens, best.solution, seed, best.rating)
   }
 
   // Extremely unlikely fallback: every attempt somehow failed to produce a
@@ -221,20 +220,23 @@ export function generateSudoku(options: GenerateSudokuOptions): SudokuPuzzle {
   // an unpermuted (fully given) puzzle rather than throwing.
   const rng = createSudokuRng(hashSeed(seed))
   const solution = fillGrid(rng)
-  return buildPuzzle(solution.slice(), solution, difficulty, seed, rateSudoku(solution))
+  return buildPuzzle(solution.slice(), solution, seed, rateSudoku(solution))
 }
 
+/** `rating.difficulty` is guaranteed to be a real difficulty (never
+ * "unrated") at every call site: either it matched the target exactly, or
+ * it was accepted into `best`/computed from a fully-solved grid, both of
+ * which require `rating.difficulty !== "unrated"`. */
 function buildPuzzle(
   givens: SudokuGrid,
   solution: SudokuGrid,
-  difficulty: SudokuDifficulty,
   seed: number,
   rating: SudokuRating,
 ): SudokuPuzzle {
   return {
     givens,
     solution,
-    difficulty,
+    difficulty: rating.difficulty as SudokuDifficulty,
     seed,
     ratingTechnique: rating.hardest ?? "naked-single",
   }

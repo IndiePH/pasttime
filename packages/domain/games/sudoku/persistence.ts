@@ -1,5 +1,5 @@
 import { getDailySeed } from "../../daily"
-import type { SudokuDifficulty, SudokuRoundMode } from "./settings"
+import { isSudokuDifficulty, SUDOKU_DIFFICULTY_RANK, type SudokuDifficulty, type SudokuRoundMode } from "./settings"
 import type { SudokuCell, SudokuDigit, SudokuGameState, SudokuPuzzle, SudokuTechnique } from "./types"
 
 /** Ordered human-technique ladder — kept in sync with rate.ts's TECHNIQUE_ORDER. */
@@ -26,16 +26,29 @@ export function getSudokuStorageKey(
   return `sudoku:random:${difficulty}`
 }
 
+/**
+ * Parses a persisted Sudoku game, validating shape and the difficulty
+ * ceiling (the stored puzzle/state difficulty may be at or below the
+ * requested `difficulty` — a fallback puzzle generated for a harder target
+ * is correctly labeled with its easier actual rating, see `generateSudoku`).
+ *
+ * `now` (defaults to the current clock) becomes the fresh `startedAt` for a
+ * still-`playing` round: the persisted `startedAt` is a wall-clock moment
+ * from a previous session/tab, and continuing the live timer from it would
+ * count all the time the app was closed as elapsed. The persisted
+ * `elapsedMs` is kept as-is and used as the already-elapsed base instead.
+ */
 export function parseStoredSudokuGame(
   value: unknown,
   difficulty: SudokuDifficulty,
   mode: SudokuRoundMode,
+  now: number = Date.now(),
 ): SudokuGameState | null {
   if (!value || typeof value !== "object") return null
   const record = value as Record<string, unknown>
 
   if (record.mode !== mode) return null
-  if (record.difficulty !== difficulty) return null
+  if (!isDifficultyAtOrBelow(record.difficulty, difficulty)) return null
   if (!isValidStatus(record.status)) return null
   if (typeof record.candidateMode !== "boolean") return null
   if (typeof record.autoCandidates !== "boolean") return null
@@ -57,18 +70,29 @@ export function parseStoredSudokuGame(
     cells,
     status: record.status,
     mode,
-    difficulty,
+    difficulty: record.difficulty,
     candidateMode: record.candidateMode,
     autoCandidates: record.autoCandidates,
     selectedIndex: record.selectedIndex,
     undoStack,
-    startedAt: record.startedAt,
+    startedAt: record.status === "playing" ? now : record.startedAt,
     elapsedMs: record.elapsedMs,
   }
 }
 
 function isValidStatus(value: unknown): value is SudokuGameState["status"] {
   return typeof value === "string" && VALID_STATUSES.has(value)
+}
+
+/** True when `value` is a real difficulty at or below `ceiling` — never
+ * strictly equal-only, since a fallback puzzle generated for a harder
+ * target is legitimately labeled with its easier actual rating. */
+function isDifficultyAtOrBelow(value: unknown, ceiling: SudokuDifficulty): value is SudokuDifficulty {
+  return (
+    typeof value === "string" &&
+    isSudokuDifficulty(value) &&
+    SUDOKU_DIFFICULTY_RANK[value] <= SUDOKU_DIFFICULTY_RANK[ceiling]
+  )
 }
 
 function isValidSelectedIndex(value: unknown): value is number | null {
@@ -84,19 +108,19 @@ function isValidGrid(value: unknown): value is number[] {
   )
 }
 
-function parsePuzzle(value: unknown, difficulty: SudokuDifficulty): SudokuPuzzle | null {
+function parsePuzzle(value: unknown, ceiling: SudokuDifficulty): SudokuPuzzle | null {
   if (!value || typeof value !== "object") return null
   const record = value as Record<string, unknown>
 
   if (!isValidGrid(record.givens) || !isValidGrid(record.solution)) return null
-  if (record.difficulty !== difficulty) return null
+  if (!isDifficultyAtOrBelow(record.difficulty, ceiling)) return null
   if (typeof record.seed !== "number") return null
   if (typeof record.ratingTechnique !== "string" || !VALID_TECHNIQUES.has(record.ratingTechnique)) return null
 
   return {
     givens: [...record.givens],
     solution: [...record.solution],
-    difficulty,
+    difficulty: record.difficulty,
     seed: record.seed,
     ratingTechnique: record.ratingTechnique as SudokuTechnique,
   }
