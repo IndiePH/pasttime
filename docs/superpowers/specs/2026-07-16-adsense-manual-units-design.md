@@ -52,16 +52,18 @@ Replace desktop ad placeholders with live Google AdSense **manual display units*
 
 ## Operator steps (outside code)
 
-1. Ensure `gamehub.pasttime.xyz` (or parent) is added in AdSense → Sites.
+1. Ensure **apex** `pasttime.xyz` is added in AdSense → Sites (subdomain-only URLs are rejected). Keep apex on the Worker custom domain while review is pending.
 2. Create three **Display** ad units (responsive) named to match slots.
-3. Copy publisher ID + three data-ad-slot values into Cloudflare env.
-4. Deploy; confirm `/ads.txt` and units load (may stay blank until site approval).
+3. Copy publisher ID + three data-ad-slot values into Cloudflare env; redeploy (NEXT_PUBLIC_* is build-time).
+4. Confirm `/ads.txt` on apex + gamehub; confirm `/privacy` discloses AdSense + Google partner-sites link; `/about` and `/terms` are real copy (not placeholders).
+5. Request site review; units may stay blank until approval.
 
 ## Testing
 
 - Unit/component: `AdPanel` shows placeholder when env missing; renders `ins` + `data-ad-slot` when configured (mock env).
 - Manual: production deploy with env; hub + shell show three units; static pages have no ad under title.
 - Regression: hub grid layout and site shell spacing unchanged when ads empty.
+- Review readiness: `/privacy`, `/about`, `/terms` are substantive (Publisher Policies / privacy disclosures).
 
 ## Non-goals
 
