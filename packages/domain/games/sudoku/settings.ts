@@ -2,6 +2,13 @@ export const SUDOKU_DIFFICULTIES = ["easy", "medium", "hard"] as const
 export type SudokuDifficulty = (typeof SUDOKU_DIFFICULTIES)[number]
 export const SUDOKU_DIFFICULTY_DEFAULT: SudokuDifficulty = "easy"
 
+/** Ordinal rank per difficulty — lower is easier. Used to compare/ceiling difficulties. */
+export const SUDOKU_DIFFICULTY_RANK: Record<SudokuDifficulty, number> = {
+  easy: 0,
+  medium: 1,
+  hard: 2,
+}
+
 export const SUDOKU_ROUND_MODES = ["daily", "random"] as const
 export type SudokuRoundMode = (typeof SUDOKU_ROUND_MODES)[number]
 export const SUDOKU_ROUND_MODE_DEFAULT: SudokuRoundMode = "daily"

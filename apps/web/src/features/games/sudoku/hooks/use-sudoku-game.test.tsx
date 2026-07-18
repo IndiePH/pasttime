@@ -121,7 +121,10 @@ describe("useSudokuGame — generation + hydration", () => {
     const { result } = await mountReady("random")
 
     expect(mockGenerateSudokuInWorker).not.toHaveBeenCalled()
-    expect(result.current.state).toEqual(stored)
+    // startedAt is intentionally refreshed to "now" on hydrate of a playing
+    // round (see the timer-hydration tests below) — every other field must
+    // round-trip unchanged.
+    expect(result.current.state).toEqual({ ...stored, startedAt: expect.any(Number) })
   })
 
   it("ignores corrupt stored state and falls back to generation", async () => {
@@ -289,7 +292,7 @@ describe("useSudokuGame — mutations + persistence", () => {
       initialProps: { difficulty: "easy" },
     })
     await waitFor(() => expect(result.current.status).toBe("ready"))
-    expect(result.current.state).toEqual(easyStored)
+    expect(result.current.state).toEqual({ ...easyStored, startedAt: expect.any(Number) })
 
     rerender({ difficulty: "medium" })
 
@@ -375,5 +378,28 @@ describe("useSudokuGame — win + engagement + timer", () => {
     })
     // Elapsed no longer advances once the round is won.
     expect(result.current.elapsedMs).toBe(frozenElapsed)
+  })
+
+  it("hydrating a still-playing round after a long real-world delay does not inflate elapsedMs with away-time", async () => {
+    vi.useFakeTimers()
+    const start = new Date("2026-07-19T00:00:00.000Z")
+    vi.setSystemTime(start)
+
+    // Store a playing round exactly as the buggy code would have left it:
+    // `startedAt` from the original session, `elapsedMs` never accumulated.
+    const stored = buildPlayingState("random")
+    storageMap.set(RANDOM_KEY, stored)
+
+    // Simulate the tab being closed for 6 hours before the game reopens.
+    vi.setSystemTime(new Date(start.getTime() + 6 * 60 * 60 * 1000))
+
+    const { result } = renderHook(() => useSudokuGame("easy", "random"))
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(result.current.status).toBe("ready")
+
+    // The 6-hour gap must never be counted as elapsed play time.
+    expect(result.current.elapsedMs).toBeLessThan(5_000)
   })
 })

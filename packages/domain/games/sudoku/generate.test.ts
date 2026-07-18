@@ -89,6 +89,7 @@ describe("generateSudoku", () => {
     const rating = rateSudoku(puzzle.givens)
     expect(rating.solvable).toBe(true)
     expect(rating.difficulty).toBe("easy")
+    expect(puzzle.difficulty).toBe(rating.difficulty)
     expect(puzzle.solution.every((d) => d >= 1 && d <= 9)).toBe(true)
     expect(countSolutions(puzzle.givens, 2)).toBe(1)
   })
@@ -96,8 +97,23 @@ describe("generateSudoku", () => {
   it("never rates easy above singles", () => {
     for (const seed of [1, 2, 3, 7, 11]) {
       const puzzle = generateSudoku({ difficulty: "easy", seed })
-      expect(rateSudoku(puzzle.givens).difficulty).toBe("easy")
+      const rating = rateSudoku(puzzle.givens)
+      expect(rating.difficulty).toBe("easy")
+      expect(puzzle.difficulty).toBe("easy")
     }
+  })
+
+  it("labels the returned puzzle with its actual rated difficulty, never the requested target, when a fallback undershoots it", () => {
+    // maxAttempts=1 forces the fallback path (a single carve attempt rarely
+    // hits "hard" exactly) — before the fix this puzzle was mislabeled
+    // "hard" even though it only rates "easy".
+    const puzzle = generateSudoku({ difficulty: "hard", seed: 0, maxAttempts: 1 })
+    const rating = rateSudoku(puzzle.givens)
+
+    expect(rating.solvable).toBe(true)
+    expect(rating.difficulty).not.toBe("hard")
+    expect(puzzle.difficulty).toBe(rating.difficulty)
+    expect(countSolutions(puzzle.givens, 2)).toBe(1)
   })
 
   it("produces a solvable puzzle whose givens match the solution", () => {
@@ -110,24 +126,26 @@ describe("generateSudoku", () => {
   })
 
   it(
-    "generates a medium puzzle at or below the medium ceiling",
+    "generates a medium puzzle at or below the medium ceiling, labeled with its actual difficulty",
     () => {
       const puzzle = generateSudoku({ difficulty: "medium", seed: 555 })
       const rating = rateSudoku(puzzle.givens)
       expect(rating.solvable).toBe(true)
       expect(["easy", "medium"]).toContain(rating.difficulty)
+      expect(puzzle.difficulty).toBe(rating.difficulty)
       expect(countSolutions(puzzle.givens, 2)).toBe(1)
     },
     GENERATE_TEST_TIMEOUT,
   )
 
   it(
-    "generates a hard puzzle at or below the hard ceiling",
+    "generates a hard puzzle at or below the hard ceiling, labeled with its actual difficulty",
     () => {
       const puzzle = generateSudoku({ difficulty: "hard", seed: 777 })
       const rating = rateSudoku(puzzle.givens)
       expect(rating.solvable).toBe(true)
       expect(["easy", "medium", "hard"]).toContain(rating.difficulty)
+      expect(puzzle.difficulty).toBe(rating.difficulty)
       expect(countSolutions(puzzle.givens, 2)).toBe(1)
     },
     GENERATE_TEST_TIMEOUT,
