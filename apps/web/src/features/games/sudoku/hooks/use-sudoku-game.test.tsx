@@ -276,6 +276,30 @@ describe("useSudokuGame — mutations + persistence", () => {
     const emptyIndex = result.current.state!.cells.findIndex((cell) => !cell.given)
     expect(result.current.state!.cells[emptyIndex].candidates.length).toBeGreaterThan(0)
   })
+
+  it("does not persist stale state under the new key when difficulty changes mid-flight (regression)", async () => {
+    const easyStored = buildPlayingState("random")
+    storageMap.set(RANDOM_KEY, easyStored)
+    const mediumKey = getSudokuStorageKey("medium", "random")
+
+    const { result, rerender } = renderHook<
+      ReturnType<typeof useSudokuGame>,
+      { difficulty: "easy" | "medium" }
+    >(({ difficulty }) => useSudokuGame(difficulty, "random"), {
+      initialProps: { difficulty: "easy" },
+    })
+    await waitFor(() => expect(result.current.status).toBe("ready"))
+    expect(result.current.state).toEqual(easyStored)
+
+    rerender({ difficulty: "medium" })
+
+    // The storage key flips to the medium key immediately, but the still-stale
+    // easy-mode `state` object must never be written under it before the
+    // medium puzzle actually loads (the bug crossword's analogous effect has).
+    expect(storageMap.has(mediumKey)).toBe(false)
+
+    await waitFor(() => expect(result.current.status).toBe("ready"))
+  })
 })
 
 describe("useSudokuGame — win + engagement + timer", () => {

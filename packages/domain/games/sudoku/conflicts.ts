@@ -1,5 +1,4 @@
 import type { SudokuCell } from "./types"
-import { indexToRowCol, boxIndex } from "./board"
 
 export function findConflictIndexes(cells: SudokuCell[]): Set<number> {
   const conflicts = new Set<number>()

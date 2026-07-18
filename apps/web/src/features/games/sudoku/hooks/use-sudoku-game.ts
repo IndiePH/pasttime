@@ -109,11 +109,14 @@ export function useSudokuGame(difficulty: SudokuDifficulty, mode: SudokuRoundMod
   }, [difficulty, mode, storageKey, retryCount]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Persist on every state change — both daily AND random modes resume,
-  // unlike crossword's ephemeral endless mode.
+  // unlike crossword's ephemeral endless mode. Guarded on `loadedKey` so a
+  // stale `state` from the previous difficulty/mode never gets written under
+  // the new `storageKey` during the brief window before the load effect
+  // above replaces it (a bug crossword's analogous effect doesn't guard against).
   useEffect(() => {
-    if (!state) return
+    if (!state || loadedKey !== storageKey) return
     storage.set(storageKey, state)
-  }, [state, storageKey]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [state, storageKey, loadedKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Derive the live elapsed clock and tick once a second while playing.
   // `Date.now()` is read inside this callback (never during render), and the
