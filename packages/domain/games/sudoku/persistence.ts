@@ -94,8 +94,8 @@ function parsePuzzle(value: unknown, difficulty: SudokuDifficulty): SudokuPuzzle
   if (typeof record.ratingTechnique !== "string" || !VALID_TECHNIQUES.has(record.ratingTechnique)) return null
 
   return {
-    givens: record.givens,
-    solution: record.solution,
+    givens: [...record.givens],
+    solution: [...record.solution],
     difficulty,
     seed: record.seed,
     ratingTechnique: record.ratingTechnique as SudokuTechnique,
