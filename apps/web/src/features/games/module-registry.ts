@@ -15,6 +15,7 @@ import { GameStatsView } from "@/features/games/components/game-stats-view"
 import { solitaireSearchParamsCache } from "@/features/games/solitaire/search-params"
 import { wordGuessSearchParamsCache } from "@/features/games/word-guess/search-params"
 import { crosswordSearchParamsCache } from "@/features/games/crossword/search-params"
+import { sudokuSearchParamsCache } from "@/features/games/sudoku/search-params"
 
 type SearchParamsInput = Promise<
   Record<string, string | string[] | undefined>
@@ -80,6 +81,18 @@ const CrosswordPlayView = dynamic(() =>
   ),
 )
 
+const SudokuLaunchView = dynamic(() =>
+  import("@/features/games/sudoku/components/sudoku-launch-view").then(
+    (m) => ({ default: m.SudokuLaunchView }),
+  ),
+)
+
+const SudokuPlayView = dynamic(() =>
+  import("@/features/games/sudoku/components/sudoku-play-view").then(
+    (m) => ({ default: m.SudokuPlayView }),
+  ),
+)
+
 export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   solitaire: {
     LaunchView: SolitaireLaunchView,
@@ -110,6 +123,17 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
     playLayout: "board",
     parseSearchParams: async (searchParams) => {
       await crosswordSearchParamsCache.parse(searchParams)
+    },
+  },
+  sudoku: {
+    LaunchView: SudokuLaunchView,
+    PlayView: SudokuPlayView,
+    StatsView: GameStatsView,
+    SettingsWidget: GAME_SETTINGS_WIDGETS.sudoku,
+    HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT.sudoku,
+    playLayout: "board",
+    parseSearchParams: async (searchParams) => {
+      await sudokuSearchParamsCache.parse(searchParams)
     },
   },
 }

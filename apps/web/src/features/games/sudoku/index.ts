@@ -1,2 +1,5 @@
 export { sudokuSearchParams, sudokuSearchParamsCache } from "./search-params"
 export { generateSudokuInWorker } from "./lib/generate-sudoku.client"
+export { SudokuLaunchView } from "./components"
+export { SudokuPlayView } from "./components"
+export { SudokuPlayPreferencesProvider } from "./context/sudoku-play-preferences-context"

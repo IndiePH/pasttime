@@ -1,3 +1,7 @@
 export { SudokuGrid } from "./sudoku-grid"
+export { SudokuHowToPlay } from "./sudoku-how-to-play"
+export { SudokuLaunchView } from "./sudoku-launch-view"
 export { SudokuNumberPad } from "./sudoku-number-pad"
+export { SudokuPlaySettingsWidget } from "./sudoku-play-settings-widget"
 export { SudokuPlayView } from "./sudoku-play-view"
+export { SudokuSettingsWidget } from "./sudoku-settings-widget"

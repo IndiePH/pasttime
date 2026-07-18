@@ -3,6 +3,7 @@
 import { GameSettingsPlaceholder } from "@/features/games/components/game-settings-placeholder"
 import { CrosswordSettingsWidget } from "@/features/games/crossword/components/crossword-settings-widget"
 import { SolitaireSettingsWidget } from "@/features/games/solitaire/components/solitaire-settings-widget"
+import { SudokuSettingsWidget } from "@/features/games/sudoku/components/sudoku-settings-widget"
 import { WordGuessSettingsWidget } from "@/features/games/word-guess/components/word-guess-settings-widget"
 
 interface RegisteredGameSettingsProps {
@@ -22,6 +23,8 @@ export function RegisteredGameSettings({
       return <WordGuessSettingsWidget className={className} />
     case "crossword":
       return <CrosswordSettingsWidget className={className} />
+    case "sudoku":
+      return <SudokuSettingsWidget className={className} />
     default:
       return <GameSettingsPlaceholder gameId={gameId} className={className} />
   }
