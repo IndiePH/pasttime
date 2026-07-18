@@ -59,7 +59,7 @@ export const GAME_REGISTRY: readonly GameDefinition[] = [
     id: "sudoku",
     title: "Sudoku",
     description: "Complete the number grid with clean logic and no guessing.",
-    status: "coming_soon",
+    status: "available",
     icon: "sudoku",
     tags: ["logic", "puzzle", "solo"],
     playerCount: "1 player",
