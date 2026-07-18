@@ -12,3 +12,4 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 | [engineering-decisions](engineering-decisions.md) | Persistent log of architectural, tradeoff, rule-override, and technical-debt decisions |
 | [nyt-engagement-patterns](nyt-engagement-patterns.md) | NYT Games engagement patterns analysis for Pasttime engagement features |
 | [percentile-ranking-patterns](percentile-ranking-patterns.md) | Anonymous percentile-based ranking styles (Wordle, Duolingo, Spotify Wrapped patterns) |
+| [sudoku-design](sudoku-design.md) | Sudoku v1 decisions: bands, candidates, generation A, storage keys |
