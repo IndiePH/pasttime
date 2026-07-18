@@ -51,7 +51,7 @@ interface SudokuPlayViewProps {
 const SIDE_INSET = "0.75rem"
 
 /** `m:ss` under an hour, `h:mm:ss` once the round runs past 60 minutes. */
-function formatSudokuElapsed(ms: number): string {
+export function formatSudokuElapsed(ms: number): string {
   const totalSeconds = Math.max(0, Math.floor(ms / 1000))
   const hours = Math.floor(totalSeconds / 3600)
   const minutes = Math.floor((totalSeconds % 3600) / 60)
@@ -66,7 +66,7 @@ function modeLabelText(mode: SudokuRoundMode): string {
   return mode === "daily" ? "Daily puzzle" : "Endless puzzle"
 }
 
-interface SudokuPlaySessionReadyProps {
+export interface SudokuPlaySessionReadyProps {
   game: GameDefinition
   modeLabel: string
   difficulty: SudokuDifficulty
@@ -81,7 +81,7 @@ interface SudokuPlaySessionReadyProps {
   undo: () => void
 }
 
-function SudokuPlaySessionReady({
+export function SudokuPlaySessionReady({
   game,
   modeLabel,
   difficulty,
@@ -211,23 +211,13 @@ function SudokuPlaySessionReady({
                 nice work!
               </p>
               {mode === "daily" ? <PostSolveRanking gameId="sudoku" /> : null}
+              {/* Restart/back-to-setup CTAs live only in the footer (see
+                  GamePlayFooterActions below) so the won state has a single
+                  CTA group, matching the crossword/word-guess play views. */}
               <div className="flex w-60 flex-col items-center gap-2">
                 <Button variant="outline" className="w-full" asChild>
                   <PlatformLink href="/games/sudoku/stats">
                     View stats
-                  </PlatformLink>
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full"
-                  onClick={handleNewEndless}
-                >
-                  New endless
-                </Button>
-                <Button variant="outline" className="w-full" asChild>
-                  <PlatformLink href={sudokuLaunchPath(difficulty)}>
-                    Back to launch
                   </PlatformLink>
                 </Button>
               </div>
