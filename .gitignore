@@ -74,3 +74,4 @@ firebase-debug.log
 next-env.d.ts
 
 .pi-subagents/
+.worktrees/
