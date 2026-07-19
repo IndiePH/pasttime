@@ -19,6 +19,7 @@ import {
   solitaireLaunchPath,
   type SolitaireMode,
 } from "@pasttime/domain/games/solitaire"
+import { GameBoardLoading } from "@/features/games/components/game-board-loading"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
@@ -43,6 +44,10 @@ function KlondikePlayInner({
 }) {
   const drawCount: 1 | 3 = mode === "klondike-draw3" ? 3 : 1
   const klondike = useKlondikeGame(drawCount)
+
+  if (klondike.loadStatus === "loading") {
+    return <GameBoardLoading label="Dealing cards…" />
+  }
 
   return (
     <GamePlaySection
