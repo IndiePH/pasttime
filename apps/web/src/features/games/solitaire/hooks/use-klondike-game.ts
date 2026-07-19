@@ -29,6 +29,22 @@ const STORAGE_KEY = "solitaire:klondike:session"
 
 type FoundationFlyQueueMode = "auto-stack" | "auto-complete" | null
 
+export type KlondikeLoadStatus = "loading" | "ready"
+
+/** Placeholder board for the SSR + first client paint (never shown). */
+function emptyKlondikeState(drawCount: 1 | 3): KlondikeState {
+  return {
+    stock: [],
+    waste: [],
+    foundations: [[], [], [], []],
+    tableau: [[], [], [], [], [], [], []],
+    status: "playing",
+    moves: 0,
+    seed: null,
+    drawCount,
+  }
+}
+
 function isKlondikeState(
   value: unknown,
   expectedDrawCount?: 1 | 3,
@@ -107,30 +123,39 @@ function shouldQueueAutoStack(
 export function useKlondikeGame(drawCount: 1 | 3) {
   const storage = useStorage()
   const { autoStackEnabled } = useSolitairePlayPreferencesContext()
-  const initialState = React.useMemo(() => {
-    const stored = storage.get<unknown>(STORAGE_KEY)
-    if (isKlondikeState(stored, drawCount)) {
-      return stored
-    }
-    return createKlondikeGame({ drawCount })
-  }, [storage, drawCount])
-  const [state, setState] = React.useState<KlondikeState>(initialState)
-  const stateRef = React.useRef(state)
+  // Start empty so SSR and the first client paint match. localStorage +
+  // Math.random deals are loaded only after mount (same pattern as Sudoku).
+  const [state, setState] = React.useState<KlondikeState | null>(null)
+  const loadStatus: KlondikeLoadStatus = state === null ? "loading" : "ready"
+  const boardState = state ?? emptyKlondikeState(drawCount)
+  const stateRef = React.useRef(boardState)
   const foundationFlyModeRef = React.useRef<FoundationFlyQueueMode>(null)
   const [selection, setSelection] = React.useState<KlondikeSelection | null>(
     null,
   )
   const [feedback, setFeedback] = React.useState<string | null>(null)
 
+  React.useEffect(() => {
+    const stored = storage.get<unknown>(STORAGE_KEY)
+    setState(
+      isKlondikeState(stored, drawCount)
+        ? stored
+        : createKlondikeGame({ drawCount }),
+    )
+  }, [storage, drawCount])
+
   React.useLayoutEffect(() => {
-    stateRef.current = state
-  }, [state])
+    stateRef.current = boardState
+  }, [boardState])
 
   React.useEffect(() => {
+    if (state === null) {
+      return
+    }
     storage.set(STORAGE_KEY, state)
   }, [state, storage])
 
-  const isPlaying = state.status === "playing"
+  const isPlaying = loadStatus === "ready" && boardState.status === "playing"
 
   const clearSelection = React.useCallback(() => {
     setSelection(null)
@@ -144,6 +169,10 @@ export function useKlondikeGame(drawCount: 1 | 3) {
     let feedback: string | null = null
 
     setState((current) => {
+      if (current === null) {
+        return current
+      }
+
       let nextState = current
       let fb: string | null = null
 
@@ -184,7 +213,7 @@ export function useKlondikeGame(drawCount: 1 | 3) {
   )
 
   const foundationFlyQueue = useKlondikeFoundationFly({
-    state,
+    state: boardState,
     getNextBatch: getKlondikeNextAutoFoundationMoveBatch,
     applyMoves: applyMovesOnly,
     onFinished: handleFoundationFlyFinished,
@@ -221,8 +250,8 @@ export function useKlondikeGame(drawCount: 1 | 3) {
       return
     }
 
-    const autoCompleteReady = isKlondikeAutoCompleteReady(state)
-    const shouldAutoStack = shouldQueueAutoStack(state, autoStackEnabled)
+    const autoCompleteReady = isKlondikeAutoCompleteReady(boardState)
+    const shouldAutoStack = shouldQueueAutoStack(boardState, autoStackEnabled)
 
     if (!autoCompleteReady && !shouldAutoStack) {
       return
@@ -237,11 +266,11 @@ export function useKlondikeGame(drawCount: 1 | 3) {
     })
   }, [
     autoStackEnabled,
+    boardState,
     foundationFlyActive,
     foundationFlyFlySessions.length,
     isPlaying,
     startFoundationFlyQueue,
-    state,
   ])
 
   React.useEffect(() => {
@@ -249,14 +278,14 @@ export function useKlondikeGame(drawCount: 1 | 3) {
       return
     }
 
-    if (state.stock.length > 0) {
+    if (boardState.stock.length > 0) {
       cancelFoundationFlyQueue()
       clearFoundationFlyMode()
     }
   }, [
+    boardState.stock.length,
     cancelFoundationFlyQueue,
     clearFoundationFlyMode,
-    state.stock.length,
   ])
 
   const foundationFly = {
@@ -275,19 +304,19 @@ export function useKlondikeGame(drawCount: 1 | 3) {
       return
     }
 
-    if (state.stock.length > 0) {
+    if (boardState.stock.length > 0) {
       applyAndUpdate({ type: "draw" })
       return
     }
 
-    if (state.waste.length > 0) {
+    if (boardState.waste.length > 0) {
       applyAndUpdate({ type: "recycle" })
     }
   }, [
     applyAndUpdate,
+    boardState.stock.length,
+    boardState.waste.length,
     interactionEnabled,
-    state.stock.length,
-    state.waste.length,
   ])
 
   const autoFoundation = React.useCallback(
@@ -296,12 +325,12 @@ export function useKlondikeGame(drawCount: 1 | 3) {
         return
       }
 
-      const move = getKlondikeAutoFoundationMove(state, from)
+      const move = getKlondikeAutoFoundationMove(boardState, from)
       if (move) {
         applyAndUpdate(move)
       }
     },
-    [applyAndUpdate, interactionEnabled, state],
+    [applyAndUpdate, boardState, interactionEnabled],
   )
 
   const selectFrom = React.useCallback(
@@ -356,7 +385,7 @@ export function useKlondikeGame(drawCount: 1 | 3) {
 
   const handleTableauCardClick = React.useCallback(
     (columnIndex: number, cardIndex: number) => {
-      const column = state.tableau[columnIndex]
+      const column = boardState.tableau[columnIndex]
       const card = column[cardIndex]
       if (!card?.faceUp) {
         return
@@ -384,12 +413,18 @@ export function useKlondikeGame(drawCount: 1 | 3) {
 
       selectFrom(from, cardCount)
     },
-    [attemptMoveTo, clearSelection, selectFrom, selection, state.tableau],
+    [
+      attemptMoveTo,
+      boardState.tableau,
+      clearSelection,
+      selectFrom,
+      selection,
+    ],
   )
 
   const handleWasteClick = React.useCallback(() => {
     const from: KlondikePileRef = { pile: "waste" }
-    if (!state.waste.length) {
+    if (!boardState.waste.length) {
       return
     }
 
@@ -406,7 +441,13 @@ export function useKlondikeGame(drawCount: 1 | 3) {
     }
 
     selectFrom(from, 1)
-  }, [attemptMoveTo, clearSelection, selectFrom, selection, state.waste.length])
+  }, [
+    attemptMoveTo,
+    boardState.waste.length,
+    clearSelection,
+    selectFrom,
+    selection,
+  ])
 
   const handleFoundationClick = React.useCallback(
     (index: KlondikePileRef & { pile: "foundation" }) => {
@@ -446,13 +487,14 @@ export function useKlondikeGame(drawCount: 1 | 3) {
   useEngagementRecorder({
     gameId: "solitaire",
     variant: "klondike",
-    status: state.status,
+    status: boardState.status,
     isDaily: false,
-    moves: state.moves,
+    moves: boardState.moves,
   })
 
   return {
-    state,
+    loadStatus,
+    state: boardState,
     selection,
     feedback,
     isPlaying,
