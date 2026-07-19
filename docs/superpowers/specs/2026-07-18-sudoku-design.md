@@ -1,7 +1,7 @@
 # Sudoku Game Design
 
 **Date:** 2026-07-18  
-**Status:** Draft  
+**Status:** Implemented 2026-07-19
 **Scope:** Classic 9×9 Sudoku — domain engine, generation/rating, launch + play UI, persistence, engagement stats
 
 ---
@@ -11,6 +11,15 @@
 Ship Sudoku as a first-class Pasttime solo game: classic 9×9, Easy / Medium / Hard (NYT-inspired technique bands), Daily and Endless per difficulty, NYT-style candidates (manual + optional auto-candidate), undo, timer, live peer-conflict highlighting, and local engagement stats. No hints, share cards, variants, or multiplayer in v1.
 
 **Approach:** Pasttime-native domain engine + feature plugin (same shape as Crossword / Word Guess). Runtime seeded generation with a technique-based reject loop (Web Worker + daily cache).
+
+### Implementation outcome
+
+The v1 scope shipped as specified. Follow-up polish completed the single-primary
+daily launch action, timer reconciliation across persistence/resume, stale-key
+persistence guards, loading-state hydration, and explicit JSX spacing in the
+How to Play dialog. The live implementation is under
+`packages/domain/games/sudoku/` and
+`apps/web/src/features/games/sudoku/`.
 
 ---
 
@@ -110,7 +119,8 @@ Clue count is a soft target only. Accept/reject uses the technique ladder. Same 
 ### Launch (`/games/sudoku`)
 
 - Difficulty picker: Easy / Medium / Hard
-- `GameLaunchActions` for Daily + Endless
+- `GameLaunchActions` exposes one primary route: Daily until that difficulty is
+  complete for the day, then Random/Endless
 - How to Play
 - Settings: default auto-candidate preference
 - Daily completion via `useDailyCompleted("sudoku", difficulty)`
@@ -147,7 +157,9 @@ Clue count is a soft target only. Accept/reject uses the technique ladder. Same 
 4. Mutations → domain state → persist → UI  
 5. Win → persist → `useEngagementRecorder`  
 
-Timer v1: elapsed derived from persisted `startedAt` while playing (no pause UI unless shared shell already provides it).
+Timer v1: elapsed derives from persisted `elapsedMs + (now - startedAt)` while
+playing. Every mutation flushes the current segment into `elapsedMs`, keeping
+resumed time accurate without a pause UI.
 
 ---
 

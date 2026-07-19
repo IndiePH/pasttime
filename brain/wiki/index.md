@@ -1,5 +1,5 @@
 # Wiki Index
-updated: 2026-07-18
+updated: 2026-07-20
 
 Master list of all wiki pages. One line per page.
 Keep entries sorted alphabetically. Add a page here whenever you create one.
@@ -12,4 +12,4 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 | [engineering-decisions](engineering-decisions.md) | Persistent log of architectural, tradeoff, rule-override, and technical-debt decisions |
 | [nyt-engagement-patterns](nyt-engagement-patterns.md) | NYT Games engagement patterns analysis for Pasttime engagement features |
 | [percentile-ranking-patterns](percentile-ranking-patterns.md) | Anonymous percentile-based ranking styles (Wordle, Duolingo, Spotify Wrapped patterns) |
-| [sudoku-design](sudoku-design.md) | Sudoku v1 decisions: bands, candidates, generation A, storage keys |
+| [sudoku-design](sudoku-design.md) | Shipped Sudoku v1 decisions and patterns: difficulty bands, generation, storage, timer, hydration, and launch UX |

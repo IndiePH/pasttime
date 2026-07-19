@@ -64,6 +64,11 @@ Rules engines live in `packages/domain/games/<id>/` as **pure functions**
 Hooks (`features/games/<id>/hooks/`) call domain functions and manage React state + persistence only.
 **Never put rule logic in a `"use client"` file.**
 
+Sudoku follows this split end to end: `packages/domain/games/sudoku/` owns
+generation, technique rating, mutations, conflicts, persistence parsing, and
+settings; `apps/web/src/features/games/sudoku/` owns the Worker bridge, React
+state, launch/play UI, and engagement integration.
+
 ## URL state (nuqs) — SSR/CSR alignment
 
 Each game with query settings has `features/games/<id>/search-params.ts` exporting a
@@ -79,8 +84,17 @@ not be duplicated in components. The play/launch pages call
 `useStorage()` returns a `StorageAdapter`. Persisted reads must be **validated** with a type guard /
 `asStored*` parser (see `word-guess/persistence.ts`: `parseStoredWordGuessGame` returns `null` on bad
 data). Invalid stored data → discard and start fresh, never throw. Storage key convention:
-`<game-id>:<scope>:<mode>:...` (e.g. `word-guess:solo:...`). SSR note: `getStorage()` returns `null`
-on the server. See `docs/QUALITY-CHECKLIST.md` Slice Q6.
+`<game-id>:<scope>:<mode>:...` (e.g. `word-guess:solo:...`). SSR note: the local-storage adapter's
+`get` returns `null` when `window.localStorage` is unavailable. See
+`docs/QUALITY-CHECKLIST.md` Slice Q6.
+
+When a browser-only read or random deal affects rendered markup, initialize the
+game state to `null` and render a stable loading branch for SSR and the first
+client render. Read storage in an effect and commit synchronous results from a
+callback/microtask rather than calling a state setter directly in the effect
+body. Solitaire and Sudoku use this pattern. For games whose storage key can
+change while mounted, track the loaded key and only persist when it matches the
+current key; this prevents stale state crossing difficulty or mode slots.
 
 ## Testing
 
@@ -92,7 +106,9 @@ on the server. See `docs/QUALITY-CHECKLIST.md` Slice Q6.
 - Reference test suites to model new ones on:
   - `packages/domain/games/word-guess/{evaluate-guess,game,persistence}.test.ts`
   - `packages/domain/games/solitaire/klondike/game.test.ts`
+  - `packages/domain/games/sudoku/{generate,rate,game,persistence}.test.ts`
   - `apps/web/src/features/games/word-guess/hooks/use-word-guess-game.test.tsx`
+  - `apps/web/src/features/games/sudoku/hooks/use-sudoku-game.test.tsx`
 - Run a single package: `npm run test -w @pasttime/domain` / `-w @pasttime/web`.
 
 ## Conventions & gotchas
@@ -122,7 +138,8 @@ on the server. See `docs/QUALITY-CHECKLIST.md` Slice Q6.
 - `brain/sources/` — **read-only**. Never edit.
 - When asked to "remember X", treat as an Ingest op (update the most specific existing page,
   cross-link via `related:`, never delete — deprecate with a note). `brain/wiki/engineering-decisions.md`
-  is the ADR log (currently empty — append rows, don't rewrite).
+  is the ADR log (append rows; correct superseded decisions in place with an
+  explicit note).
 
 ## Skills directory (`skills/`)
 

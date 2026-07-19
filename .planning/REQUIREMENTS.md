@@ -7,10 +7,16 @@
 
 Requirements for shipping Solitaire and Word Guess alongside crossword, with a shared per-game engagement layer.
 
+**Scope extension:** Sudoku v1 shipped 2026-07-19 as an additive game after
+this 44-requirement roadmap was defined. Its requirements and completion record
+live in `docs/superpowers/specs/2026-07-18-sudoku-design.md` and
+`docs/superpowers/plans/2026-07-18-sudoku.md`; the IDs and coverage totals below
+remain the canonical v1.1 Phase 4–8 set.
+
 ### Solitaire (Klondike)
 
 - [x] **SOL-01**: Player can deal a standard Klondike solitaire game (random shuffle)
-- [x] **SOL-02**: Player can draw 1 or 3 cards from stock (configurable in settings)
+- [x] **SOL-02**: Player can choose Klondike Draw 1 or Draw 3 at launch
 - [x] **SOL-03**: Player can drag cards between tableau columns (descending, alternating colors)
 - [x] **SOL-04**: Player can move cards to foundation piles (A→K per suit)
 - [x] **SOL-05**: Player can double-click/tap to auto-send eligible cards to foundation
@@ -27,7 +33,7 @@ Requirements for shipping Solitaire and Word Guess alongside crossword, with a s
 - [x] **WRD-04**: Daily mode — one shared word per day (seed from date, deterministic)
 - [x] **WRD-05**: Endless/random mode — random word on demand with chosen length
 - [x] **WRD-06**: Hard mode — correctly placed letters must be reused in subsequent guesses
-- [x] **WRD-07**: Daily mode game state persists in localStorage; endless mode is ephemeral
+- [x] **WRD-07**: Daily mode persists per date/length; endless mode resumes from one shared random-session slot
 - [x] **WRD-08**: Invalid word detection (not in dictionary) shows visual feedback (shake)
 
 ### Engagement Package (`@pasttime/domain/engagement`)
@@ -151,4 +157,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-07-01*
-*Last updated: 2026-07-01 after initial definition*
+*Last updated: 2026-07-20 to record the separate Sudoku scope extension*

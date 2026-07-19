@@ -17,6 +17,13 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Available web games
+
+- Crossword — Daily and Endless
+- Solitaire — Klondike Draw 1 and Draw 3
+- Word Guess — Daily and Endless, 5–10 letters
+- Sudoku — Daily and Random, Easy/Medium/Hard
+
 ### Multiplayer API (optional)
 
 ```bash
@@ -85,5 +92,8 @@ On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows
 ## Docs
 
 - [Design direction](./docs/DESIGN.md)
+- [Architecture](./docs/ARCHITECTURE.md)
+- [Game catalog](./docs/GAMES.md)
 - [Implementation slices](./docs/IMPLEMENTATION.md)
 - [Quality checklist](./docs/QUALITY-CHECKLIST.md)
+- [Sudoku v1 design](./docs/superpowers/specs/2026-07-18-sudoku-design.md)

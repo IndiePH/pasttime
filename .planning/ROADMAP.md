@@ -7,7 +7,7 @@
 ## Milestones
 
 - ✅ **v1.0 Crossword Completion** — Phases 1–3 (shipped 2026-06-29)
-- 🚧 **v1.1 Three Games + Engagement** — Phases 4–8 (in planning)
+- 🚧 **v1.1 Three Games + Engagement** — Phases 4–8 (executing; Phase 8 remains)
 
 ## Phases
 
@@ -59,13 +59,18 @@
 </details>
 
 <details open>
-<summary>🚧 v1.1 Three Games + Engagement (Phases 4–8) — PLANNING</summary>
+<summary>🚧 v1.1 Three Games + Engagement (Phases 4–8) — EXECUTING</summary>
 
 - [x] **Phase 4: Engagement Foundation** — Shared domain package for per-game streaks and stats computation (completed 2026-07-03)
 - [x] **Phase 5: Solitaire Klondike** — Complete playable Klondike with drag-and-drop, foundation moves, win detection (completed 2026-07-02)
 - [x] **Phase 6: Word Guess** — Word-guessing game with visual feedback, daily+endless modes, hard mode (completed 2026-07-02)
-- [ ] **Phase 7: Streaks, Stats & Crossword Engagement** — Per-game streaks, stats pages, crossword engagement wiring
+- [x] **Phase 7: Streaks, Stats & Crossword Engagement** — Per-game streaks, stats pages, crossword engagement wiring (completed 2026-07-03)
 - [ ] **Phase 8: Rankings & Share Cards** — Comparative rankings and post-solve sharing for all games
+
+**Post-roadmap extension:** Sudoku v1 shipped 2026-07-19. It is an additive
+available game documented in
+`docs/superpowers/specs/2026-07-18-sudoku-design.md`; it does not change the 44
+requirement IDs mapped to Phases 4–8.
 
 ### Phase 4: Engagement Foundation
 
@@ -94,11 +99,11 @@
 **Success Criteria** (what must be TRUE):
 
   1. Player can deal a new Klondike game and see the standard 7-column tableau layout with face-up cards
-  2. Player can draw 1 or 3 cards from stock (configurable in settings)
+  2. Player can choose Klondike Draw 1 or Draw 3 at launch
   3. Player can drag cards between tableau columns, respecting descending-rank and alternating-color rules
   4. Player can move cards to foundation piles (A→K per suit); win detection fires when all 52 cards are on foundation
   5. Player can double-click/tap an eligible card to auto-send it to foundation; empty tableau columns accept Kings only
-  6. Game state and draw-mode setting persist in localStorage across page refreshes
+  6. Game state and play preferences persist in localStorage across page refreshes
 
 **Plans**: 2/2 complete
 

@@ -61,8 +61,9 @@ npm run build
 ### Known fixes (track until done)
 
 - [x] **Crossword:** `available` in registry + module + play UI now implemented
-- [ ] **Solitaire:** play UI beyond placeholder before treating as fully live
-- [ ] Hub filter `?status=available` only lists games that pass checks above
+- [x] **Solitaire:** Klondike Draw 1/3 are fully playable; non-Klondike modes are explicitly labeled coming soon
+- [x] **Sudoku:** domain, launch/play UI, settings, How to Play, stats, and registry wiring implemented
+- [x] Hub filter `?status=available` only lists games that pass checks above
 
 **DoD:** No `available` game without a registered module and honest play experience.
 
@@ -121,6 +122,8 @@ Per game with query settings:
 - [ ] Same parsers used on client hooks
 - [ ] Game play/launch pages call `parseGameSearchParams(slug, searchParams)` before render
 - [ ] Defaults live in domain settings, not duplicated in components
+- [ ] Browser-only state or random deals render a stable loading branch until mounted
+- [ ] Effects do not synchronously call state setters to commit storage reads; use an async callback/microtask
 
 **Refactor target:**
 
@@ -140,11 +143,12 @@ Per game with query settings:
 - [x] `game.test.ts` — submit, win/lose, invalid word/length
 - [ ] Hook test kept in sync when persistence shape changes (`use-word-guess-game.test.tsx`)
 
-### Next games (Solitaire, etc.)
+### Solitaire and Sudoku
 
-- [ ] Pure functions in `src/domain/games/<id>/` have `*.test.ts`
-- [ ] Cover: valid move, invalid move, win/lose/stalemate (as applicable)
-- [ ] No game rule logic only in `"use client"` files
+- [x] Pure functions in `packages/domain/games/<id>/` have `*.test.ts`
+- [x] Solitaire covers valid/invalid moves and win state
+- [x] Sudoku covers generation, difficulty rating, play mutations, persistence, and conflicts
+- [x] No game rule logic only in `"use client"` files
 
 **DoD:** Changing evaluation/move logic fails tests before UI manual check.
 
@@ -156,15 +160,16 @@ Per game with query settings:
 
 ### Storage adapter (`src/infrastructure/storage/`)
 
-- [x] SSR-safe (`getStorage()` null on server)
+- [x] SSR-safe (local adapter `get` returns `null` without browser storage)
 - [x] Parse errors return `null`
-- [ ] Document keys convention: `<game-id>:<scope>:<mode>:...` (see Word Guess `word-guess:solo:...`)
+- [x] Document keys convention: `<game-id>:<scope>:<mode>:...` (see Word Guess `word-guess:solo:...`)
 
 ### Per game that persists state
 
 - [ ] Typed stored shape (interface in domain or feature)
 - [ ] `asStored*` guard or Zod parse on read (Word Guess `asStoredWordGuessGame` is the pattern)
 - [ ] Invalid stored data → discard and start fresh round (no throw)
+- [ ] If the key changes while mounted, persist only after the loaded key matches the current key
 - [ ] Do not persist secrets needed for competitive integrity (see Q7)
 
 **DoD:** Manually corrupting localStorage key resets game without white screen.

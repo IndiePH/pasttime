@@ -6,8 +6,8 @@ current_phase: 8
 current_phase_name: Rankings & Share Cards
 status: not_started
 stopped_at: Phase 7 complete — ready for Phase 8
-last_updated: "2026-07-03T00:00:00.000Z"
-last_activity: 2026-07-03
+last_updated: "2026-07-20T00:00:00.000Z"
+last_activity: 2026-07-20
 progress:
   total_phases: 5
   completed_phases: 4
@@ -25,11 +25,11 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-07-01)
+See: .planning/PROJECT.md (updated 2026-07-20)
 
-**Core Value:** A player can open any of 3 games (crossword, solitaire, word guess), play a satisfying round, see their per-game streaks and stats, and know how they compare to the playerbase — all without logging in.
+**Core Value:** A player can open an available game, play a satisfying round, see per-game streaks and stats, and know how they compare to the playerbase — all without logging in. The available web catalog now includes Crossword, Solitaire, Word Guess, and the post-roadmap Sudoku extension.
 
-**Current Focus:** Phase 7 — Streaks, Stats & Crossword Engagement
+**Current Focus:** Phase 8 — Rankings & Share Cards
 
 ---
 
@@ -40,7 +40,7 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 | Phase | 8 — Rankings & Share Cards |
 | Plans | TBD |
 | Status | Not started |
-| Last activity | 2026-07-03 |
+| Last activity | 2026-07-20 |
 
 ## Milestone Overview
 
@@ -63,6 +63,11 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 | 6 — Word Guess | Word-guessing game with all modes | 8 (WRD-01—WRD-08) | ✅ Complete |
 | 7 — Streaks, Stats & Crossword Engagement | Per-game streaks, stats pages, crossword wiring | 13 (STK-01—STK-05, STA-01—STA-05, ENH-01—ENH-03) | ✅ Complete |
 | 8 — Rankings & Share Cards | Comparative rankings and share cards | 9 (CMP-01—CMP-04, SHR-01—SHR-05) | Not started |
+
+**Post-roadmap extension:** Sudoku v1 shipped 2026-07-19 with Daily/Random
+Easy/Medium/Hard play, candidates, undo, timer, persistence, stats, and a
+technique-rated seeded generator. It is documented separately from the 44
+v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 
 ---
 
@@ -100,11 +105,11 @@ See: .planning/PROJECT.md (updated 2026-07-01)
 
 ## Session Continuity
 
-**Resume file:** .planning/phases/07-streaks-stats-crossword-engagement/ (to be created)
+**Resume file:** Phase 8 has no plan directory yet.
 
-**Last session:** 2026-07-03T00:00:00.000Z
-**Current session:** 2026-07-03
-**Stopped at:** Phase 7 complete
+**Last session:** 2026-07-20T00:00:00.000Z
+**Current session:** 2026-07-20
+**Stopped at:** Phase 7 complete; Sudoku extension shipped and polished
 **Next action:** Start Phase 8 planning. Run `/gsd-plan-phase 8` or `/gsd-discuss-phase 8`.
 
 ---
