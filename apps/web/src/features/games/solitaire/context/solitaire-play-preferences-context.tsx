@@ -2,10 +2,7 @@
 
 import * as React from "react"
 
-import {
-  DEFAULT_PLAYING_CARD_VARIANT,
-  type PlayingCardVariant,
-} from "@pasttime/domain/games"
+import type { PlayingCardVariant } from "@pasttime/domain/games"
 import {
   readCardVariant,
   writeCardVariant,
@@ -35,17 +32,14 @@ export function SolitairePlayPreferencesProvider({
 }: SolitairePlayPreferencesProviderProps) {
   const storage = useStorage()
 
-  // Defaults match SSR (no localStorage). Hydrate from storage after mount so
-  // the first client paint matches the server HTML.
   const [cardVariant, setCardVariantState] =
-    React.useState<PlayingCardVariant>(DEFAULT_PLAYING_CARD_VARIANT)
+    React.useState<PlayingCardVariant>(() =>
+      readCardVariant(storage.get.bind(storage)),
+    )
 
-  const [autoStackEnabled, setAutoStackEnabledState] = React.useState(false)
-
-  React.useEffect(() => {
-    setCardVariantState(readCardVariant(storage.get.bind(storage)))
-    setAutoStackEnabledState(readAutoStackEnabled(storage.get.bind(storage)))
-  }, [storage])
+  const [autoStackEnabled, setAutoStackEnabledState] = React.useState(() =>
+    readAutoStackEnabled(storage.get.bind(storage)),
+  )
 
   const setCardVariant = React.useCallback(
     (variant: PlayingCardVariant) => {

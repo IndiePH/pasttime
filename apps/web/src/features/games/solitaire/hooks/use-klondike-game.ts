@@ -136,12 +136,19 @@ export function useKlondikeGame(drawCount: 1 | 3) {
   const [feedback, setFeedback] = React.useState<string | null>(null)
 
   React.useEffect(() => {
+    let cancelled = false
     const stored = storage.get<unknown>(STORAGE_KEY)
-    setState(
-      isKlondikeState(stored, drawCount)
-        ? stored
-        : createKlondikeGame({ drawCount }),
-    )
+    queueMicrotask(() => {
+      if (cancelled) return
+      setState(
+        isKlondikeState(stored, drawCount)
+          ? stored
+          : createKlondikeGame({ drawCount }),
+      )
+    })
+    return () => {
+      cancelled = true
+    }
   }, [storage, drawCount])
 
   React.useLayoutEffect(() => {
