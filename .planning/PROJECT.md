@@ -2,13 +2,13 @@
 
 ## What This Is
 
-Pasttime is a multi-platform games hub (Next.js web on Cloudflare Workers, plus Electron desktop, Expo mobile, and an Express/WS multiplayer server) sharing a pure `@pasttime/domain` package. The crossword game is fully playable with real interlocking words from a shipped corpus, interactive grid filling, keyboard navigation, visual feedback, daily shared puzzle mode, and endless/random mode with grid size selection.
+Pasttime is a multi-platform games hub (Next.js web on Cloudflare Workers, plus Electron desktop, Expo mobile, and an Express/WS multiplayer server) sharing a pure `@pasttime/domain` package. The web catalog currently has four available games: Crossword, Solitaire (Klondike Draw 1/3), Word Guess, and Sudoku.
 
 ## Core Value
 
-A player can open the crossword, read real clues, fill an interlocking grid, and have a correct solve detected — for both the daily puzzle and endless mode.
+A player can open an available game, play a satisfying round, and keep anonymous local progress without logging in.
 
-## Current State (v1.0 — Shipped)
+## Current State
 
 The crossword milestone delivered:
 - **Runtime generation**: Seeded-random, deterministic, in-browser — reuses daily-seed infra
@@ -24,22 +24,32 @@ The crossword milestone delivered:
 **Timeline:** 10 days (2026-06-19 → 2026-06-29)
 **Commits:** ~48 crossword-related commits
 
+Subsequent work added:
+- **Solitaire:** playable Klondike Draw 1/3, drag/tap interactions,
+  auto-foundation/auto-stack, persistence, and stats
+- **Word Guess:** Daily/Endless, 5–10 letters, hard mode, keyboard feedback,
+  persistence, and stats
+- **Sudoku:** Daily/Random Easy/Medium/Hard, deterministic technique-rated
+  generation, candidates, undo, timer, persistence, and stats
+- **Engagement:** shared daily completion, streak, stats, and percentile helpers
+
 ## Current Milestone: v1.1 — Three Games + Engagement
 
 **Goal:** Ship Solitaire Klondike and Word Guess as fully playable games alongside
-crossword, with a shared engagement layer providing streaks, stats, timers,
-comparative rankings, and share cards — no login required, localStorage-backed.
+crossword, with a shared engagement layer providing streaks, stats, comparative
+rankings, and share cards — no login required, localStorage-backed.
 
-**Progress:** Phase 4 (Engagement Foundation) shipped — shared domain package for streaks
-and stats. Phase 5 (Solitaire Klondike) complete — draw-1/draw-3 modes, full drag-and-drop,
-foundation moves, win detection, state persistence.
+**Progress:** Phases 4–7 are complete. Phase 8 (Rankings & Share Cards) has not
+started. Sudoku shipped on 2026-07-19 as a post-roadmap scope extension and is
+tracked in its dedicated design spec rather than the 44 v1.1 requirement IDs.
 
 **Target features:**
 - ✅ Solitaire Klondike — Klondike Draw 1 + Draw 3 modes with draw-3 waste fan
-- Ship Word Guess — guess in 6 tries, keyboard, persistence (domain exists, wire UI)
-- New `@pasttime/domain/engagement` package — game-agnostic streaks, stats, timer
-- Per-game stats page — streak calendar, solve count, win rate, times, comparative "better than X%"
-- Optional timer during play for all 3 games
+- ✅ Word Guess — six-try board, keyboard, Daily/Endless, hard mode, persistence
+- ✅ Sudoku — classic 9×9 Daily/Random with candidates, undo, timer, and stats
+- ✅ New `@pasttime/domain/engagement` package — game-agnostic streaks and stats
+- ✅ Per-game stats pages and engagement recording
+- Comparative "better than X%" rankings and share cards remain Phase 8
 - Share cards after solve — visual result summary, no spoilers
 - No login/accounts (anonymous device ID + localStorage)
 - No multiplayer for these 3 in this milestone
@@ -71,7 +81,8 @@ foundation moves, win detection, state persistence.
 
 ### Active
 
-v1.1 requirements to be defined. See `.planning/REQUIREMENTS.md`.
+Phase 8 requirements `CMP-01—CMP-04` and `SHR-01—SHR-05` remain active. See
+`.planning/REQUIREMENTS.md`.
 
 ### Out of Scope
 
@@ -82,24 +93,20 @@ v1.1 requirements to be defined. See `.planning/REQUIREMENTS.md`.
 - Login / accounts (authentication) — anonymous device ID + localStorage, no server-side identity
 - Push notifications — defer to when server-side infra justifies it
 - Friends / leaderboards — defer to future milestone
-- Additional games beyond crossword, solitaire, word-guess
+- Additional games beyond the approved catalog. The original three-game limit
+  was superseded for the explicit Sudoku v1 extension shipped 2026-07-19.
 - Multiplayer for these 3 games in this milestone
 
 ## Context
 
 **Stack:** TypeScript ESM monorepo, Next.js 16 / React 19, Tailwind v4 + shadcn/Radix, nuqs for URL state, Vitest (jsdom). Domain package pure TS (no React/IO), consumed as TS source via `transpilePackages`.
 
-**Current crossword state (v1.0 shipped):**
-- Fully playable with real interlocking words, clues, keyboard/mouse interaction
-- Both daily and endless modes working with grid size selection
-- Win detection, show-errors, auto-check all functional
-- Error boundary and daily rollover handling in place
-- 65 web + 132 domain tests, tsc clean
-
-**Existing domain code for solitaire & word-guess:**
-- Solitaire Klondike: full domain (deck, deal, game logic, rules, types)
-- Word Guess: full domain (dictionary, guess evaluation, game state, persistence)
-- Both have UI shells (launch view, play view components) registered in GAME_MODULES
+**Current available web games:**
+- Crossword: Daily/Endless grids, generation, clues, keyboard/mouse play
+- Solitaire: Klondike Draw 1/3 (other listed layouts remain previews)
+- Word Guess: Daily/Endless, hard mode, 5–10 letters
+- Sudoku: Daily/Random, Easy/Medium/Hard, candidates, undo, timer
+- All four are registered in `GAME_MODULES` with launch/play surfaces and stats
 - `useDailyCompleted` hook already exists for cross-game daily tracking
 - Room/multiplayer infrastructure exists (Express/WS server, anonymous device IDs)
 
@@ -149,4 +156,4 @@ This document evolves at milestone transitions.
 - ✓ Draw action produces screen-reader feedback — Phase 5
 
 ---
-*Last updated: 2026-07-02 after Phase 5 completion*
+*Last updated: 2026-07-20 after Sudoku launch and documentation reconciliation*

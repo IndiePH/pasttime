@@ -28,11 +28,11 @@ This is not legal advice.
 | # | id | title | Inspiration | legalStatus | Gameplay viability note | Reconsider for launch? |
 |---|---|---|---|---|---|---|
 | 1 | `word-guess` | Word Guess | Wordle-style | caution | Strong fit. Word list + letter grid only. Solo + multiplayer + co-op planned. | No |
-| 2 | `solitaire` | Solitaire | Klondike + other layouts | caution | Available. Modes: Klondike, Pyramid, TriPeaks, FreeCell (see `docs/SOLITAIRE.md`). | No |
+| 2 | `solitaire` | Solitaire | Klondike + other layouts | caution | Available. Klondike Draw 1/3 are playable; Pyramid, TriPeaks, and FreeCell remain preview modes (see `docs/SOLITAIRE.md`). | No |
 | 3 | `tongits` | Tongits | Tongits | caution | Strong fit. Standard 52-card rules and simple card UI. Multiplayer. | Maybe (trademark check first) |
 | 4 | `pusoy-dos` | Pusoy Dos | Pusoy dos | caution | Strong fit. Standard card-game mechanics and simple UI. Multiplayer. | Maybe (trademark check first) |
 | 5 | `crossword` | Crossword | Crossword puzzle | caution | Fit for solo with text/grid assets only. | Maybe (content pipeline complexity) |
-| 6 | `sudoku` | Sudoku | Sudoku puzzle | caution | Excellent low-asset solo game. | No |
+| 6 | `sudoku` | Sudoku | Sudoku puzzle | caution | Available. Classic 9×9 with Easy/Medium/Hard, daily/random play, candidates, undo, timer, and stats. | No |
 | 7 | `reversi` | Reversi | Reversi/Othello-style | caution | Great fit. 8x8 board + two token colors. Solo or multiplayer. | Maybe (rules polish) |
 | 8 | `fleet-grid` | Fleet Grid | Battleship-style | caution | Fit with grid + markers only. Solo practice or multiplayer. | Maybe (avoid trademarked wording) |
 | 9 | `spades` | Spades | Spades | caution | Strong card game candidate for multiplayer. | Maybe (trademark check first) |

@@ -20,9 +20,9 @@ export function SudokuHowToPlay({ game }: SudokuHowToPlayProps) {
             <strong>Normal</strong> mode enters your final answer for a cell.
           </li>
           <li>
-            <strong>Candidates</strong> mode marks small pencil notes for
-            digits you&rsquo;re still considering — toggle it from the number
-            pad.
+            <strong>Candidates</strong>{" "}
+            mode marks small pencil notes for digits you&rsquo;re still
+            considering — toggle it from the number pad.
           </li>
           <li>
             Turning on auto-candidates fills in every cell&rsquo;s remaining

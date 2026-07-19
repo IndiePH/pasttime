@@ -1,7 +1,7 @@
 # Pasttime — File Index
 
 A flat, navigable index of the **pasttime** monorepo: a cross-platform games hub
-(web, desktop, mobile, multiplayer server). Updated 2026-06-17.
+(web, desktop, mobile, multiplayer server). Updated 2026-07-20.
 
 Legend: ✅ implemented/available · 🚧 coming soon / scaffold · ⚙️ engine/package
 
@@ -94,6 +94,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | → `games/solitaire/` | ✅ Klondike (see [§5](#5-game-modules)) |
 | → `games/word-guess/` | ✅ Word Guess (see [§5](#5-game-modules)) |
 | → `games/crossword/` | ✅ Crossword (see [§5](#5-game-modules)) |
+| → `games/sudoku/` | ✅ Sudoku (see [§5](#5-game-modules)) |
 
 **L0–L2 — Platform & infra** (`src/`)
 | Path | Purpose |
@@ -216,7 +217,7 @@ for what a game *is*.
 | `games/word-guess/game.ts` / `game.test.ts` | Game engine + tests |
 | `games/word-guess/persistence.ts` / `persistence.test.ts` | Save/restore |
 
-**Game: crossword** ✅ (new — untracked)
+**Game: crossword** ✅
 | Path | Purpose |
 |------|---------|
 | `games/crossword/index.ts` | Barrel |
@@ -224,6 +225,16 @@ for what a game *is*.
 | `games/crossword/settings.ts` | Settings schema |
 | `games/crossword/paths.ts` | Route paths |
 | `games/crossword/clues.json` | Puzzle clue bank |
+
+**Game: sudoku** ✅
+| Path | Purpose |
+|------|---------|
+| `games/sudoku/{types,settings,paths}.ts` | Domain types, settings, and routes |
+| `games/sudoku/{rng,board,conflicts}.ts` | Deterministic RNG and board helpers |
+| `games/sudoku/{rate,generate}.ts` | Human-technique rating and seeded generation |
+| `games/sudoku/game.ts` | Pure play mutations, candidates, undo, and win detection |
+| `games/sudoku/{persistence,play-preferences}.ts` | Storage validation, keys, and preferences |
+| `games/sudoku/*.test.ts` | Domain coverage for settings, generation, rating, play, and persistence |
 
 ---
 
@@ -263,6 +274,8 @@ Typed REST + WebSocket multiplayer client (shared web/mobile).
 | `docs/QUALITY-CHECKLIST.md` | Quality checklist |
 | `docs/GAMES.md` | Game catalog overview |
 | `docs/SOLITAIRE.md` | Solitaire spec |
+| `docs/superpowers/specs/2026-07-18-sudoku-design.md` | Implemented Sudoku v1 design |
+| `docs/superpowers/plans/2026-07-18-sudoku.md` | Completed Sudoku implementation plan |
 | `docs/CARD-ASSETS.md` | Card SVG asset spec |
 | `docs/DEPLOY.md` | Cloudflare deploy + data-build scripts |
 | `docs/CONTENT-STORAGE-HANDOFF.md` | R2 + D1 lexicon migration plan (Worker size) |
@@ -281,10 +294,10 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 |------|--------|--------|--------|-------------------|
 | **Solitaire (Klondike)** | ✅ | `games/solitaire/klondike/*` | `features/games/solitaire/` | `LaunchView`, `PlayView`, `SettingsWidget`, `playLayout: board` |
 | **Word Guess** | ✅ | `games/word-guess/*` | `features/games/word-guess/` | `LaunchView`, `PlayView`, `SettingsWidget`, `HowToPlayContent` |
-| **Crossword** | ✅ (new) | `games/crossword/*` | `features/games/crossword/` | `LaunchView`, `PlayView`, `SettingsWidget`, `HowToPlayContent`, `playLayout: board` |
+| **Crossword** | ✅ | `games/crossword/*` | `features/games/crossword/` | `LaunchView`, `PlayView`, `SettingsWidget`, `HowToPlayContent`, `playLayout: board` |
+| **Sudoku** | ✅ | `games/sudoku/*` | `features/games/sudoku/` | `LaunchView`, `PlayView`, `StatsView`, `SettingsWidget`, `HowToPlayContent`, `playLayout: board` |
 | Tongits | 🚧 | — | — | catalog only |
 | Pusoy Dos | 🚧 | — | — | catalog only |
-| Sudoku | 🚧 | — | — | catalog only |
 | Reversi | 🚧 | — | — | catalog only |
 | Fleet Grid | 🚧 | — | — | catalog only |
 | Spades | 🚧 | — | — | catalog only |
@@ -305,9 +318,16 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 - `hooks/`: `use-word-guess-game` (+ `.test.tsx`), `use-word-guess-daily-completed`
 - `search-params.ts`, `index.ts`
 
-**Crossword web UI** (`features/games/crossword/`) — *untracked*
+**Crossword web UI** (`features/games/crossword/`)
 - `components/`: `crossword-grid`, `crossword-how-to-play`, `crossword-launch-view`, `crossword-mode-picker`, `crossword-play-settings-widget`, `crossword-play-view`, `crossword-settings-widget`, `index`
 - `hooks/use-crossword-game.ts`
+- `search-params.ts`, `index.ts`
+
+**Sudoku web UI** (`features/games/sudoku/`)
+- `components/`: launch, settings, How to Play, grid, number pad, play settings, and play view (with component tests)
+- `context/`: persisted auto-candidate preference provider + test
+- `hooks/use-sudoku-game.ts` (+ test): load/generate/persist flow, timer reconciliation, engagement recording
+- `lib/generate-sudoku.client.ts` (+ test) and `workers/sudoku-generate.worker.ts`: generation bridge
 - `search-params.ts`, `index.ts`
 
 ---
