@@ -34,10 +34,6 @@ export function SudokuLaunchView({ game }: SudokuLaunchViewProps) {
         game={game}
         playHref={sudokuPlayPath(difficulty, isDailyCompleted ? "random" : "daily")}
         dailyCompleted={isDailyCompleted}
-        secondaryAction={{
-          label: "Play endless",
-          href: sudokuPlayPath(difficulty, "random"),
-        }}
         statsHref="/games/sudoku/stats"
       />
     </GamePageShell>
