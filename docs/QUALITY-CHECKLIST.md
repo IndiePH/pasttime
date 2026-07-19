@@ -82,6 +82,26 @@ npm run build
 6. [ ] Domain tests for pure logic (`src/**/*.test.ts`)
 7. [ ] (Optional) Hook/component test for primary user flow
 
+### Daily-mode launch contract
+
+For every game with both daily and repeatable (random/endless) modes:
+
+1. [ ] Use `useDailyCompleted(gameId, variant)` (or a documented game-specific equivalent) and `GameLaunchActions`.
+2. [ ] Before completion, show one primary action: **Play daily puzzle**, linked to the daily mode. Do not show the random/endless action yet.
+3. [ ] After the daily reaches a terminal state (`won` or `lost`), hide the daily action and replace it with one primary **Play puzzle** or **Play endless** action linked to random/endless mode.
+4. [ ] Do not add an always-visible random/endless `secondaryAction`; it duplicates the post-completion primary action. Secondary actions are reserved for a distinct destination such as **View today's results**.
+5. [ ] Persist the daily state where the completion hook can read its top-level `status`, using the key `{gameId}:daily:{variant}:{dailySeed}` unless the game documents and tests an equivalent key.
+6. [ ] Test both launch states: incomplete/in-progress shows only daily; completed shows only random/endless. Assert labels and destinations so two buttons cannot target the same mode.
+
+Reference implementations:
+
+- `apps/web/src/features/games/crossword/components/crossword-launch-view.tsx`
+- `apps/web/src/features/games/sudoku/components/sudoku-launch-view.tsx`
+- `apps/web/src/features/games/hooks/use-daily-completed.test.ts`
+- `apps/web/src/features/games/components/__tests__/game-launch-actions.test.tsx`
+
+**DoD:** A daily game never offers daily and random/endless play at the same time; completion swaps the single primary action.
+
 ### Registry loading (when ≥3 live games)
 
 - [ ] Replace static imports in `module-registry.ts` with `dynamic()` / lazy map per `gameId`

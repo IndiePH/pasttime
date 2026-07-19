@@ -30,4 +30,5 @@ See [DESIGN.md](./DESIGN.md).
 2. Registry entry + icon in L3
 3. `features/games/<id>/` module
 4. Register in L4 `moduleRegistry` — no new route file
-5. Complete relevant gates in [QUALITY-CHECKLIST.md](./QUALITY-CHECKLIST.md) (tests, registry integrity, URL state)
+5. If the game has daily + repeatable modes, implement the [daily-mode launch contract](./QUALITY-CHECKLIST.md#daily-mode-launch-contract): daily is the only play action until completion, then it is replaced by puzzle/endless
+6. Complete relevant gates in [QUALITY-CHECKLIST.md](./QUALITY-CHECKLIST.md) (tests, registry integrity, URL state)
