@@ -31,6 +31,12 @@ cannot be picked.
 enriched and seeds D1 definitions from the same file. Use full publish (not `--d1-only`)
 after changing the answer pool. D1-only redo is unnecessary if enriched content is unchanged.
 
+Guessable shards still come from `dictionary.full.json` keyed by `String(length)` —
+not a bare `key` variable (that typo crashed publish mid-run after answers/5 uploaded).
+
+**Last successful full publish (2026-07-20):** R2 answers + guessable for lengths 5–10,
+crossword answers pack, and D1 `word_definitions` reseeded (15,236 rows).
+
 ## Files
 
 | File | Role | Built by |
