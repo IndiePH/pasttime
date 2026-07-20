@@ -118,7 +118,7 @@ if (!d1Only) {
       words: enrichedAnswerWords(length),
     })
     uploadJson(`${PREFIX}/guessable/${length}.json`, {
-      words: (full[key] ?? []).map((word) => word.toUpperCase()),
+      words: (full[String(length)] ?? []).map((word) => word.toUpperCase()),
     })
   }
 
