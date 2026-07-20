@@ -6,7 +6,7 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 
 | page | summary |
 |------|---------|
-| [adsense-manual-units](adsense-manual-units.md) | AdSense slots, privacy disclosures for review, apex vs gamehub, ads.txt/CMP |
+| [adsense-manual-units](adsense-manual-units.md) | Manual AdSense units, wrangler vars vs secrets, ads.txt/CMP, apex vs gamehub |
 | [classic-game-conventions](classic-game-conventions.md) | Original rules and UX of Solitaire Klondike and Word Guess, with Pasttime innovation ideas |
 | [dictionary-pipeline](dictionary-pipeline.md) | Data flow, files, and tooling for the enriched dictionary, crossword corpus, and definition fixing pipeline |
 | [engineering-decisions](engineering-decisions.md) | Persistent log of architectural, tradeoff, rule-override, and technical-debt decisions |

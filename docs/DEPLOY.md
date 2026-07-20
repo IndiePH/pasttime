@@ -28,18 +28,31 @@ Gotchas:
 - **Worker script size (3 MiB free):** large lexicon JSON is served from R2 +
   D1 at runtime — see [`CONTENT-STORAGE-HANDOFF.md`](./CONTENT-STORAGE-HANDOFF.md).
 
+### Secrets vs plaintext vars
+
+`wrangler deploy` **deletes dashboard plaintext Variables** unless they are listed in `wrangler.jsonc` `vars` (or `keep_vars` is true). **Secrets are never deleted** by deploy.
+
+| Kind | Examples | Where |
+|------|----------|--------|
+| Secrets | `RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `FEEDBACK_FROM_EMAIL` | Dashboard **Secret**, or from `apps/web`: `npx wrangler versions secret put <NAME>` then `npx wrangler versions deploy` (use `secret put` only when the latest version is already the live deployment). Declared in `secrets.required`. |
+| Public plaintext | `NEXT_PUBLIC_ADSENSE_*` | `vars` in `apps/web/wrangler.jsonc` (source of truth; safe to commit — they appear in page HTML / ads.txt) |
+
+Local: copy from `.env.example` into `.env.local` (gitignored). Never commit real Resend keys.
+
+If the latest Worker version is not currently deployed, `wrangler secret put` fails — prefer `versions secret put` + `versions deploy`.
+
 ### AdSense (production)
 
-Set these **plain-text** Worker variables for `gamehub` (Cloudflare dashboard → Workers → gamehub → Settings → Variables, or your usual OpenNext/CF env flow). Values are public in the client bundle.
+Production values live under `"vars"` in `apps/web/wrangler.jsonc`. They must be present for the Next **build**, so redeploy after changing them. Local overrides: `.env.local`.
 
-| Variable | Value |
-|----------|--------|
-| `NEXT_PUBLIC_ADSENSE_CLIENT` | `ca-pub-…` (add `ca-` if AdSense shows only `pub-…`) |
-| `NEXT_PUBLIC_ADSENSE_SLOT_TOP` | Display unit ID for top strip |
-| `NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM` | Display unit ID for bottom strip |
-| `NEXT_PUBLIC_ADSENSE_SLOT_HUB` | Display unit ID for hub grid card |
+| Variable | AdSense unit name (label only) | Notes |
+|----------|--------------------------------|--------|
+| `NEXT_PUBLIC_ADSENSE_CLIENT` | — | Use `ca-pub-…` even if Account info shows `pub-…` |
+| `NEXT_PUBLIC_ADSENSE_SLOT_TOP` | `pasttime-global-top-strip` | Numeric ad unit ID, not the name |
+| `NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM` | `pasttime-global-bottom-strip` | Numeric ad unit ID |
+| `NEXT_PUBLIC_ADSENSE_SLOT_HUB` | `pasttime-hub-grid-card` | Numeric ad unit ID |
 
-After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime.xyz/ads.txt` — each should list your `pub-…` line. Units may stay empty until the site is approved in AdSense. Leave vars unset to keep dashed placeholders.
+After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime.xyz/ads.txt` — each should list `google.com, pub-…, DIRECT, f08c47fec0942fa0` (not `# AdSense not configured`). Units may stay empty until the site is approved in AdSense.
 
 **Site review:** Google Publisher Policies require a real Privacy Policy that discloses AdSense/cookie use (and preferably links [How Google uses data](https://policies.google.com/technologies/partner-sites)). Keep `/privacy`, `/about`, and `/terms` substantive — not placeholders — then request review on the **apex** site (`pasttime.xyz`). See `brain/wiki/adsense-manual-units.md`.
 
