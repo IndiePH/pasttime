@@ -4,16 +4,16 @@ milestone: v1.1
 milestone_name: Three Games + Engagement
 current_phase: 8
 current_phase_name: Rankings & Share Cards
-status: not_started
-stopped_at: Phase 7 complete — ready for Phase 8
-last_updated: "2026-07-20T00:00:00.000Z"
+status: in_progress
+stopped_at: Phase 8 plan 08-02 complete — verification pending
+last_updated: "2026-07-20T12:25:00.000Z"
 last_activity: 2026-07-20
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 11
-  completed_plans: 11
-  percent: 90.9
+  total_plans: 13
+  completed_plans: 13
+  percent: 100
 ---
 
 # STATE: Pasttime — Three Games + Engagement
@@ -38,8 +38,9 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 | Item | Value |
 |------|-------|
 | Phase | 8 — Rankings & Share Cards |
-| Plans | TBD |
-| Status | Not started |
+| Plans | 08-01 complete, 08-02 complete |
+| Status | In progress |
+| Branch | `phase/8-rankings-share-cards` |
 | Last activity | 2026-07-20 |
 
 ## Milestone Overview
@@ -62,7 +63,7 @@ See: .planning/PROJECT.md (updated 2026-07-20)
 | 5 — Solitaire Klondike | Complete playable Klondike with draw-1/draw-3 modes | 9 (SOL-01—SOL-09) | ✅ Complete |
 | 6 — Word Guess | Word-guessing game with all modes | 8 (WRD-01—WRD-08) | ✅ Complete |
 | 7 — Streaks, Stats & Crossword Engagement | Per-game streaks, stats pages, crossword wiring | 13 (STK-01—STK-05, STA-01—STA-05, ENH-01—ENH-03) | ✅ Complete |
-| 8 — Rankings & Share Cards | Comparative rankings and share cards | 9 (CMP-01—CMP-04, SHR-01—SHR-05) | Not started |
+| 8 — Rankings & Share Cards | Comparative rankings and share cards | 9 (CMP-01—CMP-04, SHR-01—SHR-05) | 🚧 In progress |
 
 **Post-roadmap extension:** Sudoku v1 shipped 2026-07-19 with Daily/Random
 Easy/Medium/Hard play, candidates, undo, timer, persistence, stats, and a

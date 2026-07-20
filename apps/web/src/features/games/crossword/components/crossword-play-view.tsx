@@ -1,6 +1,6 @@
 "use client"
 
-import { Component, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react"
+import { Component, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react"
 import { useQueryState } from "nuqs"
 
 import { cn } from "@/lib/utils"
@@ -16,6 +16,7 @@ import {
 import { PlatformLink } from "@/platform/navigation"
 import type { GameDefinition } from "@pasttime/domain/games"
 import {
+  buildCrosswordShareText,
   crosswordLaunchPath,
   CROSSWORD_GRID_SIZE_DEFAULT,
   findClueAtCell,
@@ -34,7 +35,19 @@ import { CrosswordPlayPreferencesProvider, useCrosswordPlayPreferences } from "@
 import { IS_CROSSWORD_DEV } from "@/features/games/crossword/context/dev-flag"
 import { CrosswordGrid } from "@/features/games/crossword/components/crossword-grid"
 import { useCrosswordGame } from "@/features/games/crossword/hooks/use-crossword-game"
-import { PostSolveRanking } from "@/features/games/components/game-post-solve-ranking"
+import {
+  GamePostSolveActionStack,
+  GamePostSolveDialog,
+  ViewResultsLink,
+} from "@/features/games/components/game-post-solve-dialog"
+import { ComparativeRankingsList } from "@/features/games/components/comparative-rankings-list"
+import { CrosswordShareVisual } from "@/features/games/components/crossword-share-visual"
+import {
+  buildGameShareUrl,
+  GameShareCopyButton,
+} from "@/features/games/components/game-share-copy-button"
+import { useDailyPostSolveDialog } from "@/features/games/hooks/use-daily-post-solve-dialog"
+import { usePostSolveRankings } from "@/features/games/hooks/use-post-solve-rankings"
 import { crosswordSearchParams } from "@/features/games/crossword/search-params"
 
 interface CrosswordPlayViewProps {
@@ -252,6 +265,22 @@ function CrosswordPlaySessionReady({
     blinkActiveClue,
   } = useCrosswordPlayPreferences()
 
+  const dailyShareText = useMemo(() => {
+    if (gameState.status !== "won" || mode !== "daily") {
+      return null
+    }
+    return buildCrosswordShareText({
+      puzzle: gameState.puzzle,
+      inputs: gameState.inputs,
+      shareUrl: buildGameShareUrl("crossword"),
+    })
+  }, [gameState.status, gameState.puzzle, gameState.inputs, mode])
+
+  const isDailyWin = gameState.status === "won" && mode === "daily"
+  const { open: resultsOpen, setOpen: setResultsOpen, canReview } =
+    useDailyPostSolveDialog(isDailyWin)
+  const rankings = usePostSolveRankings("crossword")
+
   // Daily rollover detection (D-02, D-03)
   const [showRollover, setShowRollover] = useState(false)
   // Reset the banner when switching away from daily mode (adjust state during
@@ -450,7 +479,10 @@ function CrosswordPlaySessionReady({
                       >
                         Puzzle solved — nice work!
                       </p>
-                      <PostSolveRanking gameId="crossword" />
+                      <ViewResultsLink
+                        visible={canReview}
+                        onClick={() => setResultsOpen(true)}
+                      />
                     </div>
                   )
                 }
@@ -501,6 +533,39 @@ function CrosswordPlaySessionReady({
           </div>
         </CardContent>
       </Card>
+
+      <GamePostSolveDialog
+        open={resultsOpen}
+        onOpenChange={setResultsOpen}
+        title="Nice work!"
+        description="Daily crossword complete"
+        footer={
+          <GamePostSolveActionStack>
+            {dailyShareText ? (
+              <GameShareCopyButton
+                shareText={dailyShareText}
+                className="w-full gap-2"
+              />
+            ) : null}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setResultsOpen(false)}
+            >
+              Close
+            </Button>
+          </GamePostSolveActionStack>
+        }
+      >
+        <ComparativeRankingsList rankings={rankings} />
+        {dailyShareText ? (
+          <CrosswordShareVisual
+            puzzle={gameState.puzzle}
+            inputs={gameState.inputs}
+          />
+        ) : null}
+      </GamePostSolveDialog>
       </>
     </GamePlaySection>
   )

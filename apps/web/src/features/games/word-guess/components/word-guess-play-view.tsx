@@ -32,6 +32,21 @@ import { GameContentPanel } from "@/features/games/components/game-content-panel
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
+import {
+  GamePostSolveActionStack,
+  GamePostSolveDialog,
+  ViewResultsLink,
+} from "@/features/games/components/game-post-solve-dialog"
+import { ComparativeRankingsList } from "@/features/games/components/comparative-rankings-list"
+import {
+  buildGameShareUrl,
+  GameShareCopyButton,
+} from "@/features/games/components/game-share-copy-button"
+import { WordDefinitionBlock } from "@/features/games/components/word-definition-block"
+import { WordGuessShareVisual } from "@/features/games/components/word-guess-share-visual"
+import { useDailyPostSolveDialog } from "@/features/games/hooks/use-daily-post-solve-dialog"
+import { usePostSolveRankings } from "@/features/games/hooks/use-post-solve-rankings"
+import { buildWordGuessShareText } from "@pasttime/domain/games/word-guess"
 import { WordGuessBoard } from "@/features/games/word-guess/components/word-guess-board"
 import { WordGuessKeyboard } from "@/features/games/word-guess/components/word-guess-keyboard"
 import { WordGuessPlayPreferencesProvider, useWordGuessPlayPreferences } from "@/features/games/word-guess/context/word-guess-play-preferences-context"
@@ -99,14 +114,33 @@ function WordGuessPlayCard({
   const shakeRowIndex = isPlaying ? (invalidWordShake?.rowIndex ?? null) : null
   const shakeTrigger = invalidWordShake?.trigger ?? 0
 
-  const answerEntry = useWordDefinition(
-    round.answer,
-    round.status !== "playing",
-  )
-  const answerDefinition = answerEntry?.definition ?? null
+  const roundComplete = round.status !== "playing"
+  const isDailyComplete = roundMode === "daily" && roundComplete
+
+  const { definition: answerDefinition, loading: definitionLoading } =
+    useWordDefinition(round.answer, roundComplete)
+
+  const { open: resultsOpen, setOpen: setResultsOpen, canReview } =
+    useDailyPostSolveDialog(isDailyComplete)
+
+  const rankings = usePostSolveRankings("word-guess")
+
+  const shareText =
+    round.status === "won" && roundMode === "daily"
+      ? buildWordGuessShareText({
+          guesses: round.guesses,
+          maxTries: round.maxTries,
+          shareUrl: buildGameShareUrl("word-guess"),
+        })
+      : null
+
+  const dialogTitle =
+    round.status === "won" ? "Nice work!" : "Better luck tomorrow"
+  const dialogDescription = `${round.guesses.length}/${round.maxTries}`
 
   return (
-    <Card className="word-guess-vars mx-auto overflow-visible text-left">
+    <>
+      <Card className="word-guess-vars mx-auto overflow-visible text-left">
       <CardHeader
         className="gap-3 pt-2 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
         style={{ paddingInline: SIDE_INSET }}
@@ -162,15 +196,14 @@ function WordGuessPlayCard({
 
           {round.status === "lost" ? (
             <p className="text-center text-sm text-muted-foreground">
-              Answer: <strong>{round.answer}</strong>
+              Out of tries.
             </p>
           ) : null}
 
-          {answerDefinition ? (
-            <p className="mx-auto max-w-sm text-center text-xs italic text-muted-foreground/80">
-              {answerDefinition}
-            </p>
-          ) : null}
+          <ViewResultsLink
+            visible={canReview}
+            onClick={() => setResultsOpen(true)}
+          />
         </div>
 
         <div style={{ paddingInline: SIDE_INSET }}>
@@ -184,6 +217,42 @@ function WordGuessPlayCard({
         </div>
       </CardContent>
     </Card>
+
+      <GamePostSolveDialog
+        open={resultsOpen}
+        onOpenChange={setResultsOpen}
+        title={dialogTitle}
+        description={dialogDescription}
+        footer={
+          <GamePostSolveActionStack>
+            {round.status === "won" && shareText ? (
+              <GameShareCopyButton
+                shareText={shareText}
+                className="w-full gap-2"
+              />
+            ) : null}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setResultsOpen(false)}
+            >
+              Close
+            </Button>
+          </GamePostSolveActionStack>
+        }
+      >
+        <WordDefinitionBlock
+          word={round.answer}
+          definition={answerDefinition}
+          loading={definitionLoading}
+        />
+        <ComparativeRankingsList rankings={rankings} />
+        {round.status === "won" && shareText ? (
+          <WordGuessShareVisual guesses={round.guesses} />
+        ) : null}
+      </GamePostSolveDialog>
+    </>
   )
 }
 

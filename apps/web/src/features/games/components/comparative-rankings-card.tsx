@@ -6,23 +6,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import type { ComparativeRanking } from "@pasttime/domain/engagement"
 import { ComparativeRankingsList } from "@/features/games/components/comparative-rankings-list"
-import { usePostSolveRankings } from "@/features/games/hooks/use-post-solve-rankings"
 
-interface PostSolveRankingProps {
-  gameId: string
+interface ComparativeRankingsCardProps {
+  rankings: ComparativeRanking[]
+  className?: string
 }
 
 /**
- * Post-solve comparative ranking card for stats-style surfaces.
+ * Anonymous percentile comparisons — always "You" vs the population, never a
+ * ranked list of other players.
  */
-export function PostSolveRanking({ gameId }: PostSolveRankingProps) {
-  const rankings = usePostSolveRankings(gameId)
-
+export function ComparativeRankingsCard({
+  rankings,
+  className,
+}: ComparativeRankingsCardProps) {
   if (rankings.length === 0) return null
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className={className ?? "w-full max-w-sm"}>
       <CardHeader className="pb-3">
         <CardTitle className="text-base">How you compare</CardTitle>
       </CardHeader>

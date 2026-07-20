@@ -15,6 +15,8 @@ interface WordGuessTileProps {
   state: WordGuessBoardTileState
   flip?: boolean
   flipIndex?: number
+  /** Smaller tiles for share summaries and other compact layouts. */
+  size?: "default" | "compact"
 }
 
 const TILE_STATE_CLASS_NAME: Record<WordGuessBoardTileState, string> = {
@@ -42,11 +44,17 @@ function tileStateLabel(state: WordGuessBoardTileState): string {
   return "empty"
 }
 
+const TILE_SIZE_CLASS_NAME = {
+  default: "size-11 text-lg sm:size-12",
+  compact: "size-3.5 text-[0.625rem] sm:size-4",
+} as const
+
 export function WordGuessTile({
   letter,
   state,
   flip = false,
   flipIndex = 0,
+  size = "default",
 }: WordGuessTileProps) {
   const [revealed, setRevealed] = React.useState(false)
   const [prevFlip, setPrevFlip] = React.useState(flip)
@@ -94,7 +102,8 @@ export function WordGuessTile({
   return (
     <span
       className={cn(
-        "flex size-11 items-center justify-center rounded border text-lg font-semibold tracking-wide uppercase transition-colors sm:size-12",
+        "flex items-center justify-center rounded border font-semibold tracking-wide uppercase transition-colors",
+        TILE_SIZE_CLASS_NAME[size],
         TILE_STATE_CLASS_NAME[displayState],
         flip && "word-guess-tile-flip",
         flip && `word-guess-tile-flip-delay-${Math.min(flipIndex, 9)}`,

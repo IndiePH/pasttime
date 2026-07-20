@@ -4,6 +4,7 @@ import {
   buildEnrichedWordIndex,
   getEnrichedWordFromIndex,
   isEnrichedWordLength,
+  listEnrichedAnswerWords,
   normalizeEnrichedWord,
 } from "./enriched-dictionary"
 
@@ -51,5 +52,26 @@ describe("enriched dictionary helpers", () => {
     expect(isEnrichedWordLength(4)).toBe(false)
     expect(isEnrichedWordLength(11)).toBe(false)
     expect(isEnrichedWordLength(3.5)).toBe(false)
+  })
+
+  it("lists answer words with definitions only", () => {
+    const enriched = {
+      "5": [
+        {
+          word: "CRANE",
+          definition: "A bird.",
+          synonyms: [],
+          antonyms: [],
+        },
+        {
+          word: "LAURA",
+          definition: null,
+          synonyms: [],
+          antonyms: [],
+        },
+      ],
+    }
+
+    expect(listEnrichedAnswerWords(enriched, 5)).toEqual(["CRANE"])
   })
 })

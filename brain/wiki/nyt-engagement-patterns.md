@@ -1,5 +1,5 @@
 # NYT Games Engagement Patterns
-updated: 2026-07-01
+updated: 2026-07-20
 tags: [engagement, nyt, patterns, games, reference]
 related: [engineering-decisions]
 
@@ -28,6 +28,13 @@ engagement through a shared cross-game layer. Key patterns relevant to Pasttime:
 - Emoji grid representation (for crosswords — mini grid showing filled/empty cells)
 - No answer spoilers in share cards
 - Social share targets: Messages, WhatsApp, Twitter, clipboard
+
+**Shipped (Phase 8, 2026-07-20):**
+- `GamePostSolveDialog` on daily terminal states (WG win/loss, crossword win, sudoku win)
+- Spoiler-free visuals: `WordGuessShareVisual` (colored tiles, no letters), `CrosswordShareVisual` (emoji grid)
+- `GameShareCopyButton` copies formatted share text to clipboard (no raw preview)
+- Word Guess loss still shows definition + rankings; share copy on win only
+- Compact share tiles (~14–16px) in modal; crossword emoji grid at ~0.25–0.3125rem
 
 ### Notifications
 - Daily puzzle available (at puzzle release time ~10pm ET / midnight UTC)

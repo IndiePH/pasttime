@@ -8,5 +8,6 @@ export {
 } from "./persistence"
 export { computeStreak } from "./streak"
 export { computeStats, computePercentile } from "./stats"
+export { computeComparativeRankings } from "./comparative-rankings"
 export { DISTRIBUTION_DATA } from "./distribution-data"
 export type { DistributionData } from "./distribution-data"

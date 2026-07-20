@@ -8,6 +8,7 @@ import {
 } from "../crossword/generator"
 import {
   buildEnrichedWordIndex,
+  listEnrichedAnswerWords,
   type EnrichedWordEntry,
 } from "../shared/lexicon-types"
 
@@ -58,8 +59,8 @@ export function loadCommittedGuessableSet(
 }
 
 export function loadCommittedAnswerWords(length: number): readonly string[] {
-  const target = readJson<Record<string, string[]>>(
-    "shared/dictionary.target.json",
+  const enriched = readJson<Record<string, EnrichedWordEntry[]>>(
+    "shared/dictionary.full.enriched.json",
   )
-  return (target[String(length)] ?? []).map((word) => word.toUpperCase())
+  return listEnrichedAnswerWords(enriched, length)
 }

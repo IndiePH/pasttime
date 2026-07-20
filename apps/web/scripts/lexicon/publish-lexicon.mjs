@@ -101,16 +101,21 @@ ON CONFLICT(word) DO UPDATE SET
   console.log(`seeded ${rows.length} rows into D1 ${D1_NAME}`)
 }
 
-const target = readJson(join(DOMAIN_ROOT, "shared", "dictionary.target.json"))
-const full = readJson(join(DOMAIN_ROOT, "shared", "dictionary.full.json"))
 const enriched = readJson(join(DOMAIN_ROOT, "shared", "dictionary.full.enriched.json"))
+const full = readJson(join(DOMAIN_ROOT, "shared", "dictionary.full.json"))
 const corpus = readJson(join(DOMAIN_ROOT, "crossword", "corpus.json"))
+
+function enrichedAnswerWords(length) {
+  return (enriched[String(length)] ?? [])
+    .filter((entry) => entry.definition?.trim())
+    .map((entry) => String(entry.word).toUpperCase())
+    .sort((a, b) => a.localeCompare(b))
+}
 
 if (!d1Only) {
   for (const length of LENGTHS) {
-    const key = String(length)
     uploadJson(`${PREFIX}/answers/${length}.json`, {
-      words: (target[key] ?? []).map((word) => word.toUpperCase()),
+      words: enrichedAnswerWords(length),
     })
     uploadJson(`${PREFIX}/guessable/${length}.json`, {
       words: (full[key] ?? []).map((word) => word.toUpperCase()),

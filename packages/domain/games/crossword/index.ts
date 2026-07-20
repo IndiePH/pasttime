@@ -52,3 +52,8 @@ export {
   resolveDirection,
 } from "./navigation"
 export type { CrosswordDirection } from "./navigation"
+export {
+  buildCrosswordShareGridLines,
+  buildCrosswordShareText,
+} from "./share"
+export type { CrosswordShareOptions } from "./share"
