@@ -45,7 +45,8 @@ export function buildCrosswordShareText({
   shareUrl,
 }: CrosswordShareOptions): string {
   const lines = [
-    `${siteLabel} · Daily · ${formatUtcDateLabel(puzzleDate)}`,
+    siteLabel,
+    `Daily · ${formatUtcDateLabel(puzzleDate)}`,
     "",
     ...buildCrosswordShareGridLines(puzzle, inputs),
   ]

@@ -32,6 +32,7 @@ export {
 export type { CrosswordPlayPreferences } from "./play-preferences"
 export {
   buildCrosswordPool,
+  clueLengthsMatchGridRuns,
   generateCrosswordPuzzleWithRetry,
   hydrateCrosswordClues,
   type CrosswordPoolWord,

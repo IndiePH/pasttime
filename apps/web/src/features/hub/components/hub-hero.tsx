@@ -8,7 +8,13 @@ export function HubHero() {
           Play more. Think sharper.
         </h1>
         <p className="mt-3 text-lg text-muted-foreground">
-          Daily puzzles and party-style games — jump in instantly, no downloads.
+          Pasttime is a free hub for daily puzzles and classic games in your
+          browser — no download, no account required.
+        </p>
+        <p className="mt-3 text-muted-foreground">
+          Jump into Crossword, Word Guess, Sudoku, or Solitaire. Each game keeps
+          progress on your device and offers a calm layout built for a short
+          break or a longer streak.
         </p>
         <TrustBadges className="mt-6" />
       </div>

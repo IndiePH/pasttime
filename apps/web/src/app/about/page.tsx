@@ -29,8 +29,8 @@ export default function AboutPage() {
         {
           title: "What you can play",
           content: [
-            "The hub currently includes word and logic games such as Crossword, Word Guess, Sudoku, Word Factory, Tile Words, Type Rush, and Type Shield; solitaire and card games such as Solitaire, Tongits, Pusoy Dos, and Spades; and board-style games such as Reversi and Fleet Grid.",
-            "Catalog and features grow over time. Some games support local solo play; others offer multiplayer rooms when the live server is available.",
+            "The hub currently offers Crossword, Word Guess, Sudoku, and Solitaire — free to play instantly in the browser. More classics are in development and will appear in the catalog when they are ready.",
+            "Some games support local solo play with daily and endless modes; selected titles also offer multiplayer rooms when the live server is available.",
           ],
         },
         {

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  clueLengthsMatchGridRuns,
   everyCellChecked,
   generateCrosswordPuzzleWithRetry,
   hasRotationalSymmetry,
@@ -128,6 +129,69 @@ describe("hasSufficientFill", () => {
   })
 })
 
+// ---- clueLengthsMatchGridRuns ----
+
+describe("clueLengthsMatchGridRuns", () => {
+  it("returns false when an across clue is shorter than the contiguous letter run", () => {
+    // Reproduces CAR (3) clue on a CARD (4) grid run — same-direction overlay bug.
+    const grid: CrosswordGrid = [
+      [
+        { type: "block", row: 0, col: 0 },
+        { type: "letter", row: 0, col: 1, answerLetter: "C", clueNumber: 1 },
+        { type: "letter", row: 0, col: 2, answerLetter: "A" },
+        { type: "letter", row: 0, col: 3, answerLetter: "R" },
+        { type: "letter", row: 0, col: 4, answerLetter: "D" },
+      ],
+    ]
+    const puzzle: CrosswordPuzzle = {
+      id: "car-card-mismatch",
+      grid,
+      across: [
+        {
+          id: "across-1",
+          number: 1,
+          direction: "across",
+          text: "Wheeled vehicle",
+          answer: "CAR",
+          row: 0,
+          col: 1,
+        },
+      ],
+      down: [],
+    }
+    expect(clueLengthsMatchGridRuns(puzzle)).toBe(false)
+  })
+
+  it("returns true when clue answer length matches the contiguous run", () => {
+    const grid: CrosswordGrid = [
+      [
+        { type: "block", row: 0, col: 0 },
+        { type: "letter", row: 0, col: 1, answerLetter: "C", clueNumber: 1 },
+        { type: "letter", row: 0, col: 2, answerLetter: "A" },
+        { type: "letter", row: 0, col: 3, answerLetter: "R" },
+        { type: "block", row: 0, col: 4 },
+      ],
+    ]
+    const puzzle: CrosswordPuzzle = {
+      id: "car-ok",
+      grid,
+      across: [
+        {
+          id: "across-1",
+          number: 1,
+          direction: "across",
+          text: "Wheeled vehicle",
+          answer: "CAR",
+          row: 0,
+          col: 1,
+        },
+      ],
+      down: [],
+    }
+    expect(clueLengthsMatchGridRuns(puzzle)).toBe(true)
+  })
+})
+
 // ---- everyCellChecked tests (pure function) ----
 
 describe("everyCellChecked", () => {
@@ -232,6 +296,30 @@ describe("generateCrosswordPuzzleWithRetry", () => {
     const b = generateCrosswordPuzzleWithRetry(15, 101, POOL)
     if (a !== null && b !== null) {
       expect(a.id).not.toBe(b.id)
+    }
+  })
+
+  it("never produces clue/grid-run length mismatches for known seeds", () => {
+    for (const seed of [...SEEDS, 1_296_332_162]) {
+      const puzzle = generateCrosswordPuzzleWithRetry(15, seed, POOL)
+      if (puzzle === null) continue
+      expect(clueLengthsMatchGridRuns(puzzle)).toBe(true)
+      for (const clue of [...puzzle.across, ...puzzle.down]) {
+        const run =
+          clue.direction === "across"
+            ? puzzle.grid[clue.row]
+                .slice(clue.col)
+                .findIndex((cell) => cell.type !== "letter")
+            : puzzle.grid
+                .slice(clue.row)
+                .findIndex((row) => row[clue.col].type !== "letter")
+        const runLen = run === -1
+          ? clue.direction === "across"
+            ? puzzle.grid[clue.row].length - clue.col
+            : puzzle.grid.length - clue.row
+          : run
+        expect(runLen).toBe(clue.answer.length)
+      }
     }
   })
 

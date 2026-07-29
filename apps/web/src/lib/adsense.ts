@@ -1,10 +1,16 @@
-const SLOT_ENV: Record<string, string> = {
-  "global-top-strip": "NEXT_PUBLIC_ADSENSE_SLOT_TOP",
-  "global-bottom-strip": "NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM",
-  "hub-grid-card": "NEXT_PUBLIC_ADSENSE_SLOT_HUB",
+/**
+ * Slot → env readers. Next.js only inlines `process.env.NEXT_PUBLIC_*` when
+ * the property name is a static string literal — dynamic `process.env[key]`
+ * works on the server but is undefined in the client bundle, which caused
+ * AdPanel to SSR live `<ins>` units and hydrate as placeholders.
+ */
+const SLOT_READERS: Record<string, () => string | undefined> = {
+  "global-top-strip": () => process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP,
+  "global-bottom-strip": () => process.env.NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM,
+  "hub-grid-card": () => process.env.NEXT_PUBLIC_ADSENSE_SLOT_HUB,
 }
 
-export type AdSlotKey = keyof typeof SLOT_ENV
+export type AdSlotKey = keyof typeof SLOT_READERS
 
 export function normalizeAdsenseClient(
   raw: string | undefined,
@@ -21,9 +27,9 @@ export function getAdsenseClient(): string | null {
 }
 
 export function getAdsenseSlotId(slot: string): string | null {
-  const envKey = SLOT_ENV[slot]
-  if (!envKey) return null
-  const id = process.env[envKey]?.trim()
+  const read = SLOT_READERS[slot]
+  if (!read) return null
+  const id = read()?.trim()
   return id || null
 }
 

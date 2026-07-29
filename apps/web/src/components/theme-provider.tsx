@@ -180,6 +180,11 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
     const preset = applyPreference(next)
     updateCache(next, preset)
     emitThemeChange()
+    try {
+      document.cookie = `${STORAGE_KEY}=${JSON.stringify(next)};path=/;max-age=${31536000};SameSite=Lax`
+    } catch {
+      /* cookie may be blocked */
+    }
   }, [])
 
   const setMode = React.useCallback(

@@ -200,6 +200,16 @@ function WordGuessPlayCard({
             </p>
           ) : null}
 
+          {roundMode !== "daily" && roundComplete ? (
+            <div className="w-full max-w-sm pt-1">
+              <WordDefinitionBlock
+                word={round.answer}
+                definition={answerDefinition}
+                loading={definitionLoading}
+              />
+            </div>
+          ) : null}
+
           <ViewResultsLink
             visible={canReview}
             onClick={() => setResultsOpen(true)}

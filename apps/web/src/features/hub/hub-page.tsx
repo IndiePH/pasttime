@@ -9,10 +9,11 @@ import { HubHero } from "@/features/hub/components/hub-hero"
 import { hubSearchParamsCache } from "@/features/hub/search-params"
 
 export function HubPage() {
-  const status = hubSearchParamsCache.get("status")
+  // Hub surfaces playable games only — coming-soon entries stay in the registry
+  // for future launches but are hidden from the catalog AdSense/crawlers see.
   const query = hubSearchParamsCache.get("q")
-  const games = filterGamesByTitle(filterGamesByStatus(status), query)
-  const featured = filterGamesByTitle(getFeaturedGames(status), query)
+  const games = filterGamesByTitle(filterGamesByStatus("available"), query)
+  const featured = filterGamesByTitle(getFeaturedGames("available"), query)
 
   return (
     <SiteShell>

@@ -34,9 +34,15 @@ describe("buildCrosswordShareText", () => {
       puzzleDate: new Date(Date.UTC(2026, 6, 20)),
     })
 
-    expect(text).toContain("Pasttime Crossword · Daily · 2026-07-20")
-    expect(text).toContain("⬛🟩🟩")
-    expect(text).toContain("🟩🟩⬛")
+    expect(text).toBe(
+      [
+        "Pasttime Crossword",
+        "Daily · 2026-07-20",
+        "",
+        "⬛🟩🟩",
+        "🟩🟩⬛",
+      ].join("\n"),
+    )
     expect(text).not.toContain("A")
     expect(text).not.toContain("X")
   })

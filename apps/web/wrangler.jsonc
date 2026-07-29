@@ -4,6 +4,12 @@
 	"name": "gamehub",
 	"compatibility_date": "2026-04-15",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"observability": {
+		"logs": {
+			"enabled": true,
+			"invocation_logs": true
+		}
+	},
 	// Feedback/Resend — set via `wrangler secret put` / dashboard Secrets (never plaintext vars).
 	// AdSense IDs are public (page + ads.txt); keep here so deploy does not wipe dashboard vars.
 	"vars": {

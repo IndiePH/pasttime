@@ -41,7 +41,8 @@ export function buildWordGuessShareText({
   shareUrl,
 }: WordGuessShareOptions): string {
   const lines = [
-    `${siteLabel} · Daily · ${formatUtcDateLabel(puzzleDate)}`,
+    siteLabel,
+    `Daily · ${formatUtcDateLabel(puzzleDate)}`,
     `${guesses.length}/${maxTries}`,
     "",
     ...guessRowsToEmoji(guesses),

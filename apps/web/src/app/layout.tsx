@@ -6,6 +6,7 @@ import {
   Roboto_Slab,
   Space_Grotesk,
 } from "next/font/google"
+import { cookies } from "next/headers"
 import Script from "next/script"
 
 import { NuqsAdapter } from "nuqs/adapters/next/app"
@@ -19,11 +20,13 @@ import { cn } from "@/lib/utils"
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://pasttime.xyz"),
   title: {
     default: "Pasttime",
     template: "%s — Pasttime",
   },
-  description: "Daily puzzles and games in one hub.",
+  description:
+    "Free daily puzzles and classic games in the browser — Crossword, Word Guess, Sudoku, Solitaire, and more. No download required.",
 }
 
 const fontMono = Geist_Mono({
@@ -50,19 +53,36 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 })
 
-const themeInitScript = `(function(){try{var KEY="pasttime-theme";var LEGACY="theme";var available={default:1};var raw=localStorage.getItem(KEY);if(!raw){var legacy=localStorage.getItem(LEGACY);if(legacy==="light"||legacy==="dark"||legacy==="system"){raw=JSON.stringify({family:"default",mode:legacy});try{localStorage.setItem(KEY,raw)}catch(e){}}else{raw=JSON.stringify({family:"default",mode:"system"})}}var pref;try{pref=JSON.parse(raw)}catch(e){pref={family:"default",mode:"system"}}var family=pref&&typeof pref.family==="string"?pref.family:"default";if(!available[family])family="default";var mode=pref&&(pref.mode==="light"||pref.mode==="dark"||pref.mode==="system")?pref.mode:"system";var system=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var desired=mode==="system"?system:mode;var id=family+"-"+desired;var known={"default-light":1,"default-dark":1};if(!known[id]){id="default-"+desired;if(!known[id])id="default-light";desired=id.endsWith("dark")?"dark":"light"}var root=document.documentElement;root.setAttribute("data-theme",id);root.classList.remove("light","dark");root.classList.add(desired);root.style.colorScheme=desired}catch(e){}})();`
+const STORAGE_KEY = "pasttime-theme"
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = await cookies()
+  const themeCookie = cookieStore.get(STORAGE_KEY)?.value
+
+  let initialThemeClass = ""
+  if (themeCookie) {
+    try {
+      const pref: { family?: string; mode?: string } = JSON.parse(themeCookie)
+      if (pref.mode === "dark") {
+        initialThemeClass = "dark"
+      }
+      // "light" and "system" are the CSS default — no class needed
+    } catch {
+      /* ignore invalid cookie */
+    }
+  }
+
   return (
     <html
       lang="en"
       suppressHydrationWarning
       className={cn(
         "antialiased",
+        initialThemeClass,
         fontMono.variable,
         robotoSlab.variable,
         archivoBlack.variable,
@@ -71,11 +91,7 @@ export default function RootLayout({
         geist.variable,
       )}
     >
-      <head>
-        <Script id="pasttime-theme-init" strategy="beforeInteractive">
-          {themeInitScript}
-        </Script>
-      </head>
+      <head />
       <body>
         <AdSenseScript />
         <ThemeProvider>

@@ -36,10 +36,12 @@ describe("buildWordGuessShareText", () => {
       puzzleDate: new Date(Date.UTC(2026, 6, 20)),
     })
 
-    expect(text).toContain("Pasttime Word Guess · Daily · 2026-07-20")
+    expect(text).toContain("Pasttime Word Guess\nDaily · 2026-07-20")
     expect(text).toContain("2/6")
     expect(text).toContain("⬜🟨⬜🟨🟩")
     expect(text).toContain("🟩🟩🟩🟩🟩")
+    expect(text.startsWith(" ")).toBe(false)
+    expect(text.split("\n").some((line) => line.startsWith(" "))).toBe(false)
   })
 
   it("does not include guess words or answer letters as text", () => {

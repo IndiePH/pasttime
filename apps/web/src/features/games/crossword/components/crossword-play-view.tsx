@@ -281,6 +281,23 @@ function CrosswordPlaySessionReady({
     useDailyPostSolveDialog(isDailyWin)
   const rankings = usePostSolveRankings("crossword")
 
+  // Keep the clues panel the same height as the grid panel (scroll inside).
+  const gridPanelRef = useRef<HTMLDivElement>(null)
+  const [cluesHeight, setCluesHeight] = useState<number | undefined>(undefined)
+
+  useEffect(() => {
+    const el = gridPanelRef.current
+    if (!el || typeof ResizeObserver === "undefined") return
+
+    const update = () => {
+      setCluesHeight(el.getBoundingClientRect().height)
+    }
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [gridSize, gameState.puzzle.id])
+
   // Daily rollover detection (D-02, D-03)
   const [showRollover, setShowRollover] = useState(false)
   // Reset the banner when switching away from daily mode (adjust state during
@@ -447,57 +464,74 @@ function CrosswordPlaySessionReady({
           </div>
         </CardHeader>
         <CardContent className="px-0 pt-4 pb-2 landscape:pt-3 landscape:pb-2">
-          <div className="mx-auto flex w-fit max-w-full flex-col items-center landscape:flex-row landscape:items-start">
-            <div className="flex flex-col items-center gap-2">
-              <GameContentPanel sideInset={SIDE_INSET} className="pb-2.5">
-                <CrosswordGrid
-                  gridSize={gridSize}
-                  inputs={gameState.inputs}
-                  activeCell={gameState.activeCell}
-                  showErrors={IS_CROSSWORD_DEV && showErrors}
-                  blocks={blocks}
-                  onCellChange={updateInput}
-                  onCellClick={handleCellClick}
-                  gridData={gameState.puzzle.grid}
-                  direction={direction}
-                  onDirectionChange={setDirection}
-                  activeClue={activeClue}
-                  showWordSpanHighlight={showWordSpanHighlight}
-                  showCornerArrowGlyph={showCornerArrowGlyph}
-                  showDirectionBorderColor={showDirectionBorderColor}
-                  puzzle={gameState.puzzle}
+          <div className="mx-auto flex w-fit max-w-full flex-col items-center gap-2">
+            <div className="flex w-full flex-col items-center landscape:flex-row landscape:items-start">
+              <div ref={gridPanelRef} className="w-fit max-w-full">
+                <GameContentPanel sideInset={SIDE_INSET} className="pb-2.5">
+                  <CrosswordGrid
+                    gridSize={gridSize}
+                    inputs={gameState.inputs}
+                    activeCell={gameState.activeCell}
+                    showErrors={IS_CROSSWORD_DEV && showErrors}
+                    blocks={blocks}
+                    onCellChange={updateInput}
+                    onCellClick={handleCellClick}
+                    gridData={gameState.puzzle.grid}
+                    direction={direction}
+                    onDirectionChange={setDirection}
+                    activeClue={activeClue}
+                    showWordSpanHighlight={showWordSpanHighlight}
+                    showCornerArrowGlyph={showCornerArrowGlyph}
+                    showDirectionBorderColor={showDirectionBorderColor}
+                    puzzle={gameState.puzzle}
+                  />
+                </GameContentPanel>
+              </div>
+
+              <div
+                className="w-full min-h-0 overflow-y-auto landscape:w-72 landscape:shrink-0"
+                style={{
+                  paddingInline: SIDE_INSET,
+                  height: cluesHeight,
+                  maxHeight: cluesHeight ?? "60vh",
+                }}
+              >
+                <CrosswordClues
+                  across={gameState.puzzle.across}
+                  down={gameState.puzzle.down}
+                  activeClue={
+                    activeClue
+                      ? {
+                          direction: activeClue.direction,
+                          number: activeClue.number,
+                        }
+                      : null
+                  }
+                  blinkActiveClue={blinkActiveClue}
+                  onClueClick={handleClueClick}
                 />
-              </GameContentPanel>
-              {(() => {
-                if (gameState.status === "won" && mode === "daily") {
-                  return (
-                    <div className="flex w-full flex-col items-center gap-2">
-                      <p
-                        className="text-sm text-muted-foreground"
-                        role="status"
-                        aria-live="polite"
-                      >
-                        Puzzle solved — nice work!
-                      </p>
-                      <ViewResultsLink
-                        visible={canReview}
-                        onClick={() => setResultsOpen(true)}
-                      />
-                    </div>
-                  )
-                }
-                if (gameState.status === "won") {
-                  return (
+              </div>
+            </div>
+
+            {(() => {
+              if (gameState.status === "won" && mode === "daily") {
+                return (
+                  <div className="flex w-full flex-col items-center gap-2">
                     <p
-                      className="min-h-5 w-full text-center text-sm text-muted-foreground"
-                      style={{ paddingInline: SIDE_INSET }}
+                      className="text-sm text-muted-foreground"
                       role="status"
                       aria-live="polite"
                     >
                       Puzzle solved — nice work!
                     </p>
-                  )
-                }
+                    <ViewResultsLink
+                      visible={canReview}
+                      onClick={() => setResultsOpen(true)}
+                    />
+                  </div>
+                )
+              }
+              if (gameState.status === "won") {
                 return (
                   <p
                     className="min-h-5 w-full text-center text-sm text-muted-foreground"
@@ -505,31 +539,21 @@ function CrosswordPlaySessionReady({
                     role="status"
                     aria-live="polite"
                   >
-                    {`${gameState.puzzle.across.length + gameState.puzzle.down.length} clues to solve.`}
+                    Puzzle solved — nice work!
                   </p>
                 )
-              })()}
-            </div>
-
-            <div
-              className="w-full landscape:w-72 landscape:shrink-0 landscape:pt-1 max-h-[60vh] overflow-y-auto"
-              style={{ paddingInline: SIDE_INSET }}
-            >
-              <CrosswordClues
-                across={gameState.puzzle.across}
-                down={gameState.puzzle.down}
-                activeClue={
-                  activeClue
-                    ? {
-                        direction: activeClue.direction,
-                        number: activeClue.number,
-                      }
-                    : null
-                }
-                blinkActiveClue={blinkActiveClue}
-                onClueClick={handleClueClick}
-              />
-            </div>
+              }
+              return (
+                <p
+                  className="min-h-5 w-full text-center text-sm text-muted-foreground"
+                  style={{ paddingInline: SIDE_INSET }}
+                  role="status"
+                  aria-live="polite"
+                >
+                  {`${gameState.puzzle.across.length + gameState.puzzle.down.length} clues to solve.`}
+                </p>
+              )
+            })()}
           </div>
         </CardContent>
       </Card>
