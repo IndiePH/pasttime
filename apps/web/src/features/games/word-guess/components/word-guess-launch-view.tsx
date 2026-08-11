@@ -14,6 +14,7 @@ import {
 import { GameLaunchActions } from "@/features/games/components/game-launch-actions"
 import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
+import { GameOverviewSection } from "@/features/games/content/game-overview-section"
 import { WordGuessSettingsWidget } from "@/features/games/word-guess/components/word-guess-settings-widget"
 import { wordGuessSearchParams } from "@/features/games/word-guess/search-params"
 import { useWordGuessDailyCompleted } from "@/features/games/word-guess/hooks/use-word-guess-daily-completed"
@@ -39,22 +40,25 @@ export function WordGuessLaunchView({ game }: WordGuessLaunchViewProps) {
   }
 
   return (
-    <GamePageShell>
-      <GameSessionHeader game={game} subtitle={game.description} />
-      <WordGuessSettingsWidget className="mt-6" />
-      <GameLaunchActions
-        game={game}
-        playHref={wordGuessPlayPath(wordLength, playMode, appliedHardMode || undefined)}
-        dailyCompleted={isDailyCompleted}
-        secondaryAction={
-          isDailyCompleted
-            ? { label: "View today's results", href: wordGuessPlayPath(wordLength, "daily", appliedHardMode ? true : undefined) }
-            : undefined
-        }
-        statsHref="/games/word-guess/stats"
-        onCreateRoom={handleCreateRoom}
-        onJoinRoom={() => {}}
-      />
-    </GamePageShell>
+    <>
+      <GamePageShell>
+        <GameSessionHeader game={game} subtitle={game.description} />
+        <WordGuessSettingsWidget className="mt-6" />
+        <GameLaunchActions
+          game={game}
+          playHref={wordGuessPlayPath(wordLength, playMode, appliedHardMode || undefined)}
+          dailyCompleted={isDailyCompleted}
+          secondaryAction={
+            isDailyCompleted
+              ? { label: "View today's results", href: wordGuessPlayPath(wordLength, "daily", appliedHardMode ? true : undefined) }
+              : undefined
+          }
+          statsHref="/games/word-guess/stats"
+          onCreateRoom={handleCreateRoom}
+          onJoinRoom={() => {}}
+        />
+      </GamePageShell>
+      <GameOverviewSection gameId={game.id} gameTitle={game.title} />
+    </>
   )
 }

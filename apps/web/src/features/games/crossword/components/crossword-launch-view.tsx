@@ -7,6 +7,7 @@ import { crosswordPlayPath } from "@pasttime/domain/games/crossword"
 import { GameLaunchActions } from "@/features/games/components/game-launch-actions"
 import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
+import { GameOverviewSection } from "@/features/games/content/game-overview-section"
 import { CrosswordSettingsWidget } from "@/features/games/crossword/components/crossword-settings-widget"
 import { crosswordSearchParams } from "@/features/games/crossword/search-params"
 import { useDailyCompleted } from "@/features/games/hooks/use-daily-completed"
@@ -21,15 +22,18 @@ export function CrosswordLaunchView({ game }: CrosswordLaunchViewProps) {
   const isDailyCompleted = useDailyCompleted("crossword", String(resolvedSize))
 
   return (
-    <GamePageShell>
-      <GameSessionHeader game={game} subtitle={game.description} />
-      <CrosswordSettingsWidget className="mt-6" />
-      <GameLaunchActions
-        game={game}
-        playHref={crosswordPlayPath(resolvedSize, isDailyCompleted ? "random" : "daily")}
-        dailyCompleted={isDailyCompleted}
-        statsHref="/games/crossword/stats"
-      />
-    </GamePageShell>
+    <>
+      <GamePageShell>
+        <GameSessionHeader game={game} subtitle={game.description} />
+        <CrosswordSettingsWidget className="mt-6" />
+        <GameLaunchActions
+          game={game}
+          playHref={crosswordPlayPath(resolvedSize, isDailyCompleted ? "random" : "daily")}
+          dailyCompleted={isDailyCompleted}
+          statsHref="/games/crossword/stats"
+        />
+      </GamePageShell>
+      <GameOverviewSection gameId={game.id} gameTitle={game.title} />
+    </>
   )
 }

@@ -16,10 +16,12 @@ import { GamePlayFooterActions } from "@/features/games/components/game-play-foo
 import {
   loadCompletions,
   computeStats,
+  computeComparativeRankings,
 } from "@pasttime/domain/engagement"
 import { useStorage } from "@/infrastructure/storage"
 import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
+import { ComparativeRankingsCard } from "@/features/games/components/comparative-rankings-card"
 
 export interface GameStatsViewProps {
   game: GameDefinition
@@ -47,6 +49,10 @@ export function GameStatsView({ game }: GameStatsViewProps) {
   }, [storage, game.id])
 
   const stats = React.useMemo(() => computeStats(completions), [completions])
+  const comparativeRankings = React.useMemo(
+    () => computeComparativeRankings(game.id, stats),
+    [game.id, stats],
+  )
 
   if (completions.length === 0) {
     return (
@@ -180,6 +186,11 @@ export function GameStatsView({ game }: GameStatsViewProps) {
             </CardContent>
           </Card>
         )}
+
+        <ComparativeRankingsCard
+          rankings={comparativeRankings}
+          className="w-full max-w-md"
+        />
       </div>
 
       <GamePlayFooterActions>

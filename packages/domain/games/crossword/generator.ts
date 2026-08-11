@@ -98,6 +98,8 @@ function shuffled<T>(items: readonly T[], rand: () => number): T[] {
  *   - fully in bounds
  *   - the cells immediately before the start and after the end are empty/edge
  *     (so we never extend an existing word)
+ *   - no cell along the path already belongs to another same-direction word
+ *     (prevents overlaying CARD on CAR and orphaning the extra letter)
  *   - existing letters along the path must match (a real crossing)
  *   - newly filled cells must not sit beside another word on the perpendicular
  *     axis (no run-on or accidental parallel words)
@@ -111,6 +113,7 @@ function canPlace(
   col: number,
   dir: Direction,
   requireCrossing: boolean,
+  sameDirOccupied: ReadonlySet<string>,
 ): boolean {
   const dr = dir === "down" ? 1 : 0
   const dc = dir === "across" ? 1 : 0
@@ -140,6 +143,10 @@ function canPlace(
   for (let i = 0; i < len; i++) {
     const r = row + dr * i
     const c = col + dc * i
+    // Same-direction words must not share cells. Without this, a longer word
+    // can overlay a shorter one (CAR → CARD); finalize keeps one clue per start
+    // and the extra letter becomes an orphan in the contiguous grid run.
+    if (sameDirOccupied.has(`${r},${c}`)) return false
     const existing = letters[r][c]
     if (existing !== null) {
       if (existing !== word[i]) return false
@@ -223,15 +230,22 @@ export function generateCrosswordPuzzle(
     new Array<string | null>(size).fill(null),
   )
   const cellsByLetter = new Map<string, Array<[number, number]>>()
+  const acrossOccupied = new Set<string>()
+  const downOccupied = new Set<string>()
   const placed: PlacedWord[] = []
   const used = new Set<string>()
+
+  const occupiedFor = (dir: Direction) =>
+    dir === "across" ? acrossOccupied : downOccupied
 
   const place = (word: string, row: number, col: number, dir: Direction) => {
     const dr = dir === "down" ? 1 : 0
     const dc = dir === "across" ? 1 : 0
+    const occupied = occupiedFor(dir)
     for (let i = 0; i < word.length; i++) {
       const r = row + dr * i
       const c = col + dc * i
+      occupied.add(`${r},${c}`)
       if (letters[r][c] === null) {
         letters[r][c] = word[i]
         const list = cellsByLetter.get(word[i]) ?? []
@@ -263,7 +277,18 @@ export function generateCrosswordPuzzle(
     progress = false
     for (const w of pool) {
       if (used.has(w.answer)) continue
-      if (tryPlaceCrossing(letters, size, w, cellsByLetter, place, placed)) {
+      if (
+        tryPlaceCrossing(
+          letters,
+          size,
+          w,
+          cellsByLetter,
+          place,
+          placed,
+          acrossOccupied,
+          downOccupied,
+        )
+      ) {
         used.add(w.answer)
         progress = true
       }
@@ -291,7 +316,18 @@ export function generateCrosswordPuzzle(
     for (const candidate of pool) {
       if (used.has(candidate.answer)) continue
       if (candidate.answer.length !== pw.answer.length) continue
-      if (canPlace(letters, size, candidate.answer, mirror.row, mirror.col, pw.direction, true)) {
+      if (
+        canPlace(
+          letters,
+          size,
+          candidate.answer,
+          mirror.row,
+          mirror.col,
+          pw.direction,
+          true,
+          occupiedFor(pw.direction),
+        )
+      ) {
         place(candidate.answer, mirror.row, mirror.col, pw.direction)
         placed.push({ ...candidate, row: mirror.row, col: mirror.col, direction: pw.direction })
         used.add(candidate.answer)
@@ -311,6 +347,8 @@ function tryPlaceCrossing(
   cellsByLetter: Map<string, Array<[number, number]>>,
   place: (word: string, row: number, col: number, dir: Direction) => void,
   placed: PlacedWord[],
+  acrossOccupied: ReadonlySet<string>,
+  downOccupied: ReadonlySet<string>,
 ): boolean {
   const word = w.answer
   for (let i = 0; i < word.length; i++) {
@@ -318,13 +356,15 @@ function tryPlaceCrossing(
     if (!targets) continue
     for (const [r, c] of targets) {
       // Cross with `word` running across (start col = c - i).
-      if (canPlace(letters, size, word, r, c - i, "across", true)) {
+      if (
+        canPlace(letters, size, word, r, c - i, "across", true, acrossOccupied)
+      ) {
         place(word, r, c - i, "across")
         placed.push({ ...w, row: r, col: c - i, direction: "across" })
         return true
       }
       // Cross with `word` running down (start row = r - i).
-      if (canPlace(letters, size, word, r - i, c, "down", true)) {
+      if (canPlace(letters, size, word, r - i, c, "down", true, downOccupied)) {
         place(word, r - i, c, "down")
         placed.push({ ...w, row: r - i, col: c, direction: "down" })
         return true
@@ -494,6 +534,45 @@ export function everyCellChecked(puzzle: CrosswordPuzzle): boolean {
   return true
 }
 
+/**
+ * Returns true when every across/down clue's answer length equals the
+ * contiguous letter-run length on the grid from that clue's start. Catches
+ * generator bugs where a longer same-direction word overlays a shorter one
+ * and leaves orphan letters in the visual slot (e.g. CAR clue on a CARD run).
+ */
+export function clueLengthsMatchGridRuns(puzzle: CrosswordPuzzle): boolean {
+  const { grid } = puzzle
+  const rows = grid.length
+
+  const runLength = (
+    row: number,
+    col: number,
+    direction: "across" | "down",
+  ): number => {
+    let len = 0
+    if (direction === "across") {
+      const cols = grid[row]?.length ?? 0
+      for (let c = col; c < cols; c++) {
+        if (grid[row][c].type !== "letter") break
+        len++
+      }
+    } else {
+      for (let r = row; r < rows; r++) {
+        if (grid[r][col].type !== "letter") break
+        len++
+      }
+    }
+    return len
+  }
+
+  for (const clue of [...puzzle.across, ...puzzle.down]) {
+    if (runLength(clue.row, clue.col, clue.direction) !== clue.answer.length) {
+      return false
+    }
+  }
+  return true
+}
+
 // ---- Retry wrapper ----
 
 /**
@@ -501,6 +580,7 @@ export function everyCellChecked(puzzle: CrosswordPuzzle): boolean {
  * a deterministic per-attempt seed (same seed + attempt always produces the
  * same shuffle), and the resulting puzzle is validated for basic fill quality:
  *   - Fill ≥ 50% (hasSufficientFill)
+ *   - Clue answer lengths match contiguous grid runs (clueLengthsMatchGridRuns)
  *
  * Additional quality constraints (everyCellChecked, hasRotationalSymmetry,
  * isWithinDensityLimit) are available as utilities for future generator
@@ -517,7 +597,10 @@ export function generateCrosswordPuzzleWithRetry(
   for (let attempt = 0; attempt < 3; attempt++) {
     const attemptSeed = hashSeed(seed + attempt * 0x45d9f3b)
     const puzzle = generateCrosswordPuzzle(size, attemptSeed, answerPool)
-    if (hasSufficientFill(puzzle.grid)) {
+    if (
+      hasSufficientFill(puzzle.grid) &&
+      clueLengthsMatchGridRuns(puzzle)
+    ) {
       return puzzle
     }
   }

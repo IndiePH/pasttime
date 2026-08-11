@@ -143,16 +143,15 @@ describe("SudokuPlaySessionReady — win-state CTAs", () => {
     expect(screen.queryByRole("link", { name: "Back to launch" })).not.toBeInTheDocument()
   })
 
-  it("daily mode, won: no replay CTA (footer has no New game for daily), single Back to setup", () => {
+  it("daily mode, won: opens results dialog, View stats in dialog, no replay CTA", () => {
     renderSession("daily", "won")
 
-    expect(screen.getByText(/Solved in/)).toBeInTheDocument()
+    expect(screen.getAllByText(/Solved in/).length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByRole("dialog", { name: "Nice work!" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "View stats" })).toBeInTheDocument()
 
     expect(screen.queryByRole("button", { name: "New game" })).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: "New endless" })).not.toBeInTheDocument()
-    expect(screen.getAllByRole("link", { name: "Back to setup" })).toHaveLength(1)
-    expect(screen.queryByRole("link", { name: "Back to launch" })).not.toBeInTheDocument()
   })
 })
 

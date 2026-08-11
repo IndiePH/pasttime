@@ -1,86 +1,23 @@
 "use client"
 
-import { useMemo } from "react"
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useStorage } from "@/infrastructure/storage"
-import {
-  loadCompletions,
-  computeStats,
-  computePercentile,
-  DISTRIBUTION_DATA,
-} from "@pasttime/domain/engagement"
+import { ComparativeRankingsList } from "@/features/games/components/comparative-rankings-list"
+import { usePostSolveRankings } from "@/features/games/hooks/use-post-solve-rankings"
 
 interface PostSolveRankingProps {
   gameId: string
 }
 
 /**
- * Post-solve comparative ranking card. Shows how the player's metrics
- * (streak, win rate, solve time) compare against the distribution of
- * other players, using stub data from DISTRIBUTION_DATA.
- *
- * Returns null when there are no completions, no distribution data,
- * or no metrics with both values and distributions.
+ * Post-solve comparative ranking card for stats-style surfaces.
  */
 export function PostSolveRanking({ gameId }: PostSolveRankingProps) {
-  const storage = useStorage()
-  const completions = useMemo(
-    () => loadCompletions(storage, gameId),
-    [storage, gameId],
-  )
-  const stats = useMemo(() => computeStats(completions), [completions])
-  const distributions = DISTRIBUTION_DATA[gameId]
-
-  if (!distributions) return null
-
-  // Compute rankings during render (React Compiler memoises automatically).
-  // Previously a conditional `useMemo` here violated the rules of hooks and
-  // defeated the compiler's manual-memo preservation.
-  const rankings: { label: string; percentile: number }[] = []
-
-  if (
-    stats.dailyStreak &&
-    stats.dailyStreak.current > 0 &&
-    distributions.streak
-  ) {
-    rankings.push({
-      label: "Your streak is longer than",
-      percentile: computePercentile(
-        stats.dailyStreak.current,
-        distributions.streak,
-      ),
-    })
-  }
-
-  if (
-    stats.winRate !== undefined &&
-    stats.winRate > 0 &&
-    distributions.winRate
-  ) {
-    rankings.push({
-      label: "Your win rate beats",
-      percentile: computePercentile(stats.winRate, distributions.winRate),
-    })
-  }
-
-  if (
-    stats.averageTime !== undefined &&
-    stats.averageTime !== null &&
-    distributions.solveTime
-  ) {
-    rankings.push({
-      label: "Your solve time is faster than",
-      percentile: computePercentile(
-        stats.averageTime,
-        distributions.solveTime,
-      ),
-    })
-  }
+  const rankings = usePostSolveRankings(gameId)
 
   if (rankings.length === 0) return null
 
@@ -89,13 +26,8 @@ export function PostSolveRanking({ gameId }: PostSolveRankingProps) {
       <CardHeader className="pb-3">
         <CardTitle className="text-base">How you compare</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
-        {rankings.map((item) => (
-          <p key={item.label} className="text-sm">
-            {item.label}{" "}
-            <span className="font-semibold">{item.percentile}%</span> of players
-          </p>
-        ))}
+      <CardContent>
+        <ComparativeRankingsList rankings={rankings} title="" />
       </CardContent>
     </Card>
   )

@@ -1,5 +1,5 @@
 # Percentile Ranking Patterns
-updated: 2026-07-01
+updated: 2026-07-20
 tags: [engagement, ranking, leaderboard, patterns, design]
 related: [nyt-engagement-patterns]
 
@@ -76,6 +76,12 @@ distribution data bundled with the app or fetched as a static JSON.
 No server needed. Percentiles are estimates, not live — good enough for
 the initial engagement layer. Add server-side percentile computation
 when multiplayer ships and the playerbase justifies it.
+
+### Shipped (Phase 8, 2026-07-20)
+- `packages/domain/engagement/comparative-rankings.ts` — `computeComparativeRankings()`
+- `DISTRIBUTION_DATA` in `distribution-data.ts` (word-guess tries, crossword solve time, sudoku metrics)
+- UI: `ComparativeRankingsList` / `ComparativeRankingsCard` on stats pages + post-solve modal via `usePostSolveRankings`
+- Style: Duolingo/Strava-style "Top X%" lines per metric (not Wordle histogram bars yet)
 
 ## Terms
 - **Percentile Ranking** — Most technically accurate

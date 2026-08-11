@@ -1,5 +1,5 @@
 # Dictionary Pipeline
-updated: 2026-07-17
+updated: 2026-07-20
 tags: [architecture, data-pipeline, crossword, word-guess]
 related: [engineering-decisions]
 
@@ -13,17 +13,37 @@ related: [engineering-decisions]
 dictionary.full.enriched.json  ──►  corpus.json  ──►  crossword generator
   (single source of truth)           (clue pool)        (generator.ts imports corpus.json)
        │
-       └──► enriched-dictionary.ts  ──►  word-guess game
-            (TypeScript wrapper)         (pick-target-word.ts, etc.)
+       ├──► listEnrichedAnswerWords()  ──►  Word Guess answer pool
+       │    (entries with non-empty definition)   (R2 `answers/{length}.json` + dev file read)
+       │
+       ├──► D1 `word_definitions` seed  ──►  post-solve definition API
+       │
+       └──► enriched-dictionary.ts  ──►  lookup / validation helpers
 ```
+
+**Word Guess answer pool (2026-07-20):** Answers come from enriched entries that
+have a definition — not `dictionary.target.json`. Guarantees every daily target has
+a definition in D1/local fallback. Tradeoff: smaller pool (~2,540 five-letter words
+vs ~3,019 in target). Words like LAURA (in target + blocklist, no enriched entry)
+cannot be picked.
+
+**Publish:** `npm run lexicon:publish -w @pasttime/web` uploads R2 answer shards from
+enriched and seeds D1 definitions from the same file. Use full publish (not `--d1-only`)
+after changing the answer pool. D1-only redo is unnecessary if enriched content is unchanged.
+
+Guessable shards still come from `dictionary.full.json` keyed by `String(length)` —
+not a bare `key` variable (that typo crashed publish mid-run after answers/5 uploaded).
+
+**Last successful full publish (2026-07-20):** R2 answers + guessable for lengths 5–10,
+crossword answers pack, and D1 `word_definitions` reseeded (15,236 rows).
 
 ## Files
 
 | File | Role | Built by |
 |------|------|----------|
-| `packages/domain/games/shared/dictionary.full.enriched.json` | Canonical word list with definitions, synonyms, antonyms | `build-enriched.mjs` + `enrich-from-mcp.mjs` |
+| `packages/domain/games/shared/dictionary.full.enriched.json` | Definitions + **Word Guess answer pool** (entries with definitions); crossword corpus source | `build-enriched.mjs` + `enrich-from-mcp.mjs` |
 | `packages/domain/games/crossword/corpus.json` | Crossword clue pool (answer + clue pairs) | `rebuild-corpus.mjs` (from enriched dict only) |
-| `packages/domain/games/shared/dictionary.target.json` | Canonical word universe (just word lists by length) | crossword scripts |
+| `packages/domain/games/shared/dictionary.target.json` | Legacy filtered universe from `build-dictionary.mjs` (crossword bootstrap scripts) | `build-dictionary.mjs` |
 | `packages/domain/games/shared/dictionary.full.json` | Original raw dictionary | git history |
 | `packages/domain/games/shared/manual-blocklist.txt` | Words excluded from enriched dict (definitions still contain the word) | manual |
 

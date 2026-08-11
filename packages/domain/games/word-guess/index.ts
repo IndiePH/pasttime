@@ -44,3 +44,5 @@ export type {
   WordGuessSubmitErrorCode,
   WordGuessSubmitGuessResult,
 } from "./types"
+export { buildWordGuessShareText } from "./share"
+export type { WordGuessShareOptions } from "./share"

@@ -32,6 +32,7 @@ export {
 export type { CrosswordPlayPreferences } from "./play-preferences"
 export {
   buildCrosswordPool,
+  clueLengthsMatchGridRuns,
   generateCrosswordPuzzleWithRetry,
   hydrateCrosswordClues,
   type CrosswordPoolWord,
@@ -52,3 +53,8 @@ export {
   resolveDirection,
 } from "./navigation"
 export type { CrosswordDirection } from "./navigation"
+export {
+  buildCrosswordShareGridLines,
+  buildCrosswordShareText,
+} from "./share"
+export type { CrosswordShareOptions } from "./share"

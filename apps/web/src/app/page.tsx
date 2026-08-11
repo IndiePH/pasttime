@@ -6,7 +6,7 @@ import { hubSearchParamsCache } from "@/features/hub/search-params"
 export const metadata: Metadata = {
   title: "Pasttime — Play more. Think sharper.",
   description:
-    "Daily puzzles and games in one hub. Instant play, no download required.",
+    "Free daily puzzles and classic games in one hub — Crossword, Word Guess, Sudoku, and Solitaire. Instant play, no download required.",
 }
 
 type PageProps = {

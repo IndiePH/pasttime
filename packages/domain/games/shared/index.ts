@@ -2,6 +2,7 @@ export {
   buildEnrichedWordIndex,
   getEnrichedWordFromIndex,
   isEnrichedWordLength,
+  listEnrichedAnswerWords,
   normalizeLexiconWord as normalizeEnrichedWord,
   type EnrichedWordEntry,
   type EnrichedWordLength,

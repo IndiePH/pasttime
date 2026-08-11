@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 
 import type { WordDefinition } from "@pasttime/domain/games/shared/lexicon-types"
+import { listEnrichedAnswerWords } from "@pasttime/domain/games/shared/lexicon-types"
 import {
   LEXICON_CROSSWORD_ANSWERS_KEY,
   lexiconAnswersKey,
@@ -23,11 +24,11 @@ function parseShardPayload(raw: string): string[] {
 
 async function readDevAnswersByLength(length: number): Promise<string[]> {
   const raw = await readFile(
-    join(DOMAIN_ROOT, "shared", "dictionary.target.json"),
+    join(DOMAIN_ROOT, "shared", "dictionary.full.enriched.json"),
     "utf8",
   )
-  const parsed = JSON.parse(raw) as Record<string, string[]>
-  return parsed[String(length)] ?? []
+  const parsed = JSON.parse(raw) as Record<string, EnrichedEntry[]>
+  return listEnrichedAnswerWords(parsed, length)
 }
 
 async function readDevGuessableByLength(length: number): Promise<string[]> {
@@ -178,27 +179,31 @@ export async function fetchWordDefinitions(
         synonyms: row.synonyms ? (JSON.parse(row.synonyms) as string[]) : [],
         antonyms: row.antonyms ? (JSON.parse(row.antonyms) as string[]) : [],
       }))
-
-      // Prefer D1 when it has hits. Empty local D1 (migrated, not seeded)
-      // falls through to domain JSON for next dev.
-      if (fromD1.length > 0) {
-        return fromD1
-      }
     }
   } catch (error) {
     // Local next dev often has the D1 binding but an unmigrated/empty DB.
     console.warn("D1 lexicon lookup failed; falling back to local files", error)
   }
 
-  try {
-    const fromFiles = await readDevDefinitions(normalized)
-    if (fromFiles.length > 0) {
-      return fromFiles
-    }
-  } catch (error) {
-    // Production Workers have no domain JSON on disk — keep D1 result.
-    console.warn("Local lexicon file fallback failed", error)
+  const byWord = new Map<string, WordDefinition>()
+  for (const row of fromD1 ?? []) {
+    byWord.set(row.word.toUpperCase(), row)
   }
 
-  return fromD1 ?? []
+  const missing = normalized.filter((word) => !byWord.has(word))
+  if (missing.length > 0) {
+    try {
+      const fromFiles = await readDevDefinitions(missing)
+      for (const row of fromFiles) {
+        byWord.set(row.word.toUpperCase(), row)
+      }
+    } catch (error) {
+      console.warn("Local lexicon file fallback failed", error)
+    }
+  }
+
+  return normalized.flatMap((word) => {
+    const hit = byWord.get(word)
+    return hit ? [hit] : []
+  })
 }

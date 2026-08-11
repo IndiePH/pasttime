@@ -7,6 +7,7 @@ import { parseSolitaireMode, solitairePlayPath } from "@pasttime/domain/games/so
 import { GameLaunchActions } from "@/features/games/components/game-launch-actions"
 import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
+import { GameOverviewSection } from "@/features/games/content/game-overview-section"
 import { SolitaireSettingsWidget } from "@/features/games/solitaire/components/solitaire-settings-widget"
 import { solitaireSearchParams } from "@/features/games/solitaire/search-params"
 
@@ -19,15 +20,18 @@ export function SolitaireLaunchView({ game }: SolitaireLaunchViewProps) {
   const mode = parseSolitaireMode(modeParam)
 
   return (
-    <GamePageShell>
-      <GameSessionHeader game={game} subtitle={game.description} />
-      <SolitaireSettingsWidget className="mt-6" />
-      <GameLaunchActions
-        game={game}
-        playHref={solitairePlayPath(mode)}
-        playLabel="Play"
-        statsHref="/games/solitaire/stats"
-      />
-    </GamePageShell>
+    <>
+      <GamePageShell>
+        <GameSessionHeader game={game} subtitle={game.description} />
+        <SolitaireSettingsWidget className="mt-6" />
+        <GameLaunchActions
+          game={game}
+          playHref={solitairePlayPath(mode)}
+          playLabel="Play"
+          statsHref="/games/solitaire/stats"
+        />
+      </GamePageShell>
+      <GameOverviewSection gameId={game.id} gameTitle={game.title} />
+    </>
   )
 }

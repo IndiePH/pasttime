@@ -30,7 +30,14 @@ import { GameContentPanel } from "@/features/games/components/game-content-panel
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlaySection } from "@/features/games/components/game-play-section"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
-import { PostSolveRanking } from "@/features/games/components/game-post-solve-ranking"
+import {
+  GamePostSolveActionStack,
+  GamePostSolveDialog,
+  ViewResultsLink,
+} from "@/features/games/components/game-post-solve-dialog"
+import { ComparativeRankingsList } from "@/features/games/components/comparative-rankings-list"
+import { useDailyPostSolveDialog } from "@/features/games/hooks/use-daily-post-solve-dialog"
+import { usePostSolveRankings } from "@/features/games/hooks/use-post-solve-rankings"
 import { useStorage } from "@/infrastructure/storage"
 
 import {
@@ -107,7 +114,12 @@ export function SudokuPlaySessionReady({
 
   const isPlaying = state.status === "playing"
   const isWon = state.status === "won"
+  const isDailyWin = isWon && mode === "daily"
   const cells: SudokuCell[] = state.cells
+
+  const { open: resultsOpen, setOpen: setResultsOpen, canReview } =
+    useDailyPostSolveDialog(isDailyWin)
+  const rankings = usePostSolveRankings("sudoku")
 
   // Endless rounds resume from storage by design (see useSudokuGame), so a
   // fresh round requires clearing the slot before a full navigation forces
@@ -210,17 +222,21 @@ export function SudokuPlaySessionReady({
                 Solved in <strong>{formatSudokuElapsed(elapsedMs)}</strong> —
                 nice work!
               </p>
-              {mode === "daily" ? <PostSolveRanking gameId="sudoku" /> : null}
-              {/* Restart/back-to-setup CTAs live only in the footer (see
-                  GamePlayFooterActions below) so the won state has a single
-                  CTA group, matching the crossword/word-guess play views. */}
-              <div className="flex w-60 flex-col items-center gap-2">
-                <Button variant="outline" className="w-full" asChild>
-                  <PlatformLink href="/games/sudoku/stats">
-                    View stats
-                  </PlatformLink>
-                </Button>
-              </div>
+              {mode === "daily" ? (
+                <ViewResultsLink
+                  visible={canReview}
+                  onClick={() => setResultsOpen(true)}
+                />
+              ) : null}
+              {mode !== "daily" ? (
+                <div className="flex w-60 flex-col items-center gap-2">
+                  <Button variant="outline" className="w-full" asChild>
+                    <PlatformLink href="/games/sudoku/stats">
+                      View stats
+                    </PlatformLink>
+                  </Button>
+                </div>
+              ) : null}
             </div>
           ) : (
             <p
@@ -236,6 +252,30 @@ export function SudokuPlaySessionReady({
           )}
         </CardContent>
       </Card>
+
+      <GamePostSolveDialog
+        open={resultsOpen}
+        onOpenChange={setResultsOpen}
+        title="Nice work!"
+        description={`Solved in ${formatSudokuElapsed(elapsedMs)}`}
+        footer={
+          <GamePostSolveActionStack>
+            <Button variant="outline" className="w-full" asChild>
+              <PlatformLink href="/games/sudoku/stats">View stats</PlatformLink>
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setResultsOpen(false)}
+            >
+              Close
+            </Button>
+          </GamePostSolveActionStack>
+        }
+      >
+        <ComparativeRankingsList rankings={rankings} />
+      </GamePostSolveDialog>
     </GamePlaySection>
   )
 }

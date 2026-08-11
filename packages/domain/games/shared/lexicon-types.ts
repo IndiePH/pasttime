@@ -53,3 +53,18 @@ export function getEnrichedWordFromIndex(
 export function isEnrichedWordLength(value: number): value is EnrichedWordLength {
   return Number.isInteger(value) && value >= 5 && value <= 10
 }
+
+/**
+ * Word Guess answer pool: enriched entries with a non-empty definition,
+ * sorted A→Z. Keeps daily/endless targets aligned with definition lookup.
+ */
+export function listEnrichedAnswerWords(
+  enrichedByLength: Readonly<Record<string, readonly EnrichedWordEntry[]>>,
+  length: number,
+): string[] {
+  const entries = enrichedByLength[String(length)] ?? []
+  return entries
+    .filter((entry) => Boolean(entry.definition?.trim()))
+    .map((entry) => normalizeLexiconWord(entry.word))
+    .sort((a, b) => a.localeCompare(b))
+}

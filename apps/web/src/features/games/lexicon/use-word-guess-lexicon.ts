@@ -90,9 +90,13 @@ export function useWordDefinition(word: string | null, enabled: boolean) {
     }
   }, [enabled, word])
 
-  if (!enabled || !word || loadedWord !== word) {
-    return null
+  if (!enabled || !word) {
+    return { definition: null, loading: false }
   }
 
-  return definition
+  if (loadedWord !== word) {
+    return { definition: null, loading: true }
+  }
+
+  return { definition: definition?.definition ?? null, loading: false }
 }
