@@ -37,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.4,
     },
+    {
+      url: `${SITE_URL}/word-guess/policy`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
   ]
 
   const gameRoutes: MetadataRoute.Sitemap = GAME_REGISTRY.filter(

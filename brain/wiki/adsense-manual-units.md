@@ -50,6 +50,7 @@ Numeric publisher/slot IDs are public (they appear in page HTML and `ads.txt`) �
 | Method | Status |
 |--------|--------|
 | `/ads.txt` | Route serves `google.com, pub-…, DIRECT, f08c47fec0942fa0` when client set. Must work on **apex**. |
+| `/app-ads.txt` | Same publisher line for **AdMob** mobile apps (e.g. Word Guess). Crawler ignores Play Website path — file must be at apex `https://pasttime.xyz/app-ads.txt`. Word Guess mobile privacy: `/word-guess/policy`. |
 | AdSense `<script>` | `AdSenseScript` in root layout (env-gated). |
 | Meta `google-adsense-account` | Not implemented; optional if ads.txt already verifies. |
 
