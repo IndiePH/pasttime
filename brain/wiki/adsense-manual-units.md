@@ -50,7 +50,7 @@ Numeric publisher/slot IDs are public (they appear in page HTML and `ads.txt`) �
 | Method | Status |
 |--------|--------|
 | `/ads.txt` | Route serves `google.com, pub-…, DIRECT, f08c47fec0942fa0` when client set. Must work on **apex**. |
-| `/app-ads.txt` | Same publisher line for **AdMob** mobile apps (e.g. Word Guess). Crawler ignores Play Website path — file must be at apex `https://pasttime.xyz/app-ads.txt`. Word Guess mobile privacy: `/word-guess/policy`. |
+| `/app-ads.txt` | Same publisher line for **AdMob** mobile apps (e.g. Word Guess). Crawler ignores Play Website path — file must be at apex `https://pasttime.xyz/app-ads.txt`. Word Guess mobile privacy (Play): `https://yoxent.github.io/word-guess/privacy`. |
 | AdSense `<script>` | `AdSenseScript` in root layout (env-gated). |
 | Meta `google-adsense-account` | Not implemented; optional if ads.txt already verifies. |
 
@@ -64,6 +64,8 @@ Google requires a **certified CMP** for personalized ads in EEA/UK/CH. Choice fo
 
 Google Publisher Policies ([support article](https://support.google.com/adsense/answer/10502938)) require a real privacy policy that discloses AdSense-related data use (cookies / web beacons / IP, third parties placing cookies) and preferably links [How Google uses data](https://policies.google.com/technologies/partner-sites).
 
+Also required for approval readiness: [unique content + UX](https://support.google.com/adsense/answer/10015918) and avoid [thin content / doorway patterns](https://support.google.com/webmasters/answer/9044175#thin-content).
+
 Pasttime legal pages (`/privacy`, `/about`, `/terms`) must stay **substantive** — not placeholders.
 
 ### Rejection history
@@ -71,6 +73,16 @@ Pasttime legal pages (`/privacy`, `/about`, `/terms`) must stay **substantive** 
 | Date | Result | Cause identified | Fix |
 |------|--------|------------------|-----|
 | 2026-07-29 | **Fail** — Low value content | Root `loading.tsx` emits skeleton `animate-pulse` HTML in initial response for ALL routes. Googlebot sees loading placeholders instead of text content. Game pages have ~1 sentence of descriptive text. Coming-soon cards dilute the catalog. No sitemap. | Removed `loading.tsx` (root, `games/[slug]`, `games/[slug]/play`). Added SSR `GameOverviewSection` (~150+ words) on available game landings. Hub shows available games only. Added `sitemap.ts` + `robots.ts`. |
+| 2026-08-12 | **Fail** — Low value content (re-review) | Production already had overviews + sitemap; hub homepage was still thin (~800 visible chars of mostly nav/cards). Interactive `/play`, `/stats`, `/room` shells were indexable. | Added SSR `HubEditorial` + hero tip copy; `noIndex` on play/stats/room; keep Word Guess `/word-guess/policy` in sitemap; shared `pageMetadata` / JSON-LD. **Must redeploy** then re-request review. |
+
+### Search Console (robots / sitemap)
+
+Live apex (verified 2026-08-12):
+- `https://pasttime.xyz/robots.txt` → **200**, `Allow: /`, `Sitemap: https://pasttime.xyz/sitemap.xml` (Cloudflare may prepend managed AI-bot Disallows; Googlebot is still allowed).
+- `https://pasttime.xyz/sitemap.xml` → **200**, valid urlset for hub, legal, game landings, Word Guess policy.
+- `pasttime.app` and `www.pasttime.xyz` **do not resolve** — GSC property must be **`pasttime.xyz`** (or `https://pasttime.xyz`), not those hosts.
+
+If GSC still says “no robots.txt” / “could not fetch sitemap” after ~24h on the correct property: use URL Inspection on `/robots.txt` and `/sitemap.xml`, then **Sitemaps → Add** `https://pasttime.xyz/sitemap.xml` again. Stale GSC fetch errors are common before first successful crawl; the files are already live.
 
 ### Diagnosis method
 
@@ -88,9 +100,11 @@ When `pasttime.xyz` was rejected for "Low value content," the initial HTML was i
 2. [x] Add substantive SSR text to game landing pages (`GameOverviewSection` + `game-overviews.ts`)
 3. [x] Create sitemap.xml (`app/sitemap.ts`) + robots.txt (`app/robots.ts`)
 4. [x] Hide "Coming Soon" games from hub (registry kept; hub filters to `available`)
-5. [ ] **Redeploy** and verify apex is healthy (no Cloudflare 1102 / Worker resource limit errors)
-6. [ ] Pre-submit: `curl` apex HTML — no `animate-pulse` skeletons; game pages contain overview copy; `/sitemap.xml` returns 200
-7. [ ] Re-request AdSense site review on `pasttime.xyz`
+5. [x] Hub editorial SSR (`HubEditorial`) + noindex thin interactive routes
+6. [ ] **Redeploy** and verify apex is healthy (no Cloudflare 1102 / Worker resource limit errors)
+7. [ ] Pre-submit: `curl` apex HTML — no `animate-pulse`; hub has editorial section; game pages contain overview copy; `/robots.txt` + `/sitemap.xml` return 200
+8. [ ] GSC: confirm property is `pasttime.xyz`; re-submit sitemap; URL Inspection on robots/sitemap
+9. [ ] Re-request AdSense site review on `pasttime.xyz`
 
 ## Operator checklist
 

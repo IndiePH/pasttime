@@ -16,6 +16,10 @@ export function HubHero() {
           progress on your device and offers a calm layout built for a short
           break or a longer streak.
         </p>
+        <p className="mt-3 text-muted-foreground">
+          Every title below is playable today — open a game page for rules and
+          tips, then start a daily puzzle or a fresh run without signing up.
+        </p>
         <TrustBadges className="mt-6" />
       </div>
     </section>

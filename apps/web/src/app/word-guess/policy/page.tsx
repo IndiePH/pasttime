@@ -1,12 +1,12 @@
-import type { Metadata } from "next"
-
 import { StaticPage } from "@/components/shared/static-page"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Word Guess Privacy Policy",
   description:
     "Privacy policy for the Word Guess Android app by Vorith Studio, including AdMob, Play Games, and Firebase.",
-}
+  path: "/word-guess/policy",
+})
 
 const linkClass = "underline underline-offset-4 hover:text-foreground"
 

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next"
 
 import { GAME_REGISTRY, gamePath } from "@pasttime/domain/games"
 
-const SITE_URL = "https://pasttime.xyz"
+import { SITE_URL } from "@/lib/seo"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()

@@ -6,7 +6,7 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 
 | page | summary |
 |------|---------|
-| [adsense-manual-units](adsense-manual-units.md) | Manual AdSense units, review rejection history, SSR content/sitemap checklist, ads.txt/CMP |
+| [adsense-manual-units](adsense-manual-units.md) | Manual AdSense units, review rejection history, SSR content/sitemap/GSC checklist, ads.txt/CMP |
 | [classic-game-conventions](classic-game-conventions.md) | Original rules and UX of Solitaire Klondike and Word Guess, with Pasttime innovation ideas |
 | [dictionary-pipeline](dictionary-pipeline.md) | Enriched dict, Word Guess answer pool, crossword corpus, R2/D1 publish, definition fixing |
 | [engineering-decisions](engineering-decisions.md) | Persistent log of architectural, tradeoff, rule-override, and technical-debt decisions |

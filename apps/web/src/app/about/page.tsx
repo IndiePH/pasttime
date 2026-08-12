@@ -1,12 +1,12 @@
-import type { Metadata } from "next"
-
 import { StaticPage } from "@/components/shared/static-page"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "About",
   description:
     "Pasttime is a free hub for daily puzzles and classic games you can play instantly in the browser.",
-}
+  path: "/about",
+})
 
 export default function AboutPage() {
   return (

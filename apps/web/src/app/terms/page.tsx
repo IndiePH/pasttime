@@ -1,11 +1,11 @@
-import type { Metadata } from "next"
-
 import { StaticPage } from "@/components/shared/static-page"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Terms",
   description: "Terms of service for using Pasttime.",
-}
+  path: "/terms",
+})
 
 export default function TermsPage() {
   return (

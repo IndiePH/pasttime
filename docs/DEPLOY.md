@@ -56,6 +56,17 @@ After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime
 
 **Site review:** Google Publisher Policies require a real Privacy Policy that discloses AdSense/cookie use (and preferably links [How Google uses data](https://policies.google.com/technologies/partner-sites)). Keep `/privacy`, `/about`, and `/terms` substantive — not placeholders — then request review on the **apex** site (`pasttime.xyz`). See `brain/wiki/adsense-manual-units.md`.
 
+**Pre-review crawl checks (apex):**
+
+| URL | Expect |
+|-----|--------|
+| `https://pasttime.xyz/robots.txt` | 200, `Allow: /`, `Sitemap: https://pasttime.xyz/sitemap.xml` |
+| `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub, legal, available game landings, `/word-guess/policy`) |
+| `https://pasttime.xyz/` | SSR hub copy including editorial section; no `animate-pulse` skeletons |
+| `https://pasttime.xyz/games/<slug>` | SSR overview article for each available game |
+
+Search Console property must be **`pasttime.xyz`** (`pasttime.app` / `www.pasttime.xyz` do not resolve). After deploy, re-submit the sitemap URL and use URL Inspection on robots/sitemap if GSC still shows fetch errors.
+
 ## Lexicon publish (R2 + D1)
 
 Runtime keys use the product-scoped prefix `shared/lexicon/v1/` in bucket
