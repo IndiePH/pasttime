@@ -1,13 +1,22 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { GameLaunchActions, SiteShell } from "@/components/shared"
-import { GAME_REGISTRY, getGameById } from "@pasttime/domain/games"
+import {
+  GameLaunchActions,
+  JsonLd,
+  SiteShell,
+} from "@/components/shared"
+import {
+  GAME_REGISTRY,
+  gamePath,
+  getGameById,
+} from "@pasttime/domain/games"
 import { GameLaunchSettings } from "@/features/games/components/game-launch-settings"
 import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
 import { GameOverviewSection } from "@/features/games/content/game-overview-section"
 import { getGameModule } from "@/features/games/module-registry"
 import { parseGameSearchParams } from "@/features/games/parse-game-search-params"
+import { gameApplicationJsonLd, pageMetadata } from "@/lib/seo"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -15,9 +24,7 @@ type PageProps = {
 }
 
 export function generateStaticParams() {
-  return GAME_REGISTRY.filter((game) => game.status === "available").map(
-    (game) => ({ slug: game.id }),
-  )
+  return GAME_REGISTRY.map((game) => ({ slug: game.id }))
 }
 
 export async function generateMetadata({
@@ -26,12 +33,17 @@ export async function generateMetadata({
   const { slug } = await params
   const game = getGameById(slug)
   if (!game) {
-    return { title: "Game not found — Pasttime" }
+    return pageMetadata({
+      title: "Game not found",
+      description: "That game is not available on Pasttime.",
+      path: gamePath(slug),
+    })
   }
-  return {
-    title: `${game.title} — Pasttime`,
+  return pageMetadata({
+    title: game.title,
     description: game.description,
-  }
+    path: gamePath(game.id),
+  })
 }
 
 export default async function GamePage({ params, searchParams }: PageProps) {
@@ -44,11 +56,16 @@ export default async function GamePage({ params, searchParams }: PageProps) {
   }
 
   const gameModule = getGameModule(slug)
+  const structuredData =
+    game.status === "available" ? (
+      <JsonLd data={gameApplicationJsonLd(game)} />
+    ) : null
 
   if (game.status === "available" && gameModule?.LaunchView) {
     const LaunchView = gameModule.LaunchView
     return (
       <SiteShell>
+        {structuredData}
         <LaunchView game={game} />
       </SiteShell>
     )
@@ -56,6 +73,7 @@ export default async function GamePage({ params, searchParams }: PageProps) {
 
   return (
     <SiteShell>
+      {structuredData}
       <GamePageShell>
         <GameSessionHeader game={game} subtitle={game.description} />
         <GameLaunchSettings game={game} className="mt-6" />

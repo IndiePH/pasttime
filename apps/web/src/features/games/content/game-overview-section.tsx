@@ -8,7 +8,8 @@ interface GameOverviewSectionProps {
 }
 
 /**
- * Visible SSR article copy for game launch pages (AdSense / crawler-facing).
+ * Visible SSR article for game launch pages (AdSense / crawler-facing).
+ * Origin and context, not a second How to play (that stays in the dialog).
  */
 export function GameOverviewSection({
   gameId,

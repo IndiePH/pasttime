@@ -22,5 +22,24 @@ describe("AdPanel", () => {
     expect(ins).not.toBeNull()
     expect(ins?.getAttribute("data-ad-client")).toBe("ca-pub-999")
     expect(ins?.getAttribute("data-ad-slot")).toBe("111")
+    expect(ins?.getAttribute("data-ad-format")).toBeNull()
+    expect(ins?.getAttribute("data-full-width-responsive")).toBeNull()
+    expect(ins).toHaveStyle({ width: "728px", height: "90px" })
+  })
+
+  it("keeps a sized card shell when the hub slot is live", () => {
+    vi.stubEnv("NEXT_PUBLIC_ADSENSE_CLIENT", "ca-pub-999")
+    vi.stubEnv("NEXT_PUBLIC_ADSENSE_SLOT_HUB", "333")
+    render(
+      <AdPanel
+        slot="hub-grid-card"
+        variant="card"
+        matchGameCardSize="compact"
+      />,
+    )
+
+    expect(screen.getByText("Sample Quiz")).toBeTruthy()
+    expect(document.querySelector("ins.adsbygoogle")).not.toBeNull()
+    expect(screen.queryByText(/ad placeholder/i)).toBeNull()
   })
 })

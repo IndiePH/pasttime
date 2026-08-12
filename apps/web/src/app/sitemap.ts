@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next"
 
 import { GAME_REGISTRY, gamePath } from "@pasttime/domain/games"
 
-const SITE_URL = "https://pasttime.xyz"
+import { SITE_URL } from "@/lib/seo"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
@@ -45,7 +45,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  const gameRoutes: MetadataRoute.Sitemap = GAME_REGISTRY.filter(
+  const availableRoutes: MetadataRoute.Sitemap = GAME_REGISTRY.filter(
     (game) => game.status === "available",
   ).map((game) => ({
     url: `${SITE_URL}${gamePath(game.id)}`,
@@ -54,5 +54,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  return [...staticRoutes, ...gameRoutes]
+  const comingSoonRoutes: MetadataRoute.Sitemap = GAME_REGISTRY.filter(
+    (game) => game.status === "coming_soon",
+  ).map((game) => ({
+    url: `${SITE_URL}${gamePath(game.id)}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.4,
+  }))
+
+  return [...staticRoutes, ...availableRoutes, ...comingSoonRoutes]
 }

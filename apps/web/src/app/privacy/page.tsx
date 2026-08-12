@@ -1,12 +1,12 @@
-import type { Metadata } from "next"
-
 import { StaticPage } from "@/components/shared/static-page"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Privacy",
   description:
     "How Pasttime collects, uses, and shares information, including Google AdSense advertising.",
-}
+  path: "/privacy",
+})
 
 const googlePartnerSitesUrl =
   "https://policies.google.com/technologies/partner-sites"

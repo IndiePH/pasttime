@@ -12,7 +12,7 @@ export function Header({ className }: { className?: string }) {
         className,
       )}
     >
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <PlatformLink
           href="/"
           className="font-semibold tracking-tight transition-opacity hover:opacity-80"

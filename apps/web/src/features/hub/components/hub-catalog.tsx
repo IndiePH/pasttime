@@ -57,9 +57,11 @@ function GameGrid({
 }
 
 export function HubCatalog({
+  comingSoon = [],
   featured,
   games,
 }: {
+  comingSoon?: GameDefinition[]
   featured: GameDefinition[]
   games: GameDefinition[]
 }) {
@@ -113,6 +115,24 @@ export function HubCatalog({
             cardSize="compact"
             games={showSplitLayout ? rest : games}
           />
+        </section>
+      ) : null}
+
+      {comingSoon.length > 0 ? (
+        <section aria-labelledby="coming-soon-heading">
+          <div className="mb-4 space-y-1">
+            <h2
+              id="coming-soon-heading"
+              className="text-lg font-semibold tracking-tight"
+            >
+              Coming soon
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Not playable yet. Open a card for background on the game; play
+              controls arrive when the title launches.
+            </p>
+          </div>
+          <GameGrid cardSize="compact" games={comingSoon} />
         </section>
       ) : null}
     </div>

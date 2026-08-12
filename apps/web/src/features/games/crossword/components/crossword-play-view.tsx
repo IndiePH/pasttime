@@ -522,7 +522,7 @@ function CrosswordPlaySessionReady({
                       role="status"
                       aria-live="polite"
                     >
-                      Puzzle solved — nice work!
+                      Puzzle solved. Nice work!
                     </p>
                     <ViewResultsLink
                       visible={canReview}
@@ -539,7 +539,7 @@ function CrosswordPlaySessionReady({
                     role="status"
                     aria-live="polite"
                   >
-                    Puzzle solved — nice work!
+                    Puzzle solved. Nice work!
                   </p>
                 )
               }

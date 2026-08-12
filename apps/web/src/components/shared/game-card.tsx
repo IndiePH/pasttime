@@ -146,20 +146,27 @@ export function GameCard({
           <p className={cn("text-muted-foreground", styles.description)}>
             {game.description}
           </p>
-          {game.playerCount ? (
-            <div
-              className={cn(
-                "flex items-center gap-1.5 font-medium text-foreground/70",
-                styles.player,
-              )}
-            >
-              <UsersIcon
-                className={cn("shrink-0", styles.playerIcon)}
-                aria-hidden
-              />
-              <span>{game.playerCount}</span>
-            </div>
-          ) : null}
+          <div
+            className={cn(
+              "flex flex-wrap items-center gap-x-2 gap-y-1 font-medium text-foreground/70",
+              styles.player,
+            )}
+          >
+            {isComingSoon ? (
+              <span className="rounded-md bg-muted px-1.5 py-0.5 text-[0.65rem] font-semibold tracking-wide text-muted-foreground uppercase">
+                Coming soon
+              </span>
+            ) : null}
+            {game.playerCount ? (
+              <span className="inline-flex items-center gap-1.5">
+                <UsersIcon
+                  className={cn("shrink-0", styles.playerIcon)}
+                  aria-hidden
+                />
+                <span>{game.playerCount}</span>
+              </span>
+            ) : null}
+          </div>
         </div>
       </article>
     </PlatformLink>

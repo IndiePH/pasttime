@@ -13,23 +13,32 @@ function HubToolbarFallback() {
 }
 
 export function HubGamesSection({
+  comingSoon = [],
   featured,
   games,
 }: {
+  comingSoon?: GameDefinition[]
   featured: GameDefinition[]
   games: GameDefinition[]
 }) {
   return (
     <>
-      <div className="mb-8 space-y-4">
+      <div className="mb-5 space-y-3">
         <p className="text-sm text-muted-foreground">
           {games.length} {games.length === 1 ? "game" : "games"} ready to play
+          {comingSoon.length > 0
+            ? ` · ${comingSoon.length} coming soon`
+            : null}
         </p>
         <Suspense fallback={<HubToolbarFallback />}>
           <HubGameSearch />
         </Suspense>
       </div>
-      <HubCatalog featured={featured} games={games} />
+      <HubCatalog
+        comingSoon={comingSoon}
+        featured={featured}
+        games={games}
+      />
     </>
   )
 }

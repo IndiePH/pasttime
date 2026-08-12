@@ -2,8 +2,9 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { SiteShell } from "@/components/shared"
-import { getGameById } from "@pasttime/domain/games"
+import { gamePath, getGameById } from "@pasttime/domain/games"
 import { getGameModule } from "@/features/games/module-registry"
+import { pageMetadata } from "@/lib/seo"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -15,12 +16,19 @@ export async function generateMetadata({
   const { slug } = await params
   const game = getGameById(slug)
   if (!game) {
-    return { title: "Game not found — Pasttime" }
+    return pageMetadata({
+      title: "Game not found",
+      description: "That game is not available on Pasttime.",
+      path: `${gamePath(slug)}/stats`,
+      noIndex: true,
+    })
   }
-  return {
-    title: `${game.title} Stats — Pasttime`,
+  return pageMetadata({
+    title: `${game.title} Stats`,
     description: `Your ${game.title} stats and streaks.`,
-  }
+    path: `${gamePath(game.id)}/stats`,
+    noIndex: true,
+  })
 }
 
 export default async function GameStatsPage({ params }: PageProps) {

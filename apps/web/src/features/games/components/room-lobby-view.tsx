@@ -70,7 +70,7 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
         : launchHref
     try {
       await navigator.clipboard.writeText(
-        `Join my ${game.title} room — code ${roomCode}: ${link}`,
+        `Join my ${game.title} room. Code ${roomCode}: ${link}`,
       )
       setCopied(true)
       window.setTimeout(() => setCopied(false), 2000)

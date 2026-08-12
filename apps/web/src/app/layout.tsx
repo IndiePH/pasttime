@@ -7,7 +7,6 @@ import {
   Space_Grotesk,
 } from "next/font/google"
 import { cookies } from "next/headers"
-import Script from "next/script"
 
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 
@@ -15,18 +14,35 @@ import "./globals.css"
 import { AdSenseScript } from "@/components/shared/adsense-script"
 import { ThemeProvider } from "@/components/theme-provider"
 import { StorageProvider } from "@/infrastructure/storage"
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://pasttime.xyz"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Pasttime",
-    template: "%s — Pasttime",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Free daily puzzles and classic games in the browser — Crossword, Word Guess, Sudoku, Solitaire, and more. No download required.",
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
 }
 
 const fontMono = Geist_Mono({

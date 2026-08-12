@@ -1,12 +1,12 @@
-import type { Metadata } from "next"
-
 import { StaticPage } from "@/components/shared/static-page"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Word Guess Privacy Policy",
   description:
     "Privacy policy for the Word Guess Android app by Vorith Studio, including AdMob, Play Games, and Firebase.",
-}
+  path: "/word-guess/policy",
+})
 
 const linkClass = "underline underline-offset-4 hover:text-foreground"
 
@@ -85,7 +85,7 @@ export default function WordGuessPolicyPage() {
           content: (
             <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
               <li>
-                Google AdMob (advertising) —{" "}
+                Google AdMob (advertising):{" "}
                 <a
                   href="https://support.google.com/admob/answer/6128543"
                   className={linkClass}
@@ -96,7 +96,7 @@ export default function WordGuessPolicyPage() {
                 </a>
               </li>
               <li>
-                Google Play Games Services (optional Android auth) —{" "}
+                Google Play Games Services (optional Android auth):{" "}
                 <a
                   href="https://policies.google.com/privacy"
                   className={linkClass}
@@ -107,7 +107,7 @@ export default function WordGuessPolicyPage() {
                 </a>
               </li>
               <li>
-                Firebase Authentication, Firestore, and Remote Config —{" "}
+                Firebase Authentication, Firestore, and Remote Config:{" "}
                 <a
                   href="https://firebase.google.com/support/privacy"
                   className={linkClass}
@@ -118,7 +118,7 @@ export default function WordGuessPolicyPage() {
                 </a>
               </li>
               <li>
-                Google Play Billing and Play Services —{" "}
+                Google Play Billing and Play Services:{" "}
                 <a
                   href="https://policies.google.com/privacy"
                   className={linkClass}
