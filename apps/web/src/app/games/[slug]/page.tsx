@@ -24,9 +24,7 @@ type PageProps = {
 }
 
 export function generateStaticParams() {
-  return GAME_REGISTRY.filter((game) => game.status === "available").map(
-    (game) => ({ slug: game.id }),
-  )
+  return GAME_REGISTRY.map((game) => ({ slug: game.id }))
 }
 
 export async function generateMetadata({

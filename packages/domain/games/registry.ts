@@ -17,7 +17,7 @@ export const GAME_REGISTRY: readonly GameDefinition[] = [
     id: "solitaire",
     title: "Solitaire",
     description:
-      "Klondike, Pyramid, TriPeaks, FreeCell, and more — pick a mode and play solo.",
+      "Klondike, Pyramid, TriPeaks, FreeCell, and more. Pick a mode and play solo.",
     status: "available",
     icon: "solitaire",
     tags: ["cards", "puzzle", "solo"],

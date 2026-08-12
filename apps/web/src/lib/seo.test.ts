@@ -40,14 +40,14 @@ describe("seo helpers", () => {
 
   it("supports absolute titles that skip the root template", () => {
     const meta = pageMetadata({
-      title: "Pasttime — Play more. Think sharper.",
+      title: "Pasttime | Play more. Think sharper.",
       description: "Hub description",
       path: "/",
       absoluteTitle: true,
     })
 
     expect(meta.title).toEqual({
-      absolute: "Pasttime — Play more. Think sharper.",
+      absolute: "Pasttime | Play more. Think sharper.",
     })
   })
 

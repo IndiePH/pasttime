@@ -51,7 +51,7 @@ export const SOLITAIRE_MODE_INFO: Record<SolitaireMode, SolitaireModeInfo> = {
   },
   freecell: {
     label: "FreeCell",
-    tagline: "All cards face up — use four free cells to win.",
+    tagline: "All cards face up. Use four free cells to win.",
   },
 }
 

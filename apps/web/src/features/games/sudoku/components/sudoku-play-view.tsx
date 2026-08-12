@@ -219,8 +219,8 @@ export function SudokuPlaySessionReady({
               aria-live="polite"
             >
               <p className="text-center text-sm text-muted-foreground">
-                Solved in <strong>{formatSudokuElapsed(elapsedMs)}</strong> —
-                nice work!
+                Solved in <strong>{formatSudokuElapsed(elapsedMs)}</strong>.
+                Nice work!
               </p>
               {mode === "daily" ? (
                 <ViewResultsLink
@@ -246,7 +246,7 @@ export function SudokuPlaySessionReady({
               aria-live="polite"
             >
               {state.candidateMode
-                ? "Candidate mode — tap digits to mark notes."
+                ? "Candidate mode. Tap digits to mark notes."
                 : "\u00A0"}
             </p>
           )}

@@ -63,9 +63,9 @@ Strip units request fixed **728×90**; hub cards **300×250** (no responsive aut
 | URL | Expect |
 |-----|--------|
 | `https://pasttime.xyz/robots.txt` | 200, `Allow: /`, `Sitemap: https://pasttime.xyz/sitemap.xml` |
-| `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub, legal, available game landings, `/word-guess/policy`) |
-| `https://pasttime.xyz/` | SSR hub copy including editorial section; no `animate-pulse` skeletons |
-| `https://pasttime.xyz/games/<slug>` | SSR overview article for each available game |
+| `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub, legal, available + coming-soon landings, `/word-guess/policy`) |
+| `https://pasttime.xyz/` | SSR hub copy including editorial; playable catalog plus labeled Coming soon; no `animate-pulse` skeletons |
+| `https://pasttime.xyz/games/<slug>` | SSR origin/history article for every registry game (coming soon: no Play) |
 | `https://pasttime.xyz/games/<slug>/play` | `noindex` (thin interactive shell) |
 
 Search Console property must be **`pasttime.xyz`** (`pasttime.app` / `www.pasttime.xyz` do not resolve). After deploy, re-submit the sitemap URL and use URL Inspection on hub + game landings (Request indexing), plus robots/sitemap if GSC still shows fetch errors.

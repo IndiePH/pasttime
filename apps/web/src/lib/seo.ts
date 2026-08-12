@@ -5,7 +5,7 @@ import { gamePath, type GameDefinition } from "@pasttime/domain/games"
 export const SITE_URL = "https://pasttime.xyz"
 export const SITE_NAME = "Pasttime"
 export const SITE_DESCRIPTION =
-  "Free daily puzzles and classic games in the browser — Crossword, Word Guess, Sudoku, Solitaire, and more. No download required."
+  "Free daily puzzles and classic games in the browser: Crossword, Word Guess, Sudoku, Solitaire, and more. No download required."
 
 export function absoluteUrl(path = "/"): string {
   if (path === "/" || path === "") {
@@ -18,7 +18,7 @@ type PageMetadataInput = {
   title: string
   description: string
   path: string
-  /** Skip the root `%s — Pasttime` template (already branded titles). */
+  /** Skip the root `%s | Pasttime` template (already branded titles). */
   absoluteTitle?: boolean
   /**
    * Interactive shells (play / stats / room) stay out of the index so

@@ -34,6 +34,8 @@ Plus publisher: `NEXT_PUBLIC_ADSENSE_CLIENT`.
 
 Strip units request a **fixed 728×90** leaderboard (`<ins>` width/height, no `data-ad-format="auto"` / `data-full-width-responsive`). Responsive + full-width lets AdSense serve ~726×280 and ignore the reserved box. Hub cards use a fixed **300×250**.
 
+**Hydration:** `AdPanel` must not SSR a live `<ins>`. AdSense fills/mutates the tag (status attrs + iframe) before React hydrates, which triggers a mismatch. Keep the reserved box on the server; mount `<ins>` + `adsbygoogle.push` only after the client is ready.
+
 ## Where config lives (do not put secrets here)
 
 | Kind | Names | Store | Survives `wrangler deploy`? |
@@ -51,7 +53,7 @@ Numeric publisher/slot IDs are public (they appear in page HTML and `ads.txt`) �
 |--------|--------|
 | `/ads.txt` | Route serves `google.com, pub-…, DIRECT, f08c47fec0942fa0` when client set. Must work on **apex**. |
 | `/app-ads.txt` | Same publisher line for **AdMob** mobile apps (e.g. Word Guess). Crawler ignores Play Website path — file must be at apex `https://pasttime.xyz/app-ads.txt`. Word Guess mobile privacy (Play): `https://yoxent.github.io/word-guess/privacy`. |
-| AdSense `<script>` | `AdSenseScript` in root layout (env-gated). |
+| AdSense `<script>` | `AdSenseScript` in root layout (env-gated). Plain `<script async>` (not `next/script`) so Next does not inject `data-nscript` (AdSense console warning). |
 | Meta `google-adsense-account` | Not implemented; optional if ads.txt already verifies. |
 
 Code: `apps/web/src/lib/adsense.ts`, `AdPanel`, `AdSenseScript`, `app/ads.txt/route.ts`. Spec/plan: `docs/superpowers/*adsense*`. Deploy notes: `docs/DEPLOY.md`.
@@ -84,11 +86,21 @@ Pasttime legal pages (`/privacy`, `/about`, `/terms`) must stay **substantive** 
 | `/play`, `/stats` | `noindex, nofollow` |
 | `/privacy` | AdSense + cookies disclosure + Google partner-sites link |
 | `/ads.txt`, `/app-ads.txt`, gamehub `/ads.txt` | `google.com, pub-4297882562709937, DIRECT, f08c47fec0942fa0` |
-| `/robots.txt`, `/sitemap.xml` | 200; sitemap includes hub, legal, available games, `/word-guess/policy` |
+| `/robots.txt`, `/sitemap.xml` | 200; sitemap includes hub, legal, available + coming-soon landings, `/word-guess/policy` |
 | Canonical / JSON-LD | Hub has `canonical` + `WebSite`/`Organization` JSON-LD |
 | Favicon | `/favicon.ico` 200 (Next default). No dedicated `og:image` yet (optional share polish). |
 
 Strip/card `<ins>` units use **fixed** 728×90 / 300×250 (no `data-ad-format="auto"`) so reserved shells match served creatives.
+
+### Landing copy (do not duplicate How to play)
+
+`GameOverviewSection` + `game-overviews.ts` is SSR origin/history + “On Pasttime”, not a second tutorial. Mechanics stay in the **How to play** dialog on available games.
+
+Every registry title has the same three-part article: intro, **Where … came from**, **On Pasttime**. Coming-soon intros add a line that play controls are not live yet.
+
+Hub: playable titles in Top picks / All games; **Coming soon** is a separate labeled section (cards + origin landings). Do not mix pending titles into the playable grid as primary inventory.
+
+Player-facing copy avoids em dashes (common “AI tell”); title template is `%s | Pasttime`.
 
 ### Search Console (robots / sitemap)
 
@@ -123,7 +135,7 @@ When `pasttime.xyz` was rejected for "Low value content," the initial HTML was i
 1. [x] Remove loading.tsx files (SSR skeleton fix)
 2. [x] Add substantive SSR text to game landing pages (`GameOverviewSection` + `game-overviews.ts`)
 3. [x] Create sitemap.xml (`app/sitemap.ts`) + robots.txt (`app/robots.ts`)
-4. [x] Hide "Coming Soon" games from hub (registry kept; hub filters to `available`)
+4. [x] Coming soon stays secondary: labeled hub section + origin landings (not playable shells as primary inventory)
 5. [x] Hub editorial SSR (`HubEditorial`) + noindex thin interactive routes
 6. [x] Redeploy healthy Worker (no CF 1102); fixed strip/card ad request sizes
 7. [x] Pre-submit crawl checks on apex (see audit table above)
@@ -142,5 +154,5 @@ When `pasttime.xyz` was rejected for "Low value content," the initial HTML was i
 7. AdSense Sites = apex; submit/wait Ready (ads may stay empty until then).
 8. Keep Google CMP consent message published for future sites.
 9. **Before re-submitting**: verify no `animate-pulse` skeleton blocks appear in the initial HTML of any **content** page. Use `curl <url>` and search for `animate-pulse` after deploy. Also confirm the Worker is not returning Cloudflare **1102** (resource limits) — reviewers cannot approve an error page.
-10. **Content enrichment**: each `available` game landing page must include SSR overview copy (`GameOverviewSection`). Hub must not feature coming-soon shells as primary inventory.
+10. **Content enrichment**: each game landing (available + coming soon) must include SSR overview copy (`GameOverviewSection`). Hub keeps playable titles primary; coming soon is a separate labeled section with origin pages, not fake play buttons.
 11. Confirm `https://pasttime.xyz/sitemap.xml` and `https://pasttime.xyz/robots.txt` resolve after deploy.

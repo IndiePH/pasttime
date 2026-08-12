@@ -22,7 +22,7 @@ export function SudokuHowToPlay({ game }: SudokuHowToPlayProps) {
           <li>
             <strong>Candidates</strong>{" "}
             mode marks small pencil notes for digits you&rsquo;re still
-            considering — toggle it from the number pad.
+            considering. Toggle it from the number pad.
           </li>
           <li>
             Turning on auto-candidates fills in every cell&rsquo;s remaining

@@ -66,7 +66,7 @@ function KlondikeRules({ drawCount }: { drawCount: 1 | 3 }) {
         <h3 className="font-medium">Tips</h3>
         <ul className="mt-2 list-disc space-y-1.5 pl-5 text-muted-foreground">
           <li>
-            Try to keep tableau columns balanced — avoid burying cards you need.
+            Try to keep tableau columns balanced. Avoid burying cards you need.
           </li>
           <li>
             With auto-stack on, playable cards move to foundations automatically
@@ -159,7 +159,7 @@ function TriPeaksRules() {
             Only uncovered cards (not overlapped) on the peaks can be selected.
           </li>
           <li>
-            Aces are both high and low — you can play a 2 or a King on an Ace.
+            Aces are both high and low. You can play a 2 or a King on an Ace.
           </li>
           <li>
             Suit and color do not matter, only rank adjacency.

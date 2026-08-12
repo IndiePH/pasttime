@@ -1,10 +1,12 @@
 # Engineering Decisions
-updated: 2026-07-30
+updated: 2026-08-12
 tags: [decision, architecture, tradeoff, rule-override, technical-debt]
 related: [dictionary-pipeline, adsense-manual-units, sudoku-design, classic-game-conventions]
 
 | date | type | scope | summary | rationale | rules | skills | decision-maker |
 |------|------|-------|---------|-----------|-------|--------|----------------|
+| 2026-08-12 | content | web | Landing overviews are origin/history; How to play stays a button | Duplicate “How to play” sections on landings competed with the original dialog. SSR still needs unique copy. | `game-overviews.ts`: intro + Where it came from + On Pasttime; no second tutorial. All registry slugs get the same shape. Coming soon: labeled hub section + origin landing, no fake Play. | adsense, seo, copy | user |
+| 2026-08-12 | bugfix | adsense | Defer live `<ins>` until after mount; load AdSense with a plain script | AdSense mutated SSR `<ins>` before hydration (status + iframe). `next/script` also added `data-nscript`, which AdSense logs as unsupported. | Never SSR a live adsbygoogle `<ins>`; reserved box only until client ready. Prefer native `<script async>` for the library. | nextjs, hydration, adsense | user |
 | 2026-08-12 | seo | web | Hub editorial + noindex shells after AdSense/GSC failures | AdSense still “low value”; GSC robots/sitemap errors were stale/wrong-host (live apex already 200). Enrich hub SSR copy; noindex play/stats/room; restore Word Guess policy in tree/sitemap; deploy required for review. | Prefer `pageMetadata({ noIndex })` for interactive shells; keep crawlers on landings + legal. | seo, adsense, nextjs | user |
 | 2026-08-11 | seo | web | Core metadata + JSON-LD (no deploy during AdSense review) | GSC onboarding; titles were double-suffixing via root template; missing canonical/OG/Twitter and schema.org. Implemented helpers locally; commit without push so production AdSense review is undisturbed. | Prefer `pageMetadata()` for shared routes; brand-complete titles use `absoluteTitle`; JSON-LD via `application/ld+json` only (Next.js docs). Ship/deploy after AdSense settles. | seo, nextjs, schema | user |
 | 2026-07-29 | monetization | adsense | Fix Low value content rejection: SSR overviews, hub available-only, sitemap | AdSense rejected apex for thin/low-value inventory. Root cause mix: `loading.tsx` skeletons in initial HTML, one-line game landings, coming-soon catalog dilution, missing sitemap. Content pages were already substantive once skeletons removed. | Before re-review: deploy healthy Worker (no 1102), verify SSR text + sitemap on apex; keep coming-soon out of hub; see adsense-manual-units | adsense, seo, nextjs | user |

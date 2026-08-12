@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useSyncExternalStore } from "react"
 import { UsersIcon } from "lucide-react"
 
 import { Card } from "@/components/ui/card"
@@ -57,6 +57,15 @@ function AdPanelContent({
   )
 }
 
+/** False during SSR + hydration; true only after the client has mounted. */
+function useIsClient() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+}
+
 function AdSenseUnit({
   slot,
   variant,
@@ -65,20 +74,24 @@ function AdSenseUnit({
   variant: AdPanelVariant
 }) {
   const pushed = useRef(false)
+  const isClient = useIsClient()
   const client = getAdsenseClient()
   const slotId = getAdsenseSlotId(slot)
 
   useEffect(() => {
-    if (!client || !slotId || pushed.current) return
+    if (!isClient || !client || !slotId || pushed.current) return
     pushed.current = true
     try {
       ;(window.adsbygoogle = window.adsbygoogle || []).push({})
     } catch {
       // AdSense may throw if the script is blocked; keep the reserved box.
     }
-  }, [client, slotId])
+  }, [isClient, client, slotId])
 
-  if (!client || !slotId) return null
+  // Defer <ins> until after mount. AdSense fills/mutates <ins> as soon as the
+  // library loads; if that happens before hydration, React sees a mismatch
+  // (status attrs + iframe children that were not in the SSR HTML).
+  if (!isClient || !client || !slotId) return null
 
   const request =
     variant === "strip"

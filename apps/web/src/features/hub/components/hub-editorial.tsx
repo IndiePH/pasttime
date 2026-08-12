@@ -1,5 +1,5 @@
 /**
- * SSR editorial copy for the hub — crawlers and AdSense reviewers need more
+ * SSR editorial copy for the hub. Crawlers and AdSense reviewers need more
  * than a game grid to judge publisher value.
  */
 export function HubEditorial() {
@@ -18,7 +18,7 @@ export function HubEditorial() {
         <p className="leading-relaxed text-muted-foreground">
           Pasttime is built for people who want a real puzzle break without an
           install wall, a noisy feed, or a forced account. Open the site, pick a
-          game, and play — Crossword, Word Guess, Sudoku, and Solitaire are
+          game, and play. Crossword, Word Guess, Sudoku, and Solitaire are
           ready in the browser on this device.
         </p>
         <p className="leading-relaxed text-muted-foreground">
@@ -36,22 +36,22 @@ export function HubEditorial() {
           </h3>
           <ul className="list-disc space-y-2 pl-5 leading-relaxed text-muted-foreground">
             <li>
-              <span className="font-medium text-foreground">Crossword</span> —
+              <span className="font-medium text-foreground">Crossword:</span>{" "}
               daily and random grids with across/down clues, local progress, and
               a calm board for longer solves.
             </li>
             <li>
-              <span className="font-medium text-foreground">Word Guess</span> —
+              <span className="font-medium text-foreground">Word Guess:</span>{" "}
               find the hidden word with color feedback; choose length, daily or
               endless modes, and optional hard mode.
             </li>
             <li>
-              <span className="font-medium text-foreground">Sudoku</span> —
+              <span className="font-medium text-foreground">Sudoku:</span>{" "}
               classic 9×9 logic puzzles with difficulty bands, notes, and a
               daily board when you want a shared challenge.
             </li>
             <li>
-              <span className="font-medium text-foreground">Solitaire</span> —
+              <span className="font-medium text-foreground">Solitaire:</span>{" "}
               Klondike and related patience layouts with local save state and
               settings that stay out of the way.
             </li>
@@ -83,9 +83,9 @@ export function HubEditorial() {
             page.
           </p>
           <p className="leading-relaxed text-muted-foreground">
-            Prefer a short reset or a longer streak — the catalog is curated to
-            playable games only. Coming-soon titles stay off the hub until they
-            are actually ready.
+            Prefer a short reset or a longer streak. Playable titles stay in
+            Top picks and All games. Coming soon cards are labeled separately
+            and link to background pages until those games launch.
           </p>
         </div>
       </div>
@@ -96,12 +96,13 @@ export function HubEditorial() {
         </h3>
         <ol className="grid list-decimal gap-4 pl-5 leading-relaxed text-muted-foreground md:grid-cols-3">
           <li>
-            Start on a game landing page to read how that mode works, then use
-            Play daily puzzle or start a fresh run from the launch controls.
+            Open a game page and use How to play if you want the rules, then
+            start a daily puzzle or a fresh run from the launch controls. The
+            article below each title is background, not a second tutorial.
           </li>
           <li>
             Use the same browser if you want local streaks and unfinished boards
-            to stick around — clearing site data resets that device-only
+            to stick around. Clearing site data resets that device-only
             history.
           </li>
           <li>

@@ -10,7 +10,7 @@ export function HubHero() {
           </h1>
           <p className="mt-3 text-lg text-muted-foreground">
             Pasttime is a free hub for daily puzzles and classic games in your
-            browser — no download, no account required.
+            browser. No download, no account required.
           </p>
           <TrustBadges className="mt-4" />
         </div>
@@ -21,7 +21,7 @@ export function HubHero() {
             short break or a longer streak.
           </p>
           <p className="text-muted-foreground">
-            Every title below is playable today — open a game page for rules and
+            Every title below is playable today. Open a game page for rules and
             tips, then start a daily puzzle or a fresh run without signing up.
           </p>
         </div>

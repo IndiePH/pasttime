@@ -62,7 +62,7 @@ export function WordGuessHowToPlay({ game }: { game: GameDefinition }) {
         <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-muted-foreground">
           <li>Type a valid word and submit your guess.</li>
           <li>
-            Tile colors show how close you are — use them to narrow your next
+            Tile colors show how close you are. Use them to narrow your next
             guess.
           </li>
           <li>
@@ -100,7 +100,7 @@ export function WordGuessHowToPlay({ game }: { game: GameDefinition }) {
         <h3 className="font-medium">Playing with others</h3>
         <p className="mt-2 text-muted-foreground">
           Create a room to host up to four players, or join with a room code.
-          Everyone works toward the same word — share clues from your guesses
+          Everyone works toward the same word. Share clues from your guesses
           without revealing the answer directly.
         </p>
       </section>
