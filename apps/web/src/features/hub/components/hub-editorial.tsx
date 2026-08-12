@@ -8,10 +8,10 @@ export function HubEditorial() {
       className="mt-16 space-y-12 border-t border-border/60 pb-16 pt-12"
       aria-labelledby="hub-editorial-heading"
     >
-      <div className="max-w-2xl space-y-4">
+      <div className="grid gap-4 lg:grid-cols-2 lg:gap-x-10 lg:gap-y-4">
         <h2
           id="hub-editorial-heading"
-          className="text-xl font-semibold tracking-tight sm:text-2xl"
+          className="text-xl font-semibold tracking-tight sm:text-2xl lg:col-span-2"
         >
           A quieter place for classic puzzles
         </h2>
@@ -30,7 +30,7 @@ export function HubEditorial() {
       </div>
 
       <div className="grid gap-10 md:grid-cols-2">
-        <div className="max-w-xl space-y-3">
+        <div className="space-y-3">
           <h3 className="text-lg font-medium tracking-tight">
             What you can play today
           </h3>
@@ -58,7 +58,7 @@ export function HubEditorial() {
           </ul>
         </div>
 
-        <div className="max-w-xl space-y-3">
+        <div className="space-y-3">
           <h3 className="text-lg font-medium tracking-tight">
             How Pasttime stays free
           </h3>
@@ -90,11 +90,11 @@ export function HubEditorial() {
         </div>
       </div>
 
-      <div className="max-w-2xl space-y-4">
+      <div className="space-y-4">
         <h3 className="text-lg font-medium tracking-tight">
           Tips for a better first session
         </h3>
-        <ol className="list-decimal space-y-2 pl-5 leading-relaxed text-muted-foreground">
+        <ol className="grid list-decimal gap-4 pl-5 leading-relaxed text-muted-foreground md:grid-cols-3">
           <li>
             Start on a game landing page to read how that mode works, then use
             Play daily puzzle or start a fresh run from the launch controls.

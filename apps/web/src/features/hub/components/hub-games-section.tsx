@@ -21,7 +21,7 @@ export function HubGamesSection({
 }) {
   return (
     <>
-      <div className="mb-8 space-y-4">
+      <div className="mb-5 space-y-3">
         <p className="text-sm text-muted-foreground">
           {games.length} {games.length === 1 ? "game" : "games"} ready to play
         </p>

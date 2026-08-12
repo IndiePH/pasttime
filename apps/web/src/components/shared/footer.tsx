@@ -10,7 +10,7 @@ const footerLinks = [
 export function Footer() {
   return (
     <footer className="border-t border-border/60 py-8">
-      <div className="mx-auto max-w-6xl space-y-4 px-4 text-center text-sm text-muted-foreground sm:px-6">
+      <div className="mx-auto max-w-7xl space-y-4 px-4 text-center text-sm text-muted-foreground sm:px-6">
         <nav
           className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2"
           aria-label="Footer"

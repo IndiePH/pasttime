@@ -54,6 +54,8 @@ Production values live under `"vars"` in `apps/web/wrangler.jsonc`. They must be
 
 After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime.xyz/ads.txt` — each should list `google.com, pub-…, DIRECT, f08c47fec0942fa0` (not `# AdSense not configured`). Units may stay empty until the site is approved in AdSense.
 
+Strip units request fixed **728×90**; hub cards **300×250** (no responsive auto-format). Redeploy after changing slot env vars so Next inlines them.
+
 **Site review:** Google Publisher Policies require a real Privacy Policy that discloses AdSense/cookie use (and preferably links [How Google uses data](https://policies.google.com/technologies/partner-sites)). Keep `/privacy`, `/about`, and `/terms` substantive — not placeholders — then request review on the **apex** site (`pasttime.xyz`). See `brain/wiki/adsense-manual-units.md`.
 
 **Pre-review crawl checks (apex):**
@@ -64,8 +66,11 @@ After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime
 | `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub, legal, available game landings, `/word-guess/policy`) |
 | `https://pasttime.xyz/` | SSR hub copy including editorial section; no `animate-pulse` skeletons |
 | `https://pasttime.xyz/games/<slug>` | SSR overview article for each available game |
+| `https://pasttime.xyz/games/<slug>/play` | `noindex` (thin interactive shell) |
 
-Search Console property must be **`pasttime.xyz`** (`pasttime.app` / `www.pasttime.xyz` do not resolve). After deploy, re-submit the sitemap URL and use URL Inspection on robots/sitemap if GSC still shows fetch errors.
+Search Console property must be **`pasttime.xyz`** (`pasttime.app` / `www.pasttime.xyz` do not resolve). After deploy, re-submit the sitemap URL and use URL Inspection on hub + game landings (Request indexing), plus robots/sitemap if GSC still shows fetch errors.
+
+**Stay on Cloudflare Free:** keep large lexicon data in R2/D1 (not in the Worker script), leave apex attached as a Worker Custom Domain, and avoid paid Workers/Image/AI add-ons until ads earn. SEO leverage that costs $0: SSR copy, sitemap/GSC, canonicals/JSON-LD, noindex on play/stats/room.
 
 ## Lexicon publish (R2 + D1)
 

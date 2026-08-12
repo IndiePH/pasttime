@@ -1,5 +1,5 @@
 # AdSense manual units
-updated: 2026-07-29
+updated: 2026-08-12
 tags: [monetization, adsense, devops, cloudflare]
 related: [engineering-decisions]
 
@@ -32,7 +32,7 @@ Plus publisher: `NEXT_PUBLIC_ADSENSE_CLIENT`.
 - Next only replaces **literal** `process.env.NEXT_PUBLIC_*` in the client bundle. Dynamic `process.env[key]` works on the Worker/SSR but is `undefined` in the browser → AdPanel SSR/hydration mismatch (live `<ins>` vs placeholder). Slot readers in `adsense.ts` must stay static.
 - Unset client/slots → dashed placeholders. Removed: `static-below-header`. No side rails.
 
-Prefer **Responsive** AdSense units (better fill than fixed); our CSS still reserves desktop sizes.
+Strip units request a **fixed 728×90** leaderboard (`<ins>` width/height, no `data-ad-format="auto"` / `data-full-width-responsive`). Responsive + full-width lets AdSense serve ~726×280 and ignore the reserved box. Hub cards use a fixed **300×250**.
 
 ## Where config lives (do not put secrets here)
 
@@ -73,7 +73,22 @@ Pasttime legal pages (`/privacy`, `/about`, `/terms`) must stay **substantive** 
 | Date | Result | Cause identified | Fix |
 |------|--------|------------------|-----|
 | 2026-07-29 | **Fail** — Low value content | Root `loading.tsx` emits skeleton `animate-pulse` HTML in initial response for ALL routes. Googlebot sees loading placeholders instead of text content. Game pages have ~1 sentence of descriptive text. Coming-soon cards dilute the catalog. No sitemap. | Removed `loading.tsx` (root, `games/[slug]`, `games/[slug]/play`). Added SSR `GameOverviewSection` (~150+ words) on available game landings. Hub shows available games only. Added `sitemap.ts` + `robots.ts`. |
-| 2026-08-12 | **Fail** — Low value content (re-review) | Production already had overviews + sitemap; hub homepage was still thin (~800 visible chars of mostly nav/cards). Interactive `/play`, `/stats`, `/room` shells were indexable. | Added SSR `HubEditorial` + hero tip copy; `noIndex` on play/stats/room; keep Word Guess `/word-guess/policy` in sitemap; shared `pageMetadata` / JSON-LD. **Must redeploy** then re-request review. |
+| 2026-08-12 | **Fail** — Low value content (re-review) | Production already had overviews + sitemap; hub homepage was still thin (~800 visible chars of mostly nav/cards). Interactive `/play`, `/stats`, `/room` shells were indexable. | Added SSR `HubEditorial` + hero tip copy; `noIndex` on play/stats/room; keep Word Guess `/word-guess/policy` in sitemap; shared `pageMetadata` / JSON-LD. Redeploy, then re-request review. |
+
+### Pre-submit audit (2026-08-12, apex)
+
+| Check | Result |
+|-------|--------|
+| Hub `/` SSR | ~2.8k visible chars; editorial headings present; no `animate-pulse`; no CF 1102 |
+| Game landings | Crossword / Solitaire / Word Guess / Sudoku return overview copy (~1.1–1.3k visible chars) |
+| `/play`, `/stats` | `noindex, nofollow` |
+| `/privacy` | AdSense + cookies disclosure + Google partner-sites link |
+| `/ads.txt`, `/app-ads.txt`, gamehub `/ads.txt` | `google.com, pub-4297882562709937, DIRECT, f08c47fec0942fa0` |
+| `/robots.txt`, `/sitemap.xml` | 200; sitemap includes hub, legal, available games, `/word-guess/policy` |
+| Canonical / JSON-LD | Hub has `canonical` + `WebSite`/`Organization` JSON-LD |
+| Favicon | `/favicon.ico` 200 (Next default). No dedicated `og:image` yet (optional share polish). |
+
+Strip/card `<ins>` units use **fixed** 728×90 / 300×250 (no `data-ad-format="auto"`) so reserved shells match served creatives.
 
 ### Search Console (robots / sitemap)
 
@@ -83,6 +98,15 @@ Live apex (verified 2026-08-12):
 - `pasttime.app` and `www.pasttime.xyz` **do not resolve** — GSC property must be **`pasttime.xyz`** (or `https://pasttime.xyz`), not those hosts.
 
 If GSC still says “no robots.txt” / “could not fetch sitemap” after ~24h on the correct property: use URL Inspection on `/robots.txt` and `/sitemap.xml`, then **Sitemaps → Add** `https://pasttime.xyz/sitemap.xml` again. Stale GSC fetch errors are common before first successful crawl; the files are already live.
+
+### Free Cloudflare plan (keep costs at $0)
+
+Stay on Workers Free while revenue is $0:
+- Keep lexicon off the Worker bundle (R2 + D1) so script stays under the **3 MiB free** limit — see `docs/DEPLOY.md` / `CONTENT-STORAGE-HANDOFF.md`.
+- Do **not** turn on paid Workers features, paid Image Resizing, or paid AI products for SEO.
+- Cloudflare managed robots may block AI trainers (`GPTBot`, etc.); leave Googlebot allowed.
+- Apex `pasttime.xyz` must remain a Worker **Custom Domain** on `gamehub` for review + `ads.txt`.
+- Visibility that stays free: GSC sitemap + URL Inspection, SSR editorial landings, canonicals/JSON-LD, noindex thin shells, internal links from hub → game landings → Play.
 
 ### Diagnosis method
 
@@ -101,10 +125,11 @@ When `pasttime.xyz` was rejected for "Low value content," the initial HTML was i
 3. [x] Create sitemap.xml (`app/sitemap.ts`) + robots.txt (`app/robots.ts`)
 4. [x] Hide "Coming Soon" games from hub (registry kept; hub filters to `available`)
 5. [x] Hub editorial SSR (`HubEditorial`) + noindex thin interactive routes
-6. [ ] **Redeploy** and verify apex is healthy (no Cloudflare 1102 / Worker resource limit errors)
-7. [ ] Pre-submit: `curl` apex HTML — no `animate-pulse`; hub has editorial section; game pages contain overview copy; `/robots.txt` + `/sitemap.xml` return 200
-8. [ ] GSC: confirm property is `pasttime.xyz`; re-submit sitemap; URL Inspection on robots/sitemap
-9. [ ] Re-request AdSense site review on `pasttime.xyz`
+6. [x] Redeploy healthy Worker (no CF 1102); fixed strip/card ad request sizes
+7. [x] Pre-submit crawl checks on apex (see audit table above)
+8. [ ] GSC: confirm property is `pasttime.xyz`; re-submit sitemap; URL Inspection on `/`, game landings, robots, sitemap; Request indexing
+9. [ ] Re-request AdSense site review on `pasttime.xyz` (only after GSC sees the current deploy)
+10. [ ] Optional later (not blockers): branded `og:image` / apple-touch icon; `www` → apex redirect if you add `www` DNS
 
 ## Operator checklist
 

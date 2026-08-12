@@ -57,7 +57,13 @@ function AdPanelContent({
   )
 }
 
-function AdSenseUnit({ slot }: { slot: string }) {
+function AdSenseUnit({
+  slot,
+  variant,
+}: {
+  slot: string
+  variant: AdPanelVariant
+}) {
   const pushed = useRef(false)
   const client = getAdsenseClient()
   const slotId = getAdsenseSlotId(slot)
@@ -74,14 +80,29 @@ function AdSenseUnit({ slot }: { slot: string }) {
 
   if (!client || !slotId) return null
 
+  const request =
+    variant === "strip"
+      ? {
+          style: {
+            display: "inline-block",
+            width: "728px",
+            height: "90px",
+          } as const,
+        }
+      : {
+          style: {
+            display: "inline-block",
+            width: "300px",
+            height: "250px",
+          } as const,
+        }
+
   return (
     <ins
       className="adsbygoogle"
-      style={{ display: "block", width: "100%", height: "100%" }}
+      style={request.style}
       data-ad-client={client}
       data-ad-slot={slotId}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
     />
   )
 }
@@ -110,35 +131,31 @@ export function AdPanel({
           )}
         >
           <div className={shell.article}>
-            {live ? (
-              <div className="absolute inset-0 flex items-center justify-center overflow-hidden p-2">
-                <AdSenseUnit slot={slot} />
+            <div className={shell.header} aria-hidden>
+              <div className={cn(shell.iconFrame, "invisible")} />
+              <h3 className={cn(shell.title, "invisible")}>
+                {placeholder.title}
+              </h3>
+            </div>
+            <div className={shell.body} aria-hidden>
+              <p className={cn(shell.description, "invisible")}>
+                {placeholder.description}
+              </p>
+              <div className={cn(shell.player, "invisible")}>
+                <UsersIcon className={shell.playerIcon} />
+                <span>{placeholder.playerCount}</span>
               </div>
-            ) : (
-              <>
-                <div className={shell.header} aria-hidden>
-                  <div className={cn(shell.iconFrame, "invisible")} />
-                  <h3 className={cn(shell.title, "invisible")}>
-                    {placeholder.title}
-                  </h3>
-                </div>
-                <div className={shell.body} aria-hidden>
-                  <p className={cn(shell.description, "invisible")}>
-                    {placeholder.description}
-                  </p>
-                  <div className={cn(shell.player, "invisible")}>
-                    <UsersIcon className={shell.playerIcon} />
-                    <span>{placeholder.playerCount}</span>
-                  </div>
-                </div>
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 px-3 text-center">
-                  <AdPanelContent
-                    slot={slot}
-                    sizeLabel={DESKTOP_AD_SIZE.card.label}
-                  />
-                </div>
-              </>
-            )}
+            </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 overflow-hidden bg-muted/40 px-3 text-center">
+              {live ? (
+                <AdSenseUnit slot={slot} variant="card" />
+              ) : (
+                <AdPanelContent
+                  slot={slot}
+                  sizeLabel={DESKTOP_AD_SIZE.card.label}
+                />
+              )}
+            </div>
           </div>
         </aside>
       )
@@ -157,7 +174,7 @@ export function AdPanel({
         >
           {live ? (
             <div className="flex h-full w-full items-center justify-center p-2">
-              <AdSenseUnit slot={slot} />
+              <AdSenseUnit slot={slot} variant="card" />
             </div>
           ) : (
             <AdPanelContent
@@ -180,12 +197,12 @@ export function AdPanel({
       className={cn(
         "mx-auto flex flex-col items-center justify-center gap-1 overflow-hidden rounded-xl border border-dashed border-border/80 bg-muted/40 px-4 text-center",
         size.className,
-        live && "border-solid p-0",
+        live && "min-h-0 border-solid p-0",
         className,
       )}
     >
       {live ? (
-        <AdSenseUnit slot={slot} />
+        <AdSenseUnit slot={slot} variant={variant} />
       ) : (
         <AdPanelContent slot={slot} sizeLabel={size.label} />
       )}
