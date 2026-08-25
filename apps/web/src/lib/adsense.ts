@@ -40,3 +40,19 @@ export function isAdsenseConfigured(slot: string): boolean {
 export function toAdsTxtPublisherId(client: string): string {
   return client.startsWith("ca-") ? client.slice(3) : client
 }
+
+/** IAB OwnerDomain — same value as /app-ads.txt. */
+export const ADS_OWNER_DOMAIN = "pasttime.xyz"
+
+const ADSENSE_CERT_AUTHORITY = "f08c47fec0942fa0"
+
+export function buildAdsTxt(
+  client: string | null = getAdsenseClient(),
+): string {
+  const owner = `ownerdomain=${ADS_OWNER_DOMAIN}`
+  if (!client) {
+    return `${owner}\n# AdSense not configured\n`
+  }
+  const pub = toAdsTxtPublisherId(client)
+  return `${owner}\ngoogle.com, ${pub}, DIRECT, ${ADSENSE_CERT_AUTHORITY}\n`
+}

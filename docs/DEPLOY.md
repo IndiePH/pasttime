@@ -52,7 +52,9 @@ Production values live under `"vars"` in `apps/web/wrangler.jsonc`. They must be
 | `NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM` | `pasttime-global-bottom-strip` | Numeric ad unit ID |
 | `NEXT_PUBLIC_ADSENSE_SLOT_HUB` | `pasttime-hub-grid-card` | Numeric ad unit ID |
 
-After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime.xyz/ads.txt` — each should list `google.com, pub-…, DIRECT, f08c47fec0942fa0` (not `# AdSense not configured`). Units may stay empty until the site is approved in AdSense.
+After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime.xyz/ads.txt` — each should start with `ownerdomain=pasttime.xyz` and list `google.com, pub-…, DIRECT, f08c47fec0942fa0` (not `# AdSense not configured`). Units may stay empty until the site is approved in AdSense.
+
+`https://pasttime.xyz/app-ads.txt` is **LevelPlay** (Word Guess), not AdSense. It starts with `ownerdomain=pasttime.xyz` and includes ironSource DIRECT (`644195`), Unity Ads DIRECT (`unity.com` / `unity3d.com` game ID `8830872`), plus Unity reseller lines. Do not put the AdSense publisher DIRECT line or ironSource API keys in app-ads.txt.
 
 Strip units request fixed **728×90**; hub cards **300×250** (no responsive auto-format). Redeploy after changing slot env vars so Next inlines them.
 

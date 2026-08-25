@@ -1,5 +1,5 @@
 # AdSense manual units
-updated: 2026-08-12
+updated: 2026-08-25
 tags: [monetization, adsense, devops, cloudflare]
 related: [engineering-decisions]
 
@@ -51,12 +51,12 @@ Numeric publisher/slot IDs are public (they appear in page HTML and `ads.txt`) �
 
 | Method | Status |
 |--------|--------|
-| `/ads.txt` | Route serves `google.com, pub-…, DIRECT, f08c47fec0942fa0` when client set. Must work on **apex**. |
-| `/app-ads.txt` | Same publisher line for **AdMob** mobile apps (e.g. Word Guess). Crawler ignores Play Website path — file must be at apex `https://pasttime.xyz/app-ads.txt`. Word Guess mobile privacy (Play): `https://yoxent.github.io/word-guess/privacy`. |
+| `/ads.txt` | AdSense publisher line for the **website**, prefixed with `ownerdomain=pasttime.xyz`. Must work on **apex**. |
+| `/app-ads.txt` | **LevelPlay** file for Word Guess (mobile). Unity dashboard list plus `ownerdomain=pasttime.xyz` and `unity.com` / `unity3d.com` DIRECT (`8830872`). Crawler ignores Play Website path — file must be at apex `https://pasttime.xyz/app-ads.txt`. Do not copy the AdSense `/ads.txt` DIRECT line here. In-repo privacy: `/word-guess/policy` (LevelPlay, not AdMob). Play listing URL: `https://yoxent.github.io/word-guess/privacy`. |
 | AdSense `<script>` | `AdSenseScript` in root layout (env-gated). Plain `<script async>` (not `next/script`) so Next does not inject `data-nscript` (AdSense console warning). |
 | Meta `google-adsense-account` | Not implemented; optional if ads.txt already verifies. |
 
-Code: `apps/web/src/lib/adsense.ts`, `AdPanel`, `AdSenseScript`, `app/ads.txt/route.ts`. Spec/plan: `docs/superpowers/*adsense*`. Deploy notes: `docs/DEPLOY.md`.
+Code: `apps/web/src/lib/adsense.ts`, `apps/web/src/lib/app-ads.ts`, `AdPanel`, `AdSenseScript`, `app/ads.txt/route.ts`, `app/app-ads.txt/route.ts`. Spec/plan: `docs/superpowers/*adsense*`. Deploy notes: `docs/DEPLOY.md`.
 
 ## Consent (EEA / UK / CH)
 
@@ -85,7 +85,8 @@ Pasttime legal pages (`/privacy`, `/about`, `/terms`) must stay **substantive** 
 | Game landings | Crossword / Solitaire / Word Guess / Sudoku return overview copy (~1.1–1.3k visible chars) |
 | `/play`, `/stats` | `noindex, nofollow` |
 | `/privacy` | AdSense + cookies disclosure + Google partner-sites link |
-| `/ads.txt`, `/app-ads.txt`, gamehub `/ads.txt` | `google.com, pub-4297882562709937, DIRECT, f08c47fec0942fa0` |
+| `/ads.txt`, gamehub `/ads.txt` | `ownerdomain=pasttime.xyz` then `google.com, pub-4297882562709937, DIRECT, f08c47fec0942fa0` |
+| `/app-ads.txt` | LevelPlay: `ownerdomain=pasttime.xyz`, ironSource DIRECT `644195`, Unity Ads DIRECT `8830872`, Unity authorized resellers |
 | `/robots.txt`, `/sitemap.xml` | 200; sitemap includes hub, legal, available + coming-soon landings, `/word-guess/policy` |
 | Canonical / JSON-LD | Hub has `canonical` + `WebSite`/`Organization` JSON-LD |
 | Favicon | `/favicon.ico` 200 (Next default). No dedicated `og:image` yet (optional share polish). |
@@ -149,7 +150,7 @@ When `pasttime.xyz` was rejected for "Low value content," the initial HTML was i
 2. Publisher: set `NEXT_PUBLIC_ADSENSE_CLIENT=ca-pub-…` even if Account info shows `pub-…`.
 3. Resend/feedback: `wrangler versions secret put <NAME>` (or dashboard Secret), then deploy that version if needed — never plaintext.
 4. Redeploy web (`npm run deploy` from repo / `apps/web`) so Next build bakes `NEXT_PUBLIC_*`.
-5. Confirm `https://pasttime.xyz/ads.txt` (and gamehub) shows the `google.com, pub-…, DIRECT, …` line — not `# AdSense not configured`.
+5. Confirm `https://pasttime.xyz/ads.txt` (and gamehub) starts with `ownerdomain=pasttime.xyz` and shows the `google.com, pub-…, DIRECT, …` line — not `# AdSense not configured`.
 6. Confirm `/privacy` discloses AdSense + Google partner-sites link; `/about` and `/terms` are real copy.
 7. AdSense Sites = apex; submit/wait Ready (ads may stay empty until then).
 8. Keep Google CMP consent message published for future sites.
