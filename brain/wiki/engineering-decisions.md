@@ -1,10 +1,11 @@
 # Engineering Decisions
-updated: 2026-08-12
+updated: 2026-08-25
 tags: [decision, architecture, tradeoff, rule-override, technical-debt]
 related: [dictionary-pipeline, adsense-manual-units, sudoku-design, classic-game-conventions]
 
 | date | type | scope | summary | rationale | rules | skills | decision-maker |
 |------|------|-------|---------|-----------|-------|--------|----------------|
+| 2026-08-25 | monetization | word-guess | Split website `ads.txt` (AdSense) from apex `app-ads.txt` (LevelPlay) | Word Guess Android ads moved to Unity LevelPlay. Mixing the AdSense DIRECT line into app-ads.txt would authorize the wrong sellers. Both files share IAB `ownerdomain=pasttime.xyz`. Publisher ID `644195` is public; bake it in code, never ironSource API keys. | Keep `/ads.txt` AdSense-only; `/app-ads.txt` = Unity dashboard list + ironSource/Unity DIRECT. Policy: `/word-guess/policy`. See adsense-manual-units. | ads, levelplay, adsense | user |
 | 2026-08-12 | content | web | Landing overviews are origin/history; How to play stays a button | Duplicate “How to play” sections on landings competed with the original dialog. SSR still needs unique copy. | `game-overviews.ts`: intro + Where it came from + On Pasttime; no second tutorial. All registry slugs get the same shape. Coming soon: labeled hub section + origin landing, no fake Play. | adsense, seo, copy | user |
 | 2026-08-12 | bugfix | adsense | Defer live `<ins>` until after mount; load AdSense with a plain script | AdSense mutated SSR `<ins>` before hydration (status + iframe). `next/script` also added `data-nscript`, which AdSense logs as unsupported. | Never SSR a live adsbygoogle `<ins>`; reserved box only until client ready. Prefer native `<script async>` for the library. | nextjs, hydration, adsense | user |
 | 2026-08-12 | seo | web | Hub editorial + noindex shells after AdSense/GSC failures | AdSense still “low value”; GSC robots/sitemap errors were stale/wrong-host (live apex already 200). Enrich hub SSR copy; noindex play/stats/room; restore Word Guess policy in tree/sitemap; deploy required for review. | Prefer `pageMetadata({ noIndex })` for interactive shells; keep crawlers on landings + legal. | seo, adsense, nextjs | user |

@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo"
 export const metadata = pageMetadata({
   title: "Word Guess Privacy Policy",
   description:
-    "Privacy policy for the Word Guess Android app by Vorith Studio, including AdMob, Play Games, and Firebase.",
+    "Privacy policy for the Word Guess Android app by Vorith Studio, including Unity LevelPlay, Play Games, and Firebase.",
   path: "/word-guess/policy",
 })
 
@@ -15,7 +15,7 @@ export default function WordGuessPolicyPage() {
     <StaticPage
       title="Word Guess Privacy Policy"
       description="How the Word Guess Android app collects, uses, and protects information."
-      lastUpdated="2026-07-14"
+      lastUpdated="2026-08-25"
       sections={[
         {
           title: "Overview",
@@ -39,33 +39,34 @@ export default function WordGuessPolicyPage() {
           ],
         },
         {
-          title: "Advertising (Google AdMob)",
+          title: "Advertising (Unity LevelPlay)",
           content: (
             <div className="space-y-3">
               <p>
-                The App displays ads served by Google AdMob. AdMob may collect,
-                on its own behalf: Advertising ID, device information, IP
-                address, ad interaction events, and app-identifier information
-                (AdMob app/unit IDs).
+                The App displays ads served by Unity LevelPlay. LevelPlay and
+                its advertising partners may collect, on their own behalf:
+                Advertising ID, device information, IP address, ad interaction
+                events, and app-identifier information (LevelPlay app key and ad
+                unit IDs).
               </p>
               <p>
-                AdMob&apos;s data collection is governed by{" "}
+                LevelPlay&apos;s data collection is governed by{" "}
                 <a
-                  href="https://policies.google.com/privacy"
+                  href="https://unity.com/legal/privacy-policy"
                   className={linkClass}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Google&apos;s Privacy Policy
+                  Unity&apos;s Privacy Policy
                 </a>{" "}
-                and{" "}
+                and the{" "}
                 <a
-                  href="https://support.google.com/admob/answer/6128543"
+                  href="https://unity.com/legal/game-player-and-app-user-privacy-policy"
                   className={linkClass}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  AdMob privacy information
+                  Unity game player and app user privacy policy
                 </a>
                 . You may reset your Advertising ID or opt out of personalized
                 advertising in your device&apos;s Google settings.
@@ -76,7 +77,7 @@ export default function WordGuessPolicyPage() {
         {
           title: "How we use information",
           content: [
-            "We use this information to operate the App, provide cloud features when you are signed in, display advertising via AdMob, and diagnose issues.",
+            "We use this information to operate the App, provide cloud features when you are signed in, display advertising via Unity LevelPlay, and diagnose issues.",
             "We do not sell your personal information to third parties. We do not use your gameplay data for advertising profiling or cross-app tracking.",
           ],
         },
@@ -85,14 +86,14 @@ export default function WordGuessPolicyPage() {
           content: (
             <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
               <li>
-                Google AdMob (advertising):{" "}
+                Unity LevelPlay (advertising):{" "}
                 <a
-                  href="https://support.google.com/admob/answer/6128543"
+                  href="https://unity.com/legal/game-player-and-app-user-privacy-policy"
                   className={linkClass}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  privacy info
+                  privacy policy
                 </a>
               </li>
               <li>
@@ -135,7 +136,7 @@ export default function WordGuessPolicyPage() {
           title: "Children's privacy",
           content: [
             "The App is not directed to children under the age of 13 (or such higher age as required by applicable law). We do not knowingly collect personal information from children under 13.",
-            "Because the App integrates Google AdMob, we configure ad requests in line with Google Play's Families Policy and do not knowingly allow children under 13 to create accounts or sign in. Contact us if you believe we inadvertently collected information from a child under 13.",
+            "Because the App integrates Unity LevelPlay, we configure ad requests in line with Google Play's Families Policy and do not knowingly allow children under 13 to create accounts or sign in. Contact us if you believe we inadvertently collected information from a child under 13.",
           ],
         },
         {

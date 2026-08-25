@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import {
+  ADS_OWNER_DOMAIN,
+  buildAdsTxt,
   getAdsenseSlotId,
   isAdsenseConfigured,
   normalizeAdsenseClient,
@@ -53,5 +55,27 @@ describe("toAdsTxtPublisherId", () => {
   it("strips ca- prefix", () => {
     expect(toAdsTxtPublisherId("ca-pub-123")).toBe("pub-123")
     expect(toAdsTxtPublisherId("pub-123")).toBe("pub-123")
+  })
+})
+
+describe("buildAdsTxt", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it("starts with ownerdomain and keeps the AdSense DIRECT line", () => {
+    expect(buildAdsTxt("ca-pub-4297882562709937")).toBe(
+      [
+        `ownerdomain=${ADS_OWNER_DOMAIN}`,
+        "google.com, pub-4297882562709937, DIRECT, f08c47fec0942fa0",
+        "",
+      ].join("\n"),
+    )
+  })
+
+  it("still emits ownerdomain when AdSense is unset", () => {
+    expect(buildAdsTxt(null)).toBe(
+      `ownerdomain=${ADS_OWNER_DOMAIN}\n# AdSense not configured\n`,
+    )
   })
 })
