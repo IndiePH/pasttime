@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
+import { useSealPlayClockOnLeave } from "@/features/games/hooks/use-seal-play-clock-on-leave"
 import { useStorage } from "@/infrastructure/storage"
 import { getDailySeed } from "@pasttime/domain/daily"
 import {
@@ -39,8 +40,8 @@ function randomSudokuSeed(): number {
  *   the segment since `startedAt` into `elapsedMs` and refresh `startedAt`
  *   to `now`. This runs on *every* mutation, not just status transitions, so
  *   `elapsedMs` in the persisted state is always an accurate "already played"
- *   base — a later hydrate only ever loses the (typically tiny) gap between
- *   the last mutation and the tab closing, never the whole session.
+ *   base. Leaving the page also seals the open segment, so idle time on the
+ *   board is kept. A later hydrate does not count time the tab was closed.
  * - won/abandoned -> playing (e.g. undo after a win): start a fresh segment
  *   from `now`, keeping the already-accumulated `elapsedMs`.
  */
@@ -72,7 +73,6 @@ export function useSudokuGame(difficulty: SudokuDifficulty, mode: SudokuRoundMod
   const [loadedKey, setLoadedKey] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [retryCount, setRetryCount] = useState(0)
-  const [elapsedMs, setElapsedMs] = useState(0)
 
   useEffect(() => {
     let cancelled = false
@@ -122,28 +122,9 @@ export function useSudokuGame(difficulty: SudokuDifficulty, mode: SudokuRoundMod
     storage.set(storageKey, state)
   }, [state, storageKey, loadedKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Derive the live elapsed clock and tick once a second while playing.
-  // `Date.now()` is read inside this callback (never during render), and the
-  // resulting setState calls are routed through a named helper so they read
-  // as subscription updates rather than a direct render-derived assignment.
-  useEffect(() => {
-    function syncElapsed() {
-      if (!state) {
-        setElapsedMs(0)
-        return
-      }
-      setElapsedMs(
-        state.status === "playing"
-          ? state.elapsedMs + (Date.now() - state.startedAt)
-          : state.elapsedMs,
-      )
-    }
-
-    syncElapsed()
-    if (!state || state.status !== "playing") return
-    const interval = setInterval(syncElapsed, 1000)
-    return () => clearInterval(interval)
-  }, [state])
+  useSealPlayClockOnLeave(loadedKey === storageKey ? state : null, (sealed) => {
+    storage.set(storageKey, sealed)
+  })
 
   const retry = useCallback(() => {
     setLoadedKey(null)
@@ -203,7 +184,7 @@ export function useSudokuGame(difficulty: SudokuDifficulty, mode: SudokuRoundMod
     variant: difficulty,
     status: visibleState?.status ?? "playing",
     isDaily: mode === "daily",
-    time: Math.floor(elapsedMs / 1000),
+    time: Math.floor((visibleState?.elapsedMs ?? 0) / 1000),
   })
 
   return {
@@ -217,6 +198,5 @@ export function useSudokuGame(difficulty: SudokuDifficulty, mode: SudokuRoundMod
     toggleCandidateMode,
     setAutoCandidates,
     undo,
-    elapsedMs,
   }
 }

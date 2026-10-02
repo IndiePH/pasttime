@@ -35,5 +35,7 @@ export function dealKlondikeState(seed: number | null, drawCount: 1 | 3 = 1): Kl
     moves: 0,
     seed,
     drawCount,
+    elapsedMs: 0,
+    startedAt: Date.now(),
   }
 }

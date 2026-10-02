@@ -4,12 +4,9 @@ import { pageMetadata } from "@/lib/seo"
 export const metadata = pageMetadata({
   title: "Privacy",
   description:
-    "How Pasttime collects, uses, and shares information, including Google AdSense advertising.",
+    "How Pasttime collects, uses, and shares information. Website games do not show ads; the Word Guess Android app uses Unity LevelPlay.",
   path: "/privacy",
 })
-
-const googlePartnerSitesUrl =
-  "https://policies.google.com/technologies/partner-sites"
 
 export default function PrivacyPage() {
   return (
@@ -34,39 +31,24 @@ export default function PrivacyPage() {
           ],
         },
         {
-          title: "Advertising and Google AdSense",
+          title: "Advertising",
           content: (
             <div className="space-y-3">
               <p>
-                Pasttime uses Google AdSense to show ads and help keep the games
-                free. Google and its partners may use cookies, web beacons, IP
-                addresses, or similar technologies to serve ads, measure how ads
-                perform, and (where allowed) personalize advertising based on
-                your browsing activity.
+                The Pasttime website does not show display ads and does not use
+                Google AdSense.
               </p>
               <p>
-                Third parties, including Google, may be placing and reading
-                cookies on your browser, or using web beacons or IP addresses to
-                collect information as a result of ad serving on this site.
-              </p>
-              <p>
-                To learn how Google uses data when you visit sites or apps that
-                use Google advertising services, see{" "}
+                The Word Guess Android app shows ads through Unity LevelPlay so
+                that app can stay free. LevelPlay and its partners may collect
+                device and advertising identifiers as described in the{" "}
                 <a
-                  href={googlePartnerSitesUrl}
+                  href="/word-guess/policy"
                   className="underline underline-offset-4 hover:text-foreground"
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
-                  How Google uses data when you use our partners’ sites or apps
+                  Word Guess privacy policy
                 </a>
                 .
-              </p>
-              <p>
-                You can manage ad personalization and cookie preferences through
-                your browser settings, Google’s ad settings, and any consent
-                choices presented on this site (including Google’s consent
-                message where required, such as in the EEA, UK, and Switzerland).
               </p>
             </div>
           ),
@@ -74,47 +56,46 @@ export default function PrivacyPage() {
         {
           title: "How we use information",
           content: [
-            "We use information to provide and improve Pasttime, remember your preferences and progress on your device, show advertising, respond to feedback, maintain security, and comply with legal obligations.",
+            "We use information to provide and improve Pasttime, remember your preferences and progress on your device, respond to feedback, maintain security, and comply with legal obligations.",
             "We do not sell your personal information. We do not use gameplay content you enter into puzzles as a profile to market unrelated products to you.",
           ],
         },
         {
           title: "Sharing of information",
           content: [
-            "We share information only as needed to operate the service: with infrastructure and email providers that process feedback or host the site; with Google and advertising partners for ad serving as described above; and when required by law or to protect the rights, safety, or integrity of Pasttime and its users.",
-            "Service providers are expected to use shared information only to perform services for us and not for their own unrelated purposes, except where they act as independent controllers (for example Google with respect to advertising technologies).",
+            "We share information only as needed to operate the website: with infrastructure and email providers that process feedback or host the site, and when required by law or to protect the rights, safety, or integrity of Pasttime and its users.",
+            "The Word Guess Android app shares advertising data with Unity LevelPlay as described in that app’s privacy policy. Website service providers are expected to use shared information only to perform services for us.",
           ],
         },
         {
           title: "Cookies and similar technologies",
           content: [
-            "We and our partners may use cookies, local storage, pixels, and similar technologies for essential site functions, preferences, analytics related to operating the site, and advertising.",
-            "You can block or delete cookies and clear local storage through your browser. Doing so may reset preferences, progress, or ad consent choices.",
+            "The website uses local storage for preferences and game progress. Hosting providers may process standard request logs. This site does not set advertising cookies.",
+            "You can block or delete cookies and clear local storage through your browser. Doing so may reset preferences and progress. Advertising technologies in the Word Guess Android app are covered in that app’s privacy policy.",
           ],
         },
         {
           title: "Children’s privacy",
           content: [
             "Pasttime is a general-audience game hub and is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe a child has provided personal information to us, contact us and we will take reasonable steps to delete it.",
-            "Parents and guardians should supervise children’s use of websites that display advertising.",
+            "Parents and guardians should supervise children’s use of the site and of the Word Guess Android app, which displays advertising.",
           ],
         },
         {
           title: "Your choices and rights",
           content: [
             "You can clear local storage and cookies in your browser at any time. You can decline to provide an email address when sending feedback. Where applicable law gives you rights to access, correct, delete, or restrict processing of personal information, or to object to certain processing, contact us and we will respond as required.",
-            "If you are in a region that requires consent for personalized ads, use the consent options shown on the site. You may also visit Google’s ad settings to control personalized advertising associated with your Google Account.",
           ],
         },
         {
           title: "Data retention",
           content:
-            "Local storage data remains on your device until you clear it or your browser removes it. Feedback messages and optional contact emails are retained only as long as needed to handle the request and improve the product, unless a longer period is required by law. Advertising partners retain data according to their own policies.",
+            "Local storage data remains on your device until you clear it or your browser removes it. Feedback messages and optional contact emails are retained only as long as needed to handle the request and improve the product, unless a longer period is required by law. Unity LevelPlay retains Word Guess app advertising data according to its own policy, linked from the Word Guess privacy policy.",
         },
         {
           title: "International processing",
           content:
-            "Pasttime may be hosted and processed in countries other than where you live. When we transfer information, we take steps appropriate to the nature of the transfer and applicable law. Google and other partners may process advertising data in multiple countries as described in their policies.",
+            "Pasttime may be hosted and processed in countries other than where you live. When we transfer information, we take steps appropriate to the nature of the transfer and applicable law. Unity LevelPlay may process Word Guess app advertising data in multiple countries as described in its policy.",
         },
         {
           title: "Changes to this policy",

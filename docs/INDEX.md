@@ -1,7 +1,7 @@
 # Pasttime — File Index
 
 A flat, navigable index of the **pasttime** monorepo: a cross-platform games hub
-(web, desktop, mobile, multiplayer server). Updated 2026-07-20.
+(web, desktop, mobile, multiplayer server). Updated 2026-10-03.
 
 Legend: ✅ implemented/available · 🚧 coming soon / scaffold · ⚙️ engine/package
 
@@ -71,13 +71,15 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `games/[slug]/play/page.tsx` | Game play |
 | `games/[slug]/room/[code]/page.tsx` | Multiplayer room |
 | `games/[slug]/{loading,error,not-found}.tsx` | Route segments |
-| `about/`, `privacy/`, `terms/` | Static pages (substantive copy for AdSense review; not placeholders) |
+| `about/`, `privacy/`, `terms/` | Site legal pages. The website does not show display ads. |
+| `app-ads.txt/route.ts` | Unity LevelPlay seller file for the Word Guess Android app |
+| `word-guess/policy/page.tsx` | Word Guess Android privacy policy (LevelPlay, Play Games, Firebase) |
 | `favicon.ico` | Favicon |
 
 **L3 — Shared UI** (`src/components/`)
 | Path | Purpose |
 |------|---------|
-| `shared/` | `site-shell`, `header`, `footer`, `game-card`, `game-launch-actions`, `ad-panel`, `feedback-widget`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
+| `shared/` | `site-shell`, `header`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
 | `ui/` | shadcn primitives: `badge`, `button`, `card`, `dialog`, `dropdown-menu` |
 | `ui/icons/` | `game-icon`, `word-guess-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
 | `theme-provider.tsx` | Theme context |
@@ -87,9 +89,9 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 |------|---------|
 | `hub/` | Hub page: `hub-hero`, `hub-catalog`, `hub-filter`, `hub-games-section`, `hub-game-search`, `search-params`, `index` |
 | `games/` | Game plugin system (see [§5](#5-game-modules)) |
-| → `games/components/` | Shared game shells: `game-page-shell`, `game-play-shell`, `game-play-section`, `game-play-view`, `game-play-settings`, `game-play-footer-actions`, `game-content-panel`, `game-session-header`, `game-launch-settings`, `game-how-to-play(-placeholder)`, `game-settings-widget`, `game-settings-placeholder`, `join-room-panel`, `room-lobby-view`, `settings-toggle-field`, `index` |
+| → `games/components/` | Shared game shells: `game-page-shell`, `game-play-shell`, `game-play-section`, `game-play-view`, `game-play-settings`, `game-play-footer-actions`, `game-content-panel`, `game-session-header`, `game-launch-settings`, `game-how-to-play(-placeholder)`, `game-settings-widget`, `game-settings-placeholder`, `play-clock-readout`, `join-room-panel`, `room-lobby-view`, `settings-toggle-field`, `index` |
 | → `games/cards/` | Card-skin prefs: `card-game-preferences`, `card-skin-picker`, `use-card-game-preferences` |
-| → `games/hooks/` | `use-move-queue`, `use-room-lobby` |
+| → `games/hooks/` | `use-move-queue`, `use-room-lobby`, `use-live-play-elapsed`, `use-seal-play-clock-on-leave` |
 | → `games/` (registry glue) | `module-registry`, `game-settings-registry`, `game-play-settings-registry`, `game-how-to-play-registry`, `registered-game-settings`, `registered-game-play-settings`, `registered-how-to-play-content`, `parse-game-search-params`, `index` |
 | → `games/solitaire/` | ✅ Klondike (see [§5](#5-game-modules)) |
 | → `games/word-guess/` | ✅ Word Guess (see [§5](#5-game-modules)) |
@@ -100,6 +102,8 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | Path | Purpose |
 |------|---------|
 | `lib/pasttime-client.ts` | API client wrapper |
+| `lib/app-ads.ts` | LevelPlay `/app-ads.txt` builder (`ownerdomain`, ironSource DIRECT, Unity Ads mirror) |
+| `lib/app-ads-unity-list.ts` | Unity dashboard reseller lines included in `/app-ads.txt` |
 | `lib/utils.ts` | `cn` + helpers |
 | `infrastructure/storage/` | `storage-provider`, `index` |
 | `platform/navigation/` | `platform-link`, `use-platform-router`, `index` |
@@ -180,6 +184,7 @@ for what a game *is*.
 | `status-filter.ts` | Hub status filter logic |
 | `room-code.ts` | Room code generation/validation |
 | `card-interaction.ts` / `card-theme.ts` / `playing-cards.ts` | Shared card primitives |
+| `shared/play-clock.ts` | Shared elapsed-time clock. Time away from the tab is not counted. |
 | `index.ts` | Barrel |
 
 **Daily**
@@ -278,6 +283,7 @@ Typed REST + WebSocket multiplayer client (shared web/mobile).
 | `docs/superpowers/plans/2026-07-18-sudoku.md` | Completed Sudoku implementation plan |
 | `docs/CARD-ASSETS.md` | Card SVG asset spec |
 | `docs/DEPLOY.md` | Cloudflare deploy + data-build scripts |
+| `docs/third-party.md` | Third-party inventory (LevelPlay active; AdSense retired) |
 | `docs/CONTENT-STORAGE-HANDOFF.md` | R2 + D1 lexicon migration plan (Worker size) |
 | `docs/INDEX.md` | This file |
 

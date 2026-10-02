@@ -14,7 +14,12 @@ import {
   type KlondikeState,
   type KlondikeTableauIndex,
 } from "@pasttime/domain/games/solitaire"
+import {
+  readStoredPlayClock,
+  reconcilePlayClock,
+} from "@pasttime/domain/games/shared/play-clock"
 import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
+import { useSealPlayClockOnLeave } from "@/features/games/hooks/use-seal-play-clock-on-leave"
 import { useStorage } from "@/infrastructure/storage"
 import { useKlondikeFoundationFly } from "@/features/games/solitaire/hooks/use-klondike-foundation-fly"
 import { useSolitairePlayPreferencesContext } from "@/features/games/solitaire/context/solitaire-play-preferences-context"
@@ -42,6 +47,8 @@ function emptyKlondikeState(drawCount: 1 | 3): KlondikeState {
     moves: 0,
     seed: null,
     drawCount,
+    elapsedMs: 0,
+    startedAt: 0,
   }
 }
 
@@ -105,7 +112,7 @@ function applyUserMove(
     feedback = "You won!"
   }
 
-  return { state: result.state, feedback, ok: true }
+  return { state: reconcilePlayClock(state, result.state), feedback, ok: true }
 }
 
 function shouldQueueAutoStack(
@@ -142,7 +149,7 @@ export function useKlondikeGame(drawCount: 1 | 3) {
       if (cancelled) return
       setState(
         isKlondikeState(stored, drawCount)
-          ? stored
+          ? { ...stored, ...readStoredPlayClock(stored, Date.now()) }
           : createKlondikeGame({ drawCount }),
       )
     })
@@ -161,6 +168,10 @@ export function useKlondikeGame(drawCount: 1 | 3) {
     }
     storage.set(STORAGE_KEY, state)
   }, [state, storage])
+
+  useSealPlayClockOnLeave(state, (sealed) => {
+    storage.set(STORAGE_KEY, sealed)
+  })
 
   const isPlaying = loadStatus === "ready" && boardState.status === "playing"
 

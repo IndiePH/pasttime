@@ -41,6 +41,8 @@ function buildMockCrosswordState() {
     },
     inputs: {},
     status: "playing" as const,
+    elapsedMs: 0,
+    startedAt: 0,
   }
 }
 

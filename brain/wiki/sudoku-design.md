@@ -1,5 +1,5 @@
 # Sudoku Design Decisions
-updated: 2026-07-20
+updated: 2026-10-02
 tags: [games, sudoku, design, architecture]
 related: [classic-game-conventions, engineering-decisions, nyt-engagement-patterns]
 
@@ -48,8 +48,14 @@ daily and random persistence, engagement stats, and co-located tests.
   calling `setState` directly in the effect body. Generation remains async via
   the Worker helper.
 - Every gameplay mutation flushes the active timer segment into `elapsedMs` and
-  refreshes `startedAt`. This prevents elapsed time from inflating after reload
-  and keeps persisted time close to the visible clock.
+  refreshes `startedAt`. Hiding or leaving the page seals that same open
+  segment, so idle time on the board is kept and a return does not rewind the
+  clock. Time spent away is still not counted. The visible clock ticks inside
+  its own readout, so a second passing does not re-render the board.
+- Crossword and Klondike use that same flush (`reconcilePlayClock`,
+  `readStoredPlayClock`, `formatPlayElapsed` in `packages/domain/games/shared/play-clock.ts`).
+  The play card shows it on the title row, at the right. Word Guess has no timer.
+  Sudoku still owns its tick and `applySudokuMutation`; it only shares the formatter.
 - The launch page follows the single-primary-action contract: daily before
   completion, random after completion. It never shows a duplicate always-on
   endless action.

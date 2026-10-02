@@ -1,4 +1,3 @@
-export { AdPanel } from "./ad-panel"
 export { FeedbackWidget } from "./feedback-widget"
 export { Footer } from "./footer"
 export { GameCard, type GameCardSize } from "./game-card"

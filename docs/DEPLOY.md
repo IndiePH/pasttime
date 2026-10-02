@@ -35,30 +35,18 @@ Gotchas:
 | Kind | Examples | Where |
 |------|----------|--------|
 | Secrets | `RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `FEEDBACK_FROM_EMAIL` | Dashboard **Secret**, or from `apps/web`: `npx wrangler versions secret put <NAME>` then `npx wrangler versions deploy` (use `secret put` only when the latest version is already the live deployment). Declared in `secrets.required`. |
-| Public plaintext | `NEXT_PUBLIC_ADSENSE_*` | `vars` in `apps/web/wrangler.jsonc` (source of truth; safe to commit — they appear in page HTML / ads.txt) |
 
 Local: copy from `.env.example` into `.env.local` (gitignored). Never commit real Resend keys.
 
 If the latest Worker version is not currently deployed, `wrangler secret put` fails — prefer `versions secret put` + `versions deploy`.
 
-### AdSense (production)
+### Unity LevelPlay (Word Guess Android)
 
-Production values live under `"vars"` in `apps/web/wrangler.jsonc`. They must be present for the Next **build**, so redeploy after changing them. Local overrides: `.env.local`.
+The website does not sell display ads. There is no `/ads.txt` and no AdSense script or slot. Advertising for the Word Guess Android app is Unity LevelPlay.
 
-| Variable | AdSense unit name (label only) | Notes |
-|----------|--------------------------------|--------|
-| `NEXT_PUBLIC_ADSENSE_CLIENT` | — | Use `ca-pub-…` even if Account info shows `pub-…` |
-| `NEXT_PUBLIC_ADSENSE_SLOT_TOP` | `pasttime-global-top-strip` | Numeric ad unit ID, not the name |
-| `NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM` | `pasttime-global-bottom-strip` | Numeric ad unit ID |
-| `NEXT_PUBLIC_ADSENSE_SLOT_HUB` | `pasttime-hub-grid-card` | Numeric ad unit ID |
+`https://pasttime.xyz/app-ads.txt` must stay on the apex. It starts with `ownerdomain=pasttime.xyz` and includes ironSource DIRECT, Unity Ads DIRECT (`unity.com` / `unity3d.com`), plus the Unity reseller list baked in `apps/web/src/lib/app-ads-unity-list.ts`. The public publisher ID lives in `apps/web/src/lib/app-ads.ts`. Do not put ironSource API keys in the repo or in Worker vars.
 
-After deploy, check `https://pasttime.xyz/ads.txt` and `https://gamehub.pasttime.xyz/ads.txt` — each should start with `ownerdomain=pasttime.xyz` and list `google.com, pub-…, DIRECT, f08c47fec0942fa0` (not `# AdSense not configured`). Units may stay empty until the site is approved in AdSense.
-
-`https://pasttime.xyz/app-ads.txt` is **LevelPlay** (Word Guess), not AdSense. It starts with `ownerdomain=pasttime.xyz` and includes ironSource DIRECT (`644195`), Unity Ads DIRECT (`unity.com` / `unity3d.com` game ID `8830872`), plus Unity reseller lines. Do not put the AdSense publisher DIRECT line or ironSource API keys in app-ads.txt.
-
-Strip units request fixed **728×90**; hub cards **300×250** (no responsive auto-format). Redeploy after changing slot env vars so Next inlines them.
-
-**Site review:** Google Publisher Policies require a real Privacy Policy that discloses AdSense/cookie use (and preferably links [How Google uses data](https://policies.google.com/technologies/partner-sites)). Keep `/privacy`, `/about`, and `/terms` substantive — not placeholders — then request review on the **apex** site (`pasttime.xyz`). See `brain/wiki/adsense-manual-units.md`.
+Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Live checks: `https://pasttime.xyz/app-ads.txt` still returns the LevelPlay file, and `https://pasttime.xyz/ads.txt` is a 404 (no Google seller line). Privacy, about, and terms describe LevelPlay on the Android app. The app disclosure is `/word-guess/policy`. See `brain/wiki/levelplay-app-ads.md`.
 
 **Pre-review crawl checks (apex):**
 
@@ -72,7 +60,7 @@ Strip units request fixed **728×90**; hub cards **300×250** (no responsive aut
 
 Search Console property must be **`pasttime.xyz`** (`pasttime.app` / `www.pasttime.xyz` do not resolve). After deploy, re-submit the sitemap URL and use URL Inspection on hub + game landings (Request indexing), plus robots/sitemap if GSC still shows fetch errors.
 
-**Stay on Cloudflare Free:** keep large lexicon data in R2/D1 (not in the Worker script), leave apex attached as a Worker Custom Domain, and avoid paid Workers/Image/AI add-ons until ads earn. SEO leverage that costs $0: SSR copy, sitemap/GSC, canonicals/JSON-LD, noindex on play/stats/room.
+**Stay on Cloudflare Free:** keep large lexicon data in R2/D1 (not in the Worker script), leave apex attached as a Worker Custom Domain, and avoid paid Workers/Image/AI add-ons until Word Guess LevelPlay revenue covers them. SEO leverage that costs $0: SSR copy, sitemap/GSC, canonicals/JSON-LD, noindex on play/stats/room.
 
 ## Lexicon publish (R2 + D1)
 

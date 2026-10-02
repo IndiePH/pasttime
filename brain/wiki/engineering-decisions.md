@@ -1,10 +1,11 @@
 # Engineering Decisions
-updated: 2026-08-25
+updated: 2026-10-02
 tags: [decision, architecture, tradeoff, rule-override, technical-debt]
-related: [dictionary-pipeline, adsense-manual-units, sudoku-design, classic-game-conventions]
+related: [dictionary-pipeline, adsense-manual-units, levelplay-app-ads, sudoku-design, classic-game-conventions]
 
 | date | type | scope | summary | rationale | rules | skills | decision-maker |
 |------|------|-------|---------|-----------|-------|--------|----------------|
+| 2026-10-02 | monetization | web | Remove website Google AdSense; LevelPlay covers Word Guess Android only | AdSense slots, script, `/ads.txt`, and legal copy were still live after the product moved off website ads. LevelPlay does not fill browser strips. | No `AdPanel`, no AdSense env vars, no `/ads.txt`. `/app-ads.txt` and `/word-guess/policy` stay. Site privacy, about, and terms point at the app policy and do not claim AdSense. | ads, levelplay | user |
 | 2026-08-25 | monetization | word-guess | Split website `ads.txt` (AdSense) from apex `app-ads.txt` (LevelPlay) | Word Guess Android ads moved to Unity LevelPlay. Mixing the AdSense DIRECT line into app-ads.txt would authorize the wrong sellers. Both files share IAB `ownerdomain=pasttime.xyz`. Publisher ID `644195` is public; bake it in code, never ironSource API keys. | Keep `/ads.txt` AdSense-only; `/app-ads.txt` = Unity dashboard list + ironSource/Unity DIRECT. Policy: `/word-guess/policy`. See adsense-manual-units. | ads, levelplay, adsense | user |
 | 2026-08-12 | content | web | Landing overviews are origin/history; How to play stays a button | Duplicate “How to play” sections on landings competed with the original dialog. SSR still needs unique copy. | `game-overviews.ts`: intro + Where it came from + On Pasttime; no second tutorial. All registry slugs get the same shape. Coming soon: labeled hub section + origin landing, no fake Play. | adsense, seo, copy | user |
 | 2026-08-12 | bugfix | adsense | Defer live `<ins>` until after mount; load AdSense with a plain script | AdSense mutated SSR `<ins>` before hydration (status + iframe). `next/script` also added `data-nscript`, which AdSense logs as unsupported. | Never SSR a live adsbygoogle `<ins>`; reserved box only until client ready. Prefer native `<script async>` for the library. | nextjs, hydration, adsense | user |

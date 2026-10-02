@@ -31,7 +31,7 @@ export default function TermsPage() {
           title: "Eligibility and acceptable use",
           content: [
             "You must be able to form a binding agreement under the laws of your jurisdiction. If you are under the age of digital consent in your region, you may use the Service only with permission from a parent or guardian.",
-            "You agree not to misuse the Service, including by attempting to disrupt servers or other players; cheating, abusing multiplayer features, or interfering with fair play; scraping, reverse engineering, or copying the Service except as allowed by law; using the Service for unlawful, harmful, or fraudulent purposes; or attempting to interfere with advertising, analytics, or security systems.",
+            "You agree not to misuse the Service, including by attempting to disrupt servers or other players; cheating, abusing multiplayer features, or interfering with fair play; scraping, reverse engineering, or copying the Service except as allowed by law; using the Service for unlawful, harmful, or fraudulent purposes; or attempting to interfere with security systems or with advertising in the Word Guess Android app.",
           ],
         },
         {
@@ -49,7 +49,7 @@ export default function TermsPage() {
         {
           title: "Advertising and third-party services",
           content: [
-            "The Service may display advertisements and use third-party services such as Google AdSense. Those parties may have their own terms and privacy practices. Your interactions with ads and third-party sites are between you and those parties.",
+            "The Pasttime website does not display advertisements. The Word Guess Android app may display ads through Unity LevelPlay. Those parties have their own terms and privacy practices, linked from the Word Guess privacy policy. Your interactions with ads in that app are between you and those parties.",
             "We are not responsible for third-party content, offers, or websites linked from ads or elsewhere on the Service.",
           ],
         },

@@ -98,7 +98,6 @@ function renderSession(mode: SudokuRoundMode, status: SudokuGameState["status"])
         difficulty="easy"
         mode={mode}
         state={buildState(mode, status)}
-        elapsedMs={12_000}
         selectCell={vi.fn()}
         placeDigit={vi.fn()}
         clearCell={vi.fn()}

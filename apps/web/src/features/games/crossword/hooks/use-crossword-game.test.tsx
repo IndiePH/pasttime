@@ -1,7 +1,10 @@
-import { act, renderHook, waitFor } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { act, render, renderHook, screen, waitFor } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { CrosswordGameState } from "@pasttime/domain/games/crossword"
+import { livePlayElapsedMs } from "@pasttime/domain/games/shared/play-clock"
+
+import { PlayClockReadout } from "@/features/games/components/play-clock-readout"
 
 import { useCrosswordGame } from "./use-crossword-game"
 
@@ -119,11 +122,17 @@ function buildTestGameState(
     inputs: {},
     activeCell,
     status: "playing",
+    elapsedMs: 0,
+    startedAt: 0,
   }
 }
 
 // The storage key the hook constructs for (15, "random").
 const STORAGE_KEY = "crossword:15:random"
+
+function shownElapsed(clock: CrosswordGameState | null) {
+  return clock ? livePlayElapsedMs(clock, clock.status) : 0
+}
 
 // ---------------------------------------------------------------------------
 // Helper: mount the hook inside renderHook and return the result + helpers.
@@ -512,5 +521,145 @@ describe("mode-awareness: dailyRolloverDetected", () => {
     const { result } = renderHook(() => useCrosswordGame(15, "daily"))
     await waitFor(() => expect(result.current.loadStatus).toBe("ready"))
     expect(result.current.dailyRolloverDetected).toBe(false)
+  })
+})
+
+describe("useCrosswordGame — play clock", () => {
+  beforeEach(() => {
+    storageMap.clear()
+    mockCreateHydratedCrosswordGameState.mockResolvedValue(buildTestGameState())
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date("2026-07-19T00:00:00.000Z"))
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  async function mountPlaying() {
+    const { result } = renderHook(() => useCrosswordGame(15, "random"))
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(result.current.loadStatus).toBe("ready")
+    return result
+  }
+
+  it("elapsedMs increases every second while playing, then freezes on win", async () => {
+    const result = await mountPlaying()
+    const elapsedBefore = shownElapsed(result.current.gameState)
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000)
+    })
+    expect(shownElapsed(result.current.gameState)).toBeGreaterThanOrEqual(elapsedBefore + 3000)
+
+    const elapsedAtWinTime = shownElapsed(result.current.gameState)
+    const letters: Array<[number, number, string]> = [
+      [0, 0, "F"],
+      [0, 1, "I"],
+      [0, 2, "R"],
+      [0, 3, "S"],
+      [0, 4, "T"],
+      [1, 0, "I"],
+      [2, 0, "N"],
+      [3, 0, "A"],
+      [4, 0, "L"],
+    ]
+    act(() => {
+      for (const [row, col, letter] of letters) {
+        result.current.updateInput(row, col, letter)
+      }
+    })
+    expect(result.current.gameState!.status).toBe("won")
+    const frozenElapsed = shownElapsed(result.current.gameState)
+    expect(frozenElapsed).toBeGreaterThanOrEqual(elapsedAtWinTime)
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000)
+    })
+    expect(shownElapsed(result.current.gameState)).toBe(frozenElapsed)
+  })
+
+  it("ticks the clock without re-rendering the game each second", async () => {
+    let renders = 0
+    function Probe() {
+      renders += 1
+      const game = useCrosswordGame(15, "random")
+      return game.gameState ? <PlayClockReadout clock={game.gameState} /> : null
+    }
+
+    render(<Probe />)
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    const rendersAfterLoad = renders
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000)
+    })
+
+    const text = screen.getByLabelText("Elapsed time").textContent ?? "0:00"
+    const [minutes, seconds] = text.split(":").map(Number)
+    expect(minutes * 60 + seconds).toBeGreaterThanOrEqual(3)
+    expect(renders).toBe(rendersAfterLoad)
+  })
+
+  it("hydrating a still-playing round after a long real-world delay does not inflate elapsedMs with away-time", async () => {
+    const start = new Date("2026-07-19T00:00:00.000Z")
+    vi.setSystemTime(start)
+    storageMap.set(STORAGE_KEY, {
+      ...buildTestGameState(),
+      elapsedMs: 0,
+      startedAt: start.getTime(),
+    })
+
+    vi.setSystemTime(new Date(start.getTime() + 6 * 60 * 60 * 1000))
+
+    const result = await mountPlaying()
+    expect(shownElapsed(result.current.gameState)).toBeLessThan(5_000)
+  })
+
+  it("keeps idle time when leaving and does not count time away", async () => {
+    const start = new Date("2026-07-19T00:00:00.000Z")
+    vi.setSystemTime(start)
+    const dailyKey = "crossword:15:daily"
+    const first = renderHook(() => useCrosswordGame(15, "daily"))
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(first.result.current.loadStatus).toBe("ready")
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(60_000)
+    })
+    expect(shownElapsed(first.result.current.gameState)).toBeGreaterThanOrEqual(60_000)
+
+    act(() => {
+      first.unmount()
+    })
+
+    const saved = storageMap.get(dailyKey) as CrosswordGameState
+    expect(saved.status).toBe("playing")
+    expect(saved.elapsedMs).toBeGreaterThanOrEqual(60_000)
+
+    vi.setSystemTime(new Date(start.getTime() + 60_000 + 6 * 60 * 60 * 1000))
+    const second = renderHook(() => useCrosswordGame(15, "daily"))
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(shownElapsed(second.result.current.gameState)).toBeGreaterThanOrEqual(60_000)
+    expect(shownElapsed(second.result.current.gameState)).toBeLessThan(90_000)
+    second.unmount()
+  })
+
+  it("treats a saved game with no clock fields as a new segment at zero", async () => {
+    const stored = buildTestGameState()
+    const { elapsedMs: _elapsed, startedAt: _started, ...withoutClock } = stored
+    storageMap.set(STORAGE_KEY, withoutClock)
+
+    const result = await mountPlaying()
+    expect(shownElapsed(result.current.gameState)).toBeLessThan(5_000)
+    expect(result.current.gameState!.elapsedMs).toBe(0)
   })
 })

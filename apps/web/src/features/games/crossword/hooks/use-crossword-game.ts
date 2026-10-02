@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
+import { useSealPlayClockOnLeave } from "@/features/games/hooks/use-seal-play-clock-on-leave"
 import { createHydratedCrosswordGameState } from "@/lib/lexicon/crossword-state"
 import { useStorage } from "@/infrastructure/storage"
 import type {
@@ -12,6 +13,11 @@ import type {
   CrosswordGridSize,
   CrosswordRoundMode,
 } from "@pasttime/domain/games/crossword"
+import {
+  freshPlayClock,
+  readStoredPlayClock,
+  reconcilePlayClock,
+} from "@pasttime/domain/games/shared/play-clock"
 import {
   findClueAtCell,
   getCellKey,
@@ -28,6 +34,20 @@ const CROSSWORD_STORAGE_KEY = (
 const VALID_STATUSES = new Set(["playing", "won", "lost", "abandoned"])
 
 type LoadStatus = "loading" | "ready" | "error"
+
+function withHydratedClock(
+  state: CrosswordGameState,
+  now = Date.now(),
+): CrosswordGameState {
+  return { ...state, ...readStoredPlayClock(state, now) }
+}
+
+function applyCrosswordMutation(
+  state: CrosswordGameState,
+  mutate: (state: CrosswordGameState) => CrosswordGameState,
+): CrosswordGameState {
+  return reconcilePlayClock(state, mutate(state))
+}
 
 function isCrosswordGameState(value: unknown): value is CrosswordGameState {
   if (!value || typeof value !== "object") return false
@@ -63,7 +83,7 @@ export function useCrosswordGame(
     if (isCrosswordGameState(stored)) {
       queueMicrotask(() => {
         if (cancelled) return
-        setGameState(stored)
+        setGameState(withHydratedClock(stored))
         setLoadedKey(storageKey)
         setLoadError(null)
       })
@@ -75,7 +95,7 @@ export function useCrosswordGame(
     void createHydratedCrosswordGameState(size, mode)
       .then((state) => {
         if (cancelled) return
-        setGameState(state)
+        setGameState(withHydratedClock(state))
         setLoadedKey(storageKey)
         setLoadError(null)
       })
@@ -99,6 +119,10 @@ export function useCrosswordGame(
       storage.set(storageKey, gameState)
     }
   }, [gameState, storageKey, mode]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useSealPlayClockOnLeave(mode === "daily" ? gameState : null, (sealed) => {
+    storage.set(storageKey, sealed)
+  })
 
   const puzzle = gameState?.puzzle
   const activeCell = gameState?.activeCell
@@ -136,6 +160,7 @@ export function useCrosswordGame(
               ...prev,
               inputs: {},
               status: "playing" as const,
+              ...freshPlayClock(),
             }
           : prev,
       )
@@ -147,7 +172,7 @@ export function useCrosswordGame(
     setLoadError(null)
     void createHydratedCrosswordGameState(size, "random")
       .then((state) => {
-        setGameState(state)
+        setGameState(withHydratedClock(state))
         setLoadedKey(storageKey)
         setLoadError(null)
       })
@@ -172,11 +197,11 @@ export function useCrosswordGame(
           delete newInputs[cellKey]
         }
 
-        return {
-          ...prev,
+        return applyCrosswordMutation(prev, (current) => ({
+          ...current,
           inputs: newInputs,
-          status: resolveCrosswordStatus(prev.puzzle, newInputs, prev.status),
-        }
+          status: resolveCrosswordStatus(current.puzzle, newInputs, current.status),
+        }))
       })
     },
     [],
@@ -186,7 +211,9 @@ export function useCrosswordGame(
     setGameState((prev) => {
       if (!prev) return prev
       const next = resolveCrosswordStatus(prev.puzzle, prev.inputs, prev.status)
-      return next === prev.status ? prev : { ...prev, status: next }
+      return next === prev.status
+        ? prev
+        : applyCrosswordMutation(prev, (current) => ({ ...current, status: next }))
     })
   }, [])
 
@@ -194,10 +221,10 @@ export function useCrosswordGame(
     (cell: { row: number; col: number } | null) => {
       setGameState((prev) => {
         if (!prev) return prev
-        return {
-          ...prev,
+        return applyCrosswordMutation(prev, (current) => ({
+          ...current,
           activeCell: cell ?? undefined,
-        }
+        }))
       })
     },
     [],
@@ -210,6 +237,8 @@ export function useCrosswordGame(
         .filter((x): x is { row: number; col: number } => x !== null),
     ) ?? []
 
+  const visibleState = isStale ? null : gameState
+
   useEngagementRecorder({
     gameId: "crossword",
     variant: String(size),
@@ -218,7 +247,7 @@ export function useCrosswordGame(
   })
 
   return {
-    gameState: isStale ? null : gameState,
+    gameState: visibleState,
     loadStatus,
     loadError,
     retryLoad,

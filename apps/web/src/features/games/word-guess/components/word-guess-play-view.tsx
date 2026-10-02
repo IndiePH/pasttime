@@ -140,9 +140,12 @@ function WordGuessPlayCard({
 
   return (
     <>
-      <Card className="word-guess-vars mx-auto overflow-visible text-left">
+      <Card
+        className="word-guess-vars mx-auto overflow-visible py-0 text-left"
+        style={{ paddingBlock: SIDE_INSET }}
+      >
       <CardHeader
-        className="gap-3 pt-2 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
+        className="gap-3 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
         style={{ paddingInline: SIDE_INSET }}
       >
         <div className="space-y-1.5">
@@ -169,7 +172,7 @@ function WordGuessPlayCard({
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-4 px-0 pt-4 pb-2 landscape:space-y-3 landscape:pt-3 landscape:pb-2">
+      <CardContent className="space-y-4 px-0 pt-4 landscape:space-y-3 landscape:pt-3">
         <GameContentPanel sideInset={SIDE_INSET}>
           <div className="flex justify-center">
             <WordGuessBoard

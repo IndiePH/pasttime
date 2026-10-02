@@ -11,7 +11,6 @@ import { cookies } from "next/headers"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import "./globals.css"
-import { AdSenseScript } from "@/components/shared/adsense-script"
 import { ThemeProvider } from "@/components/theme-provider"
 import { StorageProvider } from "@/infrastructure/storage"
 import {
@@ -109,7 +108,6 @@ export default async function RootLayout({
     >
       <head />
       <body>
-        <AdSenseScript />
         <ThemeProvider>
           <StorageProvider>
             <NuqsAdapter>{children}</NuqsAdapter>

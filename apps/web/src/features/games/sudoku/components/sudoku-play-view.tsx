@@ -44,9 +44,11 @@ import {
   SudokuPlayPreferencesProvider,
   useSudokuPlayPreferences,
 } from "@/features/games/sudoku/context/sudoku-play-preferences-context"
+import { PlayClockReadout } from "@/features/games/components/play-clock-readout"
 import { useSudokuGame } from "@/features/games/sudoku/hooks/use-sudoku-game"
 import { sudokuSearchParams } from "@/features/games/sudoku/search-params"
 
+import { formatPlayElapsed } from "@pasttime/domain/games/shared/play-clock"
 import { SudokuGrid } from "./sudoku-grid"
 import { SudokuNumberPad } from "./sudoku-number-pad"
 
@@ -59,14 +61,7 @@ const SIDE_INSET = "0.75rem"
 
 /** `m:ss` under an hour, `h:mm:ss` once the round runs past 60 minutes. */
 export function formatSudokuElapsed(ms: number): string {
-  const totalSeconds = Math.max(0, Math.floor(ms / 1000))
-  const hours = Math.floor(totalSeconds / 3600)
-  const minutes = Math.floor((totalSeconds % 3600) / 60)
-  const seconds = totalSeconds % 60
-  const pad = (n: number) => n.toString().padStart(2, "0")
-  return hours > 0
-    ? `${hours}:${pad(minutes)}:${pad(seconds)}`
-    : `${minutes}:${pad(seconds)}`
+  return formatPlayElapsed(ms)
 }
 
 function modeLabelText(mode: SudokuRoundMode): string {
@@ -79,7 +74,6 @@ export interface SudokuPlaySessionReadyProps {
   difficulty: SudokuDifficulty
   mode: SudokuRoundMode
   state: SudokuGameState
-  elapsedMs: number
   selectCell: (index: number) => void
   placeDigit: ReturnType<typeof useSudokuGame>["placeDigit"]
   clearCell: () => void
@@ -94,7 +88,6 @@ export function SudokuPlaySessionReady({
   difficulty,
   mode,
   state,
-  elapsedMs,
   selectCell,
   placeDigit,
   clearCell,
@@ -155,38 +148,35 @@ export function SudokuPlaySessionReady({
         </GamePlayFooterActions>
       }
     >
-      <Card className="sudoku-vars mx-auto overflow-visible text-left">
+      <Card
+        className="sudoku-vars mx-auto overflow-visible py-0 text-left"
+        style={{ paddingBlock: SIDE_INSET }}
+      >
         <CardHeader
-          className="gap-3 pt-2 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
+          className="gap-3"
           style={{ paddingInline: SIDE_INSET }}
         >
-          <div className="space-y-1.5">
+          <div className="flex items-center justify-between gap-3">
             <CardTitle>Sudoku</CardTitle>
-            <CardDescription className="max-w-2xl landscape:hidden">
-              Fill every row, column, and 3×3 box with 1–9. Click a cell, then
-              type a number. Backspace clears.
-            </CardDescription>
+            <PlayClockReadout clock={state} />
           </div>
-          <div className="flex flex-wrap items-center gap-2 py-0.5 text-sm landscape:justify-end">
+          <CardDescription className="max-w-2xl landscape:hidden">
+            Fill every row, column, and 3×3 box with 1–9. Click a cell, then
+            type a number. Backspace clears.
+          </CardDescription>
+          <div className="flex flex-wrap items-center gap-2 py-0.5 text-sm">
             <Badge variant="outline" className="leading-normal">
               {formatSudokuDifficultyLabel(difficulty)}
             </Badge>
             <Badge variant="outline" className="leading-normal">
               {modeLabelText(mode)}
             </Badge>
-            <Badge
-              variant="outline"
-              className="leading-normal font-mono tabular-nums"
-              aria-label="Elapsed time"
-            >
-              {formatSudokuElapsed(elapsedMs)}
-            </Badge>
             <Badge variant="outline" className="leading-normal">
               {isWon ? "Solved" : "Solving"}
             </Badge>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4 px-0 pt-4 pb-2 landscape:space-y-3 landscape:pt-3 landscape:pb-2">
+        <CardContent className="space-y-4 px-0 pt-4 landscape:space-y-3 landscape:pt-3">
           <GameContentPanel sideInset={SIDE_INSET}>
             <SudokuGrid
               cells={cells}
@@ -219,7 +209,7 @@ export function SudokuPlaySessionReady({
               aria-live="polite"
             >
               <p className="text-center text-sm text-muted-foreground">
-                Solved in <strong>{formatSudokuElapsed(elapsedMs)}</strong>.
+                Solved in <strong>{formatSudokuElapsed(state.elapsedMs)}</strong>.
                 Nice work!
               </p>
               {mode === "daily" ? (
@@ -257,7 +247,7 @@ export function SudokuPlaySessionReady({
         open={resultsOpen}
         onOpenChange={setResultsOpen}
         title="Nice work!"
-        description={`Solved in ${formatSudokuElapsed(elapsedMs)}`}
+        description={`Solved in ${formatSudokuElapsed(state.elapsedMs)}`}
         footer={
           <GamePostSolveActionStack>
             <Button variant="outline" className="w-full" asChild>
@@ -320,7 +310,6 @@ function SudokuPlaySession({
       difficulty={difficulty}
       mode={mode}
       state={sudoku.state}
-      elapsedMs={sudoku.elapsedMs}
       selectCell={sudoku.selectCell}
       placeDigit={sudoku.placeDigit}
       clearCell={sudoku.clearCell}

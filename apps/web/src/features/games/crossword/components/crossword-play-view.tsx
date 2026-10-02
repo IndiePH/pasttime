@@ -24,6 +24,7 @@ import {
   type CrosswordDirection,
   type CrosswordGridSize,
 } from "@pasttime/domain/games/crossword"
+import { PlayClockReadout } from "@/features/games/components/play-clock-readout"
 import { isNewDay } from "@pasttime/domain/daily"
 import { GameBoardLoading } from "@/features/games/components/game-board-loading"
 import { GameContentPanel } from "@/features/games/components/game-content-panel"
@@ -437,21 +438,22 @@ function CrosswordPlaySessionReady({
           </div>
         )}
         <Card
-          className="crossword-vars mx-auto overflow-visible text-left"
-        style={{ "--crossword-grid-size": gridSize } as CSSProperties}
-      >
+          className="crossword-vars mx-auto overflow-visible py-0 text-left"
+          style={{ "--crossword-grid-size": gridSize, paddingBlock: SIDE_INSET } as CSSProperties}
+        >
         <CardHeader
-          className="gap-3 pt-2 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
+          className="gap-3"
           style={{ paddingInline: SIDE_INSET }}
         >
-          <div className="space-y-1.5">
+          <div className="flex items-center justify-between gap-3">
             <CardTitle>Crossword</CardTitle>
-            <CardDescription className="max-w-2xl landscape:hidden">
-              Fill the grid using the across and down clues. Click a cell, then
-              type letters. Backspace clears.
-            </CardDescription>
+            <PlayClockReadout clock={gameState} />
           </div>
-          <div className="flex flex-wrap items-center gap-2 py-0.5 text-sm landscape:justify-end">
+          <CardDescription className="max-w-2xl landscape:hidden">
+            Fill the grid using the across and down clues. Click a cell, then
+            type letters. Backspace clears.
+          </CardDescription>
+          <div className="flex flex-wrap items-center gap-2 py-0.5 text-sm">
             <Badge variant="outline" className="leading-normal">
               {gridSize}×{gridSize}
             </Badge>
@@ -463,7 +465,7 @@ function CrosswordPlaySessionReady({
             </Badge>
           </div>
         </CardHeader>
-        <CardContent className="px-0 pt-4 pb-2 landscape:pt-3 landscape:pb-2">
+        <CardContent className="px-0 pt-4 landscape:pt-3">
           <div className="mx-auto flex w-fit max-w-full flex-col items-center gap-2">
             <div className="flex w-full flex-col items-center landscape:flex-row landscape:items-start">
               <div ref={gridPanelRef} className="w-fit max-w-full">

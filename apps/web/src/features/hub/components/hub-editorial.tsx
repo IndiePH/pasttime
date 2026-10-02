@@ -1,6 +1,5 @@
 /**
- * SSR editorial copy for the hub. Crawlers and AdSense reviewers need more
- * than a game grid to judge publisher value.
+ * SSR editorial copy for the hub. Crawlers need more than a game grid.
  */
 export function HubEditorial() {
   return (
@@ -63,17 +62,24 @@ export function HubEditorial() {
             How Pasttime stays free
           </h3>
           <p className="leading-relaxed text-muted-foreground">
-            The hub is supported by clearly labeled advertising so hosting and
-            ongoing game work can stay free to play. We keep placements limited
-            and publish a real{" "}
+            Browser games on this site are free to play and do not show display
+            ads. The Word Guess Android app is supported by Unity LevelPlay
+            advertising, described in its{" "}
+            <a
+              href="/word-guess/policy"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              privacy policy
+            </a>
+            . The site{" "}
             <a
               href="/privacy"
               className="underline underline-offset-4 hover:text-foreground"
             >
               Privacy Policy
             </a>{" "}
-            that explains AdSense-related data use. Details about who we are and
-            how to reach us live on the{" "}
+            covers the website. Details about who we are and how to reach us
+            live on the{" "}
             <a
               href="/about"
               className="underline underline-offset-4 hover:text-foreground"

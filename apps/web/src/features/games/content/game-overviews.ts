@@ -1,6 +1,6 @@
 /**
  * SSR-visible copy for game landing pages.
- * Kept outside dialogs so crawlers (and AdSense reviewers) see real publisher content.
+ * Kept outside dialogs so crawlers see real publisher content.
  * Available games: mechanics live in How to play. Coming soon: history only until launch.
  */
 

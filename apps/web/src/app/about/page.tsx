@@ -36,15 +36,15 @@ export default function AboutPage() {
         {
           title: "How Pasttime stays free",
           content: [
-            "Pasttime is supported by advertising (Google AdSense). Ads help cover hosting and development so the games can remain free to play.",
-            "We aim for clear, non-intrusive placements and follow Google’s publisher policies, including privacy disclosures and consent requirements where they apply.",
+            "Browser games on this site are free to play and do not show display ads.",
+            "The Word Guess Android app is supported by Unity LevelPlay advertising. That app’s data use is described in the Word Guess privacy policy.",
           ],
         },
         {
           title: "Privacy and progress",
           content: [
             "Gameplay progress and preferences are stored locally in your browser by default. You do not need to create an account to play.",
-            "Details about advertising, cookies, and any information you choose to send through feedback are in our Privacy Policy.",
+            "Details about the website, feedback, and the Word Guess app’s advertising are in our Privacy Policy and the Word Guess privacy policy.",
           ],
         },
         {

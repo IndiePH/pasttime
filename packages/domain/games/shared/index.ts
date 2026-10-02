@@ -1,4 +1,13 @@
 export {
+  formatPlayElapsed,
+  freshPlayClock,
+  livePlayElapsedMs,
+  readStoredPlayClock,
+  reconcilePlayClock,
+  sealPlayClock,
+} from "./play-clock"
+export type { PlayClock } from "./play-clock"
+export {
   buildEnrichedWordIndex,
   getEnrichedWordFromIndex,
   isEnrichedWordLength,
