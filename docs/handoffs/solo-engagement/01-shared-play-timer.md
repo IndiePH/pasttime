@@ -4,6 +4,15 @@
 **Task list:** [TASKS.md](./TASKS.md)  
 **Branch:** `feat/solo-engagement-gaps`
 
+## Shipped
+
+The locked decisions below are the original packet. The product that landed differs in these ways:
+
+- Crossword (daily persistence; endless shows a session clock only) and Klondike have the clock. Word Guess does not.
+- The clock sits on the card title row, at the right.
+- Idle time already spent on the page is sealed on hide, unload, or unmount, so leaving does not rewind to the last move. Time spent away is still not counted.
+- The visible tick is `PlayClockReadout`. It does not re-render the board. Sudoku still flushes through `applySudokuMutation`.
+
 New session: read this file end to end before coding. Do not re-litigate the clock rules.
 
 When this task is done, check it off in `TASKS.md`.

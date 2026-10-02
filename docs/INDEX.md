@@ -184,7 +184,7 @@ for what a game *is*.
 | `status-filter.ts` | Hub status filter logic |
 | `room-code.ts` | Room code generation/validation |
 | `card-interaction.ts` / `card-theme.ts` / `playing-cards.ts` | Shared card primitives |
-| `shared/play-clock.ts` | Shared elapsed-time clock. Time away from the tab is not counted. |
+| `shared/play-clock.ts` | Elapsed-time clock for Crossword, Klondike, and Sudoku. Idle time on the page is kept; time away is not. Word Guess has no clock. |
 | `index.ts` | Barrel |
 
 **Daily**

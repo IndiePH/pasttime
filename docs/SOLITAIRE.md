@@ -27,7 +27,8 @@ preferences persist separately from the active game.
 - Draw 1 and Draw 3 share the same engine. Draw 3 supports partial final draws
   and shows up to three fanned waste cards.
 - Drag, tap-to-select, double-tap auto-foundation, auto-stack, auto-complete,
-  win detection, persistence, and a New Game action are implemented.
+  win detection, persistence, a play clock, and a New Game action are implemented.
+  Pyramid, TriPeaks, and FreeCell have no clock.
 
 ## Deferred (not in settings yet)
 

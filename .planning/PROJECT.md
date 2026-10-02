@@ -26,11 +26,11 @@ The crossword milestone delivered:
 
 Subsequent work added:
 - **Solitaire:** playable Klondike Draw 1/3, drag/tap interactions,
-  auto-foundation/auto-stack, persistence, and stats
+  auto-foundation/auto-stack, persistence, play clock, and stats
 - **Word Guess:** Daily/Endless, 5–10 letters, hard mode, keyboard feedback,
-  persistence, and stats
+  persistence, and stats. No play clock.
 - **Sudoku:** Daily/Random Easy/Medium/Hard, deterministic technique-rated
-  generation, candidates, undo, timer, persistence, and stats
+  generation, candidates, undo, play clock, persistence, and stats
 - **Engagement:** shared daily completion, streak, stats, and percentile helpers
 
 ## Current Milestone: v1.1 — Three Games + Engagement

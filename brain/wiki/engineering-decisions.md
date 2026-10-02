@@ -1,10 +1,11 @@
 # Engineering Decisions
-updated: 2026-10-02
+updated: 2026-10-03
 tags: [decision, architecture, tradeoff, rule-override, technical-debt]
 related: [dictionary-pipeline, adsense-manual-units, levelplay-app-ads, sudoku-design, classic-game-conventions]
 
 | date | type | scope | summary | rationale | rules | skills | decision-maker |
 |------|------|-------|---------|-----------|-------|--------|----------------|
+| 2026-10-03 | product | games | Shared play clock on Crossword, Klondike, and Sudoku; none on Word Guess | Idle time was only stored on a move, so leaving the page rewound the clock. A tick inside the game hook also re-rendered the whole board every second. | Persist `elapsedMs` / `startedAt`. Flush on each move and seal the open segment on hide, unload, or unmount. Time away is not counted. Tick only in `PlayClockReadout` on the title row, at the right. Word Guess has no clock. Pyramid, TriPeaks, and FreeCell have none. See sudoku-design. | react, localstorage, timer | user |
 | 2026-10-02 | monetization | web | Remove website Google AdSense; LevelPlay covers Word Guess Android only | AdSense slots, script, `/ads.txt`, and legal copy were still live after the product moved off website ads. LevelPlay does not fill browser strips. | No `AdPanel`, no AdSense env vars, no `/ads.txt`. `/app-ads.txt` and `/word-guess/policy` stay. Site privacy, about, and terms point at the app policy and do not claim AdSense. | ads, levelplay | user |
 | 2026-08-25 | monetization | word-guess | Split website `ads.txt` (AdSense) from apex `app-ads.txt` (LevelPlay) | Word Guess Android ads moved to Unity LevelPlay. Mixing the AdSense DIRECT line into app-ads.txt would authorize the wrong sellers. Both files share IAB `ownerdomain=pasttime.xyz`. Publisher ID `644195` is public; bake it in code, never ironSource API keys. | Keep `/ads.txt` AdSense-only; `/app-ads.txt` = Unity dashboard list + ironSource/Unity DIRECT. Policy: `/word-guess/policy`. See adsense-manual-units. | ads, levelplay, adsense | user |
 | 2026-08-12 | content | web | Landing overviews are origin/history; How to play stays a button | Duplicate “How to play” sections on landings competed with the original dialog. SSR still needs unique copy. | `game-overviews.ts`: intro + Where it came from + On Pasttime; no second tutorial. All registry slugs get the same shape. Coming soon: labeled hub section + origin landing, no fake Play. | adsense, seo, copy | user |

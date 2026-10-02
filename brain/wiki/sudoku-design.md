@@ -1,5 +1,5 @@
 # Sudoku Design Decisions
-updated: 2026-10-02
+updated: 2026-10-03
 tags: [games, sudoku, design, architecture]
 related: [classic-game-conventions, engineering-decisions, nyt-engagement-patterns]
 
@@ -53,9 +53,11 @@ daily and random persistence, engagement stats, and co-located tests.
   clock. Time spent away is still not counted. The visible clock ticks inside
   its own readout, so a second passing does not re-render the board.
 - Crossword and Klondike use that same flush (`reconcilePlayClock`,
-  `readStoredPlayClock`, `formatPlayElapsed` in `packages/domain/games/shared/play-clock.ts`).
-  The play card shows it on the title row, at the right. Word Guess has no timer.
-  Sudoku still owns its tick and `applySudokuMutation`; it only shares the formatter.
+  `readStoredPlayClock`, `sealPlayClock`, `formatPlayElapsed` in
+  `packages/domain/games/shared/play-clock.ts`). The play card shows the clock
+  on the title row, at the right. Word Guess has no timer. Sudoku still flushes
+  through `applySudokuMutation`; the visible tick for all three clocks is
+  `PlayClockReadout`.
 - The launch page follows the single-primary-action contract: daily before
   completion, random after completion. It never shows a duplicate always-on
   endless action.

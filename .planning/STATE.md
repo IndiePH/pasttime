@@ -95,7 +95,7 @@ v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 
 | Category | Item | Status |
 |----------|------|--------|
-| scope | Timer during play | Deferred from v1.1 |
+| scope | Timer during play | Deferred from v1.1; shipped 2026-10-03 on Crossword, Klondike, and Sudoku. Word Guess has none. |
 | scope | Daily solitaire mode | Deferred from v1.1 |
 | scope | Push notifications | Deferred (needs PWA infra) |
 | scope | Cross-game aggregate stats | Deferred |
