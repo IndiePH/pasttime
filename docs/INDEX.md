@@ -320,8 +320,8 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 - `search-params.ts`, `solitaire-play-preferences.ts`
 
 **Word Guess web UI** (`features/games/word-guess/`)
-- `components/`: `word-board-preview`, `word-guess-board`, `word-guess-how-to-play`, `word-guess-keyboard`, `word-guess-launch-actions`, `word-guess-launch-view`, `word-guess-mode-picker`, `word-guess-play-settings-widget`, `word-guess-play-view`, `word-guess-settings-widget`, `word-guess-tile`, `word-length-picker`, `index`
-- `hooks/`: `use-word-guess-game` (+ `.test.tsx`), `use-word-guess-daily-completed`
+- `components/`: `word-board-preview`, `word-guess-board` (+ `.test.tsx`), `word-guess-how-to-play`, `word-guess-keyboard`, `word-guess-launch-actions`, `word-guess-launch-view`, `word-guess-mode-picker`, `word-guess-play-settings-widget`, `word-guess-play-view`, `word-guess-settings-widget`, `word-guess-tile`, `word-length-picker`, `index`
+- `hooks/`: `use-word-guess-game` (+ `.test.tsx`): select a tile in the current row and replace that letter, `use-word-guess-daily-completed`
 - `search-params.ts`, `index.ts`
 
 **Crossword web UI** (`features/games/crossword/`)

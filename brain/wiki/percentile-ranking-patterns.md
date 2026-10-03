@@ -1,5 +1,5 @@
 # Percentile Ranking Patterns
-updated: 2026-07-20
+updated: 2026-10-03
 tags: [engagement, ranking, leaderboard, patterns, design]
 related: [nyt-engagement-patterns]
 
@@ -80,6 +80,7 @@ when multiplayer ships and the playerbase justifies it.
 ### Shipped (Phase 8, 2026-07-20)
 - `packages/domain/engagement/comparative-rankings.ts` — `computeComparativeRankings()`
 - `DISTRIBUTION_DATA` in `distribution-data.ts` (word-guess tries, crossword solve time, sudoku metrics)
+- Crossword daily wins store `time` in seconds (2026-10-03), so average solve time and that percentile line can appear. The comparison still uses the bundled stub, not live player aggregates.
 - UI: `ComparativeRankingsList` / `ComparativeRankingsCard` on stats pages + post-solve modal via `usePostSolveRankings`
 - Style: Duolingo/Strava-style "Top X%" lines per metric (not Wordle histogram bars yet)
 
