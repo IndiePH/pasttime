@@ -12,7 +12,7 @@ Out of this packet: multiplayer, Pyramid / TriPeaks / FreeCell, Sudoku hints, an
 ## Tasks
 
 - [x] [01 — Shared play timer](./01-shared-play-timer.md) — Crossword and Klondike. Sudoku already has a clock. Word Guess has none.
-- [ ] [02 — Crossword solve time](./02-crossword-solve-time.md) — Depends on 01. Record seconds so the existing solve-time ranking has data.
+- [x] [02 — Crossword solve time](./02-crossword-solve-time.md) — Depends on 01. Record seconds so the existing solve-time ranking has data.
 - [ ] [03 — Word Guess tries ranking](./03-word-guess-tries-ranking.md) — “Solved in N tries, better than X%” from the bundled table.
 - [ ] [04 — Klondike daily deal](./04-klondike-daily-deal.md) — Seeded Draw 1 and Draw 3 from the UTC date.
 - [ ] [05 — Klondike win recording](./05-klondike-win-recording.md) — Depends on 04. Streaks, win rate, and move rankings.

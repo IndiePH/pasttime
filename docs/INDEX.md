@@ -326,7 +326,7 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 
 **Crossword web UI** (`features/games/crossword/`)
 - `components/`: `crossword-grid`, `crossword-how-to-play`, `crossword-launch-view`, `crossword-mode-picker`, `crossword-play-settings-widget`, `crossword-play-view`, `crossword-settings-widget`, `index`
-- `hooks/use-crossword-game.ts`
+- `hooks/use-crossword-game.ts` (+ test): play clock and daily solve-time recording
 - `search-params.ts`, `index.ts`
 
 **Sudoku web UI** (`features/games/sudoku/`)

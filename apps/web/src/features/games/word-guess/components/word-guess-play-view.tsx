@@ -88,6 +88,8 @@ function WordGuessPlayCard({
     round,
     addLetter,
     removeLetter,
+    selectColumn,
+    selectedColumn,
     submitGuess,
   } = session
 
@@ -151,8 +153,8 @@ function WordGuessPlayCard({
         <div className="space-y-1.5">
           <CardTitle>Game board</CardTitle>
           <CardDescription className="max-w-2xl landscape:hidden">
-            Guess the hidden word in six tries. Use Enter to submit and Backspace
-            to edit.
+            Guess the hidden word in six tries. Tap a tile to edit one letter.
+            Enter submits and Backspace deletes.
           </CardDescription>
         </div>
         <div className="flex flex-wrap items-center gap-2 py-0.5 text-sm landscape:justify-end">
@@ -181,6 +183,9 @@ function WordGuessPlayCard({
               shakeTrigger={shakeTrigger}
               flipRowIndex={effectiveFlipRowIndex}
               flipTrigger={flipTrigger}
+              activeRowIndex={isPlaying ? attemptsUsed : null}
+              selectedColumn={selectedColumn}
+              onSelectColumn={isPlaying ? selectColumn : undefined}
             />
           </div>
         </GameContentPanel>

@@ -1,5 +1,5 @@
 # Classic Game Conventions — Solitaire & Word Guess
-updated: 2026-07-01
+updated: 2026-10-03
 tags: [games, solitaire, word-guess, conventions, design]
 related: [nyt-engagement-patterns, engineering-decisions]
 
@@ -115,6 +115,7 @@ related: [nyt-engagement-patterns, engineering-decisions]
 - Clean, responsive card interactions (drag + tap)
 
 ### Word Guess-Specific Innovation
+- Current guess: tap a tile in the active row, or move with the arrow keys, and replace that letter. Backspace and Delete remove a letter. Enter still submits.
 - Daily + endless mode (same pattern as crossword)
 - Word size selection in endless mode
 - Hard mode toggle

@@ -103,6 +103,90 @@ function isEditableTarget(target: EventTarget | null): boolean {
   return target.closest("input, textarea, select") !== null
 }
 
+interface GuessDraft {
+  guess: string
+  column: number | null
+}
+
+type GuessDraftAction =
+  | { type: "letter"; letter: string; wordLength: number }
+  | { type: "backspace" }
+  | { type: "select"; column: number; wordLength: number }
+  | { type: "move"; direction: -1 | 1; wordLength: number }
+  | { type: "clear" }
+
+function editableEnd(guessLength: number, wordLength: number): number {
+  return guessLength >= wordLength ? wordLength - 1 : guessLength
+}
+
+function reduceGuessDraft(state: GuessDraft, action: GuessDraftAction): GuessDraft {
+  switch (action.type) {
+    case "clear":
+      return { guess: "", column: null }
+    case "letter": {
+      const { letter, wordLength } = action
+      const { guess, column } = state
+      if (column === null || column >= guess.length) {
+        if (guess.length >= wordLength) {
+          return state
+        }
+        const nextGuess = `${guess}${letter}`
+        if (column === null || nextGuess.length >= wordLength) {
+          return { guess: nextGuess, column: null }
+        }
+        return { guess: nextGuess, column: nextGuess.length }
+      }
+
+      const nextGuess = `${guess.slice(0, column)}${letter}${guess.slice(column + 1)}`
+      return {
+        guess: nextGuess,
+        column: column + 1 < wordLength ? column + 1 : column,
+      }
+    }
+    case "backspace": {
+      const { guess, column } = state
+      if (guess.length === 0) {
+        return state
+      }
+      if (column === null || column >= guess.length) {
+        const nextGuess = guess.slice(0, -1)
+        if (column === null) {
+          return { guess: nextGuess, column: null }
+        }
+        return { guess: nextGuess, column: nextGuess.length }
+      }
+      const nextGuess = `${guess.slice(0, column)}${guess.slice(column + 1)}`
+      return { guess: nextGuess, column: Math.min(column, nextGuess.length) }
+    }
+    case "select": {
+      if (!Number.isInteger(action.column) || action.column < 0 || action.wordLength <= 0) {
+        return state
+      }
+      const max = editableEnd(state.guess.length, action.wordLength)
+      return { ...state, column: Math.min(action.column, max) }
+    }
+    case "move": {
+      const end = editableEnd(state.guess.length, action.wordLength)
+      if (state.column === null) {
+        if (action.direction < 0) {
+          if (state.guess.length === 0) {
+            return state
+          }
+          return { ...state, column: state.guess.length - 1 }
+        }
+        return { ...state, column: end }
+      }
+      const next = state.column + action.direction
+      if (next < 0 || next > end) {
+        return state
+      }
+      return { ...state, column: next }
+    }
+    default:
+      return state
+  }
+}
+
 function messageForInvalidGuess(length: WordGuessLength, reason: string): string {
   if (reason === "invalid-length") {
     return `Guess must be exactly ${length} letters.`
@@ -146,7 +230,12 @@ export function useWordGuessGame({
     }
   }, [roundMode, storage, storageKey, wordLength, hardMode, answerWords])
   const [round, setRound] = React.useState<WordGuessRoundState>(initialGame.round)
-  const [currentGuess, setCurrentGuess] = React.useState(initialGame.currentGuess)
+  const [draft, dispatchDraft] = React.useReducer(reduceGuessDraft, {
+    guess: initialGame.currentGuess,
+    column: null,
+  })
+  const currentGuess = draft.guess
+  const selectedColumn = draft.column
   const [feedback, setFeedback] = React.useState<string | null>(null)
   const [invalidWordShake, setInvalidWordShake] = React.useState<{
     rowIndex: number
@@ -175,12 +264,7 @@ export function useWordGuessGame({
         return
       }
 
-      setCurrentGuess((prev) => {
-        if (prev.length >= wordLength) {
-          return prev
-        }
-        return `${prev}${next}`
-      })
+      dispatchDraft({ type: "letter", letter: next, wordLength })
       setFeedback(null)
     },
     [isPlaying, wordLength],
@@ -191,9 +275,32 @@ export function useWordGuessGame({
       return
     }
 
-    setCurrentGuess((prev) => prev.slice(0, -1))
+    dispatchDraft({ type: "backspace" })
     setFeedback(null)
   }, [isPlaying])
+
+  const selectColumn = React.useCallback(
+    (columnIndex: number) => {
+      if (!isPlaying) {
+        return
+      }
+
+      dispatchDraft({ type: "select", column: columnIndex, wordLength })
+      setFeedback(null)
+    },
+    [isPlaying, wordLength],
+  )
+
+  const moveColumn = React.useCallback(
+    (direction: -1 | 1) => {
+      if (!isPlaying) {
+        return
+      }
+
+      dispatchDraft({ type: "move", direction, wordLength })
+    },
+    [isPlaying, wordLength],
+  )
 
   const [flipRowIndex, setFlipRowIndex] = React.useState<number | null>(null)
   const [flipTrigger, setFlipTrigger] = React.useState(0)
@@ -223,7 +330,7 @@ export function useWordGuessGame({
     setFlipRowIndex(result.round.guesses.length - 1)
     setFlipTrigger((prev) => prev + 1)
     setRound(result.round)
-    setCurrentGuess("")
+    dispatchDraft({ type: "clear" })
     if (result.round.status === "won") {
       setFeedback("You solved it.")
       return
@@ -238,7 +345,7 @@ export function useWordGuessGame({
 
   const resetRound = React.useCallback(() => {
     setRound(createRound(wordLength, roundMode, hardMode, answerWords))
-    setCurrentGuess("")
+    dispatchDraft({ type: "clear" })
     setFeedback(null)
     setInvalidWordShake(null)
   }, [roundMode, wordLength, hardMode, answerWords])
@@ -255,9 +362,15 @@ export function useWordGuessGame({
         return
       }
 
-      if (event.key === "Backspace") {
+      if (event.key === "Backspace" || event.key === "Delete") {
         event.preventDefault()
         removeLetter()
+        return
+      }
+
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault()
+        moveColumn(event.key === "ArrowLeft" ? -1 : 1)
         return
       }
 
@@ -271,7 +384,7 @@ export function useWordGuessGame({
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [addLetter, removeLetter, submitGuess])
+  }, [addLetter, moveColumn, removeLetter, submitGuess])
 
   const boardRows = React.useMemo(
     () =>
@@ -316,9 +429,11 @@ export function useWordGuessGame({
     isPlaying,
     keyboardStates,
     round,
+    selectedColumn,
     addLetter,
     removeLetter,
     resetRound,
+    selectColumn,
     submitGuess,
   }
 }

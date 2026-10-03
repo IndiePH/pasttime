@@ -280,7 +280,7 @@ function CrosswordPlaySessionReady({
   const isDailyWin = gameState.status === "won" && mode === "daily"
   const { open: resultsOpen, setOpen: setResultsOpen, canReview } =
     useDailyPostSolveDialog(isDailyWin)
-  const rankings = usePostSolveRankings("crossword")
+  const rankings = usePostSolveRankings("crossword", resultsOpen)
 
   // Keep the clues panel the same height as the grid panel (scroll inside).
   const gridPanelRef = useRef<HTMLDivElement>(null)

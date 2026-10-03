@@ -28,10 +28,11 @@ Subsequent work added:
 - **Solitaire:** playable Klondike Draw 1/3, drag/tap interactions,
   auto-foundation/auto-stack, persistence, play clock, and stats
 - **Word Guess:** Daily/Endless, 5–10 letters, hard mode, keyboard feedback,
-  persistence, and stats. No play clock.
+  persistence, and stats. No play clock. The current guess can be edited one letter at a time.
 - **Sudoku:** Daily/Random Easy/Medium/Hard, deterministic technique-rated
   generation, candidates, undo, play clock, persistence, and stats
-- **Engagement:** shared daily completion, streak, stats, and percentile helpers
+- **Engagement:** shared daily completion, streak, stats, and percentile helpers.
+  Crossword daily wins store solve time in seconds for the existing average-time ranking.
 
 ## Current Milestone: v1.1 — Three Games + Engagement
 

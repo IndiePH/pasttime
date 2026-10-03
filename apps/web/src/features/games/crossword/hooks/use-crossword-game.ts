@@ -244,6 +244,10 @@ export function useCrosswordGame(
     variant: String(size),
     status: gameState?.status ?? "playing",
     isDaily: mode === "daily",
+    time:
+      gameState?.status === "won"
+        ? Math.floor(gameState.elapsedMs / 1000)
+        : undefined,
   })
 
   return {

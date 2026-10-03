@@ -662,4 +662,67 @@ describe("useCrosswordGame — play clock", () => {
     expect(shownElapsed(result.current.gameState)).toBeLessThan(5_000)
     expect(result.current.gameState!.elapsedMs).toBe(0)
   })
+
+  const solution: Array<[number, number, string]> = [
+    [0, 0, "F"],
+    [0, 1, "I"],
+    [0, 2, "R"],
+    [0, 3, "S"],
+    [0, 4, "T"],
+    [1, 0, "I"],
+    [2, 0, "N"],
+    [3, 0, "A"],
+    [4, 0, "L"],
+  ]
+
+  async function mountDaily() {
+    const { result } = renderHook(() => useCrosswordGame(15, "daily"))
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(result.current.loadStatus).toBe("ready")
+    return result
+  }
+
+  function fillSolution(
+    updateInput: (row: number, col: number, letter: string) => void,
+  ) {
+    for (const [row, col, letter] of solution) {
+      updateInput(row, col, letter)
+    }
+  }
+
+  it("stores elapsed seconds on a daily win completion", async () => {
+    const result = await mountDaily()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000)
+    })
+
+    act(() => {
+      fillSolution(result.current.updateInput)
+    })
+
+    expect(result.current.gameState!.status).toBe("won")
+    const completions = storageMap.get("crossword:daily:completions") as
+      | Array<{ status: string; time?: number }>
+      | undefined
+    expect(completions).toHaveLength(1)
+    expect(completions![0]).toMatchObject({ status: "won", time: 5 })
+  })
+
+  it("does not store a daily completion for a random-mode win", async () => {
+    const result = await mountPlaying()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000)
+    })
+
+    act(() => {
+      fillSolution(result.current.updateInput)
+    })
+
+    expect(result.current.gameState!.status).toBe("won")
+    expect(storageMap.has("crossword:daily:completions")).toBe(false)
+  })
 })

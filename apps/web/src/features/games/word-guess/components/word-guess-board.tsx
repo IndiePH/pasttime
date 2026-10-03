@@ -17,6 +17,10 @@ interface WordGuessBoardProps {
   shakeTrigger?: number
   flipRowIndex?: number | null
   flipTrigger?: number
+  /** Row that accepts letter edits. Null when the round is over. */
+  activeRowIndex?: number | null
+  selectedColumn?: number | null
+  onSelectColumn?: (columnIndex: number) => void
 }
 
 export function WordGuessBoard({
@@ -26,6 +30,9 @@ export function WordGuessBoard({
   shakeTrigger = 0,
   flipRowIndex = null,
   flipTrigger = 0,
+  activeRowIndex = null,
+  selectedColumn = null,
+  onSelectColumn,
 }: WordGuessBoardProps) {
   return (
     <div
@@ -44,16 +51,40 @@ export function WordGuessBoard({
             role="row"
             aria-rowindex={rowIndex + 1}
           >
-            {row.letters.map((letter, columnIndex) => (
-              <div key={`${row.id}-${columnIndex}`} role="gridcell">
+            {row.letters.map((letter, columnIndex) => {
+              const isActiveCell = rowIndex === activeRowIndex && Boolean(onSelectColumn)
+              const isSelected = isActiveCell && columnIndex === selectedColumn
+              const tile = (
                 <WordGuessTile
                   letter={letter}
                   state={row.states[columnIndex]}
                   flip={shouldFlip}
                   flipIndex={columnIndex}
+                  selected={isSelected}
                 />
-              </div>
-            ))}
+              )
+
+              if (!isActiveCell || !onSelectColumn) {
+                return (
+                  <div key={`${row.id}-${columnIndex}`} role="gridcell">
+                    {tile}
+                  </div>
+                )
+              }
+
+              return (
+                <button
+                  key={`${row.id}-${columnIndex}`}
+                  type="button"
+                  role="gridcell"
+                  aria-selected={isSelected}
+                  className="cursor-pointer appearance-none rounded-sm border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  onClick={() => onSelectColumn(columnIndex)}
+                >
+                  {tile}
+                </button>
+              )
+            })}
           </div>
         )
       })}

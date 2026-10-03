@@ -1,9 +1,16 @@
 # Handoff: Crossword solve time
 
-**Status:** Ready to implement  
+**Status:** Done  
 **Depends on:** [01 — Shared play timer](./01-shared-play-timer.md)  
 **Task list:** [TASKS.md](./TASKS.md)  
 **Branch:** `feat/solo-engagement-gaps`
+
+## Shipped
+
+- A daily win stores `time` in seconds from the frozen `elapsedMs`. The value is passed only when status is `won`.
+- A random-mode win does not write a daily completion.
+- The post-solve dialog re-reads completions when it opens, so the solve-time line includes the win just recorded.
+- The percentile still uses the bundled `DISTRIBUTION_DATA` stub. Real player aggregates are not on the roadmap.
 
 New session: read this file end to end before coding. Do not re-litigate where the percentile comes from.
 
