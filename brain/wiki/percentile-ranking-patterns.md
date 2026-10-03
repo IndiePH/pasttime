@@ -81,6 +81,7 @@ when multiplayer ships and the playerbase justifies it.
 - `packages/domain/engagement/comparative-rankings.ts` — `computeComparativeRankings()`
 - `DISTRIBUTION_DATA` in `distribution-data.ts` (word-guess tries, crossword solve time, sudoku metrics)
 - Crossword daily wins store `time` in seconds (2026-10-03), so average solve time and that percentile line can appear. The comparison still uses the bundled stub, not live player aggregates.
+- Word Guess daily wins pass this solve’s try count into `computeComparativeRankings` as an optional override (2026-10-03). Lower is better, compared to the bundled `tries` stub (counts from 1 through 6). The line is “Your guess count beats”. Losses omit it. The stats page keeps the player’s own guess-distribution bars and does not show this percentile.
 - UI: `ComparativeRankingsList` / `ComparativeRankingsCard` on stats pages + post-solve modal via `usePostSolveRankings`
 - Style: Duolingo/Strava-style "Top X%" lines per metric (not Wordle histogram bars yet)
 

@@ -148,6 +148,7 @@ v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 - Word length range (`WRD-03`): Narrow to 5-10 (dictionary JSONs untouched — 3-4 entries dormant).
 - Endless mode persistence (`WRD-07`): Single shared slot `word-guess:solo:random:session`. Same length → resume; different length → replace.
 - Current guess editing: tap a tile in the active row, or move with Left/Right. Typing replaces that letter. Backspace and Delete remove one letter. With no selection, input still appends and deletes from the end.
+- Daily win rankings include this solve’s try count (“Your guess count beats”) against a bundled 1–6 stub. Losses omit it. The stats page keeps the player’s guess-distribution bars.
 - Flip-to-reveal animation: Toggle in play view settings, default OFF. CSS rotateX flip, staggered per tile, respects `prefers-reduced-motion`.
 - Hard mode visual feedback: Same row shake as invalid word. Helper text explains violation. No special tile colors.
 - Hard mode toggle uses Button component (On/Off) instead of Switch — Switch/Label components not available in UI library.

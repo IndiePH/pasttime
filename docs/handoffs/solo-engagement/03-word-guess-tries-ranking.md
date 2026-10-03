@@ -1,8 +1,14 @@
 # Handoff: Word Guess tries ranking
 
-**Status:** Ready to implement  
+**Status:** Done  
 **Task list:** [TASKS.md](./TASKS.md)  
 **Branch:** `feat/solo-engagement-gaps`
+
+## Shipped
+
+- Daily Word Guess wins pass this solve’s guess count into comparative rankings. The post-solve dialog adds “Your guess count beats X% of players” beside streak and win rate.
+- The comparison uses a bundled stub of try counts from 1 through 6. Lower is better. A missing count, including a loss, omits the line.
+- The stats page still shows the player’s own guess-distribution bars and does not show this percentile.
 
 New session: read this file end to end before coding. Do not re-litigate live player data.
 

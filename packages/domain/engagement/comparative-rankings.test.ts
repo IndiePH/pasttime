@@ -47,4 +47,54 @@ describe("computeComparativeRankings", () => {
   it("returns empty for unknown games", () => {
     expect(computeComparativeRankings("unknown", {})).toEqual([])
   })
+
+  it("ranks fewer word-guess tries above more tries", () => {
+    const stats: StatsSnapshot = {
+      winRate: 0.8,
+      dailyStreak: { current: 5, longest: 10 },
+    }
+
+    const fewer = computeComparativeRankings("word-guess", stats, {
+      tries: 2,
+    }).find((ranking) => ranking.metric === "tries")
+    const more = computeComparativeRankings("word-guess", stats, {
+      tries: 6,
+    }).find((ranking) => ranking.metric === "tries")
+
+    expect(fewer).toMatchObject({
+      metric: "tries",
+      label: "Your guess count beats",
+    })
+    expect(more).toBeDefined()
+    expect(fewer!.percentile).toBeGreaterThan(more!.percentile)
+  })
+
+  it("omits the tries line when this solve has no try count", () => {
+    const stats: StatsSnapshot = {
+      winRate: 0.8,
+      dailyStreak: { current: 5, longest: 10 },
+    }
+
+    const rankings = computeComparativeRankings("word-guess", stats)
+
+    expect(rankings.map((ranking) => ranking.metric)).toEqual([
+      "streak",
+      "winRate",
+    ])
+  })
+
+  it("leaves other games unchanged when a try count is supplied", () => {
+    const stats: StatsSnapshot = {
+      winRate: 1,
+      averageTime: 300,
+      lowestMovesOnWin: 80,
+      dailyStreak: { current: 3, longest: 3 },
+    }
+
+    for (const gameId of ["crossword", "solitaire", "sudoku"]) {
+      expect(computeComparativeRankings(gameId, stats, { tries: 2 })).toEqual(
+        computeComparativeRankings(gameId, stats),
+      )
+    }
+  })
 })

@@ -33,6 +33,7 @@ Subsequent work added:
   generation, candidates, undo, play clock, persistence, and stats
 - **Engagement:** shared daily completion, streak, stats, and percentile helpers.
   Crossword daily wins store solve time in seconds for the existing average-time ranking.
+  Word Guess daily wins compare this solve’s try count to a bundled stub.
 
 ## Current Milestone: v1.1 — Three Games + Engagement
 

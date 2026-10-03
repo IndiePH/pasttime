@@ -4,11 +4,19 @@ import type { ComparativeRanking, StatsSnapshot } from "./types"
 
 type MetricDirection = "higher" | "lower"
 
+export type CurrentSolveOverrides = {
+  /** Tries used on this Word Guess win. Lower is better. */
+  tries?: number
+}
+
 type MetricSpec = {
   metric: string
   label: string
   direction: MetricDirection
-  getValue: (stats: StatsSnapshot) => number | null | undefined
+  getValue: (
+    stats: StatsSnapshot,
+    overrides?: CurrentSolveOverrides,
+  ) => number | null | undefined
 }
 
 const GAME_METRICS: Record<string, MetricSpec[]> = {
@@ -77,6 +85,15 @@ const GAME_METRICS: Record<string, MetricSpec[]> = {
           ? stats.winRate
           : null,
     },
+    {
+      metric: "tries",
+      label: "Your guess count beats",
+      direction: "lower",
+      getValue: (_stats, overrides) => {
+        const tries = overrides?.tries
+        return typeof tries === "number" && tries > 0 ? tries : null
+      },
+    },
   ],
   sudoku: [
     {
@@ -139,6 +156,7 @@ function percentileForDirection(
 export function computeComparativeRankings(
   gameId: string,
   stats: StatsSnapshot,
+  overrides?: CurrentSolveOverrides,
 ): ComparativeRanking[] {
   const specs = GAME_METRICS[gameId]
   const distributions = DISTRIBUTION_DATA[gameId]
@@ -149,7 +167,7 @@ export function computeComparativeRankings(
   const rankings: ComparativeRanking[] = []
 
   for (const spec of specs) {
-    const value = spec.getValue(stats)
+    const value = spec.getValue(stats, overrides)
     const distribution = distributions[spec.metric]
     if (value === null || value === undefined || !distribution) {
       continue

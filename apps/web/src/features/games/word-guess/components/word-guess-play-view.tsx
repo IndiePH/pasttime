@@ -125,7 +125,11 @@ function WordGuessPlayCard({
   const { open: resultsOpen, setOpen: setResultsOpen, canReview } =
     useDailyPostSolveDialog(isDailyComplete)
 
-  const rankings = usePostSolveRankings("word-guess")
+  const rankings = usePostSolveRankings(
+    "word-guess",
+    undefined,
+    round.status === "won" ? round.guesses.length : undefined,
+  )
 
   const shareText =
     round.status === "won" && roundMode === "daily"
