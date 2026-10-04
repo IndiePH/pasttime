@@ -655,7 +655,9 @@ describe("useCrosswordGame — play clock", () => {
 
   it("treats a saved game with no clock fields as a new segment at zero", async () => {
     const stored = buildTestGameState()
-    const { elapsedMs: _elapsed, startedAt: _started, ...withoutClock } = stored
+    const withoutClock: Record<string, unknown> = { ...stored }
+    delete withoutClock.elapsedMs
+    delete withoutClock.startedAt
     storageMap.set(STORAGE_KEY, withoutClock)
 
     const result = await mountPlaying()

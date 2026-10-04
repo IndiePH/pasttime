@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
 
 import {
   sealPlayClock,
@@ -18,8 +18,11 @@ export function useSealPlayClockOnLeave<T extends PlayClock & { status: string }
 ) {
   const stateRef = useRef(state)
   const persistRef = useRef(persist)
-  stateRef.current = state
-  persistRef.current = persist
+
+  useLayoutEffect(() => {
+    stateRef.current = state
+    persistRef.current = persist
+  }, [state, persist])
 
   useEffect(() => {
     function seal() {
