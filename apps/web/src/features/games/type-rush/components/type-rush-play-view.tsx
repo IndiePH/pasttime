@@ -6,7 +6,6 @@ import { useQueryState } from "nuqs"
 import {
   formatPlayElapsed,
   getTypingCharacterStatus,
-  getTypingEntry,
 } from "@pasttime/domain/games/shared"
 import type { GameDefinition } from "@pasttime/domain/games"
 import {
@@ -118,12 +117,9 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
 
         <CardContent className="space-y-5">
           <div className="relative w-full rounded-lg border border-border/70 bg-background p-4 text-left font-mono text-base leading-8 tracking-wide transition-colors focus-within:border-primary/50">
-            <div aria-hidden>
+            <div className="whitespace-pre-wrap" aria-hidden>
               {Array.from(round.text).map((character, index) => {
                 const status = getTypingCharacterStatus(round.typing, index)
-                const entry = getTypingEntry(round.typing, index)
-                const visibleCharacter =
-                  entry?.actual ?? (character === " " ? "\u00a0" : character)
 
                 return (
                   <span
@@ -138,7 +134,7 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
                             : "text-muted-foreground/60"
                     }
                   >
-                    {visibleCharacter}
+                    {character}
                   </span>
                 )
               })}
