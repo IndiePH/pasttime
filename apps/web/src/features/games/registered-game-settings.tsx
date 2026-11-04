@@ -5,6 +5,7 @@ import { CrosswordSettingsWidget } from "@/features/games/crossword/components/c
 import { SolitaireSettingsWidget } from "@/features/games/solitaire/components/solitaire-settings-widget"
 import { SudokuSettingsWidget } from "@/features/games/sudoku/components/sudoku-settings-widget"
 import { WordGuessSettingsWidget } from "@/features/games/word-guess/components/word-guess-settings-widget"
+import { TypeRushSettingsWidget } from "@/features/games/type-rush/components/type-rush-settings-widget"
 
 interface RegisteredGameSettingsProps {
   gameId: string
@@ -25,6 +26,8 @@ export function RegisteredGameSettings({
       return <CrosswordSettingsWidget className={className} />
     case "sudoku":
       return <SudokuSettingsWidget className={className} />
+    case "type-rush":
+      return <TypeRushSettingsWidget className={className} />
     default:
       return <GameSettingsPlaceholder gameId={gameId} className={className} />
   }

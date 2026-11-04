@@ -6,6 +6,7 @@ import { CrosswordHowToPlay } from "@/features/games/crossword/components/crossw
 import { SolitaireHowToPlay } from "@/features/games/solitaire/components/solitaire-how-to-play"
 import { SudokuHowToPlay } from "@/features/games/sudoku/components/sudoku-how-to-play"
 import { WordGuessHowToPlay } from "@/features/games/word-guess/components/word-guess-how-to-play"
+import { TypeRushHowToPlay } from "@/features/games/type-rush/components/type-rush-how-to-play"
 
 interface RegisteredHowToPlayContentProps {
   game: GameDefinition
@@ -24,6 +25,8 @@ export function RegisteredHowToPlayContent({
       return <SolitaireHowToPlay game={game} />
     case "sudoku":
       return <SudokuHowToPlay game={game} />
+    case "type-rush":
+      return <TypeRushHowToPlay game={game} />
     default:
       return <GameHowToPlayPlaceholder game={game} />
   }

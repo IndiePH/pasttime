@@ -240,8 +240,8 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
   },
   "type-rush": {
     intro: [
-      "Type Rush is planned as a speed-and-accuracy typing race: prompts appear, you type them cleanly, and the fastest clean run wins.",
-      COMING_SOON_NOTE,
+      "Type Rush is Pasttime’s speed-and-accuracy typing race: a fixed passage appears, you type it from left to right, and your time, accuracy, and words per minute show how the run went.",
+      "Play the shared daily passage or switch to practice for another curated run. No account is required, and an unfinished passage stays on this device.",
     ],
     sections: [
       {
@@ -255,7 +255,7 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
       {
         title: "On Pasttime",
         paragraphs: [
-          "Type Rush is intended for 1–6 players in the browser, with the same lightweight Pasttime shell as other titles. The race track is still under construction.",
+          "Pasttime keeps the first Type Rush release solo and focused: one passage, forgiving mistakes, and a result you can improve. Multiplayer races can build on the same typing mechanics later.",
         ],
       },
     ],

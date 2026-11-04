@@ -17,3 +17,18 @@ export {
   type EnrichedWordLength,
   type WordDefinition,
 } from "./lexicon-types"
+export {
+  computeTypingMetrics,
+  createTypingState,
+  getTypingCharacterStatus,
+  getTypingEntry,
+  normalizeTypingText,
+  submitTypingCharacter,
+} from "./typing"
+export type {
+  TypingCharacterStatus,
+  TypingEntry,
+  TypingInputPolicy,
+  TypingMetrics,
+  TypingState,
+} from "./typing"
