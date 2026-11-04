@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card"
 import type { GameDefinition } from "@pasttime/domain/games"
 import {
+  buildSudokuShareText,
   formatSudokuDifficultyLabel,
   getSudokuStorageKey,
   sudokuLaunchPath,
@@ -36,6 +37,10 @@ import {
   ViewResultsLink,
 } from "@/features/games/components/game-post-solve-dialog"
 import { ComparativeRankingsList } from "@/features/games/components/comparative-rankings-list"
+import {
+  buildGameShareUrl,
+  GameShareCopyButton,
+} from "@/features/games/components/game-share-copy-button"
 import { useDailyPostSolveDialog } from "@/features/games/hooks/use-daily-post-solve-dialog"
 import { usePostSolveRankings } from "@/features/games/hooks/use-post-solve-rankings"
 import { useStorage } from "@/infrastructure/storage"
@@ -112,7 +117,14 @@ export function SudokuPlaySessionReady({
 
   const { open: resultsOpen, setOpen: setResultsOpen, canReview } =
     useDailyPostSolveDialog(isDailyWin)
-  const rankings = usePostSolveRankings("sudoku")
+  const rankings = usePostSolveRankings("sudoku", resultsOpen)
+  const shareText = isDailyWin
+    ? buildSudokuShareText({
+        difficultyLabel: formatSudokuDifficultyLabel(difficulty),
+        elapsedLabel: formatSudokuElapsed(state.elapsedMs),
+        shareUrl: buildGameShareUrl("sudoku"),
+      })
+    : null
 
   // Endless rounds resume from storage by design (see useSudokuGame), so a
   // fresh round requires clearing the slot before a full navigation forces
@@ -250,6 +262,12 @@ export function SudokuPlaySessionReady({
         description={`Solved in ${formatSudokuElapsed(state.elapsedMs)}`}
         footer={
           <GamePostSolveActionStack>
+            {shareText ? (
+              <GameShareCopyButton
+                shareText={shareText}
+                className="w-full gap-2"
+              />
+            ) : null}
             <Button variant="outline" className="w-full" asChild>
               <PlatformLink href="/games/sudoku/stats">View stats</PlatformLink>
             </Button>

@@ -26,11 +26,15 @@ The crossword milestone delivered:
 
 Subsequent work added:
 - **Solitaire:** playable Klondike Draw 1/3, drag/tap interactions,
-  auto-foundation/auto-stack, persistence, play clock, and stats
+  auto-foundation/auto-stack, persistence, play clock, and stats.
+  Daily Draw 1 and Draw 3 are seeded from the UTC date. A daily win records
+  one streak day, with moves and seconds, and copies a text result. Random
+  wins are not recorded.
 - **Word Guess:** Daily/Endless, 5–10 letters, hard mode, keyboard feedback,
   persistence, and stats. No play clock. The current guess can be edited one letter at a time.
 - **Sudoku:** Daily/Random Easy/Medium/Hard, deterministic technique-rated
-  generation, candidates, undo, play clock, persistence, and stats
+  generation, candidates, undo, play clock, persistence, and stats.
+  A daily win copies difficulty and elapsed time. The text has no grid.
 - **Engagement:** shared daily completion, streak, stats, and percentile helpers.
   Crossword daily wins store solve time in seconds for the existing average-time ranking.
   Word Guess daily wins compare this solve’s try count to a bundled stub.
@@ -41,8 +45,9 @@ Subsequent work added:
 crossword, with a shared engagement layer providing streaks, stats, comparative
 rankings, and share cards — no login required, localStorage-backed.
 
-**Progress:** Phases 4–7 are complete. Phase 8 (Rankings & Share Cards) has not
-started. Sudoku shipped on 2026-07-19 as a post-roadmap scope extension and is
+**Progress:** Phases 4–7 are complete. Phase 8 visual share cards are still open.
+Daily Klondike and text results for Klondike and Sudoku shipped on 2026-11-04.
+Sudoku itself shipped on 2026-07-19 as a post-roadmap scope extension and is
 tracked in its dedicated design spec rather than the 44 v1.1 requirement IDs.
 
 **Target features:**
@@ -51,8 +56,8 @@ tracked in its dedicated design spec rather than the 44 v1.1 requirement IDs.
 - ✅ Sudoku — classic 9×9 Daily/Random with candidates, undo, timer, and stats
 - ✅ New `@pasttime/domain/engagement` package — game-agnostic streaks and stats
 - ✅ Per-game stats pages and engagement recording
-- Comparative "better than X%" rankings and share cards remain Phase 8
-- Share cards after solve — visual result summary, no spoilers
+- Comparative "better than X%" rankings still use the bundled stub (Phase 8)
+- Klondike and Sudoku daily wins copy a text result. Word Guess emoji squares and the Crossword mini grid remain Phase 8.
 - No login/accounts (anonymous device ID + localStorage)
 - No multiplayer for these 3 in this milestone
 
@@ -105,7 +110,7 @@ Phase 8 requirements `CMP-01—CMP-04` and `SHR-01—SHR-05` remain active. See
 
 **Current available web games:**
 - Crossword: Daily/Endless grids, generation, clues, keyboard/mouse play
-- Solitaire: Klondike Draw 1/3 (other listed layouts remain previews)
+- Solitaire: Klondike Draw 1/3, daily or random (other listed layouts remain previews)
 - Word Guess: Daily/Endless, hard mode, 5–10 letters
 - Sudoku: Daily/Random, Easy/Medium/Hard, candidates, undo, timer
 - All four are registered in `GAME_MODULES` with launch/play surfaces and stats
@@ -156,6 +161,9 @@ This document evolves at milestone transitions.
 - ✓ Game state persists in localStorage per draw mode — Phase 5
 - ✓ Saved state migration — missing/mismatched drawCount triggers fresh game — Phase 5
 - ✓ Draw action produces screen-reader feedback — Phase 5
+- ✓ Klondike daily Draw 1 and Draw 3 — same UTC date and draw count, same deal — 2026-11-04
+- ✓ Klondike daily win records moves, seconds, and one streak day for both draw modes — 2026-11-04
+- ✓ Klondike and Sudoku daily results copy as text, with no tableau and no digit grid — 2026-11-04
 
 ---
-*Last updated: 2026-07-20 after Sudoku launch and documentation reconciliation*
+*Last updated: 2026-11-04 after daily Klondike and text share cards*

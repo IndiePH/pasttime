@@ -154,7 +154,7 @@ requirement IDs mapped to Phases 4–8.
 
 **Plans**: 0/0 (built directly via manager+Jeff delegation)
 **Completed**: 2026-07-03
-**Summary**: Per-game engagement recording hooks, shared stats pages for all 3 games, comparative ranking after crossword daily solve
+**Summary**: Per-game engagement recording hooks, shared stats pages for all 3 games, comparative ranking after crossword daily solve. Daily Klondike accumulation shipped later, on 2026-11-04.
 **UI hint**: yes
 
 ### Phase 8: Rankings & Share Cards
@@ -173,6 +173,8 @@ requirement IDs mapped to Phases 4–8.
 
 **Plans**: TBD
 **UI hint**: yes
+
+Daily Klondike and Sudoku copy a text result as of 2026-11-04 (draw mode or difficulty, moves or time, no puzzle contents). That does not close this phase. SHR-02 and SHR-03 still call for a Word Guess emoji grid and a Crossword mini grid.
 
 </details>
 

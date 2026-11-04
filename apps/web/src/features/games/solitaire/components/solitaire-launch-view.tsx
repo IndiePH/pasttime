@@ -8,6 +8,7 @@ import { GameLaunchActions } from "@/features/games/components/game-launch-actio
 import { GamePageShell } from "@/features/games/components/game-page-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
 import { GameOverviewSection } from "@/features/games/content/game-overview-section"
+import { useDailyCompleted } from "@/features/games/hooks/use-daily-completed"
 import { SolitaireSettingsWidget } from "@/features/games/solitaire/components/solitaire-settings-widget"
 import { solitaireSearchParams } from "@/features/games/solitaire/search-params"
 
@@ -18,6 +19,7 @@ interface SolitaireLaunchViewProps {
 export function SolitaireLaunchView({ game }: SolitaireLaunchViewProps) {
   const [modeParam] = useQueryState("mode", solitaireSearchParams.mode)
   const mode = parseSolitaireMode(modeParam)
+  const isDailyCompleted = useDailyCompleted("solitaire", mode)
 
   return (
     <>
@@ -26,8 +28,11 @@ export function SolitaireLaunchView({ game }: SolitaireLaunchViewProps) {
         <SolitaireSettingsWidget className="mt-6" />
         <GameLaunchActions
           game={game}
-          playHref={solitairePlayPath(mode)}
-          playLabel="Play"
+          playHref={solitairePlayPath(
+            mode,
+            isDailyCompleted ? "random" : "daily",
+          )}
+          dailyCompleted={isDailyCompleted}
           statsHref="/games/solitaire/stats"
         />
       </GamePageShell>

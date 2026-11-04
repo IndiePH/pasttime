@@ -202,10 +202,13 @@ for what a game *is*.
 |------|---------|
 | `games/solitaire/index.ts` | Barrel |
 | `games/solitaire/modes.ts` | Klondike/Pyramid/TriPeaks/FreeCell… mode defs |
-| `games/solitaire/paths.ts` | Route paths |
+| `games/solitaire/paths.ts` | Route paths. Play path takes layout mode and `daily` or `random`. |
+| `games/solitaire/round.ts` | Daily and random round values |
+| `games/solitaire/share.ts` | Klondike daily share text. No card identities. |
 | `games/solitaire/klondike/types.ts` | Game types |
 | `games/solitaire/klondike/deck.ts` | Deck creation/shuffle |
 | `games/solitaire/klondike/deal.ts` | Deal layout |
+| `games/solitaire/klondike/daily.ts` | UTC daily seed and storage keys for Draw 1 and Draw 3 |
 | `games/solitaire/klondike/card-utils.ts` | Card helpers |
 | `games/solitaire/klondike/rules.ts` | Move legality |
 | `games/solitaire/klondike/game.ts` | Game engine |
@@ -243,6 +246,7 @@ for what a game *is*.
 | `games/sudoku/{rng,board,conflicts}.ts` | Deterministic RNG and board helpers |
 | `games/sudoku/{rate,generate}.ts` | Human-technique rating and seeded generation |
 | `games/sudoku/game.ts` | Pure play mutations, candidates, undo, and win detection |
+| `games/sudoku/share.ts` | Daily share text: difficulty and elapsed time. No grid. |
 | `games/sudoku/{persistence,play-preferences}.ts` | Storage validation, keys, and preferences |
 | `games/sudoku/*.test.ts` | Domain coverage for settings, generation, rating, play, and persistence |
 

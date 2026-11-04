@@ -1,5 +1,5 @@
 # Percentile Ranking Patterns
-updated: 2026-10-03
+updated: 2026-11-04
 tags: [engagement, ranking, leaderboard, patterns, design]
 related: [nyt-engagement-patterns]
 
@@ -82,6 +82,7 @@ when multiplayer ships and the playerbase justifies it.
 - `DISTRIBUTION_DATA` in `distribution-data.ts` (word-guess tries, crossword solve time, sudoku metrics)
 - Crossword daily wins store `time` in seconds (2026-10-03), so average solve time and that percentile line can appear. The comparison still uses the bundled stub, not live player aggregates.
 - Word Guess daily wins pass this solve’s try count into `computeComparativeRankings` as an optional override (2026-10-03). Lower is better, compared to the bundled `tries` stub (counts from 1 through 6). The line is “Your guess count beats”. Losses omit it. The stats page keeps the player’s own guess-distribution bars and does not show this percentile.
+- Solitaire daily wins (2026-11-04) store moves and seconds. Win rate and lowest moves rank against the bundled `DISTRIBUTION_DATA.solitaire` stub. Draw 1 and Draw 3 on the same UTC date are one completion. Random wins write nothing.
 - UI: `ComparativeRankingsList` / `ComparativeRankingsCard` on stats pages + post-solve modal via `usePostSolveRankings`
 - Style: Duolingo/Strava-style "Top X%" lines per metric (not Wordle histogram bars yet)
 

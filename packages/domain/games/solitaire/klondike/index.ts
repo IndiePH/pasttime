@@ -15,6 +15,12 @@ export {
 } from "./game"
 export type { KlondikeAutoCompleteMove } from "./game"
 export { klondikeCardColor } from "./card-utils"
+export {
+  getKlondikeStorageKey,
+  klondikeDailySeed,
+  klondikeLayoutId,
+} from "./daily"
+export type { KlondikeLayoutId } from "./daily"
 export type {
   KlondikeCard,
   KlondikeFoundationIndex,

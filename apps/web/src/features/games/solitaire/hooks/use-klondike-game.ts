@@ -8,11 +8,15 @@ import {
   getKlondikeAutoFoundationMove,
   getKlondikeNextAutoFoundationMove,
   getKlondikeNextAutoFoundationMoveBatch,
+  getKlondikeStorageKey,
   isKlondikeAutoCompleteReady,
+  klondikeDailySeed,
+  klondikeLayoutId,
   type KlondikeMove,
   type KlondikePileRef,
   type KlondikeState,
   type KlondikeTableauIndex,
+  type SolitaireRoundMode,
 } from "@pasttime/domain/games/solitaire"
 import {
   readStoredPlayClock,
@@ -29,8 +33,6 @@ export interface KlondikeSelection {
   from: KlondikePileRef
   cardCount: number
 }
-
-const STORAGE_KEY = "solitaire:klondike:session"
 
 type FoundationFlyQueueMode = "auto-stack" | "auto-complete" | null
 
@@ -127,14 +129,20 @@ function shouldQueueAutoStack(
   )
 }
 
-export function useKlondikeGame(drawCount: 1 | 3) {
+export function useKlondikeGame(
+  drawCount: 1 | 3,
+  round: SolitaireRoundMode,
+) {
   const storage = useStorage()
   const { autoStackEnabled } = useSolitairePlayPreferencesContext()
-  // Start empty so SSR and the first client paint match. localStorage +
-  // Math.random deals are loaded only after mount (same pattern as Sudoku).
+  const storageKey = getKlondikeStorageKey(klondikeLayoutId(drawCount), round)
+  // Start empty so SSR and the first client paint match. Stored boards and
+  // new deals are loaded only after mount (same pattern as Sudoku).
   const [state, setState] = React.useState<KlondikeState | null>(null)
-  const loadStatus: KlondikeLoadStatus = state === null ? "loading" : "ready"
-  const boardState = state ?? emptyKlondikeState(drawCount)
+  const [loadedKey, setLoadedKey] = React.useState<string | null>(null)
+  const ready = state !== null && loadedKey === storageKey
+  const loadStatus: KlondikeLoadStatus = ready ? "ready" : "loading"
+  const boardState = ready && state ? state : emptyKlondikeState(drawCount)
   const stateRef = React.useRef(boardState)
   const foundationFlyModeRef = React.useRef<FoundationFlyQueueMode>(null)
   const [selection, setSelection] = React.useState<KlondikeSelection | null>(
@@ -144,33 +152,37 @@ export function useKlondikeGame(drawCount: 1 | 3) {
 
   React.useEffect(() => {
     let cancelled = false
-    const stored = storage.get<unknown>(STORAGE_KEY)
+    const stored = storage.get<unknown>(storageKey)
+    const seed =
+      round === "daily" ? klondikeDailySeed(new Date(), drawCount) : null
+    const resumed =
+      isKlondikeState(stored, drawCount) && stored.seed === seed
+        ? { ...stored, ...readStoredPlayClock(stored, Date.now()) }
+        : createKlondikeGame({ drawCount, seed })
+
     queueMicrotask(() => {
       if (cancelled) return
-      setState(
-        isKlondikeState(stored, drawCount)
-          ? { ...stored, ...readStoredPlayClock(stored, Date.now()) }
-          : createKlondikeGame({ drawCount }),
-      )
+      setState(resumed)
+      setLoadedKey(storageKey)
     })
     return () => {
       cancelled = true
     }
-  }, [storage, drawCount])
+  }, [storage, drawCount, round, storageKey])
 
   React.useLayoutEffect(() => {
     stateRef.current = boardState
   }, [boardState])
 
   React.useEffect(() => {
-    if (state === null) {
+    if (!state || loadedKey !== storageKey) {
       return
     }
-    storage.set(STORAGE_KEY, state)
-  }, [state, storage])
+    storage.set(storageKey, state)
+  }, [state, storage, storageKey, loadedKey])
 
-  useSealPlayClockOnLeave(state, (sealed) => {
-    storage.set(STORAGE_KEY, sealed)
+  useSealPlayClockOnLeave(ready ? state : null, (sealed) => {
+    storage.set(storageKey, sealed)
   })
 
   const isPlaying = loadStatus === "ready" && boardState.status === "playing"
@@ -495,19 +507,22 @@ export function useKlondikeGame(drawCount: 1 | 3) {
   const newGame = React.useCallback(() => {
     cancelFoundationFlyQueue()
     clearFoundationFlyMode()
-    setState(createKlondikeGame({ drawCount }))
+    const seed =
+      round === "daily" ? klondikeDailySeed(new Date(), drawCount) : null
+    setState(createKlondikeGame({ drawCount, seed }))
     setSelection(null)
     setFeedback(null)
-  }, [cancelFoundationFlyQueue, clearFoundationFlyMode, drawCount])
+  }, [cancelFoundationFlyQueue, clearFoundationFlyMode, drawCount, round])
 
-  // Engagement recorder — disabled until solitaire gains a daily mode (STD-01).
-  // Passing isDaily: false means no completions are recorded.
+  const layout = klondikeLayoutId(drawCount)
+  const won = ready && state?.status === "won" ? state : null
   useEngagementRecorder({
     gameId: "solitaire",
-    variant: "klondike",
-    status: boardState.status,
-    isDaily: false,
-    moves: boardState.moves,
+    variant: layout,
+    status: ready && state ? state.status : "playing",
+    isDaily: round === "daily",
+    moves: won ? won.moves : undefined,
+    time: won ? Math.floor(won.elapsedMs / 1000) : undefined,
   })
 
   return {
