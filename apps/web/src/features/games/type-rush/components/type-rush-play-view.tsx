@@ -9,8 +9,10 @@ import {
 } from "@pasttime/domain/games/shared"
 import type { GameDefinition } from "@pasttime/domain/games"
 import {
+  formatTypeRushContentTypeLabel,
   formatTypeRushRoundModeLabel,
   typeRushLaunchPath,
+  type TypeRushContentType,
   type TypeRushRoundMode,
 } from "@pasttime/domain/games/type-rush"
 import { Button } from "@/components/ui/button"
@@ -34,8 +36,14 @@ function formatAccuracy(accuracy: number): string {
 
 export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
   const [modeParam] = useQueryState("mode", typeRushSearchParams.mode)
+  const [contentParam] = useQueryState(
+    "content",
+    typeRushSearchParams.content
+  )
+  const [freshParam] = useQueryState("fresh", typeRushSearchParams.fresh)
   const mode = modeParam as TypeRushRoundMode
-  const typeRush = useTypeRushGame(mode)
+  const contentType = contentParam as TypeRushContentType
+  const typeRush = useTypeRushGame(mode, contentType, freshParam ?? false)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
@@ -87,7 +95,7 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
     <GamePlayShell>
       <GameSessionHeader
         game={game}
-        subtitle={`${modeLabel} · ${formatTypeRushRoundModeLabel(mode)}`}
+        subtitle={`${modeLabel} · ${formatTypeRushRoundModeLabel(mode)} · ${formatTypeRushContentTypeLabel(contentType)}`}
         density="compact"
       />
 
@@ -174,11 +182,11 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
 
       <GamePlayFooterActions>
         <Button type="button" className="w-full" onClick={typeRush.restart}>
-          {isPlaying ? "Restart passage" : "Try again"}
+          {isPlaying ? "Restart Passage" : "Try Again"}
         </Button>
         <Button variant="outline" className="w-full" asChild>
-          <PlatformLink href={typeRushLaunchPath(mode)}>
-            Back to setup
+          <PlatformLink href={typeRushLaunchPath(mode, contentType)}>
+            Back To Setup
           </PlatformLink>
         </Button>
       </GamePlayFooterActions>

@@ -129,7 +129,7 @@ export default function RoomScreen() {
           ))}
           {isHost && room.status === "lobby" ? (
             <Pressable style={styles.button} onPress={() => void handleStart()}>
-              <Text style={styles.buttonText}>Start game</Text>
+              <Text style={styles.buttonText}>Start Game</Text>
             </Pressable>
           ) : null}
           {room.status === "playing" ? (

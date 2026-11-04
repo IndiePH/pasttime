@@ -110,7 +110,9 @@ v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 
 **Last session:** 2026-11-04
 **Current session:** 2026-11-04
-**Stopped at:** Daily Klondike deals, win recording, and text share cards shipped. Sudoku daily wins copy difficulty and time. Phase 8 visual share cards (Word Guess emoji grid, Crossword mini grid) are still open.
+**Stopped at:** Daily Klondike deals, text share cards, and Type Rush solo
+typing shipped. Sudoku daily wins copy difficulty and time. Phase 8 visual
+share cards (Word Guess emoji grid, Crossword mini grid) are still open.
 **Next action:** Finish Phase 8 visual share cards.
 
 ---

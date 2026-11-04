@@ -4,7 +4,7 @@
 
 **Goal:** Standardize landing page buttons across all games with a shared `GameLaunchActions` component and universal `useDailyCompleted` hook.
 
-**Architecture:** A new universal hook checks daily completion via storage key `{gameId}:daily:{variant}:{dailySeed}`. A new shared component renders the standard button set (How to Play → Play → optional secondary/multiplayer buttons → Back to catalog). Each game's launch view swaps its custom actions for the shared component.
+**Architecture:** A new universal hook checks daily completion via storage key `{gameId}:daily:{variant}:{dailySeed}`. A new shared component renders the standard button set (How To Play → Play → optional secondary/multiplayer buttons → Back To Catalog). Each game's launch view swaps its custom actions for the shared component.
 
 **Tech Stack:** React 19, TypeScript, Vitest, nuqs, shadcn Button, lucide-react
 
@@ -13,9 +13,9 @@
 - All new files follow existing project conventions (CVA-style exports, `cn()` utility, Radix `Slot` via `asChild`)
 - Daily storage key format: `{gameId}:daily:{variant}:{dailySeed}` — matches word guess pattern
 - `useDailyCompleted` returns `true` when stored state has `status === "won"` or `status === "lost"`
-- Play button label: daily not completed → "Play daily puzzle", daily completed → "Play puzzle", fallback/no daily → "Play"
-- "Back to catalog" label always rendered, links to `/`, variant `outline`
-- Back button in play view stays "Back to setup" (not part of this refactor)
+- Play button label: daily not completed → "Play Daily Puzzle", daily completed → "Play Puzzle", fallback/no daily → "Play"
+- "Back To Catalog" label always rendered, links to `/`, variant `outline`
+- Back button in play view stays "Back To Setup" (not part of this refactor)
 
 ---
 
@@ -279,7 +279,7 @@ interface GameLaunchActionsProps {
   playLabel?: string
   /** Whether the daily puzzle has been completed — derived label when provided. */
   dailyCompleted?: boolean
-  /** Optional secondary action link (e.g. "View today's results"). */
+  /** Optional secondary action link (e.g. "View Today's Results"). */
   secondaryAction?: {
     label: string
     href: string
@@ -305,7 +305,7 @@ export function GameLaunchActions({
   const playLabel = React.useMemo(() => {
     if (playLabelProp) return playLabelProp
     if (dailyCompleted !== undefined) {
-      return dailyCompleted ? "Play puzzle" : "Play daily puzzle"
+      return dailyCompleted ? "Play Puzzle" : "Play Daily Puzzle"
     }
     return "Play"
   }, [playLabelProp, dailyCompleted])
@@ -334,7 +334,7 @@ export function GameLaunchActions({
           onCancel={handleJoinCancel}
         />
         <Button variant="outline" className="mt-6 w-full max-w-xs self-center" asChild>
-          <PlatformLink href="/">Back to catalog</PlatformLink>
+          <PlatformLink href="/">Back To Catalog</PlatformLink>
         </Button>
       </>
     )
@@ -361,7 +361,7 @@ export function GameLaunchActions({
             className="w-full"
             onClick={handleCreateRoom}
           >
-            Create room
+            Create Room
           </Button>
         ) : null}
         {onJoinRoom ? (
@@ -371,12 +371,12 @@ export function GameLaunchActions({
             className="w-full"
             onClick={handleJoinRoom}
           >
-            Join room
+            Join Room
           </Button>
         ) : null}
       </div>
       <Button variant="outline" className="mt-6" asChild>
-        <PlatformLink href="/">Back to catalog</PlatformLink>
+        <PlatformLink href="/">Back To Catalog</PlatformLink>
       </Button>
     </>
   )
@@ -411,14 +411,14 @@ vi.mock("@/platform/navigation", () => ({
 const mockGame = { id: "crossword", title: "Crossword" } as GameDefinition
 
 describe("GameLaunchActions", () => {
-  it("renders How to Play, Play, and Back to catalog by default", () => {
+  it("renders How To Play, Play, and Back To Catalog by default", () => {
     render(<GameLaunchActions game={mockGame} playHref="/play" />)
     expect(screen.getByTestId("how-to-play")).toBeInTheDocument()
     expect(screen.getByText("Play")).toBeInTheDocument()
-    expect(screen.getByText("Back to catalog")).toBeInTheDocument()
+    expect(screen.getByText("Back To Catalog")).toBeInTheDocument()
   })
 
-  it('renders "Play daily puzzle" when dailyCompleted is false', () => {
+  it('renders "Play Daily Puzzle" when dailyCompleted is false', () => {
     render(
       <GameLaunchActions
         game={mockGame}
@@ -426,10 +426,10 @@ describe("GameLaunchActions", () => {
         dailyCompleted={false}
       />,
     )
-    expect(screen.getByText("Play daily puzzle")).toBeInTheDocument()
+    expect(screen.getByText("Play Daily Puzzle")).toBeInTheDocument()
   })
 
-  it('renders "Play puzzle" when dailyCompleted is true', () => {
+  it('renders "Play Puzzle" when dailyCompleted is true', () => {
     render(
       <GameLaunchActions
         game={mockGame}
@@ -437,7 +437,7 @@ describe("GameLaunchActions", () => {
         dailyCompleted={true}
       />,
     )
-    expect(screen.getByText("Play puzzle")).toBeInTheDocument()
+    expect(screen.getByText("Play Puzzle")).toBeInTheDocument()
   })
 
   it("uses custom playLabel when provided", () => {
@@ -445,10 +445,10 @@ describe("GameLaunchActions", () => {
       <GameLaunchActions
         game={mockGame}
         playHref="/play"
-        playLabel="Start game"
+        playLabel="Start Game"
       />,
     )
-    expect(screen.getByText("Start game")).toBeInTheDocument()
+    expect(screen.getByText("Start Game")).toBeInTheDocument()
   })
 
   it("renders secondary action when provided", () => {
@@ -456,10 +456,10 @@ describe("GameLaunchActions", () => {
       <GameLaunchActions
         game={mockGame}
         playHref="/play"
-        secondaryAction={{ label: "View results", href: "/results" }}
+        secondaryAction={{ label: "View Results", href: "/results" }}
       />,
     )
-    expect(screen.getByText("View results")).toBeInTheDocument()
+    expect(screen.getByText("View Results")).toBeInTheDocument()
   })
 
   it("renders room controls when handlers provided", () => {
@@ -471,8 +471,8 @@ describe("GameLaunchActions", () => {
         onJoinRoom={vi.fn()}
       />,
     )
-    expect(screen.getByText("Create room")).toBeInTheDocument()
-    expect(screen.getByText("Join room")).toBeInTheDocument()
+    expect(screen.getByText("Create Room")).toBeInTheDocument()
+    expect(screen.getByText("Join Room")).toBeInTheDocument()
   })
 
   it("play link goes to playHref", () => {
@@ -485,7 +485,7 @@ describe("GameLaunchActions", () => {
 
   it("back to catalog links to /", () => {
     render(<GameLaunchActions game={mockGame} playHref="/play" />)
-    expect(screen.getByText("Back to catalog").closest("a")).toHaveAttribute(
+    expect(screen.getByText("Back To Catalog").closest("a")).toHaveAttribute(
       "href",
       "/",
     )
@@ -711,7 +711,7 @@ export function WordGuessLaunchView({ game }: WordGuessLaunchViewProps) {
         dailyCompleted={isDailyCompleted}
         secondaryAction={
           isDailyCompleted
-            ? { label: "View today's results", href: wordGuessPlayPath(wordLength, "daily") }
+            ? { label: "View Today's Results", href: wordGuessPlayPath(wordLength, "daily") }
             : undefined
         }
         onCreateRoom={handleCreateRoom}

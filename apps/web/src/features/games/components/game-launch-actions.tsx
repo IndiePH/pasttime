@@ -17,7 +17,7 @@ interface GameLaunchActionsProps {
   playLabel?: string
   /** Whether the daily puzzle has been completed — derived label when provided. */
   dailyCompleted?: boolean
-  /** Optional secondary action link (e.g. "View today's results"). */
+  /** Optional secondary action link (e.g. "View Today's Results"). */
   secondaryAction?: {
     label: string
     href: string
@@ -46,7 +46,7 @@ export function GameLaunchActions({
   const playLabel = React.useMemo(() => {
     if (playLabelProp) return playLabelProp
     if (dailyCompleted !== undefined) {
-      return dailyCompleted ? "Play puzzle" : "Play daily puzzle"
+      return dailyCompleted ? "Play Puzzle" : "Play Daily Puzzle"
     }
     return "Play"
   }, [playLabelProp, dailyCompleted])
@@ -75,7 +75,7 @@ export function GameLaunchActions({
           onCancel={handleJoinCancel}
         />
         <Button variant="outline" className="mt-6 w-60 self-center" asChild>
-          <PlatformLink href="/">Back to catalog</PlatformLink>
+          <PlatformLink href="/">Back To Catalog</PlatformLink>
         </Button>
       </>
     )
@@ -102,7 +102,7 @@ export function GameLaunchActions({
             className="w-full"
             onClick={handleCreateRoom}
           >
-            Create room
+            Create Room
           </Button>
         ) : null}
         {onJoinRoom ? (
@@ -112,7 +112,7 @@ export function GameLaunchActions({
             className="w-full"
             onClick={handleJoinRoom}
           >
-            Join room
+            Join Room
           </Button>
         ) : null}
       </div>
@@ -123,7 +123,7 @@ export function GameLaunchActions({
           </Button>
         ) : null}
         <Button variant="outline" className="w-full" asChild>
-          <PlatformLink href="/">Back to catalog</PlatformLink>
+          <PlatformLink href="/">Back To Catalog</PlatformLink>
         </Button>
       </GamePlayFooterActions>
     </>

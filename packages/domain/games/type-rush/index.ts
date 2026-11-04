@@ -19,13 +19,19 @@ export {
   parseStoredTypeRushRound,
 } from "./persistence"
 export {
+  formatTypeRushDailyPlayLabel,
   formatTypeRushRoundModeLabel,
+  formatTypeRushContentTypeLabel,
+  isTypeRushContentType,
   isTypeRushRoundMode,
+  parseTypeRushContentType,
   parseTypeRushRoundMode,
+  TYPE_RUSH_CONTENT_TYPE_DEFAULT,
+  TYPE_RUSH_CONTENT_TYPES,
   TYPE_RUSH_ROUND_MODE_DEFAULT,
   TYPE_RUSH_ROUND_MODES,
 } from "./settings"
-export type { TypeRushRoundMode } from "./settings"
+export type { TypeRushContentType, TypeRushRoundMode } from "./settings"
 export { typeRushLaunchPath, typeRushPlayPath } from "./paths"
 export type {
   TypeRushRoundMetrics,

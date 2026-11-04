@@ -34,6 +34,14 @@ export function TypeRushHowToPlay({ game }: { game: GameDefinition }) {
           curated passage whenever you want a fresh run.
         </p>
       </section>
+
+      <section>
+        <h3 className="font-medium">Content types</h3>
+        <p className="mt-2 text-muted-foreground">
+          Use Settings to switch between paragraphs, random words, whole
+          numbers, or numbers with decimal points and thousands separators.
+        </p>
+      </section>
     </div>
   )
 }

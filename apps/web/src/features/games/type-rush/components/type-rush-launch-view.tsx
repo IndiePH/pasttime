@@ -4,7 +4,10 @@ import { useQueryState } from "nuqs"
 
 import type { GameDefinition } from "@pasttime/domain/games"
 import {
+  formatTypeRushDailyPlayLabel,
+  TYPE_RUSH_CONTENT_TYPE_DEFAULT,
   typeRushPlayPath,
+  type TypeRushContentType,
   type TypeRushRoundMode,
 } from "@pasttime/domain/games/type-rush"
 import { GameLaunchActions } from "@/features/games/components/game-launch-actions"
@@ -21,10 +24,18 @@ interface TypeRushLaunchViewProps {
 
 export function TypeRushLaunchView({ game }: TypeRushLaunchViewProps) {
   const [modeParam] = useQueryState("mode", typeRushSearchParams.mode)
+  const [contentParam] = useQueryState(
+    "content",
+    typeRushSearchParams.content
+  )
   const mode = modeParam as TypeRushRoundMode
-  const dailyCompleted = useDailyCompleted("type-rush", "default")
+  const contentType = contentParam as TypeRushContentType
+  const completionVariant =
+    contentType === TYPE_RUSH_CONTENT_TYPE_DEFAULT ? "default" : contentType
+  const dailyCompleted = useDailyCompleted("type-rush", completionVariant)
   const playMode = mode === "daily" && !dailyCompleted ? "daily" : "practice"
   const isDailyLaunch = mode === "daily"
+  const startsFreshPractice = isDailyLaunch && dailyCompleted
 
   return (
     <>
@@ -33,18 +44,22 @@ export function TypeRushLaunchView({ game }: TypeRushLaunchViewProps) {
         <TypeRushSettingsWidget className="mt-6" />
         <GameLaunchActions
           game={game}
-          playHref={typeRushPlayPath(playMode)}
+          playHref={typeRushPlayPath(
+            playMode,
+            contentType,
+            startsFreshPractice
+          )}
           playLabel={
             isDailyLaunch && !dailyCompleted
-              ? "Play daily passage"
-              : "Start practice"
+              ? formatTypeRushDailyPlayLabel(contentType)
+              : "Play"
           }
           dailyCompleted={isDailyLaunch ? dailyCompleted : undefined}
           secondaryAction={
             isDailyLaunch && dailyCompleted
               ? {
-                  label: "View today's passage",
-                  href: typeRushPlayPath("daily"),
+                  label: "View Today's Passage",
+                  href: typeRushPlayPath("daily", contentType),
                 }
               : undefined
           }

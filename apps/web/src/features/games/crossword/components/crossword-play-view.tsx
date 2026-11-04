@@ -396,8 +396,8 @@ function CrosswordPlaySessionReady({
     [setActiveCell, setDirection],
   )
 
-  const subtitle = `${modeLabel} · ${mode === "daily" ? "Daily puzzle" : "Random puzzle"}`
-  const modeLabelBadge = mode === "daily" ? "Daily puzzle" : "Random puzzle"
+  const subtitle = `${modeLabel} · ${mode === "daily" ? "Daily Puzzle" : "Random Puzzle"}`
+  const modeLabelBadge = mode === "daily" ? "Daily Puzzle" : "Random Puzzle"
 
   return (
     <GamePlaySection
@@ -414,12 +414,12 @@ function CrosswordPlaySessionReady({
               className="w-full"
               onClick={newPuzzle}
             >
-              New game
+              New Game
             </Button>
           ) : null}
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={crosswordLaunchPath(gridSize)}>
-              Back to setup
+            Back To Setup
             </PlatformLink>
           </Button>
         </GamePlayFooterActions>
@@ -641,7 +641,7 @@ export class CrosswordPlaySessionErrorBoundary extends Component<
                 this.props.onRetry?.()
               }}
             >
-              Try again
+              Try Again
             </Button>
           </CardContent>
         </Card>

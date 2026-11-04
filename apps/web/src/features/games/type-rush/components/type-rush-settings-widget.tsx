@@ -4,10 +4,10 @@ import * as React from "react"
 import { useQueryState } from "nuqs"
 
 import {
-  formatTypeRushRoundModeLabel,
-  TYPE_RUSH_ROUND_MODE_DEFAULT,
-  TYPE_RUSH_ROUND_MODES,
-  type TypeRushRoundMode,
+  formatTypeRushContentTypeLabel,
+  TYPE_RUSH_CONTENT_TYPE_DEFAULT,
+  TYPE_RUSH_CONTENT_TYPES,
+  type TypeRushContentType,
 } from "@pasttime/domain/games/type-rush"
 import { Button } from "@/components/ui/button"
 import { GameSettingsWidget } from "@/features/games/components/game-settings-widget"
@@ -20,52 +20,55 @@ interface TypeRushSettingsWidgetProps {
 export function TypeRushSettingsWidget({
   className,
 }: TypeRushSettingsWidgetProps) {
-  const [modeParam, setModeParam] = useQueryState(
-    "mode",
-    typeRushSearchParams.mode
+  const [contentParam, setContentParam] = useQueryState(
+    "content",
+    typeRushSearchParams.content
   )
-  const [draftMode, setDraftMode] = React.useState<TypeRushRoundMode>(
-    TYPE_RUSH_ROUND_MODE_DEFAULT
-  )
-  const mode = modeParam as TypeRushRoundMode
+  const [draftContentType, setDraftContentType] =
+    React.useState<TypeRushContentType>(TYPE_RUSH_CONTENT_TYPE_DEFAULT)
+  const contentType = contentParam as TypeRushContentType
 
   const handleOpen = React.useCallback(() => {
-    setDraftMode(mode)
-  }, [mode])
+    setDraftContentType(contentType)
+  }, [contentType])
 
   const handleApply = React.useCallback(() => {
-    void setModeParam(
-      draftMode === TYPE_RUSH_ROUND_MODE_DEFAULT ? null : draftMode
+    void setContentParam(
+      draftContentType === TYPE_RUSH_CONTENT_TYPE_DEFAULT
+        ? null
+        : draftContentType
     )
-  }, [draftMode, setModeParam])
+  }, [draftContentType, setContentParam])
 
   return (
     <GameSettingsWidget
       className={className}
       panelId="type-rush-settings-panel"
-      description="Choose a daily or practice passage."
-      summary={formatTypeRushRoundModeLabel(mode)}
+      description="Choose what to type in this session."
+      summary={formatTypeRushContentTypeLabel(contentType)}
       onOpen={handleOpen}
       onApply={handleApply}
-      applyDisabled={draftMode === mode}
+      applyDisabled={draftContentType === contentType}
     >
       <fieldset className="space-y-2">
-        <legend className="sr-only">Passage mode</legend>
+        <legend className="text-xs font-medium text-muted-foreground">
+          Content Type
+        </legend>
         <div
           className="flex flex-wrap gap-2"
           role="group"
-          aria-label="Passage mode"
+          aria-label="Content Type"
         >
-          {TYPE_RUSH_ROUND_MODES.map((option) => (
+          {TYPE_RUSH_CONTENT_TYPES.map((option) => (
             <Button
               key={option}
               type="button"
               size="sm"
-              variant={draftMode === option ? "default" : "outline"}
-              aria-pressed={draftMode === option}
-              onClick={() => setDraftMode(option)}
+              variant={draftContentType === option ? "default" : "outline"}
+              aria-pressed={draftContentType === option}
+              onClick={() => setDraftContentType(option)}
             >
-              {formatTypeRushRoundModeLabel(option)}
+              {formatTypeRushContentTypeLabel(option)}
             </Button>
           ))}
         </div>

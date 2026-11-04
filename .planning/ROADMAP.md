@@ -67,10 +67,11 @@
 - [x] **Phase 7: Streaks, Stats & Crossword Engagement** — Per-game streaks, stats pages, crossword engagement wiring (completed 2026-07-03)
 - [ ] **Phase 8: Rankings & Share Cards** — Comparative rankings and post-solve sharing for all games
 
-**Post-roadmap extension:** Sudoku v1 shipped 2026-07-19. It is an additive
-available game documented in
-`docs/superpowers/specs/2026-07-18-sudoku-design.md`; it does not change the 44
-requirement IDs mapped to Phases 4–8.
+**Post-roadmap extensions:** Sudoku v1 shipped 2026-07-19 and Type Rush solo
+typing shipped 2026-11-04. They are additive available games documented in
+`docs/superpowers/specs/2026-07-18-sudoku-design.md` and
+`docs/superpowers/specs/2026-11-04-type-rush-type-shield-design.md`; they do not
+change the 44 requirement IDs mapped to Phases 4–8.
 
 ### Phase 4: Engagement Foundation
 

@@ -7,11 +7,16 @@ import {
 } from "../shared/typing"
 
 import { pickTypeRushPrompt, type TypeRushPrompt } from "./prompts"
-import type { TypeRushRoundMode } from "./settings"
+import {
+  TYPE_RUSH_CONTENT_TYPE_DEFAULT,
+  type TypeRushContentType,
+  type TypeRushRoundMode,
+} from "./settings"
 import type { TypeRushRoundMetrics, TypeRushRoundState } from "./types"
 
 export interface CreateTypeRushRoundOptions {
   mode: TypeRushRoundMode
+  contentType?: TypeRushContentType
   prompt?: TypeRushPrompt
   date?: Date
   now?: number
@@ -20,17 +25,20 @@ export interface CreateTypeRushRoundOptions {
 
 export function createTypeRushRound({
   mode,
+  contentType = TYPE_RUSH_CONTENT_TYPE_DEFAULT,
   date = new Date(),
   now = Date.now(),
   random = Math.random,
   prompt,
 }: CreateTypeRushRoundOptions): TypeRushRoundState {
-  const selectedPrompt = prompt ?? pickTypeRushPrompt(mode, date, random)
+  const selectedPrompt =
+    prompt ?? pickTypeRushPrompt(mode, date, random, contentType)
 
   return {
     promptId: selectedPrompt.id,
     text: selectedPrompt.text,
     mode,
+    contentType,
     status: "playing",
     typing: createTypingState(selectedPrompt.text),
     elapsedMs: 0,

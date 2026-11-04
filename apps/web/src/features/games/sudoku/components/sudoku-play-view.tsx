@@ -70,7 +70,7 @@ export function formatSudokuElapsed(ms: number): string {
 }
 
 function modeLabelText(mode: SudokuRoundMode): string {
-  return mode === "daily" ? "Daily puzzle" : "Endless puzzle"
+  return mode === "daily" ? "Daily Puzzle" : "Endless Puzzle"
 }
 
 export interface SudokuPlaySessionReadyProps {
@@ -149,12 +149,12 @@ export function SudokuPlaySessionReady({
               className="w-full"
               onClick={handleNewEndless}
             >
-              New game
+              New Game
             </Button>
           ) : null}
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={sudokuLaunchPath(difficulty)}>
-              Back to setup
+              Back To Setup
             </PlatformLink>
           </Button>
         </GamePlayFooterActions>
@@ -234,7 +234,7 @@ export function SudokuPlaySessionReady({
                 <div className="flex w-60 flex-col items-center gap-2">
                   <Button variant="outline" className="w-full" asChild>
                     <PlatformLink href="/games/sudoku/stats">
-                      View stats
+                      View Stats
                     </PlatformLink>
                   </Button>
                 </div>
@@ -269,7 +269,7 @@ export function SudokuPlaySessionReady({
               />
             ) : null}
             <Button variant="outline" className="w-full" asChild>
-              <PlatformLink href="/games/sudoku/stats">View stats</PlatformLink>
+              <PlatformLink href="/games/sudoku/stats">View Stats</PlatformLink>
             </Button>
             <Button
               type="button"

@@ -11,7 +11,9 @@ import {
   parseStoredTypeRushRound,
   sealTypeRushRound,
   submitTypeRushCharacter,
+  TYPE_RUSH_CONTENT_TYPE_DEFAULT,
   type TypeRushRoundMode,
+  type TypeRushContentType,
   type TypeRushRoundState,
 } from "@pasttime/domain/games/type-rush"
 import { useEngagementRecorder } from "@/features/games/hooks/use-engagement-recorder"
@@ -74,16 +76,33 @@ function useSealTypeRushOnLeave(
   }, [])
 }
 
-export function useTypeRushGame(mode: TypeRushRoundMode) {
+export function useTypeRushGame(
+  mode: TypeRushRoundMode,
+  contentType: TypeRushContentType = TYPE_RUSH_CONTENT_TYPE_DEFAULT,
+  fresh = false
+) {
   const storage = useStorage()
-  const storageKey = React.useMemo(() => getTypeRushStorageKey(mode), [mode])
+  const storageKey = React.useMemo(
+    () => getTypeRushStorageKey(mode, new Date(), contentType),
+    [contentType, mode]
+  )
   const [round, setRound] = React.useState<TypeRushRoundState | null>(null)
   const [loadedKey, setLoadedKey] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     let cancelled = false
-    const stored = parseStoredTypeRushRound(storage.get(storageKey), mode)
-    const nextRound = stored ?? createTypeRushRound({ mode, now: Date.now() })
+    const stored =
+      fresh && mode === "practice"
+        ? null
+        : parseStoredTypeRushRound(
+            storage.get(storageKey),
+            mode,
+            Date.now(),
+            contentType
+          )
+    const nextRound =
+      stored ??
+      createTypeRushRound({ mode, contentType, now: Date.now() })
 
     queueMicrotask(() => {
       if (cancelled) return
@@ -94,7 +113,7 @@ export function useTypeRushGame(mode: TypeRushRoundMode) {
     return () => {
       cancelled = true
     }
-  }, [mode, storage, storageKey])
+  }, [contentType, fresh, mode, storage, storageKey])
 
   const persist = React.useCallback(
     (next: TypeRushRoundState) => {
@@ -132,23 +151,21 @@ export function useTypeRushGame(mode: TypeRushRoundMode) {
     setLoadedKey(null)
     setRound(null)
     queueMicrotask(() => {
-      setRound(createTypeRushRound({ mode, now: Date.now() }))
+      setRound(createTypeRushRound({ mode, contentType, now: Date.now() }))
       setLoadedKey(storageKey)
     })
-  }, [mode, storage, storageKey])
+  }, [contentType, mode, storage, storageKey])
 
   const elapsedMs = useLiveElapsed(round)
   const visibleRound = loadedKey === storageKey ? round : null
   const metrics = visibleRound
-    ? getTypeRushMetrics(
-        visibleRound,
-        visibleRound.status === "playing" ? elapsedMs : visibleRound.elapsedMs
-      )
+    ? getTypeRushMetrics(visibleRound)
     : null
 
   useEngagementRecorder({
     gameId: "type-rush",
-    variant: "default",
+    variant:
+      contentType === TYPE_RUSH_CONTENT_TYPE_DEFAULT ? "default" : contentType,
     status: visibleRound?.status ?? "playing",
     isDaily: mode === "daily",
     time:

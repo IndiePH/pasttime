@@ -59,7 +59,7 @@ const game = {
   title: "Solitaire",
   description: "Klondike",
   status: "available",
-  icon: "spade",
+  icon: "solitaire",
   tags: [],
 } as GameDefinition
 
@@ -69,29 +69,29 @@ describe("SolitaireLaunchView daily contract", () => {
     query.mode = "klondike-draw1"
   })
 
-  it("shows only Play daily puzzle before today's deal is won", () => {
+  it("shows only Play Daily Puzzle before today's deal is won", () => {
     render(<SolitaireLaunchView game={game} />)
 
-    const play = screen.getByRole("link", { name: "Play daily puzzle" })
+    const play = screen.getByRole("link", { name: "Play Daily Puzzle" })
     expect(play).toHaveAttribute(
       "href",
       "/games/solitaire/play?mode=klondike-draw1&round=daily",
     )
-    expect(screen.queryByRole("link", { name: "Play puzzle" })).toBeNull()
+    expect(screen.queryByRole("link", { name: "Play Puzzle" })).toBeNull()
   })
 
-  it("shows only Play puzzle after today's daily is won", () => {
+  it("shows only Play Puzzle after today's daily is won", () => {
     storageMap.set(`solitaire:daily:klondike-draw1:${getDailySeed(new Date())}`, {
       status: "won",
     })
 
     render(<SolitaireLaunchView game={game} />)
 
-    const play = screen.getByRole("link", { name: "Play puzzle" })
+    const play = screen.getByRole("link", { name: "Play Puzzle" })
     expect(play).toHaveAttribute(
       "href",
       "/games/solitaire/play?mode=klondike-draw1&round=random",
     )
-    expect(screen.queryByRole("link", { name: "Play daily puzzle" })).toBeNull()
+    expect(screen.queryByRole("link", { name: "Play Daily Puzzle" })).toBeNull()
   })
 })

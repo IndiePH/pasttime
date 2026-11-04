@@ -26,10 +26,10 @@ export function SolitaireModePicker({
       className={cn(compact ? "space-y-2" : "space-y-3 text-left", className)}
     >
       {compact ? (
-        <legend className="sr-only">Game mode</legend>
+        <legend className="sr-only">Game Mode</legend>
       ) : (
         <>
-          <legend className="text-sm font-medium">Game mode</legend>
+          <legend className="text-sm font-medium">Game Mode</legend>
           <p className="text-xs text-muted-foreground">
             Layout and rules for this session. Klondike is the classic default.
           </p>
@@ -43,7 +43,7 @@ export function SolitaireModePicker({
       <div
         className="flex w-full min-w-0 flex-col gap-2"
         role="group"
-        aria-label="Solitaire game mode"
+        aria-label="Solitaire Game Mode"
       >
         {SOLITAIRE_MODES.map((mode) => {
           const isActive = value === mode

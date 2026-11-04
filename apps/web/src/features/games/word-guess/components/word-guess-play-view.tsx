@@ -173,7 +173,7 @@ function WordGuessPlayCard({
           </Badge>
           {hardMode && (
             <Badge variant="default" className="leading-normal">
-              Hard mode
+              Hard Mode
             </Badge>
           )}
         </div>
@@ -364,12 +364,12 @@ function WordGuessPlaySessionReady({
               className="w-full"
               onClick={session.resetRound}
             >
-              New game
+              New Game
             </Button>
           )}
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode, appliedHardMode ? true : undefined)}>
-              Back to setup
+              Back To Setup
             </PlatformLink>
           </Button>
         </GamePlayFooterActions>

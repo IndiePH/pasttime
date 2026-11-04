@@ -43,7 +43,7 @@ export function GameShareCopyButton({
       ) : (
         <>
           <Copy className="size-4" aria-hidden />
-          Copy result
+          Copy Result
         </>
       )}
     </Button>

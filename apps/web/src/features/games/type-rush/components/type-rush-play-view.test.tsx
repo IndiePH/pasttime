@@ -18,6 +18,7 @@ const ROUND: TypeRushRoundState = {
   promptId: "test",
   text: "a b",
   mode: "daily",
+  contentType: "paragraph",
   status: "playing",
   typing: {
     text: "a b",
@@ -56,9 +57,7 @@ vi.mock("@/features/games/type-rush/hooks/use-type-rush-game", () => ({
 
 describe("TypeRushPlayView passage layout", () => {
   it("keeps the full source passage stable after an incorrect character", () => {
-    const { container } = render(
-      <TypeRushPlayView game={MOCK_GAME} modeLabel="Solo play" />
-    )
+    render(<TypeRushPlayView game={MOCK_GAME} modeLabel="Solo play" />)
 
     const passageInput = screen.getByRole("textbox")
     expect(

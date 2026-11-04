@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Pasttime is a multi-platform games hub (Next.js web on Cloudflare Workers, plus Electron desktop, Expo mobile, and an Express/WS multiplayer server) sharing a pure `@pasttime/domain` package. The web catalog currently has four available games: Crossword, Solitaire (Klondike Draw 1/3), Word Guess, and Sudoku.
+Pasttime is a multi-platform games hub (Next.js web on Cloudflare Workers, plus Electron desktop, Expo mobile, and an Express/WS multiplayer server) sharing a pure `@pasttime/domain` package. The web catalog currently has five available games: Crossword, Solitaire (Klondike Draw 1/3), Word Guess, Sudoku, and Type Rush.
 
 ## Core Value
 
@@ -38,6 +38,9 @@ Subsequent work added:
 - **Engagement:** shared daily completion, streak, stats, and percentile helpers.
   Crossword daily wins store solve time in seconds for the existing average-time ranking.
   Word Guess daily wins compare this solve’s try count to a bundled stub.
+- **Type Rush:** solo daily/practice fixed-passage typing with Paragraph,
+  Word Stream, Whole Numbers, and Decimal Numbers content types; live timer,
+  accuracy, WPM, persistence, and backspace editing.
 
 ## Current Milestone: v1.1 — Three Games + Engagement
 
@@ -54,6 +57,8 @@ tracked in its dedicated design spec rather than the 44 v1.1 requirement IDs.
 - ✅ Solitaire Klondike — Klondike Draw 1 + Draw 3 modes with draw-3 waste fan
 - ✅ Word Guess — six-try board, keyboard, Daily/Endless, hard mode, persistence
 - ✅ Sudoku — classic 9×9 Daily/Random with candidates, undo, timer, and stats
+- ✅ Type Rush — daily/practice fixed-passage typing with configurable content
+  types, live timer, accuracy, WPM, persistence, and backspace editing
 - ✅ New `@pasttime/domain/engagement` package — game-agnostic streaks and stats
 - ✅ Per-game stats pages and engagement recording
 - Comparative "better than X%" rankings still use the bundled stub (Phase 8)
@@ -101,7 +106,8 @@ Phase 8 requirements `CMP-01—CMP-04` and `SHR-01—SHR-05` remain active. See
 - Push notifications — defer to when server-side infra justifies it
 - Friends / leaderboards — defer to future milestone
 - Additional games beyond the approved catalog. The original three-game limit
-  was superseded for the explicit Sudoku v1 extension shipped 2026-07-19.
+  was superseded for the explicit Sudoku v1 extension shipped 2026-07-19 and
+  Type Rush extension shipped 2026-11-04.
 - Multiplayer for these 3 games in this milestone
 
 ## Context
@@ -113,7 +119,10 @@ Phase 8 requirements `CMP-01—CMP-04` and `SHR-01—SHR-05` remain active. See
 - Solitaire: Klondike Draw 1/3, daily or random (other listed layouts remain previews)
 - Word Guess: Daily/Endless, hard mode, 5–10 letters
 - Sudoku: Daily/Random, Easy/Medium/Hard, candidates, undo, timer
-- All four are registered in `GAME_MODULES` with launch/play surfaces and stats
+- Type Rush: Daily/Practice, Paragraph/Word Stream/Whole Numbers/Decimal
+  Numbers, live timer, accuracy, WPM, persistence, and backspace editing
+- All five are registered in `GAME_MODULES` with launch/play surfaces; stats
+  support remains game-specific
 - `useDailyCompleted` hook already exists for cross-game daily tracking
 - Room/multiplayer infrastructure exists (Express/WS server, anonymous device IDs)
 

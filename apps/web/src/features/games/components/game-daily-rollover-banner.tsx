@@ -46,7 +46,7 @@ export function GameDailyRolloverBanner({
           size="sm"
           onClick={onDismiss}
         >
-          Keep current
+          Keep Current
         </Button>
       </div>
     </Alert>

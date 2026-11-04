@@ -83,7 +83,7 @@ export function JoinRoomPanel({
       ) : null}
       <div className="mt-4 flex flex-col gap-2 sm:flex-row">
         <Button type="submit" className="flex-1" disabled={code.length === 0}>
-          Join room
+          Join Room
         </Button>
         <Button
           type="button"

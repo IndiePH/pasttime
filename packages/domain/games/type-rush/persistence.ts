@@ -1,13 +1,19 @@
 import { getDailySeed } from "../../daily"
 
-import { getTypeRushPromptById } from "./prompts"
-import type { TypeRushRoundMode } from "./settings"
+import { isTypeRushPromptText } from "./prompts"
+import {
+  TYPE_RUSH_CONTENT_TYPE_DEFAULT,
+  isTypeRushContentType,
+  type TypeRushContentType,
+  type TypeRushRoundMode,
+} from "./settings"
 import type { TypeRushRoundState } from "./types"
 
 export function parseStoredTypeRushRound(
   value: unknown,
   mode: TypeRushRoundMode,
-  now = Date.now()
+  now = Date.now(),
+  contentType: TypeRushContentType = TYPE_RUSH_CONTENT_TYPE_DEFAULT
 ): TypeRushRoundState | null {
   if (!value || typeof value !== "object") {
     return null
@@ -17,6 +23,10 @@ export function parseStoredTypeRushRound(
   const promptId = record.promptId
   const text = record.text
   const status = record.status
+  const storedContentType =
+    record.contentType === undefined
+      ? TYPE_RUSH_CONTENT_TYPE_DEFAULT
+      : record.contentType
   const typing = record.typing
   const elapsedMs = record.elapsedMs
   const startedAt = record.startedAt
@@ -25,6 +35,9 @@ export function parseStoredTypeRushRound(
     typeof promptId !== "string" ||
     typeof text !== "string" ||
     record.mode !== mode ||
+    typeof storedContentType !== "string" ||
+    !isTypeRushContentType(storedContentType) ||
+    storedContentType !== contentType ||
     (status !== "playing" && status !== "won") ||
     typeof elapsedMs !== "number" ||
     !Number.isFinite(elapsedMs) ||
@@ -36,8 +49,7 @@ export function parseStoredTypeRushRound(
     return null
   }
 
-  const prompt = getTypeRushPromptById(promptId)
-  if (!prompt || prompt.text !== text) {
+  if (!isTypeRushPromptText(contentType, promptId, text)) {
     return null
   }
 
@@ -46,6 +58,7 @@ export function parseStoredTypeRushRound(
     promptId,
     text,
     mode,
+    contentType,
     status,
     typing: {
       text: typedState.text,
@@ -101,13 +114,21 @@ function isStoredTypingState(
 
 export function getTypeRushStorageKey(
   mode: TypeRushRoundMode,
-  date = new Date()
+  date = new Date(),
+  contentType: TypeRushContentType = TYPE_RUSH_CONTENT_TYPE_DEFAULT
 ): string {
+  const variant =
+    contentType === TYPE_RUSH_CONTENT_TYPE_DEFAULT ? "default" : contentType
+
   if (mode === "daily") {
-    return `type-rush:daily:default:${getDailySeed(date)}`
+    return `type-rush:daily:${variant}:${getDailySeed(date)}`
   }
 
-  return "type-rush:practice:session"
+  if (contentType === TYPE_RUSH_CONTENT_TYPE_DEFAULT) {
+    return "type-rush:practice:session"
+  }
+
+  return `type-rush:practice:${variant}:session`
 }
 
 export function isTypeRushDailyCompleted(value: unknown): boolean {

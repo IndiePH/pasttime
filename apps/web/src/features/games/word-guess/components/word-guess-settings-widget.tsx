@@ -50,7 +50,7 @@ export function WordGuessSettingsWidget({
       className={className}
       panelId="word-guess-settings-panel"
       description="Word length for this session."
-      summary={`${formatWordLengthLabel(appliedLength)}${appliedHardMode ? " · Hard mode" : ""}`}
+      summary={`${formatWordLengthLabel(appliedLength)}${appliedHardMode ? " · Hard Mode" : ""}`}
       onOpen={handleOpen}
       onApply={handleApply}
       applyDisabled={!hasPendingChanges}
@@ -64,7 +64,7 @@ export function WordGuessSettingsWidget({
       <div className="flex items-center justify-between gap-4 rounded-lg border p-3">
         <div className="space-y-0.5">
           <p className="text-sm font-medium">
-            Hard mode
+            Hard Mode
           </p>
           <p className="text-xs text-muted-foreground">
             Correctly placed letters must be reused in the same positions for

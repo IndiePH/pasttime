@@ -48,7 +48,7 @@ interface SolitairePlayViewProps {
 }
 
 function roundLabel(round: SolitaireRoundMode): string {
-  return round === "daily" ? "Daily puzzle" : "Random puzzle"
+  return round === "daily" ? "Daily Puzzle" : "Random Puzzle"
 }
 
 function KlondikePlayInner({
@@ -98,12 +98,12 @@ function KlondikePlayInner({
               className="w-full"
               onClick={klondike.newGame}
             >
-              New game
+              New Game
             </Button>
           ) : null}
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={solitaireLaunchPath(mode)}>
-              Back to setup
+              Back To Setup
             </PlatformLink>
           </Button>
         </GamePlayFooterActions>
@@ -181,7 +181,7 @@ export function SolitairePlayView({ game, modeLabel }: SolitairePlayViewProps) {
             <GamePlayFooterActions>
               <Button variant="outline" className="w-full" asChild>
                 <PlatformLink href={solitaireLaunchPath(mode)}>
-                  Back to setup
+                  Back To Setup
                 </PlatformLink>
               </Button>
             </GamePlayFooterActions>

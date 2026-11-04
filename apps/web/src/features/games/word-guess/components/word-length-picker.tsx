@@ -47,10 +47,10 @@ export function WordLengthPicker(props: WordLengthPickerProps) {
   return (
     <fieldset className={cn(compact ? "space-y-2" : "space-y-3 text-left", className)}>
       {compact ? (
-        <legend className="sr-only">Word length</legend>
+        <legend className="sr-only">Word Length</legend>
       ) : (
         <>
-          <legend className="text-sm font-medium">Word length</legend>
+          <legend className="text-sm font-medium">Word Length</legend>
           <p className="text-xs text-muted-foreground">
             How many letters to guess. Default game mode uses 5.
           </p>
@@ -59,7 +59,7 @@ export function WordLengthPicker(props: WordLengthPickerProps) {
       <div
         className="flex flex-wrap gap-2"
         role="group"
-        aria-label="Word length"
+        aria-label="Word Length"
       >
         {WORD_GUESS_LENGTHS.map((length) => {
           const isActive = activeLength === length
@@ -72,7 +72,7 @@ export function WordLengthPicker(props: WordLengthPickerProps) {
               aria-pressed={isActive}
               onClick={() => handleSelect(length)}
             >
-              {length} letters
+              {length} Letters
             </Button>
           )
         })}

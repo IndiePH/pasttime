@@ -317,7 +317,7 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 | Fleet Grid | 🚧 | — | — | catalog only |
 | Spades | 🚧 | — | — | catalog only |
 | Word Factory | 🚧 | — | — | catalog only |
-| Type Rush | 🚧 | — | — | catalog only |
+| Type Rush | ✅ | `games/type-rush/*` + shared typing core | `features/games/type-rush/` | `LaunchView`, `PlayView`, `SettingsWidget`, `HowToPlayContent` |
 | Type Shield | 🚧 | — | — | catalog only |
 | Tile Words | 🚧 | — | — | catalog only |
 
@@ -344,6 +344,12 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 - `context/`: persisted auto-candidate preference provider + test
 - `hooks/use-sudoku-game.ts` (+ test): load/generate/persist flow, timer reconciliation, engagement recording
 - `lib/generate-sudoku.client.ts` (+ test) and `workers/sudoku-generate.worker.ts`: generation bridge
+- `search-params.ts`, `index.ts`
+
+**Type Rush web UI** (`features/games/type-rush/`)
+- `components/`: launch, play, settings, and How to Play content
+- `hooks/use-type-rush-game.ts` (+ test): persisted daily/practice rounds,
+  live timing, backspace, and completion recording
 - `search-params.ts`, `index.ts`
 
 ---

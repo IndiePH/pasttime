@@ -18,6 +18,12 @@ describe("Type Rush persistence", () => {
     expect(getTypeRushStorageKey("practice", date)).toBe(
       "type-rush:practice:session"
     )
+    expect(getTypeRushStorageKey("daily", date, "numbers")).toBe(
+      "type-rush:daily:numbers:20261104"
+    )
+    expect(getTypeRushStorageKey("practice", date, "numbers-punctuation")).toBe(
+      "type-rush:practice:numbers-punctuation:session"
+    )
   })
 
   it("parses a valid round and restarts its open timer segment", () => {
@@ -59,5 +65,37 @@ describe("Type Rush persistence", () => {
         "daily"
       )
     ).toBeNull()
+  })
+
+  it("restores generated content types", () => {
+    const round = createTypeRushRound({
+      mode: "daily",
+      contentType: "numbers-punctuation",
+      date: new Date("2026-11-04T12:00:00Z"),
+    })
+
+    expect(
+      parseStoredTypeRushRound(
+        round,
+        "daily",
+        10_000,
+        "numbers-punctuation"
+      )
+    ).toMatchObject({
+      contentType: "numbers-punctuation",
+      text: round.text,
+    })
+  })
+
+  it("restores a generated paragraph slice", () => {
+    const round = createTypeRushRound({
+      mode: "daily",
+      date: new Date("2026-11-04T12:00:00Z"),
+    })
+
+    expect(parseStoredTypeRushRound(round, "daily", 10_000)).toMatchObject({
+      contentType: "paragraph",
+      text: round.text,
+    })
   })
 })

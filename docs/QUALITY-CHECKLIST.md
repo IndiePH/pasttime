@@ -88,9 +88,9 @@ npm run build
 For every game with both daily and repeatable (random/endless) modes:
 
 1. [ ] Use `useDailyCompleted(gameId, variant)` (or a documented game-specific equivalent) and `GameLaunchActions`.
-2. [ ] Before completion, show one primary action: **Play daily puzzle**, linked to the daily mode. Do not show the random/endless action yet.
-3. [ ] After the daily reaches a terminal state (`won` or `lost`), hide the daily action and replace it with one primary **Play puzzle** or **Play endless** action linked to random/endless mode.
-4. [ ] Do not add an always-visible random/endless `secondaryAction`; it duplicates the post-completion primary action. Secondary actions are reserved for a distinct destination such as **View today's results**.
+2. [ ] Before completion, show one primary action: **Play Daily Puzzle**, linked to the daily mode. Do not show the random/endless action yet.
+3. [ ] After the daily reaches a terminal state (`won` or `lost`), hide the daily action and replace it with one primary **Play Puzzle** or **Play Endless** action linked to random/endless mode.
+4. [ ] Do not add an always-visible random/endless `secondaryAction`; it duplicates the post-completion primary action. Secondary actions are reserved for a distinct destination such as **View Today's Results**.
 5. [ ] Persist the daily state where the completion hook can read its top-level `status`, using the key `{gameId}:daily:{variant}:{dailySeed}` unless the game documents and tests an equivalent key.
 6. [ ] Test both launch states: incomplete/in-progress shows only daily; completed shows only random/endless. Assert labels and destinations so two buttons cannot target the same mode.
 
@@ -102,6 +102,20 @@ Reference implementations:
 - `apps/web/src/features/games/components/__tests__/game-launch-actions.test.tsx`
 
 **DoD:** A daily game never offers daily and random/endless play at the same time; completion swaps the single primary action.
+
+### UI label convention
+
+Use **Title Case** for front-facing buttons, links that act as buttons, and
+compact control options across games:
+
+- `Play Daily Puzzle`
+- `View Today's Results`
+- `New Game`
+- `Back To Setup`
+- `How To Play`
+
+Keep explanatory sentences, helper text, and longer descriptions in sentence
+case. Apply this convention to new game templates and shared action components.
 
 ### Registry loading (when ≥3 live games)
 

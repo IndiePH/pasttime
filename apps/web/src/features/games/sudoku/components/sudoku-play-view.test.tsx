@@ -115,42 +115,42 @@ afterEach(() => {
 })
 
 describe("SudokuPlaySessionReady — win-state CTAs", () => {
-  it("random mode, playing: no win banner, footer has New game + Back to setup", () => {
+  it("random mode, playing: no win banner, footer has New Game + Back To Setup", () => {
     renderSession("random", "playing")
 
     expect(screen.queryByText(/Solved in/)).not.toBeInTheDocument()
-    expect(screen.queryByText("View stats")).not.toBeInTheDocument()
+    expect(screen.queryByText("View Stats")).not.toBeInTheDocument()
 
-    expect(screen.getByRole("button", { name: "New game" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Back to setup" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "New Game" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Back To Setup" })).toBeInTheDocument()
   })
 
-  it("random mode, won: exactly one CTA group — no duplicate New game/Back-to-setup pair in the banner", () => {
+  it("random mode, won: exactly one CTA group — no duplicate New Game/Back-To-Setup pair in the banner", () => {
     renderSession("random", "won")
 
     expect(screen.getByText(/Solved in/)).toBeInTheDocument()
 
-    // Single "View stats" link lives in the win banner.
-    expect(screen.getByRole("link", { name: "View stats" })).toBeInTheDocument()
+    // Single "View Stats" link lives in the win banner.
+    expect(screen.getByRole("link", { name: "View Stats" })).toBeInTheDocument()
 
-    // Exactly one "New game" (footer) — no "New endless" duplicate in the banner.
-    expect(screen.getAllByRole("button", { name: "New game" })).toHaveLength(1)
-    expect(screen.queryByRole("button", { name: "New endless" })).not.toBeInTheDocument()
+    // Exactly one "New Game" (footer) — no "New Endless" duplicate in the banner.
+    expect(screen.getAllByRole("button", { name: "New Game" })).toHaveLength(1)
+    expect(screen.queryByRole("button", { name: "New Endless" })).not.toBeInTheDocument()
 
-    // Exactly one "Back to setup" (footer) — no "Back to launch" duplicate.
-    expect(screen.getAllByRole("link", { name: "Back to setup" })).toHaveLength(1)
-    expect(screen.queryByRole("link", { name: "Back to launch" })).not.toBeInTheDocument()
+    // Exactly one "Back To Setup" (footer) — no "Back To Launch" duplicate.
+    expect(screen.getAllByRole("link", { name: "Back To Setup" })).toHaveLength(1)
+    expect(screen.queryByRole("link", { name: "Back To Launch" })).not.toBeInTheDocument()
   })
 
-  it("daily mode, won: opens results dialog, View stats in dialog, no replay CTA", () => {
+  it("daily mode, won: opens results dialog, View Stats in dialog, no replay CTA", () => {
     renderSession("daily", "won")
 
     expect(screen.getAllByText(/Solved in/).length).toBeGreaterThanOrEqual(1)
     expect(screen.getByRole("dialog", { name: "Nice work!" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "View stats" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "View Stats" })).toBeInTheDocument()
 
-    expect(screen.queryByRole("button", { name: "New game" })).not.toBeInTheDocument()
-    expect(screen.queryByRole("button", { name: "New endless" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "New Game" })).not.toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "New Endless" })).not.toBeInTheDocument()
   })
 })
 
