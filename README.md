@@ -82,6 +82,7 @@ Copy [`.env.example`](./.env.example). Key variables:
 | `NEXT_PUBLIC_WS_URL` | web | WebSocket URL (optional) |
 | `PASTTIME_WEB_URL` | desktop | URL loaded in Electron window |
 | `PORT` | server | API port (default 4000) |
+| `TRAFFIC_VIEW_KEY` | web | Unlocks the private `/traffic` summary. Counts still record when it is unset. See `apps/web/.env.example` and [docs/DEPLOY.md](./docs/DEPLOY.md). |
 
 Mobile API URL: `apps/mobile/app.json` → `expo.extra.apiUrl`.
 

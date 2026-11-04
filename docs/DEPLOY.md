@@ -34,9 +34,15 @@ Gotchas:
 
 | Kind | Examples | Where |
 |------|----------|--------|
-| Secrets | `RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `FEEDBACK_FROM_EMAIL` | Dashboard **Secret**, or from `apps/web`: `npx wrangler versions secret put <NAME>` then `npx wrangler versions deploy` (use `secret put` only when the latest version is already the live deployment). Declared in `secrets.required`. |
+| Secrets | `RESEND_API_KEY`, `FEEDBACK_TO_EMAIL`, `FEEDBACK_FROM_EMAIL`, `TRAFFIC_VIEW_KEY` | Dashboard **Secret**, or from `apps/web`: `npx wrangler versions secret put <NAME>` then `npx wrangler versions deploy` (use `secret put` only when the latest version is already the live deployment). Resend names are declared in `secrets.required`. `TRAFFIC_VIEW_KEY` only unlocks `/traffic`; leaving it unset does not block deploy and does not stop counting. |
 
-Local: copy from `.env.example` into `.env.local` (gitignored). Never commit real Resend keys.
+Local: copy from `.env.example` into `.env.local` (gitignored). Never commit real Resend keys or `TRAFFIC_VIEW_KEY`.
+
+### Foot traffic
+
+Page views are daily aggregates in D1 table `site_traffic_daily` (migration `apps/web/migrations/0002_site_traffic.sql` on `pasttime-lexicon`). Apply from `apps/web` with `npm run lexicon:migrate` before the first production count, or `npm run lexicon:migrate:local` for the local D1 used by `next dev`. The private summary is [https://pasttime.xyz/traffic](https://pasttime.xyz/traffic). Country is Cloudflare’s edge code (`cf.country`, then `CF-IPCountry`). IP addresses are not stored. A browser is one visitor per UTC day.
+
+Deployed 2026-11-04 as Worker version `02df0176-7374-4719-9571-99b9b5f7b5c2`. `TRAFFIC_VIEW_KEY` is a Worker secret. See `brain/wiki/site-traffic.md`.
 
 If the latest Worker version is not currently deployed, `wrangler secret put` fails — prefer `versions secret put` + `versions deploy`.
 
@@ -52,7 +58,7 @@ Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Li
 
 | URL | Expect |
 |-----|--------|
-| `https://pasttime.xyz/robots.txt` | 200, `Allow: /`, `Sitemap: https://pasttime.xyz/sitemap.xml` |
+| `https://pasttime.xyz/robots.txt` | 200, `Allow: /`, `Disallow: /traffic` and `/api/traffic`, `Sitemap: https://pasttime.xyz/sitemap.xml` |
 | `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub, legal, available + coming-soon landings, `/word-guess/policy`) |
 | `https://pasttime.xyz/` | SSR hub copy including editorial; playable catalog plus labeled Coming soon; no `animate-pulse` skeletons |
 | `https://pasttime.xyz/games/<slug>` | SSR origin/history article for every registry game (coming soon: no Play) |

@@ -1,7 +1,7 @@
 # Pasttime — File Index
 
 A flat, navigable index of the **pasttime** monorepo: a cross-platform games hub
-(web, desktop, mobile, multiplayer server). Updated 2026-10-03.
+(web, desktop, mobile, multiplayer server). Updated 2026-11-04.
 
 Legend: ✅ implemented/available · 🚧 coming soon / scaffold · ⚙️ engine/package
 
@@ -71,7 +71,10 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `games/[slug]/play/page.tsx` | Game play |
 | `games/[slug]/room/[code]/page.tsx` | Multiplayer room |
 | `games/[slug]/{loading,error,not-found}.tsx` | Route segments |
-| `about/`, `privacy/`, `terms/` | Site legal pages. The website does not show display ads. |
+| `about/`, `privacy/`, `terms/` | Site legal pages. The website does not show display ads. Privacy covers daily country traffic totals. |
+| `traffic/page.tsx` | Private traffic summary. `noindex`. Unlocked with `TRAFFIC_VIEW_KEY`. |
+| `api/traffic/route.ts` | Records a same-site page view: country, path, views, visitors. |
+| `robots.ts` | Allows `/`. Disallows `/traffic` and `/api/traffic`. |
 | `app-ads.txt/route.ts` | Unity LevelPlay seller file for the Word Guess Android app |
 | `word-guess/policy/page.tsx` | Word Guess Android privacy policy (LevelPlay, Play Games, Firebase) |
 | `favicon.ico` | Favicon |
@@ -79,7 +82,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 **L3 — Shared UI** (`src/components/`)
 | Path | Purpose |
 |------|---------|
-| `shared/` | `site-shell`, `header`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
+| `shared/` | `site-shell`, `header`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `traffic-beacon`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
 | `ui/` | shadcn primitives: `badge`, `button`, `card`, `dialog`, `dropdown-menu` |
 | `ui/icons/` | `game-icon`, `word-guess-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
 | `theme-provider.tsx` | Theme context |
@@ -105,6 +108,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `lib/app-ads.ts` | LevelPlay `/app-ads.txt` builder (`ownerdomain`, ironSource DIRECT, Unity Ads mirror) |
 | `lib/app-ads-unity-list.ts` | Unity dashboard reseller lines included in `/app-ads.txt` |
 | `lib/utils.ts` | `cn` + helpers |
+| `lib/traffic/` | Country traffic rules, D1 totals, and view-key check. Tests in `traffic.test.ts`. |
 | `infrastructure/storage/` | `storage-provider`, `index` |
 | `platform/navigation/` | `platform-link`, `use-platform-router`, `index` |
 | `hooks/` | `.gitkeep` (reserved) |
@@ -113,6 +117,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | Path | Purpose |
 |------|---------|
 | `scripts/word-guess/build-dictionary.mjs` | Corpus → `games/shared/dictionary.target.json` |
+| `migrations/0002_site_traffic.sql` | D1 table `site_traffic_daily` on `pasttime-lexicon` |
 | `public/_headers` | Cloudflare headers |
 | `public/games/cards/minimal/` | 54 card SVGs (back light/dark + 13 ranks × 4 suits) |
 | `public/.gitkeep` | Keeps dir |
@@ -282,7 +287,7 @@ Typed REST + WebSocket multiplayer client (shared web/mobile).
 | `docs/superpowers/specs/2026-07-18-sudoku-design.md` | Implemented Sudoku v1 design |
 | `docs/superpowers/plans/2026-07-18-sudoku.md` | Completed Sudoku implementation plan |
 | `docs/CARD-ASSETS.md` | Card SVG asset spec |
-| `docs/DEPLOY.md` | Cloudflare deploy + data-build scripts |
+| `docs/DEPLOY.md` | Cloudflare deploy, secrets, and country traffic totals |
 | `docs/third-party.md` | Third-party inventory (LevelPlay active; AdSense retired) |
 | `docs/CONTENT-STORAGE-HANDOFF.md` | R2 + D1 lexicon migration plan (Worker size) |
 | `docs/INDEX.md` | This file |

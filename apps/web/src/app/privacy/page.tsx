@@ -28,6 +28,7 @@ export default function PrivacyPage() {
             "Local device storage: We store preferences and game progress in your browser’s local storage (for example theme settings, in-progress games, and local stats). This data stays on your device unless you clear site data or your browser removes it.",
             "Feedback you send: If you use the Feedback button, we receive the message you submit, the category you choose, and any email address you optionally provide. We use this only to respond to feedback and improve the service.",
             "Technical and usage data: Like most websites, our hosting and infrastructure providers may process standard request data such as IP address, browser type, device type, referring URL, and timestamps when you load pages. We use this to operate, secure, and troubleshoot the site.",
+            "Site traffic: When a page is viewed, we add to a daily total for that page and country. The country is a two-letter code supplied by our host from the connection. A first-party cookie remembers that this browser was already counted today, so a refresh is not a new visitor. These totals are aggregates. We do not store IP addresses or a history of one person’s visits in them.",
           ],
         },
         {
@@ -56,7 +57,7 @@ export default function PrivacyPage() {
         {
           title: "How we use information",
           content: [
-            "We use information to provide and improve Pasttime, remember your preferences and progress on your device, respond to feedback, maintain security, and comply with legal obligations.",
+            "We use information to provide and improve Pasttime, remember your preferences and progress on your device, respond to feedback, maintain security, and comply with legal obligations. Aggregate page and country counts show which games are opened and where visits come from.",
             "We do not sell your personal information. We do not use gameplay content you enter into puzzles as a profile to market unrelated products to you.",
           ],
         },
@@ -71,6 +72,7 @@ export default function PrivacyPage() {
           title: "Cookies and similar technologies",
           content: [
             "The website uses local storage for preferences and game progress. Hosting providers may process standard request logs. This site does not set advertising cookies.",
+            "Two short-lived first-party cookies support the traffic totals. One marks that this browser was already counted as a visitor for the current UTC day. The other suppresses a repeat count of the same page for about 30 seconds. Clearing cookies resets that count. They are not used for advertising.",
             "You can block or delete cookies and clear local storage through your browser. Doing so may reset preferences and progress. Advertising technologies in the Word Guess Android app are covered in that app’s privacy policy.",
           ],
         },
@@ -90,7 +92,7 @@ export default function PrivacyPage() {
         {
           title: "Data retention",
           content:
-            "Local storage data remains on your device until you clear it or your browser removes it. Feedback messages and optional contact emails are retained only as long as needed to handle the request and improve the product, unless a longer period is required by law. Unity LevelPlay retains Word Guess app advertising data according to its own policy, linked from the Word Guess privacy policy.",
+            "Local storage data remains on your device until you clear it or your browser removes it. Feedback messages and optional contact emails are retained only as long as needed to handle the request and improve the product, unless a longer period is required by law. Daily country and page totals are kept as aggregates and are not tied to an IP address or an account. Unity LevelPlay retains Word Guess app advertising data according to its own policy, linked from the Word Guess privacy policy.",
         },
         {
           title: "International processing",

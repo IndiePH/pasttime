@@ -1,10 +1,11 @@
 # Engineering Decisions
-updated: 2026-10-03
+updated: 2026-11-04
 tags: [decision, architecture, tradeoff, rule-override, technical-debt]
-related: [dictionary-pipeline, adsense-manual-units, levelplay-app-ads, sudoku-design, classic-game-conventions]
+related: [dictionary-pipeline, adsense-manual-units, levelplay-app-ads, sudoku-design, classic-game-conventions, site-traffic]
 
 | date | type | scope | summary | rationale | rules | skills | decision-maker |
 |------|------|-------|---------|-----------|-------|--------|----------------|
+| 2026-11-04 | product | web | Daily foot traffic by country in the existing lexicon D1 | The site had no visit counts. Cloudflare already attaches a country code at the edge. A separate analytics vendor would add a script and a second store. | Aggregate only: day, country, path, views, visitors. No IP. One visitor per browser per UTC day via `pt_seen`. Dashboard `/traffic` gated by `TRAFFIC_VIEW_KEY`, which is not a required deploy secret. See site-traffic. | cloudflare, d1, privacy | user |
 | 2026-10-03 | product | word-guess | Daily wins rank this solve’s try count against a bundled stub | The post-solve dialog showed streak and win rate only. Guess counts were already stored, but stats have no field for this solve. | Pass `round.guesses.length` only when status is `won`. Lower is better. One shared 1–6 table. Losses omit the line. The stats page keeps the player’s guess-distribution bars. | engagement, localstorage | user |
 | 2026-10-03 | product | crossword | Daily crossword wins store elapsed seconds for the existing solve-time ranking | Completions never included `time`, so average time and the percentile line stayed empty. | Pass `Math.floor(elapsedMs / 1000)` only on a daily win. Random mode writes nothing. The post-solve list re-reads storage when the dialog opens. Keep the bundled stub distribution. | engagement, localstorage | user |
 | 2026-10-03 | product | word-guess | Edit one letter in the current guess by tapping its tile | A typo meant deleting every letter after it. | Tap a tile in the active row, or move with Left/Right. Typing replaces that letter. Backspace and Delete remove a letter. | react, word-guess | user |

@@ -12,6 +12,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { TrafficBeacon } from "@/components/shared/traffic-beacon"
 import { StorageProvider } from "@/infrastructure/storage"
 import {
   SITE_DESCRIPTION,
@@ -112,6 +113,7 @@ export default async function RootLayout({
           <StorageProvider>
             <NuqsAdapter>{children}</NuqsAdapter>
           </StorageProvider>
+          <TrafficBeacon />
         </ThemeProvider>
       </body>
     </html>
