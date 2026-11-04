@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import {
+  backspaceTypeRushCharacter,
   createTypeRushRound,
   getTypeRushElapsedMs,
   getTypeRushMetrics,
@@ -118,6 +119,14 @@ export function useTypeRushGame(mode: TypeRushRoundMode) {
     })
   }, [])
 
+  const backspaceCharacter = React.useCallback(() => {
+    setRound((previous) => {
+      if (!previous) return previous
+      const next = backspaceTypeRushCharacter(previous)
+      return next === previous ? previous : next
+    })
+  }, [])
+
   const restart = React.useCallback(() => {
     storage.remove(storageKey)
     setLoadedKey(null)
@@ -154,6 +163,7 @@ export function useTypeRushGame(mode: TypeRushRoundMode) {
     loadStatus: visibleRound ? ("ready" as const) : ("loading" as const),
     elapsedMs,
     submitCharacter,
+    backspaceCharacter,
     restart,
   }
 }

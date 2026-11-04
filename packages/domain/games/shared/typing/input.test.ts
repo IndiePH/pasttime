@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  backspaceTypingCharacter,
   createTypingState,
   getTypingCharacterStatus,
   normalizeTypingText,
@@ -48,6 +49,20 @@ describe("typing input", () => {
     expect(state.cursor).toBe(0)
     expect(state.entries).toEqual([])
     expect(getTypingCharacterStatus(state, 0)).toBe("current")
+  })
+
+  it("removes the last character so it can be typed again", () => {
+    let state = createTypingState("ab")
+    state = submitTypingCharacter(state, "a")
+    state = submitTypingCharacter(state, "x")
+    state = backspaceTypingCharacter(state)
+    state = submitTypingCharacter(state, "b")
+
+    expect(state.entries).toEqual([
+      { expected: "a", actual: "a", correct: true },
+      { expected: "b", actual: "b", correct: true },
+    ])
+    expect(state.complete).toBe(true)
   })
 
   it("marks the current and pending positions", () => {

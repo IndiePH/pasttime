@@ -45,6 +45,12 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
   }, [typeRush.round])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Backspace") {
+      event.preventDefault()
+      typeRush.backspaceCharacter()
+      return
+    }
+
     if (
       event.key.length !== 1 ||
       event.ctrlKey ||

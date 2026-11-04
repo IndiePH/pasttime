@@ -1,5 +1,11 @@
 # Pastime Project Context
 
+## Git change policy
+
+- Do not stage, commit, amend, or otherwise rewrite git history automatically.
+- Only create a commit when the user explicitly asks for one in the current request.
+- After making code changes, leave them in the working tree and report their status unless the user requests a commit.
+
 ## Project knowledge & codebase map
 
 Before starting work, read these files for project context:

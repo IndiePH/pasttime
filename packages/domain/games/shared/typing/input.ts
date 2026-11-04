@@ -56,6 +56,20 @@ export function submitTypingCharacter(
   }
 }
 
+export function backspaceTypingCharacter(state: TypingState): TypingState {
+  if (state.entries.length === 0) {
+    return state
+  }
+
+  const entries = state.entries.slice(0, -1)
+  return {
+    ...state,
+    entries,
+    cursor: entries.length,
+    complete: false,
+  }
+}
+
 export function getTypingCharacterStatus(
   state: TypingState,
   index: number

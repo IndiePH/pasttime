@@ -18,6 +18,7 @@ export {
   type WordDefinition,
 } from "./lexicon-types"
 export {
+  backspaceTypingCharacter,
   computeTypingMetrics,
   createTypingState,
   getTypingCharacterStatus,

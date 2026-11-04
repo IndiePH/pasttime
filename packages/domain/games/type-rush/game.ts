@@ -1,4 +1,5 @@
 import {
+  backspaceTypingCharacter,
   computeTypingMetrics,
   createTypingState,
   submitTypingCharacter,
@@ -90,6 +91,17 @@ export function submitTypeRushCharacter(
     elapsedMs: round.elapsedMs + Math.max(0, now - startedAt),
     startedAt: null,
   }
+}
+
+export function backspaceTypeRushCharacter(
+  round: TypeRushRoundState
+): TypeRushRoundState {
+  if (round.status !== "playing") {
+    return round
+  }
+
+  const typing = backspaceTypingCharacter(round.typing)
+  return typing === round.typing ? round : { ...round, typing }
 }
 
 export function sealTypeRushRound(

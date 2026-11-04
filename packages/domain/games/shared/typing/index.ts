@@ -1,4 +1,5 @@
 export {
+  backspaceTypingCharacter,
   createTypingState,
   getTypingCharacterStatus,
   getTypingEntry,

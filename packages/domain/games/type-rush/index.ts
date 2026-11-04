@@ -1,4 +1,5 @@
 export {
+  backspaceTypeRushCharacter,
   createTypeRushRound,
   getTypeRushElapsedMs,
   getTypeRushMetrics,
