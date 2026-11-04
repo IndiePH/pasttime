@@ -120,9 +120,9 @@ describe("useKlondikeGame daily and random deals", () => {
   it("stores a random deal apart from today's daily", async () => {
     const daily = await mountReady(1, "daily")
     const dailyKey = getKlondikeStorageKey("klondike-draw1", "daily")
-    const saved = storageMap.get(dailyKey)
     const dailyBoard = boardSignature(daily.result.current.state)
     daily.unmount()
+    const saved = storageMap.get(dailyKey)
 
     const random = await mountReady(1, "random")
     expect(random.result.current.state.seed).toBeNull()

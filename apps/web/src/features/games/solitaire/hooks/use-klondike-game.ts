@@ -134,6 +134,8 @@ export function useKlondikeGame(
   round: SolitaireRoundMode,
 ) {
   const storage = useStorage()
+  const storageRef = React.useRef(storage)
+  storageRef.current = storage
   const { autoStackEnabled } = useSolitairePlayPreferencesContext()
   const storageKey = getKlondikeStorageKey(klondikeLayoutId(drawCount), round)
   // Start empty so SSR and the first client paint match. Stored boards and
@@ -150,9 +152,11 @@ export function useKlondikeGame(
   )
   const [feedback, setFeedback] = React.useState<string | null>(null)
 
+  // Hydrate once per deal key. A new adapter identity is not a new deal;
+  // reloading on it races persist and restores the pre-win snapshot.
   React.useEffect(() => {
     let cancelled = false
-    const stored = storage.get<unknown>(storageKey)
+    const stored = storageRef.current.get<unknown>(storageKey)
     const seed =
       round === "daily" ? klondikeDailySeed(new Date(), drawCount) : null
     const resumed =
@@ -168,7 +172,7 @@ export function useKlondikeGame(
     return () => {
       cancelled = true
     }
-  }, [storage, drawCount, round, storageKey])
+  }, [drawCount, round, storageKey])
 
   React.useLayoutEffect(() => {
     stateRef.current = boardState
