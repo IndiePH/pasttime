@@ -175,7 +175,9 @@ export function filterGamesByTitle(
 }
 
 /**
- * Hub “Top picks” row: `featured` games, title order.
+ * Manual hub highlights: `featured` games, title order.
+ * The hub Top picks row uses page views when those totals exist, and this
+ * list only when they do not.
  * Legacy slice fallback only for `all` and `available`; other status filters
  * return empty when nothing is featured.
  */

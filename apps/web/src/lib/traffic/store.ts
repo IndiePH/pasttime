@@ -126,3 +126,29 @@ export async function loadTrafficSummary(
     })),
   }
 }
+
+/** All-time views for game paths. Null when the traffic table is unavailable. */
+export async function loadGamePathViews(): Promise<
+  { path: string; views: number }[] | null
+> {
+  const db = await trafficDb()
+  if (!db) return null
+
+  try {
+    const paths = await db
+      .prepare(
+        `SELECT path, SUM(views) AS views
+         FROM site_traffic_daily
+         WHERE path LIKE '/games/%'
+         GROUP BY path`,
+      )
+      .all<{ path: string; views: number | string | null }>()
+
+    return (paths.results ?? []).map((row) => ({
+      path: row.path,
+      views: asCount(row.views),
+    }))
+  } catch {
+    return null
+  }
+}

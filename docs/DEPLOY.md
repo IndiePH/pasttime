@@ -42,6 +42,8 @@ Local: copy from `.env.example` into `.env.local` (gitignored). Never commit rea
 
 Page views are daily aggregates in D1 table `site_traffic_daily` (migration `apps/web/migrations/0002_site_traffic.sql` on `pasttime-lexicon`). Apply from `apps/web` with `npm run lexicon:migrate` before the first production count, or `npm run lexicon:migrate:local` for the local D1 used by `next dev`. The private summary is [https://pasttime.xyz/traffic](https://pasttime.xyz/traffic). Country is Cloudflare’s edge code (`cf.country`, then `CF-IPCountry`). IP addresses are not stored. A browser is one visitor per UTC day.
 
+The hub Top picks row uses that table. It shows the three playable games with the most views, adding every `/games/{id}` path for a game. When the table is missing, or no playable game has a view, the row stays the manual `featured` games.
+
 Deployed 2026-11-04 as Worker version `02df0176-7374-4719-9571-99b9b5f7b5c2`. `TRAFFIC_VIEW_KEY` is a Worker secret. See `brain/wiki/site-traffic.md`.
 
 If the latest Worker version is not currently deployed, `wrangler secret put` fails — prefer `versions secret put` + `versions deploy`.

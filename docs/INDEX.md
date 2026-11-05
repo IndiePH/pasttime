@@ -84,7 +84,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 |------|---------|
 | `shared/` | `site-shell`, `header`, `banner-placeholder`, `page-side-banner`, `side-banner-placeholder`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `traffic-beacon`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
 | `ui/` | shadcn primitives: `badge`, `button`, `card`, `dialog`, `dropdown-menu` |
-| `ui/icons/` | `game-icon`, `word-guess-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
+| `ui/icons/` | `game-icon` (Lucide glyph per game), `word-guess-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
 | `theme-provider.tsx` | Theme context |
 
 **L4 — Features** (`src/features/`)
@@ -108,7 +108,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `lib/app-ads.ts` | LevelPlay `/app-ads.txt` builder (`ownerdomain`, ironSource DIRECT, Unity Ads mirror) |
 | `lib/app-ads-unity-list.ts` | Unity dashboard reseller lines included in `/app-ads.txt` |
 | `lib/utils.ts` | `cn` + helpers |
-| `lib/traffic/` | Country traffic rules, D1 totals, and view-key check. Tests in `traffic.test.ts`. |
+| `lib/traffic/` | Country traffic rules, D1 totals, view-key check, and hub Top picks ranking (`top-picks.ts`). Tests in `traffic.test.ts` and `top-picks.test.ts`. |
 | `infrastructure/storage/` | `storage-provider`, `index` |
 | `platform/navigation/` | `platform-link`, `use-platform-router`, `index` |
 | `hooks/` | `.gitkeep` (reserved) |
@@ -183,7 +183,7 @@ for what a game *is*.
 **Catalog & shared** (`games/`)
 | Path | Purpose |
 |------|---------|
-| `registry.ts` | ⚙️ `GAME_REGISTRY`, `getGameById`, filter/sort/featured helpers |
+| `registry.ts` | ⚙️ `GAME_REGISTRY`, `getGameById`, filter/sort helpers, manual featured fallback for Top picks |
 | `types.ts` | `GameDefinition`, `GameStatus`, etc. |
 | `paths.ts` | Route-path helpers |
 | `status-filter.ts` | Hub status filter logic |

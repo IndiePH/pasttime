@@ -120,10 +120,7 @@ export function GameCard({
               id={game.icon}
               className={cn(
                 styles.icon,
-                "[&_rect:first-child]:hidden",
-                "[&_rect:not(:first-child)]:fill-white/90",
-                "[&_circle]:fill-white/85",
-                "[&_path]:stroke-white/80",
+                "text-white [&_.icon-plate]:hidden",
               )}
             />
           </div>
