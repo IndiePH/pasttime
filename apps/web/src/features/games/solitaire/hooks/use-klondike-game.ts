@@ -135,7 +135,9 @@ export function useKlondikeGame(
 ) {
   const storage = useStorage()
   const storageRef = React.useRef(storage)
-  storageRef.current = storage
+  React.useLayoutEffect(() => {
+    storageRef.current = storage
+  }, [storage])
   const { autoStackEnabled } = useSolitairePlayPreferencesContext()
   const storageKey = getKlondikeStorageKey(klondikeLayoutId(drawCount), round)
   // Start empty so SSR and the first client paint match. Stored boards and
