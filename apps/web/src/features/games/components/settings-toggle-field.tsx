@@ -30,6 +30,7 @@ export function SettingsToggleField({
         <Switch
           checked={value}
           onCheckedChange={onValueChange}
+          aria-label={label}
           className="shrink-0"
         />
       </div>

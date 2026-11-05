@@ -67,13 +67,11 @@ export const GAME_REGISTRY: readonly GameDefinition[] = [
   {
     id: "reversi",
     title: "Reversi",
-    description: "Capture territory by surrounding and flipping enemy tiles.",
-    status: "coming_soon",
+    description: "Play Black and outscore the computer by flipping discs.",
+    status: "available",
     icon: "reversi",
-    tags: ["board", "strategy", "multiplayer"],
-    playerCount: "1–2 players",
-    minPlayers: 1,
-    maxPlayers: 2,
+    tags: ["board", "strategy"],
+    playerCount: "1 player",
   },
   {
     id: "fleet-grid",

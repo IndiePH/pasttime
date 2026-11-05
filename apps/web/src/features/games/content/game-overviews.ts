@@ -152,8 +152,8 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
   },
   reversi: {
     intro: [
-      "Reversi (widely known through the Othello brand) is a two-player disc-flipping board game: surround enemy pieces to capture territory until the board fills. Pasttime plans a clean browser board for 1–2 players.",
-      COMING_SOON_NOTE,
+      "Pasttime Reversi is a disc-flipping board: you play Black, and a computer on this device plays White. Open How to play above for the controls. The notes below are about where the form came from.",
+      "Choose Easy, Medium, or Hard in Settings. Animate Flips starts on, so each captured disc turns over. Nothing is sent off this device.",
     ],
     sections: [
       {
@@ -167,7 +167,7 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
       {
         title: "On Pasttime",
         paragraphs: [
-          "When Reversi arrives, expect solo practice against a quiet opponent mode and optional two-player play in the browser. Until launch, only this history is available here.",
+          "You play Black. The computer plays White on the same screen. A move must flip at least one disc. If a color has no move, the turn passes. The match ends when neither color can move, and the higher disc count wins.",
         ],
       },
     ],

@@ -104,6 +104,18 @@ const TypeRushPlayView = dynamic(() =>
   )
 )
 
+const ReversiLaunchView = dynamic(() =>
+  import("@/features/games/reversi/components/reversi-launch-view").then(
+    (m) => ({ default: m.ReversiLaunchView })
+  )
+)
+
+const ReversiPlayView = dynamic(() =>
+  import("@/features/games/reversi/components/reversi-play-view").then((m) => ({
+    default: m.ReversiPlayView,
+  }))
+)
+
 export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   solitaire: {
     LaunchView: SolitaireLaunchView,
@@ -156,6 +168,13 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
     parseSearchParams: async (searchParams) => {
       await typeRushSearchParamsCache.parse(searchParams)
     },
+  },
+  reversi: {
+    LaunchView: ReversiLaunchView,
+    PlayView: ReversiPlayView,
+    HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT.reversi,
+    SettingsWidget: GAME_SETTINGS_WIDGETS.reversi,
+    playLayout: "board",
   },
 }
 

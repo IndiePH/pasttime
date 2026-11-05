@@ -23,6 +23,7 @@ Open [http://localhost:3000](http://localhost:3000).
 - Solitaire — Klondike Draw 1 and Draw 3
 - Word Guess — Daily and Endless, 5–10 letters
 - Sudoku — Daily and Random, Easy/Medium/Hard
+- Reversi — Play Black against a local computer at Easy, Medium, or Hard
 
 ### Multiplayer API (optional)
 
@@ -98,3 +99,4 @@ On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows
 - [Implementation slices](./docs/IMPLEMENTATION.md)
 - [Quality checklist](./docs/QUALITY-CHECKLIST.md)
 - [Sudoku v1 design](./docs/superpowers/specs/2026-07-18-sudoku-design.md)
+- [Reversi design](./docs/superpowers/specs/2026-11-05-reversi-design.md)

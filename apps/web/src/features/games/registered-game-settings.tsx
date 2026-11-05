@@ -6,6 +6,7 @@ import { SolitaireSettingsWidget } from "@/features/games/solitaire/components/s
 import { SudokuSettingsWidget } from "@/features/games/sudoku/components/sudoku-settings-widget"
 import { WordGuessSettingsWidget } from "@/features/games/word-guess/components/word-guess-settings-widget"
 import { TypeRushSettingsWidget } from "@/features/games/type-rush/components/type-rush-settings-widget"
+import { ReversiSettingsWidget } from "@/features/games/reversi/components/reversi-settings-widget"
 
 interface RegisteredGameSettingsProps {
   gameId: string
@@ -28,6 +29,8 @@ export function RegisteredGameSettings({
       return <SudokuSettingsWidget className={className} />
     case "type-rush":
       return <TypeRushSettingsWidget className={className} />
+    case "reversi":
+      return <ReversiSettingsWidget className={className} />
     default:
       return <GameSettingsPlaceholder gameId={gameId} className={className} />
   }
