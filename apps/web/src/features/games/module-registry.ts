@@ -128,6 +128,12 @@ const ReversiPlayView = dynamic(() =>
   }))
 )
 
+const ReversiStatsView = dynamic(() =>
+  import("@/features/games/reversi/components/reversi-stats-view").then((m) => ({
+    default: m.ReversiStatsView,
+  }))
+)
+
 export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   solitaire: {
     LaunchView: SolitaireLaunchView,
@@ -190,6 +196,7 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
   reversi: {
     LaunchView: ReversiLaunchView,
     PlayView: ReversiPlayView,
+    StatsView: ReversiStatsView,
     HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT.reversi,
     SettingsWidget: GAME_SETTINGS_WIDGETS.reversi,
     playLayout: "board",

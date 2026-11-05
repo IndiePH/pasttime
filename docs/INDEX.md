@@ -253,12 +253,13 @@ for what a game *is*.
 **Game: reversi** ✅
 | Path | Purpose |
 |------|---------|
-| `games/reversi/types.ts` | Board, seat, session, and difficulty types |
+| `games/reversi/types.ts` | Board, seat, session, difficulty, match-history, and stats types |
 | `games/reversi/position.ts` | Legal moves, flips, pass, score, and result |
 | `games/reversi/session.ts` | Human and computer seats. The play session is person versus computer |
 | `games/reversi/computer.ts` | Local search for Easy, Medium, and Hard |
 | `games/reversi/settings.ts` | Difficulty labels. Default Medium |
-| `games/reversi/*.test.ts` | Position, session, and computer coverage |
+| `games/reversi/stats.ts` | Boxing-style record, win streak, and score-margin calculations |
+| `games/reversi/*.test.ts` | Position, session, computer, and stats coverage |
 
 ---
 
@@ -299,9 +300,9 @@ Typed REST + WebSocket multiplayer client (shared web/mobile).
 | `docs/GAMES.md` | Game catalog overview |
 | `docs/SOLITAIRE.md` | Solitaire spec |
 | `docs/superpowers/specs/2026-07-18-sudoku-design.md` | Implemented Sudoku v1 design |
-| `docs/superpowers/specs/2026-11-05-reversi-design.md` | Implemented Reversi: local White computer, flip animation, shared template |
+| `docs/superpowers/specs/2026-11-05-reversi-design.md` | Implemented Reversi: local White computer, flip animation, shared template, stats, and result dialog |
 | `docs/superpowers/plans/2026-07-18-sudoku.md` | Completed Sudoku implementation plan |
-| `docs/superpowers/plans/2026-11-05-reversi.md` | Reversi hotseat plan; computer and flip animation shipped after it |
+| `docs/superpowers/plans/2026-11-05-reversi.md` | Reversi implementation plan; computer play, stats, and result dialog shipped |
 | `docs/CARD-ASSETS.md` | Card SVG asset spec |
 | `docs/DEPLOY.md` | Cloudflare deploy, secrets, and country traffic totals |
 | `docs/third-party.md` | Third-party inventory (LevelPlay active; AdSense retired) |
@@ -315,7 +316,8 @@ Typed REST + WebSocket multiplayer client (shared web/mobile).
 Each game is a **plugin**: domain logic in `packages/domain/games/<game>/` and a
 UI module registered in `apps/web/src/features/games/module-registry.ts`
 (`GAME_MODULES`). A module may supply `LaunchView`, `PlayView`,
-`SettingsWidget`, `HowToPlayContent`, `playLayout`, and `parseSearchParams`.
+`StatsView`, `SettingsWidget`, `HowToPlayContent`, `playLayout`, and
+`parseSearchParams`.
 
 | Game | Status | Domain | Web UI | Web registry keys |
 |------|--------|--------|--------|-------------------|
@@ -325,7 +327,7 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 | **Sudoku** | ✅ | `games/sudoku/*` | `features/games/sudoku/` | `LaunchView`, `PlayView`, `StatsView`, `SettingsWidget`, `HowToPlayContent`, `playLayout: board` |
 | Tongits | 🚧 | — | — | catalog only |
 | Pusoy Dos | 🚧 | — | — | catalog only |
-| **Reversi** | ✅ | `games/reversi/*` | `features/games/reversi/` | `LaunchView`, `PlayView`, `SettingsWidget`, `HowToPlayContent`, `playLayout: board` |
+| **Reversi** | ✅ | `games/reversi/*` | `features/games/reversi/` | `LaunchView`, `PlayView`, `StatsView`, `SettingsWidget`, `HowToPlayContent`, `playLayout: board` |
 | Fleet Grid | 🚧 | — | — | catalog only |
 | Spades | 🚧 | — | — | catalog only |
 | Word Factory | 🚧 | — | — | catalog only |
@@ -359,8 +361,8 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 - `search-params.ts`, `index.ts`
 
 **Reversi web UI** (`features/games/reversi/`)
-- `components/`: launch, play, board, settings, and How To Play. Play uses `GamePlaySection`
-- `hooks/`: computer session, difficulty, flip animation, and flip frames
+- `components/`: launch, play, result dialog, stats, board, settings, and How To Play. Play uses `GamePlaySection`
+- `hooks/`: computer session, difficulty, flip animation, flip frames, and completed-match history
 - `index.ts`
 
 **Type Rush web UI** (`features/games/type-rush/`)
