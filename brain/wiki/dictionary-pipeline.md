@@ -105,3 +105,6 @@ and stripped from `dictionary.full.json` (guessable). None were in enriched/targ
 Explicitly **not** synced: everyday/medical English (`DRUNK`, `HOLOCAUST`,
 `GENOCIDE`, `URINE`, `VAGINAL`, `TOBACCO`, `SEXISM`, `CRIPPLE*`, etc.) and mild
 body/alcohol terms.
+
+Type Shield reads this dictionary but only lengths 5–10. Lengths 3–4 were not
+part of that profanity pass, so they are not offered as comet words.

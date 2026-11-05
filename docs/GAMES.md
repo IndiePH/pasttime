@@ -18,10 +18,11 @@ This is not legal advice.
 4. Record `legalStatus`: `ok`, `caution`, or `blocked`.
 5. Confirm gameplay can be built with minimal assets (words, cards, simple grid/tokens).
 6. Record mode support (solo, multiplayer, co-op) and player limits.
-7. Add registry entry, icon ID, and card header color.
-8. Add or wire feature module for the game route.
-9. Verify launch/play routes use module registry (no hard-coded slug checks).
-10. Re-check legal status before release.
+7. Write a Template fit note in the design spec before building the screens. List the shared launch and play pieces the game uses. If the game cannot follow a piece, say why in that note. Examples: no daily mode, so the primary button stays Play; solo only, so Create Room and Join Room are omitted.
+8. Add registry entry, icon ID, and card header color.
+9. Add or wire feature module for the game route.
+10. Verify launch/play routes use module registry (no hard-coded slug checks).
+11. Re-check legal status before release.
 
 ## Planned game list (requested)
 
@@ -38,7 +39,7 @@ This is not legal advice.
 | 9   | `spades`       | Spades       | Spades                       | caution     | Strong card game candidate for multiplayer.                                                                                | Maybe (trademark check first)       |
 | 10  | `word-factory` | Word Factory | Word-build/word-search style | caution     | Good fit. Letters and dictionary only. Solo or multiplayer.                                                                | Maybe                               |
 | 11  | `type-rush`    | Type Rush    | Type racing                  | caution     | Available. Solo daily/practice fixed-passage typing with time, accuracy, and WPM. Settings can turn Backspace off. Typing games warn that handheld play is harder. Multiplayer remains deferred.            | Maybe (name trademark check)        |
-| 12  | `type-shield`  | Type Shield  | Typing defense co-op         | caution     | Strong fit. Words as falling enemies, minimal art required. Co-op focused.                                                 | Maybe                               |
+| 12  | `type-shield`  | Type Shield  | Typing defense               | caution     | Available. Solo dome defense. Type the word on a falling comet. Survival lasts 2 minutes; Endless ends when the shield falls. Co-op remains later. | Maybe                               |
 | 13  | `tile-words`   | Tile Words   | Tile word strategy           | caution     | Good fit with tile letters and scoring UI. Solo or multiplayer.                                                            | Maybe (name trademark check)        |
 
 ## Additional low-asset game ideas

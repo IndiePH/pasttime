@@ -13,8 +13,7 @@ framework-free typing core that Type Shield can reuse later.
 - Type Rush uses a fixed curated passage, not generated dictionary words.
 - Type Rush supports a shared daily passage and a practice mode.
 - Type Rush accepts mistyped characters, records them as errors, and advances.
-- Type Shield will later use a continuous word stream and diverge into waves,
-  targets, health, scoring, and co-op behavior.
+- Type Shield's solo round is a dome defense game. Co-op can share that stage later.
 - Multiplayer rooms, rankings, share cards, and achievements are deferred.
 
 ## Architecture
@@ -69,11 +68,69 @@ passage round state.
   is stored separately for each game at `pasttime.typing.handheld-notice.<id>`.
   The dialog keeps the line near 60 characters.
 
-## Type Shield boundary
+## Type Shield solo round
 
-Type Shield will consume shared character and metric behavior later, but its
-domain will own target queues, target completion, spawning, waves, missed
-targets, health/lives, scoring, and co-op ownership.
+Type Shield consumes the shared strict typing input for each comet word. Its
+domain owns the comet queue, spawn timing, misses, lives, score, difficulty,
+and mode. Co-op stays out of this round.
+
+- The stage is a dome at the bottom center of a wide night field. A low ridge,
+  moon, dish, and a few stones sit behind the play. Stars, haze, dust, and
+  rare thin streaks move slowly. That motion stops when the system asks for
+  reduced motion. Comet Effects covers comet arrival, destruction, and the
+  dome shake.
+- A round waits 3 seconds, shown as Get Ready and then 3, 2, 1. Typing does
+  nothing during the count. New Game, and a change of difficulty or mode,
+  start the count again.
+- The shield has 5 lives. A comet that reaches the dome costs one life. Score
+  is 10 points per letter.
+- Settings offers Survival and Endless, then Easy, Medium, Hard, and
+  Nightmare. Survival is the default. It lasts 2 minutes, the clock starts
+  after the countdown, and the round is won if any lives remain. Endless ends
+  only when the shield falls. A killing hit at the Survival deadline is still
+  a loss.
+- Words come from the dictionary at lengths 5–10 and are shown in lowercase.
+  Lengths 3–4 stay out. Easy uses 5–6 letters and makes the longer length
+  rarer. Medium uses 5–8 the same way. Hard uses every length from 5 up, with
+  equal weight per length. Nightmare uses those lengths and favors the longer
+  ones. A length is chosen first, then a word of that length that is not
+  already falling.
+- Pace is words per minute. Easy holds 25 (band 15–35), Medium holds 46
+  (36–55), and Hard holds 66 (56–75). Nightmare starts at 76 and climbs every
+  6.5 seconds to 150. Fall time follows the letters in that spawn, so one
+  comet uses its own length and a group shares the combined length. The group
+  falls slower, and the next spawn waits for the whole group. At most three
+  comets are on screen.
+- Easy releases one comet. From Medium up, a spawn can release a group.
+  Medium rarely sends two. Hard rarely sends two or three. Nightmare uses the
+  same cap of three more often.
+- Letters that still fit more than one comet light up on each of them. Typing
+  met marks those letters on both meteor and metric. The comet locks when the
+  next letter fits only that word. Backspace drops the last letter and lights
+  up every comet the shorter prefix still fits. A letter that fits none of
+  them is ignored.
+- Stats uses the shared stats page at `/games/type-shield/stats`. One result
+  is stored per UTC day, with the difficulty as the variant. A Survival win
+  counts as a solve. An Endless ending is a loss.
+
+## Type Shield template fit
+
+Launch uses `GamePageShell`, `GameSessionHeader`, the settings widget, and
+`GameLaunchActions`. Play uses `GamePlayShell` and `GamePlaySection`: header,
+settings, stage, and a footer with New Game and Back To Setup. Labels stay
+Play, How To Play, New Game, Back To Setup, and Back To Catalog.
+
+Exceptions, from the game itself:
+
+- Solo only until co-op exists, so Create Room and Join Room are omitted.
+- No daily puzzle, so there is no Play Daily Puzzle or View Today's Results.
+  The primary action is Play. Stats still uses the shared stats page. A round
+  records one result for the UTC day when it ends, with the difficulty as the
+  variant. Endless has no win. Survival is won by lasting 2 minutes.
+- The stage is wider than the default `max-w-lg` column so comets at the
+  sides stay on screen. The header, settings, and footer stay in the template.
+- When the dome falls, New Game is repeated on the stage overlay because the
+  stage covers the footer. It is the same action and the same label.
 
 ## Testing
 

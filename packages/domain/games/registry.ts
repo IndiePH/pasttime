@@ -118,13 +118,11 @@ export const GAME_REGISTRY: readonly GameDefinition[] = [
   {
     id: "type-shield",
     title: "Type Shield",
-    description: "Defend your base by typing falling words before impact.",
-    status: "coming_soon",
+    description: "Type the words in falling comets before they reach your dome.",
+    status: "available",
     icon: "type-shield",
-    tags: ["typing", "co-op", "multiplayer"],
-    playerCount: "1–4 players",
-    minPlayers: 1,
-    maxPlayers: 4,
+    tags: ["typing", "arcade", "solo"],
+    playerCount: "1 player",
   },
   {
     id: "tile-words",

@@ -104,6 +104,18 @@ const TypeRushPlayView = dynamic(() =>
   )
 )
 
+const TypeShieldLaunchView = dynamic(() =>
+  import("@/features/games/type-shield/components/type-shield-launch-view").then(
+    (m) => ({ default: m.TypeShieldLaunchView })
+  )
+)
+
+const TypeShieldPlayView = dynamic(() =>
+  import("@/features/games/type-shield/components/type-shield-play-view").then(
+    (m) => ({ default: m.TypeShieldPlayView })
+  )
+)
+
 const ReversiLaunchView = dynamic(() =>
   import("@/features/games/reversi/components/reversi-launch-view").then(
     (m) => ({ default: m.ReversiLaunchView })
@@ -168,6 +180,12 @@ export const GAME_MODULES: Partial<Record<string, GameModule>> = {
     parseSearchParams: async (searchParams) => {
       await typeRushSearchParamsCache.parse(searchParams)
     },
+  },
+  "type-shield": {
+    LaunchView: TypeShieldLaunchView,
+    PlayView: TypeShieldPlayView,
+    StatsView: GameStatsView,
+    HowToPlayContent: GAME_HOW_TO_PLAY_CONTENT["type-shield"],
   },
   reversi: {
     LaunchView: ReversiLaunchView,

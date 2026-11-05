@@ -262,8 +262,8 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
   },
   "type-shield": {
     intro: [
-      "Type Shield is planned as a defensive typing game: words fall or advance toward your base, and you type them to destroy or deflect them before impact.",
-      COMING_SOON_NOTE,
+      "Type Shield is a defensive typing game. Comets fall toward a dome at the bottom of the stage, and each comet carries a word.",
+      "Type that word to destroy the comet before it hits the shield. Survival is won by lasting 2 minutes. Endless ends when the dome runs out of lives.",
     ],
     sections: [
       {
@@ -277,7 +277,7 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
       {
         title: "On Pasttime",
         paragraphs: [
-          "Type Shield is sketched as a 1–4 player browser defense mode with readable word targets and no install. It is not playable here yet.",
+          "The first release is solo. Choose Survival or Endless, and Easy through Nightmare, in Settings. Shared letters light up on every comet they still fit. Co-op can share that stage later.",
         ],
       },
     ],

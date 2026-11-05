@@ -82,6 +82,7 @@ npm run build
 5. [ ] Search params: `features/games/<id>/search-params.ts` + register parser (see Q4)
 6. [ ] Domain tests for pure logic (`src/**/*.test.ts`)
 7. [ ] (Optional) Hook/component test for primary user flow
+8. [ ] Template fit note in the game spec, written before the screens: shared launch and play pieces used, plus any exception the game itself requires
 
 ### Daily-mode launch contract
 

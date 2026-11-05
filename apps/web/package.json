@@ -42,6 +42,7 @@
     "clsx": "^2.1.1",
     "country-list": "^2.4.1",
     "lucide-react": "^1.17.0",
+    "motion": "^14.9.1",
     "next": "16.2.9",
     "nuqs": "^2.8.9",
     "popular-english-words": "^1.0.2",

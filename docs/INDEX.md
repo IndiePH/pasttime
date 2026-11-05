@@ -330,7 +330,7 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 | Spades | 🚧 | — | — | catalog only |
 | Word Factory | 🚧 | — | — | catalog only |
 | Type Rush | ✅ | `games/type-rush/*` + shared typing core | `features/games/type-rush/` | `LaunchView`, `PlayView`, `SettingsWidget`, `HowToPlayContent` |
-| Type Shield | 🚧 | — | — | catalog only |
+| Type Shield | ✅ | `games/type-shield/*` | `features/games/type-shield/` | `LaunchView`, `PlayView`, `StatsView`, `HowToPlayContent` |
 | Tile Words | 🚧 | — | — | catalog only |
 
 **Solitaire web UI** (`features/games/solitaire/`)

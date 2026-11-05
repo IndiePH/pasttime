@@ -7,6 +7,7 @@ import { SolitaireHowToPlay } from "@/features/games/solitaire/components/solita
 import { SudokuHowToPlay } from "@/features/games/sudoku/components/sudoku-how-to-play"
 import { WordGuessHowToPlay } from "@/features/games/word-guess/components/word-guess-how-to-play"
 import { TypeRushHowToPlay } from "@/features/games/type-rush/components/type-rush-how-to-play"
+import { TypeShieldHowToPlay } from "@/features/games/type-shield/components/type-shield-how-to-play"
 import { ReversiHowToPlay } from "@/features/games/reversi/components/reversi-how-to-play"
 
 interface RegisteredHowToPlayContentProps {
@@ -28,6 +29,8 @@ export function RegisteredHowToPlayContent({
       return <SudokuHowToPlay game={game} />
     case "type-rush":
       return <TypeRushHowToPlay game={game} />
+    case "type-shield":
+      return <TypeShieldHowToPlay game={game} />
     case "reversi":
       return <ReversiHowToPlay game={game} />
     default:
