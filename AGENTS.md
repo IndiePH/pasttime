@@ -56,8 +56,8 @@ Read `brain/schema.md` for the full contract. Rules:
 | Page | Purpose |
 |------|---------|
 | [adsense-manual-units](brain/wiki/adsense-manual-units.md) | Retired. Website AdSense removed; see levelplay-app-ads |
-| [levelplay-app-ads](brain/wiki/levelplay-app-ads.md) | Word Guess Android LevelPlay app-ads.txt; no website display ads |
-| [web-banner-placeholders](brain/wiki/web-banner-placeholders.md) | Empty banner boxes and the Sovrn setup checklist; no tag until that list is done |
+| [levelplay-app-ads](brain/wiki/levelplay-app-ads.md) | Word Guess Android LevelPlay app-ads.txt; website banners are Adsterra |
+| [web-banner-placeholders](brain/wiki/web-banner-placeholders.md) | Adsterra banner tags and the setup checklist; banners only, `/ads.txt` still waiting on dashboard lines |
 | [classic-game-conventions](brain/wiki/classic-game-conventions.md) | Solitaire/Word Guess conventions and innovation ideas |
 | [dictionary-pipeline](brain/wiki/dictionary-pipeline.md) | Dictionary, crossword corpus, and definition pipeline |
 | [engineering-decisions](brain/wiki/engineering-decisions.md) | Architectural and tradeoff decision log |
@@ -86,9 +86,10 @@ Services (all commands run from repo root; see README "Scripts" table):
 - Desktop (Electron) just loads the web URL; Mobile is Expo. Neither is needed to
   exercise core gameplay.
 
-Quality gates (match CI in `.github/workflows/ci.yml`): `npm run lint`,
-`npm run typecheck`, `npm run test`, `npm run build`. `lint`/`build` target only
-the web app; `typecheck`/`test` run across all workspaces.
+Quality gates (match CI in `.github/workflows/ci.yml`): `npm run ci` runs
+`lint`, `typecheck`, `test`, and `build` in that order and stops at the first
+failure. `lint`/`build` target only the web app; `typecheck`/`test` run across
+all workspaces. CI also runs `npm ci` first.
 
 The `npm ci`/`npm install` "allow-scripts ... not yet covered" warnings (esbuild,
 sharp, workerd, etc.) are informational only — the required prebuilt binaries are

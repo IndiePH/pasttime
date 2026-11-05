@@ -103,7 +103,7 @@ Last audited: 2026-10-02
 
 ### Unity LevelPlay
 
-- Role: Advertising for the Word Guess Android app. The website does not sell display ads.
+- Role: Advertising for the Word Guess Android app. Website banners are Adsterra, not LevelPlay.
 - Workspace: apps/web
 - Where used: `apps/web/src/lib/app-ads.ts`, `apps/web/src/app/app-ads.txt/route.ts`, `apps/web/src/app/word-guess/policy/page.tsx`, `apps/web/src/app/privacy/page.tsx`, `apps/web/src/app/about/page.tsx`, `apps/web/src/app/terms/page.tsx`
 - Config names: `NEXT_PUBLIC_LEVELPLAY_PUBLISHER_ID`
@@ -195,6 +195,24 @@ Last audited: 2026-10-02
 
 ## Retired
 
+### Adsterra
+
+- Role: Display banners on the website. Header 728×90 or 320×50, and a 160×600 left rail when it fits. No popunder, smartlink, native banner, or social bar.
+- Workspace: apps/web
+- Where used: `apps/web/src/components/shared/adsterra-banner.tsx`, `banner-placeholder.tsx`, `page-side-banner.tsx`, privacy, about, and terms
+- Config names: placement keys in `ADSTERRA_UNITS`. Opt-out is `pasttime.ads.opt-out` in local storage.
+- Package: none
+- Current: none
+- Latest: none
+- Advisories: none
+- Bump: current
+- Upgrade risk: low
+- Breakage: The loader reads `window.atOptions`, so units mount one at a time. `/ads.txt` is not served until the dashboard lines are pasted. `/app-ads.txt` stays LevelPlay.
+- Checked: 2026-11-05
+- Status: active
+
+#### Notes
+
 ### Google AdSense
 
 - Role: Served website display ads and `/ads.txt`.
@@ -207,7 +225,7 @@ Last audited: 2026-10-02
 - Advisories: none
 - Bump: current
 - Upgrade risk: low
-- Breakage: Website slots and `/ads.txt` are gone. Word Guess Android ads stay on Unity LevelPlay (`/app-ads.txt`, `/word-guess/policy`). The header box and the left rail added later are empty placeholders, not an AdSense return. See `brain/wiki/web-banner-placeholders.md`.
+- Breakage: Website slots and `/ads.txt` are gone. Word Guess Android ads stay on Unity LevelPlay (`/app-ads.txt`, `/word-guess/policy`). The header box and the left rail are Adsterra banners, not an AdSense return. See `brain/wiki/web-banner-placeholders.md`.
 - Checked: 2026-11-05
 - Status: retired
 

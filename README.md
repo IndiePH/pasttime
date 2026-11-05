@@ -69,6 +69,7 @@ Web app layers (`apps/web/src/`):
 | `npm run lint` | ESLint (web) |
 | `npm run typecheck` | TypeScript (all workspaces) |
 | `npm run test` | Vitest (all workspaces) |
+| `npm run ci` | Lint, typecheck, test, and build, in that order. Stops at the first failure. Same checks as CI after `npm ci`. |
 | `npm run server:dev` | Multiplayer API dev |
 | `npm run desktop:dev` | Electron desktop (web on :3000) |
 | `npm run mobile:dev` | Expo mobile dev server |
@@ -89,7 +90,7 @@ Mobile API URL: `apps/mobile/app.json` → `expo.extra.apiUrl`.
 
 ## CI
 
-On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) runs: `npm ci`, `lint`, `typecheck`, `test`, `build`.
+On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) runs: `npm ci`, `lint`, `typecheck`, `test`, `build`. Run `npm run ci` locally before pushing. It runs those four checks against the current install and stops at the first failure.
 
 ## Docs
 

@@ -1,13 +1,51 @@
+"use client"
+
+import { useEffect, useState } from "react"
+
+import {
+  AdsterraBanner,
+  useAdsAllowed,
+  type AdsterraUnitName,
+} from "@/components/shared/adsterra-banner"
+
+type HeaderUnit = Extract<AdsterraUnitName, "leaderboard" | "mobile">
+
+function useHeaderUnit(enabled: boolean): HeaderUnit | null {
+  const [unit, setUnit] = useState<HeaderUnit | null>(null)
+
+  useEffect(() => {
+    if (!enabled) return
+    const wide = window.matchMedia("(min-width: 768px)")
+    const short = window.matchMedia("(max-height: 500px)")
+    const update = () => {
+      const next = short.matches ? null : wide.matches ? "leaderboard" : "mobile"
+      setUnit((current) => (current === next ? current : next))
+    }
+    update()
+    wide.addEventListener("change", update)
+    short.addEventListener("change", update)
+    return () => {
+      wide.removeEventListener("change", update)
+      short.removeEventListener("change", update)
+    }
+  }, [enabled])
+
+  return enabled ? unit : null
+}
+
 /**
- * Reserved banner under the site header. One slot for every page, including play.
- * Desktop is 728×90. A narrow portrait screen uses 320×50. Short landscape hides it.
+ * Banner under the site header. One slot for every page, including play.
+ * Desktop is 728×90. A narrow screen uses 320×50. Short landscape hides it.
  */
 export function BannerPlaceholder() {
+  const allowed = useAdsAllowed()
+  const unit = useHeaderUnit(allowed === true)
+  if (allowed === false) return null
+
   return (
     <div className="px-4 pb-3 [@media(max-height:500px)]:hidden">
-      <div className="mx-auto flex h-[50px] w-full max-w-[320px] items-center justify-center rounded-md border border-dashed border-border/80 bg-muted text-xs text-muted-foreground md:h-[90px] md:max-w-[728px]">
-        <span className="md:hidden">Banner · 320×50</span>
-        <span className="hidden md:inline">Banner · 728×90</span>
+      <div className="mx-auto h-[50px] w-full max-w-[320px] overflow-hidden bg-muted md:h-[90px] md:max-w-[728px]">
+        {unit ? <AdsterraBanner key={unit} unit={unit} /> : null}
       </div>
     </div>
   )

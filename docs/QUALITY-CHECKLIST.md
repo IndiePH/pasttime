@@ -8,14 +8,13 @@ Use this before merging features, promoting a game to `available`, or cutting a 
 
 ## Quick verify (every PR)
 
-Run locally (same steps as [CI](../.github/workflows/ci.yml)):
+Run locally (same checks as [CI](../.github/workflows/ci.yml), after dependencies are installed):
 
 ```bash
-npm run lint
-npm run typecheck
-npm run test
-npm run build
+npm run ci
 ```
+
+`npm run ci` runs lint, typecheck, test, and build in that order and stops at the first failure. CI also runs `npm ci` first.
 
 | Check | Command / location | Pass criteria |
 |-------|-------------------|---------------|

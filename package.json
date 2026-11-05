@@ -17,6 +17,7 @@
     "format": "npm run format -w @pasttime/web",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "ci": "npm run lint && npm run typecheck && npm run test && npm run build",
     "word-guess:build-dictionary": "npm run word-guess:build-dictionary -w @pasttime/web",
     "lexicon:publish": "npm run lexicon:publish -w @pasttime/web",
     "lexicon:ship": "npm run lexicon:ship -w @pasttime/web",

@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useState } from "react"
 
-import { SideBannerPlaceholder } from "./side-banner-placeholder"
+import { AdsterraBanner, useAdsAllowed } from "./adsterra-banner"
 
 const RAIL_WIDTH = 160
 const RAIL_GAP = 16
@@ -62,6 +62,7 @@ function placementFor(anchor: HTMLElement, shell: HTMLElement): Placement | null
  * A column that would run under the rail leaves the rail off.
  */
 export function PageSideBanner() {
+  const allowed = useAdsAllowed()
   const [placement, setPlacement] = useState<Placement | null>(null)
 
   useLayoutEffect(() => {
@@ -150,14 +151,15 @@ export function PageSideBanner() {
     }
   }, [])
 
-  if (!placement) return null
+  if (allowed !== true || !placement || placement.height < 600) return null
 
   return (
     <aside
-      className="side-banner"
+      className="side-banner overflow-hidden"
       style={{ top: placement.top, height: placement.height }}
+      aria-label="Advertisement"
     >
-      <SideBannerPlaceholder />
+      <AdsterraBanner unit="skyscraper" />
     </aside>
   )
 }

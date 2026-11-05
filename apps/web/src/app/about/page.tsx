@@ -13,6 +13,7 @@ export default function AboutPage() {
     <StaticPage
       title="About Pasttime"
       description="A free home for daily puzzles and classic games. Play more, think sharper."
+      lastUpdated="2026-11-05"
       sections={[
         {
           title: "What we are",
@@ -36,7 +37,7 @@ export default function AboutPage() {
         {
           title: "How Pasttime stays free",
           content: [
-            "Browser games on this site are free to play and do not show display ads.",
+            "Browser games on this site are free to play. Banner ads from Adsterra support the site.",
             "The Word Guess Android app is supported by Unity LevelPlay advertising. That app’s data use is described in the Word Guess privacy policy.",
           ],
         },

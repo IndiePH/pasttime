@@ -48,11 +48,11 @@ If the latest Worker version is not currently deployed, `wrangler secret put` fa
 
 ### Unity LevelPlay (Word Guess Android)
 
-The website does not sell display ads yet. There is no `/ads.txt` and no AdSense script or slot. The header and the left rail are empty placeholders (`BannerPlaceholder`, `PageSideBanner`). They are not a network and they do not change `/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay. When Sovrn approves the site, follow the checklist in `brain/wiki/web-banner-placeholders.md` before adding the tags or `/ads.txt`.
+The website serves Adsterra display banners in the header and the left rail (`BannerPlaceholder`, `PageSideBanner`). The tags are in the app and appear on pasttime.xyz only after this branch is deployed. There is still no `/ads.txt`: paste the dashboard lines before adding that route. There is no AdSense script or slot. These tags do not change `/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay. The remaining steps are in `brain/wiki/web-banner-placeholders.md`.
 
 `https://pasttime.xyz/app-ads.txt` must stay on the apex. It starts with `ownerdomain=pasttime.xyz` and includes ironSource DIRECT, Unity Ads DIRECT (`unity.com` / `unity3d.com`), plus the Unity reseller list baked in `apps/web/src/lib/app-ads-unity-list.ts`. The public publisher ID lives in `apps/web/src/lib/app-ads.ts`. Do not put ironSource API keys in the repo or in Worker vars.
 
-Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Live checks: `https://pasttime.xyz/app-ads.txt` still returns the LevelPlay file, and `https://pasttime.xyz/ads.txt` is a 404 (no Google seller line). Privacy, about, and terms describe LevelPlay on the Android app. The app disclosure is `/word-guess/policy`. See `brain/wiki/levelplay-app-ads.md`.
+Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Live checks: `https://pasttime.xyz/app-ads.txt` still returns the LevelPlay file, and `https://pasttime.xyz/ads.txt` is a 404 until the Adsterra dashboard lines are pasted (no Google seller line). Privacy, about, and terms describe Adsterra banners on the website and LevelPlay on the Android app. The app disclosure is `/word-guess/policy`. See `brain/wiki/levelplay-app-ads.md`.
 
 **Pre-review crawl checks (apex):**
 
@@ -138,4 +138,6 @@ Scripts live in `apps/web/scripts/crossword/`.
 ## CI gates (context)
 
 `.github/workflows/ci.yml` runs on every push/PR and must stay green:
-`npm ci` → `lint` → `typecheck` → `test` → `build`. Node is pinned via `.nvmrc` (≥24).
+`npm ci` → `lint` → `typecheck` → `test` → `build`. Run `npm run ci` locally
+before pushing. It runs the four checks and stops at the first failure. Node is
+pinned via `.nvmrc` (≥24).
