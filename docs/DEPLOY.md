@@ -42,46 +42,31 @@ Local: copy from `.env.example` into `.env.local` (gitignored). Never commit rea
 
 Page views are daily aggregates in D1 table `site_traffic_daily` (migration `apps/web/migrations/0002_site_traffic.sql` on `pasttime-lexicon`). Apply from `apps/web` with `npm run lexicon:migrate` before the first production count, or `npm run lexicon:migrate:local` for the local D1 used by `next dev`. The private summary is [https://pasttime.xyz/traffic](https://pasttime.xyz/traffic). Country is Cloudflare’s edge code (`cf.country`, then `CF-IPCountry`). IP addresses are not stored. A browser is one visitor per UTC day.
 
-The hub Top picks row uses that table. It shows the three playable games with the most views, adding every `/games/{id}` path for a game. When the table is missing, or no playable game has a view, the row stays the manual `featured` games.
-
 Deployed 2026-11-04 as Worker version `02df0176-7374-4719-9571-99b9b5f7b5c2`. `TRAFFIC_VIEW_KEY` is a Worker secret. See `brain/wiki/site-traffic.md`.
 
 If the latest Worker version is not currently deployed, `wrangler secret put` fails — prefer `versions secret put` + `versions deploy`.
 
 ### Unity LevelPlay (Word Guess Android)
 
-The website serves Adsterra display banners in the header and left rail
-(`BannerPlaceholder`, `PageSideBanner`). The tags are client-side and do not
-require `/ads.txt`; that path intentionally remains a 404. They do not change
-`/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay.
-See `brain/wiki/web-banner-placeholders.md` for placement behavior and blank-ad
-diagnostics.
+The website serves Adsterra display banners in the header and the left rail (`BannerPlaceholder`, `PageSideBanner`). The tags are in the app and appear on pasttime.xyz only after this branch is deployed. There is still no `/ads.txt`: paste the dashboard lines before adding that route. There is no AdSense script or slot. These tags do not change `/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay. The remaining steps are in `brain/wiki/web-banner-placeholders.md`.
 
 `https://pasttime.xyz/app-ads.txt` must stay on the apex. It starts with `ownerdomain=pasttime.xyz` and includes ironSource DIRECT, Unity Ads DIRECT (`unity.com` / `unity3d.com`), plus the Unity reseller list baked in `apps/web/src/lib/app-ads-unity-list.ts`. The public publisher ID lives in `apps/web/src/lib/app-ads.ts`. Do not put ironSource API keys in the repo or in Worker vars.
 
-`https://pasttime.xyz/app-ads.txt` returns the LevelPlay file, while
-`https://pasttime.xyz/ads.txt` remains a 404 by design. Privacy, about, and
-terms describe Adsterra on the website and LevelPlay on the Android app. The
-app disclosure is `/word-guess/policy`. See
-`brain/wiki/levelplay-app-ads.md`.
-
-Each banner makes one bounded retry when the provider request fails, times out,
-or produces no iframe. Loaded ads are not periodically refreshed.
+Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Live checks: `https://pasttime.xyz/app-ads.txt` still returns the LevelPlay file, and `https://pasttime.xyz/ads.txt` is a 404 until the Adsterra dashboard lines are pasted (no Google seller line). Privacy, about, and terms describe Adsterra banners on the website and LevelPlay on the Android app. The app disclosure is `/word-guess/policy`. See `brain/wiki/levelplay-app-ads.md`.
 
 **Pre-review crawl checks (apex):**
 
 | URL | Expect |
 |-----|--------|
-| `https://pasttime.xyz/robots.txt` | 200, `Allow: /`, `Disallow: /traffic` and `/api/traffic` for `*`. Named answer-engine crawlers also skip `/games/*/play`, `/stats`, and `/room`. `Sitemap: https://pasttime.xyz/sitemap.xml` |
-| `https://pasttime.xyz/llms.txt` | 200 text map of playable landings, about, legal, and coming-soon pages. No play, stats, room, or `/traffic` URLs |
-| `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub at the apex, legal, available + coming-soon landings, `/word-guess/policy`). `/games` is the same hub and is not listed. `lastmod` is `SITE_CONTENT_UPDATED`, not the request time |
+| `https://pasttime.xyz/robots.txt` | 200, `Allow: /`, `Disallow: /traffic` and `/api/traffic`, `Sitemap: https://pasttime.xyz/sitemap.xml` |
+| `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub, legal, available + coming-soon landings, `/word-guess/policy`) |
 | `https://pasttime.xyz/` | SSR hub copy including editorial; playable catalog plus labeled Coming soon; no `animate-pulse` skeletons |
 | `https://pasttime.xyz/games/<slug>` | SSR origin/history article for every registry game (coming soon: no Play) |
 | `https://pasttime.xyz/games/<slug>/play` | `noindex` (thin interactive shell) |
 
 Search Console property must be **`pasttime.xyz`** (`pasttime.app` / `www.pasttime.xyz` do not resolve). After deploy, re-submit the sitemap URL and use URL Inspection on hub + game landings (Request indexing), plus robots/sitemap if GSC still shows fetch errors.
 
-**Stay on Cloudflare Free:** keep large lexicon data in R2/D1 (not in the Worker script), leave apex attached as a Worker Custom Domain, and avoid paid Workers/Image/AI add-ons until Word Guess LevelPlay revenue covers them. SEO leverage that costs $0: SSR copy, sitemap/GSC, canonicals/JSON-LD, `/llms.txt`, noindex on play/stats/room.
+**Stay on Cloudflare Free:** keep large lexicon data in R2/D1 (not in the Worker script), leave apex attached as a Worker Custom Domain, and avoid paid Workers/Image/AI add-ons until Word Guess LevelPlay revenue covers them. SEO leverage that costs $0: SSR copy, sitemap/GSC, canonicals/JSON-LD, noindex on play/stats/room.
 
 ## Lexicon publish (R2 + D1)
 
@@ -153,4 +138,6 @@ Scripts live in `apps/web/scripts/crossword/`.
 ## CI gates (context)
 
 `.github/workflows/ci.yml` runs on every push/PR and must stay green:
-`npm ci` → `lint` → `typecheck` → `test` → `build`. Node is pinned via `.nvmrc` (≥24).
+`npm ci` → `lint` → `typecheck` → `test` → `build`. Run `npm run ci` locally
+before pushing. It runs the four checks and stops at the first failure. Node is
+pinned via `.nvmrc` (≥24).

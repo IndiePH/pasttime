@@ -10,11 +10,10 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 | [classic-game-conventions](classic-game-conventions.md) | Original rules and UX of Solitaire Klondike and Word Guess, with Pasttime innovation ideas |
 | [dictionary-pipeline](dictionary-pipeline.md) | Enriched dict, Word Guess answer pool, crossword corpus, R2/D1 publish, definition fixing |
 | [engineering-decisions](engineering-decisions.md) | Persistent log of architectural, tradeoff, rule-override, and technical-debt decisions |
-| [geo-seo](geo-seo.md) | Crawl map, JSON-LD, and on-page facts for search and answer engines |
-| [levelplay-app-ads](levelplay-app-ads.md) | Word Guess Android LevelPlay app-ads.txt, separate from website Adsterra |
+| [levelplay-app-ads](levelplay-app-ads.md) | Word Guess Android LevelPlay app-ads.txt; website banners are Adsterra |
 | [nyt-engagement-patterns](nyt-engagement-patterns.md) | NYT Games engagement patterns; Phase 8 post-solve modal + share cards shipped |
 | [percentile-ranking-patterns](percentile-ranking-patterns.md) | Anonymous percentile ranking styles; Phase 8 comparative rankings implementation |
 | [reversi-design](reversi-design.md) | Local computer plays White; difficulty and flip animation stay on the device |
 | [site-traffic](site-traffic.md) | Daily page views and visitors by country; private `/traffic` summary |
 | [sudoku-design](sudoku-design.md) | Shipped Sudoku v1 decisions and patterns: difficulty bands, generation, storage, timer, hydration, and launch UX |
-| [web-banner-placeholders](web-banner-placeholders.md) | Adsterra header and rail placements, delivery diagnostics, and app-ads boundary |
+| [web-banner-placeholders](web-banner-placeholders.md) | Adsterra banner tags and the setup checklist; banners only, `/ads.txt` still waiting on dashboard lines |

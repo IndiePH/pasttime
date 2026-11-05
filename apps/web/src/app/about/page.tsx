@@ -19,6 +19,7 @@ export default function AboutPage() {
     <StaticPage
       title="About Pasttime"
       description="A free home for daily puzzles and classic games. Play more, think sharper."
+      lastUpdated="2026-11-05"
       sections={[
         {
           title: "What we are",

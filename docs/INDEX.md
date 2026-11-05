@@ -36,7 +36,7 @@ Legend: ✅ implemented/available · 🚧 coming soon / scaffold · ⚙️ engin
 | `.env.example` | Root env template |
 | `README.md` | Project overview, layout, scripts |
 | `__pr_body.md` | PR description template |
-| `.github/workflows/ci.yml` | CI: ci → lint → typecheck → test → build |
+| `.github/workflows/ci.yml` | CI: npm ci → lint → typecheck → test → build. Local equivalent: `npm run ci` |
 
 ---
 
@@ -71,7 +71,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `games/[slug]/play/page.tsx` | Game play |
 | `games/[slug]/room/[code]/page.tsx` | Multiplayer room |
 | `games/[slug]/{loading,error,not-found}.tsx` | Route segments |
-| `about/`, `privacy/`, `terms/` | Site legal pages. Website banners use Adsterra; privacy covers daily country traffic totals. |
+| `about/`, `privacy/`, `terms/` | Site legal pages. Website banners are Adsterra. Privacy covers that disclosure, the Do Not Sell control, and daily country traffic totals. |
 | `traffic/page.tsx` | Private traffic summary. `noindex`. Unlocked with `TRAFFIC_VIEW_KEY`. |
 | `api/traffic/route.ts` | Records a same-site page view: country, path, views, visitors. |
 | `robots.ts` | Allows `/`. Disallows `/traffic` and `/api/traffic`. |
@@ -82,7 +82,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 **L3 — Shared UI** (`src/components/`)
 | Path | Purpose |
 |------|---------|
-| `shared/` | `site-shell`, `header`, `banner-placeholder`, `page-side-banner`, `side-banner-placeholder`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `traffic-beacon`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
+| `shared/` | `site-shell`, `header`, `banner-placeholder`, `page-side-banner`, `adsterra-banner`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `traffic-beacon`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
 | `ui/` | shadcn primitives: `badge`, `button`, `card`, `dialog`, `dropdown-menu` |
 | `ui/icons/` | `game-icon` (Lucide glyphs; custom marks for Word Guess, Tongits, and Pusoy Dos), `word-guess-icon`, `pusoy-dos-icon`, `tongits-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
 | `theme-provider.tsx` | Theme context |

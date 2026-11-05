@@ -4,10 +4,7 @@ updated: 2026-11-05
 tags: [monetization, levelplay, devops]
 related: [adsense-manual-units, engineering-decisions, web-banner-placeholders]
 
-Word Guess on Android uses **Unity LevelPlay**. The website uses separate
-Adsterra banner tags. There is no Google AdSense script or slot, and
-`/ads.txt` is intentionally not served. See
-[web-banner-placeholders](web-banner-placeholders.md).
+Word Guess on Android uses **Unity LevelPlay**. Website banners are Adsterra, documented in [web-banner-placeholders](web-banner-placeholders.md). There is no Google AdSense script or slot. `/ads.txt` is still unserved. `/app-ads.txt` stays the LevelPlay file.
 
 ## What replaced the website units
 
@@ -16,8 +13,8 @@ Adsterra banner tags. There is no Google AdSense script or slot, and
 | Top strip | Adsterra header banner. Not AdSense. |
 | Bottom strip, hub card | Not reserved. |
 | Browser grid | LevelPlay still runs in the Android app, not in the browser. |
-| `/ads.txt` | Intentionally not served. The Adsterra tags do not require it. App crawlers use `/app-ads.txt`. Do not copy LevelPlay reseller lines into a website seller file. |
-| Privacy, About, Terms AdSense copy | Website pages describe Adsterra banners and point Android advertising questions at `/word-guess/policy`. |
+| `/ads.txt` | Not served. App crawlers use `/app-ads.txt`. Do not copy LevelPlay reseller lines into a website `ads.txt`. |
+| Privacy, About, Terms AdSense copy | Website pages name Adsterra for banners and still point at `/word-guess/policy` for the app. |
 | AdSense env vars in `wrangler.jsonc` | Removed. Publisher ID is code in `apps/web/src/lib/app-ads.ts`. |
 
 ## Files

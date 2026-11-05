@@ -151,12 +151,13 @@ export function PageSideBanner() {
     }
   }, [])
 
-  if (allowed !== true || !placement) return null
+  if (allowed !== true || !placement || placement.height < 600) return null
 
   return (
     <aside
-      className="side-banner"
+      className="side-banner overflow-hidden"
       style={{ top: placement.top, height: placement.height }}
+      aria-label="Advertisement"
     >
       <AdsterraBanner unit="skyscraper" />
     </aside>

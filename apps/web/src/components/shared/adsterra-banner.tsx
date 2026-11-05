@@ -3,10 +3,6 @@
 import { useEffect, useRef, useSyncExternalStore } from "react"
 
 const OPT_OUT_KEY = "pasttime.ads.opt-out"
-const LOAD_TIMEOUT_MS = 8000
-const FRAME_WAIT_MS = 4000
-const RETRY_DELAY_MS = 1500
-const MAX_ATTEMPTS = 2
 
 export const ADSTERRA_UNITS = {
   leaderboard: {
@@ -46,88 +42,9 @@ function subscribeAdsPreference(): () => void {
   return () => {}
 }
 
-function waitForAdFrame(
-  container: HTMLElement,
-  cancelled: () => boolean,
-): Promise<boolean> {
-  if (container.querySelector("iframe")) return Promise.resolve(true)
-
-  return new Promise((resolve) => {
-    let settled = false
-    let timer = 0
-    const observer = new MutationObserver(() => {
-      if (container.querySelector("iframe")) finish(true)
-    })
-    const finish = (filled: boolean) => {
-      if (settled) return
-      settled = true
-      window.clearTimeout(timer)
-      observer.disconnect()
-      resolve(filled && !cancelled())
-    }
-
-    observer.observe(container, { childList: true, subtree: true })
-    timer = window.setTimeout(() => finish(false), FRAME_WAIT_MS)
-    if (cancelled()) finish(false)
-  })
-}
-
-function delay(ms: number, cancelled: () => boolean): Promise<void> {
-  return new Promise((resolve) => {
-    const timer = window.setTimeout(resolve, ms)
-    if (cancelled()) {
-      window.clearTimeout(timer)
-      resolve()
-    }
-  })
-}
-
-function mountAttempt(
-  container: HTMLElement,
-  unit: (typeof ADSTERRA_UNITS)[AdsterraUnitName],
-  cancelled: () => boolean,
-): Promise<boolean> {
-  return new Promise((resolve) => {
-    if (cancelled() || !container.isConnected || !adsAllowed()) {
-      resolve(false)
-      return
-    }
-
-    const options: AtOptions = {
-      key: unit.key,
-      format: "iframe",
-      height: unit.height,
-      width: unit.width,
-      params: {},
-    }
-    ;(window as Window & { atOptions?: AtOptions }).atOptions = options
-
-    const script = document.createElement("script")
-    script.src = `https://bauval.org/22/${unit.key}`
-    script.async = false
-
-    let settled = false
-    let timer = 0
-    const finish = (filled: boolean) => {
-      if (settled) return
-      settled = true
-      window.clearTimeout(timer)
-      resolve(filled && !cancelled())
-    }
-
-    script.onload = () => {
-      void waitForAdFrame(container, cancelled).then(finish)
-    }
-    script.onerror = () => finish(false)
-    timer = window.setTimeout(() => finish(false), LOAD_TIMEOUT_MS)
-    container.replaceChildren(script)
-  })
-}
-
 /**
  * The loader reads `window.atOptions` as it runs, then deletes it.
  * Mount one unit at a time so a second banner cannot replace the first key.
- * A failed or empty load gets one bounded retry; loaded ads are never refreshed.
  */
 let mountQueue = Promise.resolve()
 
@@ -136,13 +53,36 @@ function mountUnit(
   unit: (typeof ADSTERRA_UNITS)[AdsterraUnitName],
   cancelled: () => boolean,
 ): Promise<void> {
-  const run = mountQueue.then(async () => {
-    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
-      if (attempt > 0) await delay(RETRY_DELAY_MS, cancelled)
-      if (cancelled() || !container.isConnected) return
-      if (await mountAttempt(container, unit, cancelled)) return
-    }
-  })
+  const run = mountQueue.then(
+    () =>
+      new Promise<void>((resolve) => {
+        if (cancelled() || !container.isConnected || !adsAllowed()) {
+          resolve()
+          return
+        }
+        const options: AtOptions = {
+          key: unit.key,
+          format: "iframe",
+          height: unit.height,
+          width: unit.width,
+          params: {},
+        }
+        ;(window as Window & { atOptions?: AtOptions }).atOptions = options
+        const script = document.createElement("script")
+        script.src = `https://bauval.org/22/${unit.key}`
+        script.async = false
+        let settled = false
+        const finish = () => {
+          if (settled) return
+          settled = true
+          resolve()
+        }
+        script.onload = finish
+        script.onerror = finish
+        window.setTimeout(finish, 8000)
+        container.replaceChildren(script)
+      }),
+  )
   mountQueue = run.then(
     () => undefined,
     () => undefined,
