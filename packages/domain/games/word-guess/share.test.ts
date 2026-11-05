@@ -58,10 +58,10 @@ describe("buildWordGuessShareText", () => {
     const text = buildWordGuessShareText({
       guesses: sampleGuesses,
       maxTries: 6,
-      shareUrl: "https://gamehub.pasttime.xyz/games/word-guess",
+      shareUrl: "https://pasttime.xyz/games/word-guess",
     })
 
-    expect(text.endsWith("https://gamehub.pasttime.xyz/games/word-guess")).toBe(
+    expect(text.endsWith("https://pasttime.xyz/games/word-guess")).toBe(
       true,
     )
   })

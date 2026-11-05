@@ -18,7 +18,7 @@ import { wordSetFromList } from "@pasttime/domain/games/shared/lexicon-types"
 import { mobileStorage } from "@/lib/storage"
 
 const STORAGE_KEY = "word-guess:mobile:round"
-const API_BASE = process.env.EXPO_PUBLIC_WEB_ORIGIN ?? "https://gamehub.pasttime.xyz"
+const API_BASE = process.env.EXPO_PUBLIC_WEB_ORIGIN ?? "https://pasttime.xyz"
 
 async function loadMobileLexicon(length: number) {
   const [answersRes, guessableRes] = await Promise.all([
