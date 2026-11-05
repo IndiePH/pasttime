@@ -207,7 +207,7 @@ Last audited: 2026-10-02
 - Advisories: none
 - Bump: current
 - Upgrade risk: low
-- Breakage: Website slots and `/ads.txt` are gone. Word Guess Android ads stay on Unity LevelPlay (`/app-ads.txt`, `/word-guess/policy`). Header and play-screen boxes added later are empty placeholders, not an AdSense return. See `brain/wiki/web-banner-placeholders.md`.
+- Breakage: Website slots and `/ads.txt` are gone. Word Guess Android ads stay on Unity LevelPlay (`/app-ads.txt`, `/word-guess/policy`). The header box and the left rail added later are empty placeholders, not an AdSense return. See `brain/wiki/web-banner-placeholders.md`.
 - Checked: 2026-11-05
 - Status: retired
 

@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils"
 import { TypingHandheldNotice } from "@/features/games/components/typing-handheld-notice"
 
 import { gamePageShellClassName } from "./game-page-shell"
-import { PlaySideBanner } from "./play-side-banner"
 
 export type GamePlayLayout = "default" | "board"
 
@@ -34,6 +33,7 @@ export function GamePlayShell({
   const field = (
     <div
       data-play-shell
+      data-side-banner={sideBanner ? undefined : "off"}
       className={cn(
         layout === "board" ? gamePlayBoardShellClassName : gamePageShellClassName,
         className,
@@ -46,9 +46,6 @@ export function GamePlayShell({
   return (
     <>
       {notice}
-      {sideBanner ? (
-        <PlaySideBanner />
-      ) : null}
       {field}
     </>
   )

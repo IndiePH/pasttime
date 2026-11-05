@@ -465,8 +465,8 @@
 
 /* ── Landscape board overrides (shared) ──────────────────────────── */
 
-/* Near the viewport edge, inset by the header's side padding. Top comes from the play field. */
-.play-side-banner {
+/* Near the viewport edge, inset by the header's side padding. Top comes from the page. */
+.side-banner {
   position: fixed;
   z-index: 40;
   width: 160px;

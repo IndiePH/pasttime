@@ -16,4 +16,4 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 | [reversi-design](reversi-design.md) | Local computer plays White; difficulty and flip animation stay on the device |
 | [site-traffic](site-traffic.md) | Daily page views and visitors by country; private `/traffic` summary |
 | [sudoku-design](sudoku-design.md) | Shipped Sudoku v1 decisions and patterns: difficulty bands, generation, storage, timer, hydration, and launch UX |
-| [web-banner-placeholders](web-banner-placeholders.md) | Empty header and play-screen banner boxes; no network and no ads.txt |
+| [web-banner-placeholders](web-banner-placeholders.md) | Empty banner boxes and the Sovrn setup checklist; no tag until that list is done |

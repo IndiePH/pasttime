@@ -48,7 +48,7 @@ If the latest Worker version is not currently deployed, `wrangler secret put` fa
 
 ### Unity LevelPlay (Word Guess Android)
 
-The website does not sell display ads. There is no `/ads.txt` and no AdSense script or slot. The header and the play-screen rail are empty placeholders (`BannerPlaceholder`, `PlaySideBanner`). They are not a network and they do not change `/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay. See `brain/wiki/web-banner-placeholders.md`.
+The website does not sell display ads yet. There is no `/ads.txt` and no AdSense script or slot. The header and the left rail are empty placeholders (`BannerPlaceholder`, `PageSideBanner`). They are not a network and they do not change `/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay. When Sovrn approves the site, follow the checklist in `brain/wiki/web-banner-placeholders.md` before adding the tags or `/ads.txt`.
 
 `https://pasttime.xyz/app-ads.txt` must stay on the apex. It starts with `ownerdomain=pasttime.xyz` and includes ironSource DIRECT, Unity Ads DIRECT (`unity.com` / `unity3d.com`), plus the Unity reseller list baked in `apps/web/src/lib/app-ads-unity-list.ts`. The public publisher ID lives in `apps/web/src/lib/app-ads.ts`. Do not put ironSource API keys in the repo or in Worker vars.
 
