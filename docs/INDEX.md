@@ -36,7 +36,7 @@ Legend: ✅ implemented/available · 🚧 coming soon / scaffold · ⚙️ engin
 | `.env.example` | Root env template |
 | `README.md` | Project overview, layout, scripts |
 | `__pr_body.md` | PR description template |
-| `.github/workflows/ci.yml` | CI: ci → lint → typecheck → test → build |
+| `.github/workflows/ci.yml` | CI: npm ci → lint → typecheck → test → build. Local equivalent: `npm run ci` |
 
 ---
 

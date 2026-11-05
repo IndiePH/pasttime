@@ -86,9 +86,10 @@ Services (all commands run from repo root; see README "Scripts" table):
 - Desktop (Electron) just loads the web URL; Mobile is Expo. Neither is needed to
   exercise core gameplay.
 
-Quality gates (match CI in `.github/workflows/ci.yml`): `npm run lint`,
-`npm run typecheck`, `npm run test`, `npm run build`. `lint`/`build` target only
-the web app; `typecheck`/`test` run across all workspaces.
+Quality gates (match CI in `.github/workflows/ci.yml`): `npm run ci` runs
+`lint`, `typecheck`, `test`, and `build` in that order and stops at the first
+failure. `lint`/`build` target only the web app; `typecheck`/`test` run across
+all workspaces. CI also runs `npm ci` first.
 
 The `npm ci`/`npm install` "allow-scripts ... not yet covered" warnings (esbuild,
 sharp, workerd, etc.) are informational only — the required prebuilt binaries are

@@ -138,4 +138,6 @@ Scripts live in `apps/web/scripts/crossword/`.
 ## CI gates (context)
 
 `.github/workflows/ci.yml` runs on every push/PR and must stay green:
-`npm ci` → `lint` → `typecheck` → `test` → `build`. Node is pinned via `.nvmrc` (≥24).
+`npm ci` → `lint` → `typecheck` → `test` → `build`. Run `npm run ci` locally
+before pushing. It runs the four checks and stops at the first failure. Node is
+pinned via `.nvmrc` (≥24).

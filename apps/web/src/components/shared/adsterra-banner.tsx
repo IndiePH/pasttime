@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useSyncExternalStore } from "react"
 
 const OPT_OUT_KEY = "pasttime.ads.opt-out"
 
@@ -36,6 +36,10 @@ function adsAllowed(): boolean {
   if (window.localStorage.getItem(OPT_OUT_KEY) === "1") return false
   const nav = navigator as Navigator & { globalPrivacyControl?: boolean }
   return nav.globalPrivacyControl !== true
+}
+
+function subscribeAdsPreference(): () => void {
+  return () => {}
 }
 
 /**
@@ -87,13 +91,7 @@ function mountUnit(
 }
 
 export function useAdsAllowed(): boolean | null {
-  const [allowed, setAllowed] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    setAllowed(adsAllowed())
-  }, [])
-
-  return allowed
+  return useSyncExternalStore(subscribeAdsPreference, adsAllowed, () => null)
 }
 
 export function AdsterraBanner({ unit }: { unit: AdsterraUnitName }) {
@@ -121,11 +119,11 @@ export function AdsterraBanner({ unit }: { unit: AdsterraUnitName }) {
 }
 
 export function AdOptOutControl() {
-  const [optedOut, setOptedOut] = useState(false)
-
-  useEffect(() => {
-    setOptedOut(window.localStorage.getItem(OPT_OUT_KEY) === "1")
-  }, [])
+  const optedOut = useSyncExternalStore(
+    subscribeAdsPreference,
+    () => window.localStorage.getItem(OPT_OUT_KEY) === "1",
+    () => false,
+  )
 
   if (optedOut) {
     return (
