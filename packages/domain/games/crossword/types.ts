@@ -41,6 +41,10 @@ export interface CrosswordGameState {
   activeClue?: { direction: "across" | "down"; number: number }
   activeCell?: { row: number; col: number }
   status: CrosswordStatus
+  /** Epoch ms when the current play segment started. */
+  startedAt: number
+  /** Accumulated elapsed ms from closed segments. */
+  elapsedMs: number
 }
 
 const GRID_SIZES = [15] as const

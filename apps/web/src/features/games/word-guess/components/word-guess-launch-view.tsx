@@ -50,7 +50,7 @@ export function WordGuessLaunchView({ game }: WordGuessLaunchViewProps) {
           dailyCompleted={isDailyCompleted}
           secondaryAction={
             isDailyCompleted
-              ? { label: "View today's results", href: wordGuessPlayPath(wordLength, "daily", appliedHardMode ? true : undefined) }
+              ? { label: "View Today's Results", href: wordGuessPlayPath(wordLength, "daily", appliedHardMode ? true : undefined) }
               : undefined
           }
           statsHref="/games/word-guess/stats"

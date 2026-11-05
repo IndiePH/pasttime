@@ -42,10 +42,10 @@ export function WordGuessModePicker(props: WordGuessModePickerProps) {
   return (
     <fieldset className={cn(compact ? "space-y-2" : "space-y-3 text-left", className)}>
       {compact ? (
-        <legend className="sr-only">Round type</legend>
+        <legend className="sr-only">Round Type</legend>
       ) : (
         <>
-          <legend className="text-sm font-medium">Round type</legend>
+          <legend className="text-sm font-medium">Round Type</legend>
           <p className="text-xs text-muted-foreground">
             Choose a new random puzzle or play the same daily puzzle.
           </p>

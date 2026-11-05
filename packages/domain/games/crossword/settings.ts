@@ -72,5 +72,7 @@ export function createCrosswordGameState(
     puzzle,
     inputs: {},
     status: "playing" as const,
+    elapsedMs: 0,
+    startedAt: Date.now(),
   }
 }

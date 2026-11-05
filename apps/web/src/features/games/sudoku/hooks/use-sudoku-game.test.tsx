@@ -7,6 +7,7 @@ import {
   getSudokuStorageKey,
   type SudokuGameState,
 } from "@pasttime/domain/games/sudoku"
+import { livePlayElapsedMs } from "@pasttime/domain/games/shared/play-clock"
 
 import { useSudokuGame } from "./use-sudoku-game"
 
@@ -62,6 +63,10 @@ function buildNearWinState(mode: "daily" | "random" = "random"): {
     state: { ...base, cells, selectedIndex: missingIndex },
     missingDigit: FIXTURE_PUZZLE.solution[missingIndex],
   }
+}
+
+function shownElapsed(clock: SudokuGameState | null) {
+  return clock ? livePlayElapsedMs(clock, clock.status) : 0
 }
 
 const DAILY_KEY = getSudokuStorageKey("easy", "daily")
@@ -358,26 +363,26 @@ describe("useSudokuGame — win + engagement + timer", () => {
     })
     expect(result.current.status).toBe("ready")
 
-    const elapsedBefore = result.current.elapsedMs
+    const elapsedBefore = shownElapsed(result.current.state)
 
     await act(async () => {
       await vi.advanceTimersByTimeAsync(3000)
     })
-    expect(result.current.elapsedMs).toBeGreaterThanOrEqual(elapsedBefore + 3000)
+    expect(shownElapsed(result.current.state)).toBeGreaterThanOrEqual(elapsedBefore + 3000)
 
-    const elapsedAtWinTime = result.current.elapsedMs
+    const elapsedAtWinTime = shownElapsed(result.current.state)
     act(() => {
       result.current.placeDigit(missingDigit as never)
     })
     expect(result.current.state!.status).toBe("won")
-    const frozenElapsed = result.current.elapsedMs
+    const frozenElapsed = shownElapsed(result.current.state)
     expect(frozenElapsed).toBeGreaterThanOrEqual(elapsedAtWinTime)
 
     await act(async () => {
       await vi.advanceTimersByTimeAsync(5000)
     })
     // Elapsed no longer advances once the round is won.
-    expect(result.current.elapsedMs).toBe(frozenElapsed)
+    expect(shownElapsed(result.current.state)).toBe(frozenElapsed)
   })
 
   it("hydrating a still-playing round after a long real-world delay does not inflate elapsedMs with away-time", async () => {
@@ -400,6 +405,42 @@ describe("useSudokuGame — win + engagement + timer", () => {
     expect(result.current.status).toBe("ready")
 
     // The 6-hour gap must never be counted as elapsed play time.
-    expect(result.current.elapsedMs).toBeLessThan(5_000)
+    expect(shownElapsed(result.current.state)).toBeLessThan(5_000)
+  })
+
+  it("keeps idle time when leaving and does not count time away", async () => {
+    vi.useFakeTimers()
+    const start = new Date("2026-07-19T00:00:00.000Z")
+    vi.setSystemTime(start)
+    storageMap.set(RANDOM_KEY, buildPlayingState("random"))
+
+    const first = renderHook(() => useSudokuGame("easy", "random"))
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(first.result.current.status).toBe("ready")
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(60_000)
+    })
+    expect(shownElapsed(first.result.current.state)).toBeGreaterThanOrEqual(60_000)
+
+    act(() => {
+      first.unmount()
+    })
+
+    const saved = storageMap.get(RANDOM_KEY) as SudokuGameState
+    expect(saved.status).toBe("playing")
+    expect(saved.elapsedMs).toBeGreaterThanOrEqual(60_000)
+
+    vi.setSystemTime(new Date(start.getTime() + 60_000 + 6 * 60 * 60 * 1000))
+    const second = renderHook(() => useSudokuGame("easy", "random"))
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(second.result.current.status).toBe("ready")
+    expect(shownElapsed(second.result.current.state)).toBeGreaterThanOrEqual(60_000)
+    expect(shownElapsed(second.result.current.state)).toBeLessThan(90_000)
+    second.unmount()
   })
 })

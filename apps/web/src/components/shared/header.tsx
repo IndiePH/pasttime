@@ -1,5 +1,6 @@
 import { PlatformLink } from "@/platform/navigation"
 
+import { BannerPlaceholder } from "@/components/shared/banner-placeholder"
 import { ModeToggle } from "@/components/shared/mode-toggle"
 import { SkinToggle } from "@/components/shared/skin-toggle"
 import { cn } from "@/lib/utils"
@@ -24,6 +25,7 @@ export function Header({ className }: { className?: string }) {
           <ModeToggle />
         </div>
       </div>
+      <BannerPlaceholder />
     </header>
   )
 }

@@ -19,6 +19,11 @@ interface UseEngagementRecorderParams {
   status: string | null
   /** Only record completions when the game is in daily mode */
   isDaily: boolean
+  /**
+   * Record a finished round even when it is not a daily puzzle.
+   * Defaults to `isDaily`.
+   */
+  enabled?: boolean
   /** Optional solve time in seconds */
   time?: number
   /** Optional move count (solitaire) */
@@ -50,16 +55,17 @@ export function useEngagementRecorder({
   variant,
   status,
   isDaily,
+  enabled,
   time,
   moves,
   guessDistribution,
 }: UseEngagementRecorderParams): void {
   const storage = useStorage()
   const prevStatusRef = useRef<string | null>(null)
+  const shouldRecord = enabled ?? isDaily
 
   useEffect(() => {
-    // Only record in daily mode
-    if (!isDaily) return
+    if (!shouldRecord) return
 
     const prevStatus = prevStatusRef.current
     prevStatusRef.current = status
@@ -84,5 +90,5 @@ export function useEngagementRecorder({
     const completions = loadCompletions(storage, gameId)
     const updated = addCompletion(completions, completion)
     saveCompletions(storage, gameId, updated)
-  }, [status, isDaily, gameId, variant, time, moves, guessDistribution, storage])
+  }, [status, shouldRecord, gameId, variant, time, moves, guessDistribution, storage])
 }

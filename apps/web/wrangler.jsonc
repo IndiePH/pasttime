@@ -11,14 +11,7 @@
 		}
 	},
 	// Feedback/Resend — set via `wrangler secret put` / dashboard Secrets (never plaintext vars).
-	// AdSense IDs are public (page + ads.txt); keep here so deploy does not wipe dashboard vars.
 	// LevelPlay app-ads.txt Publisher ID is public (in /app-ads.txt); baked into src/lib/app-ads.ts.
-	"vars": {
-		"NEXT_PUBLIC_ADSENSE_CLIENT": "ca-pub-4297882562709937",
-		"NEXT_PUBLIC_ADSENSE_SLOT_TOP": "1824834087",
-		"NEXT_PUBLIC_ADSENSE_SLOT_BOTTOM": "3089694155",
-		"NEXT_PUBLIC_ADSENSE_SLOT_HUB": "9729721753"
-	},
 	"secrets": {
 		"required": [
 			"RESEND_API_KEY",

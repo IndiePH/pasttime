@@ -84,7 +84,7 @@ export function ViewResultsLink({ visible, onClick }: ViewResultsLinkProps) {
       className="h-auto min-h-9 px-0 text-sm"
       onClick={onClick}
     >
-      View results
+      View Results
     </Button>
   )
 }

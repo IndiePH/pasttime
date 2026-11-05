@@ -74,7 +74,7 @@ export function GameStatsView({ game }: GameStatsViewProps) {
           </Button>
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={gameLaunchPath(game.id)}>
-              Back to setup
+              Back To Setup
             </PlatformLink>
           </Button>
         </GamePlayFooterActions>
@@ -201,7 +201,7 @@ export function GameStatsView({ game }: GameStatsViewProps) {
         </Button>
         <Button variant="outline" className="w-full" asChild>
           <PlatformLink href={gameLaunchPath(game.id)}>
-            Back to setup
+            Back To Setup
           </PlatformLink>
         </Button>
       </GamePlayFooterActions>

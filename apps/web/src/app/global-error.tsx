@@ -19,7 +19,7 @@ export default function GlobalError({ reset }: GlobalErrorProps) {
             className="rounded-lg bg-foreground px-4 py-2 text-sm text-background"
             onClick={() => reset()}
           >
-            Try again
+            Try Again
           </button>
         </main>
       </body>

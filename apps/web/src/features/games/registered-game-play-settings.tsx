@@ -4,6 +4,8 @@ import { GameSettingsPlaceholder } from "@/features/games/components/game-settin
 import { CrosswordPlaySettingsWidget } from "@/features/games/crossword/components/crossword-play-settings-widget"
 import { SolitairePlaySettingsWidget } from "@/features/games/solitaire/components/solitaire-play-settings-widget"
 import { SudokuPlaySettingsWidget } from "@/features/games/sudoku/components/sudoku-play-settings-widget"
+import { TypeShieldPlaySettingsWidget } from "@/features/games/type-shield/components/type-shield-play-settings-widget"
+import { ReversiSettingsWidget } from "@/features/games/reversi/components/reversi-settings-widget"
 import { WordGuessPlaySettingsWidget } from "@/features/games/word-guess/components/word-guess-play-settings-widget"
 
 interface RegisteredGamePlaySettingsProps {
@@ -25,6 +27,10 @@ export function RegisteredGamePlaySettings({
       return <CrosswordPlaySettingsWidget className={className} />
     case "sudoku":
       return <SudokuPlaySettingsWidget className={className} />
+    case "type-shield":
+      return <TypeShieldPlaySettingsWidget className={className} />
+    case "reversi":
+      return <ReversiSettingsWidget className={className} />
     default:
       return <GameSettingsPlaceholder gameId={gameId} className={className} />
   }

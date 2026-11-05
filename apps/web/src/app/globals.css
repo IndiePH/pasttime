@@ -344,6 +344,34 @@
   }
 }
 
+@keyframes reversi-disc-place {
+  0% {
+    transform: scale(0.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes reversi-disc-flip {
+  0% {
+    transform: perspective(120px) rotateY(0deg);
+    background-color: var(--reversi-from);
+  }
+  49% {
+    transform: perspective(120px) rotateY(90deg);
+    background-color: var(--reversi-from);
+  }
+  51% {
+    transform: perspective(120px) rotateY(90deg);
+    background-color: var(--reversi-to);
+  }
+  100% {
+    transform: perspective(120px) rotateY(180deg);
+    background-color: var(--reversi-to);
+  }
+}
+
 /* Board play pages: hug measured content, grow vertically when taller. */
 .game-play-board {
   box-sizing: border-box;
@@ -436,6 +464,14 @@
 }
 
 /* ── Landscape board overrides (shared) ──────────────────────────── */
+
+/* Near the viewport edge, inset by the header's side padding. Top comes from the page. */
+.side-banner {
+  position: fixed;
+  z-index: 40;
+  width: 160px;
+  left: 1.5rem;
+}
 
 @media (orientation: landscape) and (min-height: 320px) {
   .game-play-board {

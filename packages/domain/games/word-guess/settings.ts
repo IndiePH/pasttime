@@ -33,7 +33,7 @@ export function parseWordGuessLength(
 }
 
 export function formatWordLengthLabel(length: WordGuessLength): string {
-  return `${length}-letter word`
+  return `${length}-Letter Word`
 }
 
 const ROUND_MODE_SET = new Set<string>(WORD_GUESS_ROUND_MODES)
@@ -54,8 +54,8 @@ export function parseWordGuessRoundMode(
 
 export function formatWordGuessRoundModeLabel(mode: WordGuessRoundMode): string {
   if (mode === "daily") {
-    return "Daily puzzle"
+    return "Daily Puzzle"
   }
 
-  return "Random puzzle"
+  return "Random Puzzle"
 }

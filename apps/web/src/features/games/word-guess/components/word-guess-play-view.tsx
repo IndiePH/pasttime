@@ -88,6 +88,8 @@ function WordGuessPlayCard({
     round,
     addLetter,
     removeLetter,
+    selectColumn,
+    selectedColumn,
     submitGuess,
   } = session
 
@@ -123,7 +125,11 @@ function WordGuessPlayCard({
   const { open: resultsOpen, setOpen: setResultsOpen, canReview } =
     useDailyPostSolveDialog(isDailyComplete)
 
-  const rankings = usePostSolveRankings("word-guess")
+  const rankings = usePostSolveRankings(
+    "word-guess",
+    undefined,
+    round.status === "won" ? round.guesses.length : undefined,
+  )
 
   const shareText =
     round.status === "won" && roundMode === "daily"
@@ -140,16 +146,19 @@ function WordGuessPlayCard({
 
   return (
     <>
-      <Card className="word-guess-vars mx-auto overflow-visible text-left">
+      <Card
+        className="word-guess-vars mx-auto overflow-visible py-0 text-left"
+        style={{ paddingBlock: SIDE_INSET }}
+      >
       <CardHeader
-        className="gap-3 pt-2 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
+        className="gap-3 landscape:flex-row landscape:items-start landscape:justify-between landscape:space-y-0"
         style={{ paddingInline: SIDE_INSET }}
       >
         <div className="space-y-1.5">
           <CardTitle>Game board</CardTitle>
           <CardDescription className="max-w-2xl landscape:hidden">
-            Guess the hidden word in six tries. Use Enter to submit and Backspace
-            to edit.
+            Guess the hidden word in six tries. Tap a tile to edit one letter.
+            Enter submits and Backspace deletes.
           </CardDescription>
         </div>
         <div className="flex flex-wrap items-center gap-2 py-0.5 text-sm landscape:justify-end">
@@ -164,12 +173,12 @@ function WordGuessPlayCard({
           </Badge>
           {hardMode && (
             <Badge variant="default" className="leading-normal">
-              Hard mode
+              Hard Mode
             </Badge>
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-4 px-0 pt-4 pb-2 landscape:space-y-3 landscape:pt-3 landscape:pb-2">
+      <CardContent className="space-y-4 px-0 pt-4 landscape:space-y-3 landscape:pt-3">
         <GameContentPanel sideInset={SIDE_INSET}>
           <div className="flex justify-center">
             <WordGuessBoard
@@ -178,6 +187,9 @@ function WordGuessPlayCard({
               shakeTrigger={shakeTrigger}
               flipRowIndex={effectiveFlipRowIndex}
               flipTrigger={flipTrigger}
+              activeRowIndex={isPlaying ? attemptsUsed : null}
+              selectedColumn={selectedColumn}
+              onSelectColumn={isPlaying ? selectColumn : undefined}
             />
           </div>
         </GameContentPanel>
@@ -352,12 +364,12 @@ function WordGuessPlaySessionReady({
               className="w-full"
               onClick={session.resetRound}
             >
-              New game
+              New Game
             </Button>
           )}
           <Button variant="outline" className="w-full" asChild>
             <PlatformLink href={wordGuessLaunchPath(wordLength, roundMode, appliedHardMode ? true : undefined)}>
-              Back to setup
+              Back To Setup
             </PlatformLink>
           </Button>
         </GamePlayFooterActions>

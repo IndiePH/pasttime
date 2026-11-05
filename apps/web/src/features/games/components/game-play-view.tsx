@@ -27,7 +27,7 @@ export function GamePlayView({ game, modeLabel }: GamePlayViewProps) {
         footer={
           <Button variant="outline" className="mt-6 w-60" asChild>
             <PlatformLink href={gameLaunchPath(game.id)}>
-              Back to launch options
+              Back To Launch Options
             </PlatformLink>
           </Button>
         }

@@ -1,5 +1,5 @@
 # Classic Game Conventions — Solitaire & Word Guess
-updated: 2026-07-01
+updated: 2026-10-03
 tags: [games, solitaire, word-guess, conventions, design]
 related: [nyt-engagement-patterns, engineering-decisions]
 
@@ -82,7 +82,7 @@ related: [nyt-engagement-patterns, engineering-decisions]
 ### What Pasttime Can Do Differently
 - Already supports daily + endless modes (reuses crosswords pattern)
 - Daily seeded word: use `getDailySeed` to pick a deterministic target word
-- **Comparative rankings**: "Solved in 3 tries — better than 85% of players today"
+- **Comparative rankings**: a daily win compares this solve’s try count to a bundled stub (“Your guess count beats”). Losses omit it. The stats page keeps the player’s own guess-distribution bars.
 - Share card: emoji grid just like Wordle (already the gold standard)
 - Streak + stats in the shared engagement layer
 - Hard mode toggle
@@ -115,8 +115,9 @@ related: [nyt-engagement-patterns, engineering-decisions]
 - Clean, responsive card interactions (drag + tap)
 
 ### Word Guess-Specific Innovation
+- Current guess: tap a tile in the active row, or move with the arrow keys, and replace that letter. Backspace and Delete remove a letter. Enter still submits.
 - Daily + endless mode (same pattern as crossword)
 - Word size selection in endless mode
 - Hard mode toggle
 - Share card (emoji grid — Wordle standard)
-- Stats: guess distribution, win rate, streak
+- Stats: guess distribution, win rate, streak. The daily win dialog also ranks this solve’s try count.

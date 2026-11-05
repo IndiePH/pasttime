@@ -1,5 +1,7 @@
 # AdSense Manual Units Implementation Plan
 
+> **Superseded 2026-10-02.** Do not implement. Website AdSense was removed. Word Guess Android ads are Unity LevelPlay. See `brain/wiki/levelplay-app-ads.md`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Wire Google AdSense manual display units into the three desktop slots (top strip, bottom strip, hub card), gated by env so local/preview stays on placeholders until IDs are set.

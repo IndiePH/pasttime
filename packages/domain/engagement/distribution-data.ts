@@ -54,6 +54,12 @@ export const DISTRIBUTION_DATA: DistributionData = {
       0.75, 0.78, 0.8, 0.82, 0.85, 0.88, 0.9, 0.92, 0.94, 0.95,
       0.96, 0.97, 0.98, 0.99, 1.0,
     ],
+    // Try counts for one solve (1–6), not percents.
+    tries: [
+      1, 2, 2, 3, 3, 3, 3, 3, 3, 3,
+      4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+      5, 5, 5, 5, 5, 5, 5, 6, 6, 6,
+    ],
   },
   sudoku: {
     streak: [

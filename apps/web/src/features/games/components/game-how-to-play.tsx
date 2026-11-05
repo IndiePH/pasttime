@@ -35,12 +35,12 @@ export function GameHowToPlay({ game, className }: GameHowToPlayProps) {
           variant="outline"
           className={cn("w-full", className)}
         >
-          How to play
+          How To Play
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[min(85vh,32rem)] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>How to play · {game.title}</DialogTitle>
+          <DialogTitle>How To Play · {game.title}</DialogTitle>
           <DialogDescription className="sr-only">
             Rules and tips for {game.title}
           </DialogDescription>

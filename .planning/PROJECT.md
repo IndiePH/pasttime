@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Pasttime is a multi-platform games hub (Next.js web on Cloudflare Workers, plus Electron desktop, Expo mobile, and an Express/WS multiplayer server) sharing a pure `@pasttime/domain` package. The web catalog currently has four available games: Crossword, Solitaire (Klondike Draw 1/3), Word Guess, and Sudoku.
+Pasttime is a multi-platform games hub (Next.js web on Cloudflare Workers, plus Electron desktop, Expo mobile, and an Express/WS multiplayer server) sharing a pure `@pasttime/domain` package. The web catalog currently has five available games: Crossword, Solitaire (Klondike Draw 1/3), Word Guess, Sudoku, and Type Rush.
 
 ## Core Value
 
@@ -26,12 +26,21 @@ The crossword milestone delivered:
 
 Subsequent work added:
 - **Solitaire:** playable Klondike Draw 1/3, drag/tap interactions,
-  auto-foundation/auto-stack, persistence, and stats
+  auto-foundation/auto-stack, persistence, play clock, and stats.
+  Daily Draw 1 and Draw 3 are seeded from the UTC date. A daily win records
+  one streak day, with moves and seconds, and copies a text result. Random
+  wins are not recorded.
 - **Word Guess:** Daily/Endless, 5–10 letters, hard mode, keyboard feedback,
-  persistence, and stats
+  persistence, and stats. No play clock. The current guess can be edited one letter at a time.
 - **Sudoku:** Daily/Random Easy/Medium/Hard, deterministic technique-rated
-  generation, candidates, undo, timer, persistence, and stats
-- **Engagement:** shared daily completion, streak, stats, and percentile helpers
+  generation, candidates, undo, play clock, persistence, and stats.
+  A daily win copies difficulty and elapsed time. The text has no grid.
+- **Engagement:** shared daily completion, streak, stats, and percentile helpers.
+  Crossword daily wins store solve time in seconds for the existing average-time ranking.
+  Word Guess daily wins compare this solve’s try count to a bundled stub.
+- **Type Rush:** solo daily/practice fixed-passage typing with Paragraph,
+  Word Stream, Whole Numbers, and Decimal Numbers content types; live timer,
+  accuracy, WPM, persistence, and backspace editing.
 
 ## Current Milestone: v1.1 — Three Games + Engagement
 
@@ -39,18 +48,21 @@ Subsequent work added:
 crossword, with a shared engagement layer providing streaks, stats, comparative
 rankings, and share cards — no login required, localStorage-backed.
 
-**Progress:** Phases 4–7 are complete. Phase 8 (Rankings & Share Cards) has not
-started. Sudoku shipped on 2026-07-19 as a post-roadmap scope extension and is
+**Progress:** Phases 4–7 are complete. Phase 8 visual share cards are still open.
+Daily Klondike and text results for Klondike and Sudoku shipped on 2026-11-04.
+Sudoku itself shipped on 2026-07-19 as a post-roadmap scope extension and is
 tracked in its dedicated design spec rather than the 44 v1.1 requirement IDs.
 
 **Target features:**
 - ✅ Solitaire Klondike — Klondike Draw 1 + Draw 3 modes with draw-3 waste fan
 - ✅ Word Guess — six-try board, keyboard, Daily/Endless, hard mode, persistence
 - ✅ Sudoku — classic 9×9 Daily/Random with candidates, undo, timer, and stats
+- ✅ Type Rush — daily/practice fixed-passage typing with configurable content
+  types, live timer, accuracy, WPM, persistence, and backspace editing
 - ✅ New `@pasttime/domain/engagement` package — game-agnostic streaks and stats
 - ✅ Per-game stats pages and engagement recording
-- Comparative "better than X%" rankings and share cards remain Phase 8
-- Share cards after solve — visual result summary, no spoilers
+- Comparative "better than X%" rankings still use the bundled stub (Phase 8)
+- Klondike and Sudoku daily wins copy a text result. Word Guess emoji squares and the Crossword mini grid remain Phase 8.
 - No login/accounts (anonymous device ID + localStorage)
 - No multiplayer for these 3 in this milestone
 
@@ -94,7 +106,8 @@ Phase 8 requirements `CMP-01—CMP-04` and `SHR-01—SHR-05` remain active. See
 - Push notifications — defer to when server-side infra justifies it
 - Friends / leaderboards — defer to future milestone
 - Additional games beyond the approved catalog. The original three-game limit
-  was superseded for the explicit Sudoku v1 extension shipped 2026-07-19.
+  was superseded for the explicit Sudoku v1 extension shipped 2026-07-19 and
+  Type Rush extension shipped 2026-11-04.
 - Multiplayer for these 3 games in this milestone
 
 ## Context
@@ -103,10 +116,13 @@ Phase 8 requirements `CMP-01—CMP-04` and `SHR-01—SHR-05` remain active. See
 
 **Current available web games:**
 - Crossword: Daily/Endless grids, generation, clues, keyboard/mouse play
-- Solitaire: Klondike Draw 1/3 (other listed layouts remain previews)
+- Solitaire: Klondike Draw 1/3, daily or random (other listed layouts remain previews)
 - Word Guess: Daily/Endless, hard mode, 5–10 letters
 - Sudoku: Daily/Random, Easy/Medium/Hard, candidates, undo, timer
-- All four are registered in `GAME_MODULES` with launch/play surfaces and stats
+- Type Rush: Daily/Practice, Paragraph/Word Stream/Whole Numbers/Decimal
+  Numbers, live timer, accuracy, WPM, persistence, and backspace editing
+- All five are registered in `GAME_MODULES` with launch/play surfaces; stats
+  support remains game-specific
 - `useDailyCompleted` hook already exists for cross-game daily tracking
 - Room/multiplayer infrastructure exists (Express/WS server, anonymous device IDs)
 
@@ -154,6 +170,9 @@ This document evolves at milestone transitions.
 - ✓ Game state persists in localStorage per draw mode — Phase 5
 - ✓ Saved state migration — missing/mismatched drawCount triggers fresh game — Phase 5
 - ✓ Draw action produces screen-reader feedback — Phase 5
+- ✓ Klondike daily Draw 1 and Draw 3 — same UTC date and draw count, same deal — 2026-11-04
+- ✓ Klondike daily win records moves, seconds, and one streak day for both draw modes — 2026-11-04
+- ✓ Klondike and Sudoku daily results copy as text, with no tableau and no digit grid — 2026-11-04
 
 ---
-*Last updated: 2026-07-20 after Sudoku launch and documentation reconciliation*
+*Last updated: 2026-11-04 after daily Klondike and text share cards*

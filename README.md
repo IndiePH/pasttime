@@ -23,6 +23,7 @@ Open [http://localhost:3000](http://localhost:3000).
 - Solitaire — Klondike Draw 1 and Draw 3
 - Word Guess — Daily and Endless, 5–10 letters
 - Sudoku — Daily and Random, Easy/Medium/Hard
+- Reversi — Play Black against a local computer at Easy, Medium, or Hard
 
 ### Multiplayer API (optional)
 
@@ -82,6 +83,7 @@ Copy [`.env.example`](./.env.example). Key variables:
 | `NEXT_PUBLIC_WS_URL` | web | WebSocket URL (optional) |
 | `PASTTIME_WEB_URL` | desktop | URL loaded in Electron window |
 | `PORT` | server | API port (default 4000) |
+| `TRAFFIC_VIEW_KEY` | web | Unlocks the private `/traffic` summary. Counts still record when it is unset. See `apps/web/.env.example` and [docs/DEPLOY.md](./docs/DEPLOY.md). |
 
 Mobile API URL: `apps/mobile/app.json` → `expo.extra.apiUrl`.
 
@@ -97,3 +99,4 @@ On every push and pull request, [`.github/workflows/ci.yml`](./.github/workflows
 - [Implementation slices](./docs/IMPLEMENTATION.md)
 - [Quality checklist](./docs/QUALITY-CHECKLIST.md)
 - [Sudoku v1 design](./docs/superpowers/specs/2026-07-18-sudoku-design.md)
+- [Reversi design](./docs/superpowers/specs/2026-11-05-reversi-design.md)

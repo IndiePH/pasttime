@@ -1,28 +1,21 @@
-import { AdPanel, GameCard, type GameCardSize } from "@/components/shared"
+import { GameCard, type GameCardSize } from "@/components/shared"
 import type { GameDefinition } from "@pasttime/domain/games"
 import { cn } from "@/lib/utils"
 
 function GameGrid({
-  adSlot,
-  adSlotIndex = 2,
   cardSize = "default",
   games,
 }: {
-  adSlot?: string
-  adSlotIndex?: number
   cardSize?: GameCardSize
   games: GameDefinition[]
 }) {
-  if (games.length === 0 && !adSlot) {
+  if (games.length === 0) {
     return (
       <p className="rounded-xl border border-dashed border-border px-6 py-12 text-left text-muted-foreground">
         No games match your search or filters.
       </p>
     )
   }
-
-  const gamesBeforeAd = games.slice(0, adSlotIndex)
-  const gamesAfterAd = games.slice(adSlotIndex)
 
   return (
     <ul
@@ -33,21 +26,7 @@ function GameGrid({
           : "gap-5 sm:grid-cols-2 lg:grid-cols-3",
       )}
     >
-      {gamesBeforeAd.map((game) => (
-        <li key={game.id}>
-          <GameCard game={game} size={cardSize} />
-        </li>
-      ))}
-      {adSlot ? (
-        <li>
-          <AdPanel
-            slot={adSlot}
-            variant="card"
-            matchGameCardSize={cardSize}
-          />
-        </li>
-      ) : null}
-      {gamesAfterAd.map((game) => (
+      {games.map((game) => (
         <li key={game.id}>
           <GameCard game={game} size={cardSize} />
         </li>
@@ -92,12 +71,7 @@ export function HubCatalog({
           >
             Games
           </h2>
-          <GameGrid
-            adSlot="hub-grid-card"
-            adSlotIndex={2}
-            cardSize="default"
-            games={featured}
-          />
+          <GameGrid cardSize="default" games={featured} />
         </section>
       ) : null}
 
@@ -110,8 +84,6 @@ export function HubCatalog({
             {showSplitLayout ? "All games" : "Games"}
           </h2>
           <GameGrid
-            adSlot="hub-grid-card"
-            adSlotIndex={3}
             cardSize="compact"
             games={showSplitLayout ? rest : games}
           />

@@ -5,9 +5,9 @@ milestone_name: Three Games + Engagement
 current_phase: 8
 current_phase_name: Rankings & Share Cards
 status: in_progress
-stopped_at: Phase 8 plan 08-02 complete — verification pending
-last_updated: "2026-07-20T12:25:00.000Z"
-last_activity: 2026-07-20
+stopped_at: Daily Klondike and text share cards shipped 2026-11-04; Phase 8 visual share cards remain
+last_updated: "2026-11-04T11:05:00.000Z"
+last_activity: 2026-11-04
 progress:
   total_phases: 5
   completed_phases: 4
@@ -81,7 +81,7 @@ v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 | Streaks/stats/crossword engagement grouped (Phase 7) | All wire engagement data into UI across games; natural delivery | ✓ Adopted |
 | Rankings + share cards combined (Phase 8) | Both post-solve features; share cards depend on games being playable | ✓ Adopted |
 | No timer in v1.1 | Deferred — reduces scope; timer not needed for core engagement loop | ✓ Confirmed |
-| No daily solitaire mode | Deferred — solitaire random-only for v1.1; streaks infrastructure wired but inactive | ✓ Confirmed |
+| No daily solitaire mode | Deferred for v1.1; superseded 2026-11-04 by seeded Draw 1 and Draw 3 dailies | Superseded |
 | Client-side only for comparative rankings | Pre-computed distribution JSON bundled; no server needed, no login | ✓ Adopted |
 | No cross-game aggregate streaks | Each game tracks independently; combined summary deferred | ✓ Confirmed |
 | **New — Phase 5:** Klondike split into two launch modes (Draw 1 / Draw 3) | Draw mode is a launch-time choice, not a play-time setting | ✓ Adopted |
@@ -95,8 +95,8 @@ v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 
 | Category | Item | Status |
 |----------|------|--------|
-| scope | Timer during play | Deferred from v1.1 |
-| scope | Daily solitaire mode | Deferred from v1.1 |
+| scope | Timer during play | Deferred from v1.1; shipped 2026-10-03 on Crossword, Klondike, and Sudoku. Word Guess has none. |
+| scope | Daily solitaire mode | Shipped 2026-11-04. Seeded Draw 1 and Draw 3. One solitaire completion per UTC date. Random wins are not recorded. |
 | scope | Push notifications | Deferred (needs PWA infra) |
 | scope | Cross-game aggregate stats | Deferred |
 | scope | Friends / leaderboards | Deferred to future milestone |
@@ -108,10 +108,12 @@ v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 
 **Resume file:** Phase 8 has no plan directory yet.
 
-**Last session:** 2026-07-20T00:00:00.000Z
-**Current session:** 2026-07-20
-**Stopped at:** Phase 7 complete; Sudoku extension shipped and polished
-**Next action:** Start Phase 8 planning. Run `/gsd-plan-phase 8` or `/gsd-discuss-phase 8`.
+**Last session:** 2026-11-04
+**Current session:** 2026-11-04
+**Stopped at:** Daily Klondike deals, text share cards, and Type Rush solo
+typing shipped. Sudoku daily wins copy difficulty and time. Phase 8 visual
+share cards (Word Guess emoji grid, Crossword mini grid) are still open.
+**Next action:** Finish Phase 8 visual share cards.
 
 ---
 
@@ -147,6 +149,8 @@ v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 - Hard mode (`WRD-06`): `hardMode: boolean` on round state, default `false`. Landing view toggle (off by default). Badge-only signaling in play view. Shake + helper text for violation: "Must reuse correctly-placed letters in the same positions".
 - Word length range (`WRD-03`): Narrow to 5-10 (dictionary JSONs untouched — 3-4 entries dormant).
 - Endless mode persistence (`WRD-07`): Single shared slot `word-guess:solo:random:session`. Same length → resume; different length → replace.
+- Current guess editing: tap a tile in the active row, or move with Left/Right. Typing replaces that letter. Backspace and Delete remove one letter. With no selection, input still appends and deletes from the end.
+- Daily win rankings include this solve’s try count (“Your guess count beats”) against a bundled 1–6 stub. Losses omit it. The stats page keeps the player’s guess-distribution bars.
 - Flip-to-reveal animation: Toggle in play view settings, default OFF. CSS rotateX flip, staggered per tile, respects `prefers-reduced-motion`.
 - Hard mode visual feedback: Same row shake as invalid word. Helper text explains violation. No special tile colors.
 - Hard mode toggle uses Button component (On/Off) instead of Switch — Switch/Label components not available in UI library.
@@ -164,7 +168,9 @@ v1.1 requirement IDs in `docs/superpowers/specs/2026-07-18-sudoku-design.md`.
 - Draw-3 waste pile displayed as fanned/offset stack (up to 3 cards visible)
 - Outdated saved states (missing `drawCount`) are cleared — fresh game starts
 - Win celebration remains text-only for v1.1; Phase 7 adds proper celebration
-- Pure random deals (Math.random), no seed input
+- Daily Draw 1 and Draw 3 are seeded from the UTC date (`klondikeDailySeed`). Random deals still use `Math.random` and a separate storage slot.
+- A daily win records one completion for that UTC date (`klondike-draw1` or `klondike-draw3`), with moves and seconds. Both draw modes on the same day are one streak day.
+- The daily win dialog copies text only: site label, UTC date, draw mode, moves, elapsed time, and the game URL. No card identities.
 - `useKlondikeGame(drawCount)` accepts draw count parameter and validates persisted state (Plan 02)
 - `isKlondikeState` enhanced to check `drawCount` field and optionally match expected (Plan 02)
 - Draw action produces screen-reader-friendly feedback: 'Drew 1 card' / 'Drew N cards' (Plan 02)

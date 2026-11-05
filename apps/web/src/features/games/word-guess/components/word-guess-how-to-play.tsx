@@ -60,7 +60,10 @@ export function WordGuessHowToPlay({ game }: { game: GameDefinition }) {
       <section>
         <h3 className="font-medium">How a turn works</h3>
         <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-muted-foreground">
-          <li>Type a valid word and submit your guess.</li>
+          <li>
+            Type a valid word and submit your guess. Tap a tile in the current
+            row to change one letter.
+          </li>
           <li>
             Tile colors show how close you are. Use them to narrow your next
             guess.

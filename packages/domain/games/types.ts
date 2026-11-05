@@ -24,6 +24,10 @@ export function isCardGame(game: GameDefinition): boolean {
   return game.tags.includes("cards")
 }
 
+export function isTypingGame(game: { tags: readonly string[] }): boolean {
+  return game.tags.includes("typing")
+}
+
 export type MultiplayerPlayerLimits = {
   minPlayers: number
   maxPlayers: number

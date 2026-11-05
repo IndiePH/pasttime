@@ -20,7 +20,7 @@ export default function GameLaunchScreen() {
       <Text style={styles.title}>{game.title}</Text>
       <Text style={styles.description}>{game.description}</Text>
       <Link href={`/games/${game.id}/play`} style={styles.button}>
-        <Text style={styles.buttonText}>Play solo</Text>
+        <Text style={styles.buttonText}>Play Solo</Text>
       </Link>
       <Text style={styles.meta}>Web play path: {gamePlayPath(game.id)}</Text>
     </View>

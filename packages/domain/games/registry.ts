@@ -67,13 +67,11 @@ export const GAME_REGISTRY: readonly GameDefinition[] = [
   {
     id: "reversi",
     title: "Reversi",
-    description: "Capture territory by surrounding and flipping enemy tiles.",
-    status: "coming_soon",
+    description: "Play Black and outscore the computer by flipping discs.",
+    status: "available",
     icon: "reversi",
-    tags: ["board", "strategy", "multiplayer"],
-    playerCount: "1–2 players",
-    minPlayers: 1,
-    maxPlayers: 2,
+    tags: ["board", "strategy"],
+    playerCount: "1 player",
   },
   {
     id: "fleet-grid",
@@ -111,24 +109,20 @@ export const GAME_REGISTRY: readonly GameDefinition[] = [
   {
     id: "type-rush",
     title: "Type Rush",
-    description: "Race by typing prompts quickly and accurately.",
-    status: "coming_soon",
+    description: "Type a passage quickly and accurately.",
+    status: "available",
     icon: "type-rush",
-    tags: ["typing", "arcade", "multiplayer"],
-    playerCount: "1–6 players",
-    minPlayers: 1,
-    maxPlayers: 6,
+    tags: ["typing", "arcade", "solo"],
+    playerCount: "1 player",
   },
   {
     id: "type-shield",
     title: "Type Shield",
-    description: "Defend your base by typing falling words before impact.",
-    status: "coming_soon",
+    description: "Type the words in falling comets before they reach your dome.",
+    status: "available",
     icon: "type-shield",
-    tags: ["typing", "co-op", "multiplayer"],
-    playerCount: "1–4 players",
-    minPlayers: 1,
-    maxPlayers: 4,
+    tags: ["typing", "arcade", "solo"],
+    playerCount: "1 player",
   },
   {
     id: "tile-words",
@@ -152,13 +146,13 @@ function compareGamesByTitle(a: GameDefinition, b: GameDefinition): number {
 }
 
 export function sortGamesByTitle(
-  games: readonly GameDefinition[],
+  games: readonly GameDefinition[]
 ): GameDefinition[] {
   return [...games].sort(compareGamesByTitle)
 }
 
 export function filterGamesByStatus(
-  status: GameStatus | "all",
+  status: GameStatus | "all"
 ): GameDefinition[] {
   const filtered =
     status === "all"
@@ -169,14 +163,14 @@ export function filterGamesByStatus(
 
 export function filterGamesByTitle(
   games: readonly GameDefinition[],
-  query: string,
+  query: string
 ): GameDefinition[] {
   const normalized = query.trim().toLowerCase()
   if (!normalized) {
     return sortGamesByTitle(games)
   }
   return sortGamesByTitle(
-    games.filter((game) => game.title.toLowerCase().includes(normalized)),
+    games.filter((game) => game.title.toLowerCase().includes(normalized))
   )
 }
 
@@ -187,7 +181,7 @@ export function filterGamesByTitle(
  */
 export function getFeaturedGames(
   status: GameStatus | "all" = "all",
-  limit = 2,
+  limit = 2
 ): GameDefinition[] {
   const pool =
     status === "all"

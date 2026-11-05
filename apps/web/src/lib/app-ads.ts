@@ -1,4 +1,3 @@
-import { ADS_OWNER_DOMAIN } from "./adsense"
 import { UNITY_APP_ADS_LINES } from "./app-ads-unity-list"
 
 /**
@@ -6,12 +5,14 @@ import { UNITY_APP_ADS_LINES } from "./app-ads-unity-list"
  * Served at the domain apex: https://pasttime.xyz/app-ads.txt
  * Play Console Website is pasttime.xyz — the crawler strips any path.
  *
- * Do not reuse AdSense /ads.txt here. Website AdSense stays on /ads.txt.
+ * The website does not sell display ads, so there is no /ads.txt.
+ * Do not add a website seller line here.
  *
  * Body is Unity dashboard "Show full list" plus ownerdomain, ironSource DIRECT
  * (public Publisher ID), and a unity3d.com mirror of the Unity Ads DIRECT line.
  */
-export { ADS_OWNER_DOMAIN as APP_ADS_OWNER_DOMAIN }
+export const ADS_OWNER_DOMAIN = "pasttime.xyz"
+export const APP_ADS_OWNER_DOMAIN = ADS_OWNER_DOMAIN
 
 /** ironSource / LevelPlay certification authority ID (constant). */
 export const LEVELPLAY_IRONSOURCE_TAG = "79929e88b2ba73bc"

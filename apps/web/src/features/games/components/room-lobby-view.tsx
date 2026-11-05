@@ -127,7 +127,7 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
               ) : (
                 <Copy className="size-3.5" />
               )}
-              {copied ? "Copied" : "Copy code"}
+              {copied ? "Copied" : "Copy Code"}
             </Button>
           </div>
 
@@ -170,7 +170,7 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
               disabled={!canStart}
               onClick={() => void startGame()}
             >
-              {room?.status === "playing" ? "Game started" : "Start game"}
+              {room?.status === "playing" ? "Game Started" : "Start Game"}
             </Button>
             <Button
               type="button"
@@ -178,7 +178,7 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
               className="flex-1"
               onClick={handleCopyLink}
             >
-              Copy invite
+              Copy Invite
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
@@ -189,7 +189,7 @@ export function RoomLobbyView({ game, roomCode }: RoomLobbyViewProps) {
       </Card>
 
       <Button variant="outline" className="mt-6 w-60" asChild>
-        <PlatformLink href={launchHref}>Leave room</PlatformLink>
+        <PlatformLink href={launchHref}>Leave Room</PlatformLink>
       </Button>
 
       <p className="mt-4 max-w-sm text-xs text-muted-foreground">

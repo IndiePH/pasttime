@@ -1,6 +1,6 @@
 /**
  * SSR-visible copy for game landing pages.
- * Kept outside dialogs so crawlers (and AdSense reviewers) see real publisher content.
+ * Kept outside dialogs so crawlers see real publisher content.
  * Available games: mechanics live in How to play. Coming soon: history only until launch.
  */
 
@@ -152,8 +152,8 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
   },
   reversi: {
     intro: [
-      "Reversi (widely known through the Othello brand) is a two-player disc-flipping board game: surround enemy pieces to capture territory until the board fills. Pasttime plans a clean browser board for 1–2 players.",
-      COMING_SOON_NOTE,
+      "Pasttime Reversi is a disc-flipping board: you play Black, and a computer on this device plays White. Open How to play above for the controls. The notes below are about where the form came from.",
+      "Choose Easy, Medium, or Hard in Settings. Animate Flips starts on, so each captured disc turns over. Nothing is sent off this device.",
     ],
     sections: [
       {
@@ -167,7 +167,7 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
       {
         title: "On Pasttime",
         paragraphs: [
-          "When Reversi arrives, expect solo practice against a quiet opponent mode and optional two-player play in the browser. Until launch, only this history is available here.",
+          "You play Black. The computer plays White on the same screen. A move must flip at least one disc. If a color has no move, the turn passes. The match ends when neither color can move, and the higher disc count wins.",
         ],
       },
     ],
@@ -240,8 +240,8 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
   },
   "type-rush": {
     intro: [
-      "Type Rush is planned as a speed-and-accuracy typing race: prompts appear, you type them cleanly, and the fastest clean run wins.",
-      COMING_SOON_NOTE,
+      "Type Rush is Pasttime’s speed-and-accuracy typing race: a fixed passage appears, you type it from left to right, and your time, accuracy, and words per minute show how the run went.",
+      "Play the shared daily passage or switch to practice for another curated run. No account is required, and an unfinished passage stays on this device.",
     ],
     sections: [
       {
@@ -255,15 +255,15 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
       {
         title: "On Pasttime",
         paragraphs: [
-          "Type Rush is intended for 1–6 players in the browser, with the same lightweight Pasttime shell as other titles. The race track is still under construction.",
+          "Pasttime keeps the first Type Rush release solo and focused: one passage, forgiving mistakes, and a result you can improve. Multiplayer races can build on the same typing mechanics later.",
         ],
       },
     ],
   },
   "type-shield": {
     intro: [
-      "Type Shield is planned as a defensive typing game: words fall or advance toward your base, and you type them to destroy or deflect them before impact.",
-      COMING_SOON_NOTE,
+      "Type Shield is a defensive typing game. Comets fall toward a dome at the bottom of the stage, and each comet carries a word.",
+      "Type that word to destroy the comet before it hits the shield. Survival is won by lasting 2 minutes. Endless ends when the dome runs out of lives.",
     ],
     sections: [
       {
@@ -277,7 +277,7 @@ export const GAME_OVERVIEWS: Readonly<Record<string, GameOverview>> = {
       {
         title: "On Pasttime",
         paragraphs: [
-          "Type Shield is sketched as a 1–4 player browser defense mode with readable word targets and no install. It is not playable here yet.",
+          "The first release is solo. Choose Survival or Endless, and Easy through Nightmare, in Settings. Shared letters light up on every comet they still fit. Co-op can share that stage later.",
         ],
       },
     ],

@@ -49,7 +49,7 @@ Shared domain package for per-game streak and stats computation. Game-agnostic �
 ### Per-Game Streaks
 
 - [x] **STK-01**: Crossword tracks its own daily streak (current + longest)
-- [x] **STK-02**: Solitaire tracks its own daily streak (if daily mode added in future — for now, random-mode solitaire does not have streaks)
+- [x] **STK-02**: Solitaire tracks its own daily streak. Daily Draw 1 and Draw 3 wins count as one UTC day. Random wins are not recorded.
 - [x] **STK-03**: Word Guess tracks its own daily streak (current + longest)
 - [x] **STK-04**: Streak lost when a daily puzzle is not completed before the next UTC day
 - [x] **STK-05**: Streak data persisted per game in localStorage
@@ -57,7 +57,7 @@ Shared domain package for per-game streak and stats computation. Game-agnostic �
 ### Per-Game Stats
 
 - [x] **STA-01**: Crossword stats page — total solves, win rate, average solve time, streak, comparative ranking
-- [x] **STA-02**: Solitaire stats page — total wins/games, win rate, average time (when timer added), streak
+- [x] **STA-02**: Solitaire stats page — total wins/games, win rate, average time, best moves, streak
 - [x] **STA-03**: Word Guess stats page — total solves, win rate, guess distribution, streak, comparative ranking
 - [x] **STA-04**: Stats page accessible from each game's launch view
 - [x] **STA-05**: Stats persist per game in localStorage
@@ -89,8 +89,8 @@ Explicitly excluded. Documented to prevent scope creep.
 
 | Feature | Reason |
 |---------|--------|
-| Daily deal mode for solitaire | Random-only for this milestone; daily seeded solitaire deferred |
-| Timer during play | Deferred — skip for v1.1 |
+| Daily deal mode for solitaire | Deferred for the original v1.1 cut. Shipped 2026-11-04 as seeded Draw 1 and Draw 3. |
+| Timer during play | Deferred for the original v1.1 cut. Shipped 2026-10-03 on Crossword, Klondike, and Sudoku. Word Guess has none. |
 | Push notifications | Requires PWA/service worker infra; defer |
 | Login / accounts / auth | Anonymous device ID + localStorage throughout |
 | Multiplayer for these 3 games | Solo-only for v1.1 |

@@ -17,6 +17,7 @@ interface WordGuessTileProps {
   flipIndex?: number
   /** Smaller tiles for share summaries and other compact layouts. */
   size?: "default" | "compact"
+  selected?: boolean
 }
 
 const TILE_STATE_CLASS_NAME: Record<WordGuessBoardTileState, string> = {
@@ -55,6 +56,7 @@ export function WordGuessTile({
   flip = false,
   flipIndex = 0,
   size = "default",
+  selected = false,
 }: WordGuessTileProps) {
   const [revealed, setRevealed] = React.useState(false)
   const [prevFlip, setPrevFlip] = React.useState(flip)
@@ -96,15 +98,17 @@ export function WordGuessTile({
   const normalizedLetter = letter.toUpperCase()
   const displayLetter = normalizedLetter || "\u00a0"
   const ariaLabel = normalizedLetter
-    ? `${normalizedLetter}, ${tileStateLabel(state)}`
-    : "Empty tile"
+    ? `${normalizedLetter}, ${tileStateLabel(state)}${selected ? ", selected" : ""}`
+    : `Empty tile${selected ? ", selected" : ""}`
 
   return (
     <span
+      role="img"
       className={cn(
         "flex items-center justify-center rounded border font-semibold tracking-wide uppercase transition-colors",
         TILE_SIZE_CLASS_NAME[size],
         TILE_STATE_CLASS_NAME[displayState],
+        selected && "relative z-10 ring-2 ring-primary",
         flip && "word-guess-tile-flip",
         flip && `word-guess-tile-flip-delay-${Math.min(flipIndex, 9)}`,
       )}

@@ -1,7 +1,9 @@
 # AdSense Manual Units — Design
 
+> **Superseded 2026-10-02.** Do not implement. Website AdSense was removed. Word Guess Android ads are Unity LevelPlay. See `brain/wiki/levelplay-app-ads.md`.
+
 Date: 2026-07-16  
-Status: implemented (env + units wired; apex ads.txt needs redeploy after wrangler `vars`)
+Status: superseded 2026-10-02. Website AdSense was removed. Do not implement.
 
 ## Goal
 

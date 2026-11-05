@@ -1,5 +1,11 @@
 # Pastime Project Context
 
+## Git change policy
+
+- Do not stage, commit, amend, or otherwise rewrite git history automatically.
+- Only create a commit when the user explicitly asks for one in the current request.
+- After making code changes, leave them in the working tree and report their status unless the user requests a commit.
+
 ## Project knowledge & codebase map
 
 Before starting work, read these files for project context:
@@ -12,6 +18,10 @@ Before starting work, read these files for project context:
 - `.planning/codebase/` — Architecture, conventions, integrations, stack, testing docs
 
 Use `.planning/` as the single source of truth for project context.
+
+## Game template
+
+A new game starts from the shared launch and play template: `GamePageShell`, `GameLaunchActions`, `GamePlayShell`, and `GamePlaySection`. Pass `game` into both shells. A game tagged `typing` then gets the handheld notice, with Don't Show Again stored for that game alone. Before implementation, write a Template fit note in that game's design spec. Name any part the game cannot follow because of its own limits, such as no daily mode or no multiplayer. Do not replace a template action with a new label. The full rule is `.cursor/rules/game-template.mdc`.
 
 ## 🧠 Brain Directory — Agent Memory
 
@@ -45,7 +55,9 @@ Read `brain/schema.md` for the full contract. Rules:
 
 | Page | Purpose |
 |------|---------|
-| [adsense-manual-units](brain/wiki/adsense-manual-units.md) | AdSense slots, apex vs gamehub, ads.txt; Word Guess LevelPlay app-ads.txt |
+| [adsense-manual-units](brain/wiki/adsense-manual-units.md) | Retired. Website AdSense removed; see levelplay-app-ads |
+| [levelplay-app-ads](brain/wiki/levelplay-app-ads.md) | Word Guess Android LevelPlay app-ads.txt; no website display ads |
+| [web-banner-placeholders](brain/wiki/web-banner-placeholders.md) | Empty banner boxes and the Sovrn setup checklist; no tag until that list is done |
 | [classic-game-conventions](brain/wiki/classic-game-conventions.md) | Solitaire/Word Guess conventions and innovation ideas |
 | [dictionary-pipeline](brain/wiki/dictionary-pipeline.md) | Dictionary, crossword corpus, and definition pipeline |
 | [engineering-decisions](brain/wiki/engineering-decisions.md) | Architectural and tradeoff decision log |

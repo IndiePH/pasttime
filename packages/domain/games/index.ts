@@ -4,6 +4,7 @@ export {
   getMultiplayerPlayerLimits,
   isCardGame,
   isMultiplayerGame,
+  isTypingGame,
 } from "./types"
 export type { MultiplayerPlayerLimits } from "./types"
 export {

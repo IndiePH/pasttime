@@ -42,6 +42,10 @@ export interface KlondikeState {
   moves: number
   seed: number | null
   drawCount: 1 | 3
+  /** Epoch ms when the current play segment started. */
+  startedAt: number
+  /** Accumulated elapsed ms from closed segments. */
+  elapsedMs: number
 }
 
 export type KlondikeMove =

@@ -7,6 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/traffic", "/api/traffic"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
     // Hostname only (Yandex-style Host); Google ignores this but some tools expect it.

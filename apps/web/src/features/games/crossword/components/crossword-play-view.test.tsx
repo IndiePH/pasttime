@@ -41,6 +41,8 @@ function buildMockCrosswordState() {
     },
     inputs: {},
     status: "playing" as const,
+    elapsedMs: 0,
+    startedAt: 0,
   }
 }
 
@@ -385,7 +387,7 @@ describe("daily rollover banner", () => {
       expect(screen.getByText("Daily puzzle refreshed")).toBeInTheDocument()
     })
     expect(screen.getByText("New Puzzle")).toBeInTheDocument()
-    expect(screen.getByText("Keep current")).toBeInTheDocument()
+      expect(screen.getByText("Keep Current")).toBeInTheDocument()
   })
 
   it("does NOT render banner for random mode even when isNewDay returns true", async () => {
@@ -445,7 +447,7 @@ describe("daily rollover banner", () => {
     expect(screen.getAllByText("Crossword").length).toBeGreaterThan(0)
   })
 
-  it("'Keep current' click hides banner without changing puzzle", async () => {
+  it("'Keep Current' click hides banner without changing puzzle", async () => {
     const { isNewDay } = await import("@pasttime/domain/daily")
     vi.mocked(isNewDay).mockReturnValue(true)
 
@@ -471,7 +473,7 @@ describe("daily rollover banner", () => {
     })
 
     await fireEvent.click(
-      screen.getByRole("button", { name: "Keep current" }),
+      screen.getByRole("button", { name: "Keep Current" }),
     )
 
     // Banner should be gone after dismissing
@@ -511,18 +513,18 @@ describe("generator error boundary", () => {
       ),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: "Try again" }),
+      screen.getByRole("button", { name: "Try Again" }),
     ).toBeInTheDocument()
   })
 
-  it("'Try again' button calls onRetry and resets error state", async () => {
+  it("'Try Again' button calls onRetry and resets error state", async () => {
     const { CrosswordPlaySessionErrorBoundary } = await import(
       "./crossword-play-view",
     )
 
     const onRetry = vi.fn()
 
-    // Render with error, then click Try again
+    // Render with error, then click Try Again
     // We need to track the render cycle: first render throws,
     // then setState({ hasError: false }) + onRetry is called
     render(
@@ -533,7 +535,7 @@ describe("generator error boundary", () => {
 
     expect(screen.getByText("Could not generate puzzle")).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole("button", { name: "Try again" }))
+    fireEvent.click(screen.getByRole("button", { name: "Try Again" }))
 
     // onRetry should have been called
     expect(onRetry).toHaveBeenCalledTimes(1)

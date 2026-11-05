@@ -28,7 +28,7 @@ export function GameLaunchActions({ game }: { game: GameDefinition }) {
           Coming soon
         </p>
         <Button variant="outline" className="mt-6" asChild>
-          <PlatformLink href="/">Back to catalog</PlatformLink>
+          <PlatformLink href="/">Back To Catalog</PlatformLink>
         </Button>
       </>
     )
@@ -53,7 +53,7 @@ export function GameLaunchActions({ game }: { game: GameDefinition }) {
           ) : (
             <>
               <Button type="button" className="w-full" asChild>
-                <PlatformLink href={gamePlayPath(game.id)}>Play solo</PlatformLink>
+                <PlatformLink href={gamePlayPath(game.id)}>Play Solo</PlatformLink>
               </Button>
               <Button
                 type="button"
@@ -61,7 +61,7 @@ export function GameLaunchActions({ game }: { game: GameDefinition }) {
                 className="w-full"
                 onClick={handleCreateRoom}
               >
-                Create room
+                Create Room
               </Button>
               <Button
                 type="button"
@@ -69,7 +69,7 @@ export function GameLaunchActions({ game }: { game: GameDefinition }) {
                 className="w-full"
                 onClick={() => setShowJoinPanel(true)}
               >
-                Join room
+                Join Room
               </Button>
             </>
           )
@@ -81,7 +81,7 @@ export function GameLaunchActions({ game }: { game: GameDefinition }) {
       </div>
       {!showJoinPanel ? (
         <Button variant="outline" className="mt-6" asChild>
-          <PlatformLink href="/">Back to catalog</PlatformLink>
+          <PlatformLink href="/">Back To Catalog</PlatformLink>
         </Button>
       ) : null}
     </>

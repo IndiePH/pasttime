@@ -82,7 +82,7 @@ interface GameLaunchActionsProps {
   playLabel?: string
   /** Whether daily puzzle is completed — when provided, playLabel is derived */
   dailyCompleted?: boolean
-  /** Optional secondary action link (e.g. "View today's results") */
+  /** Optional secondary action link (e.g. "View Today's Results") */
   secondaryAction?: {
     label: string
     href: string
@@ -98,30 +98,30 @@ interface GameLaunchActionsProps {
 
 ```
 +---------------------------+
-| [ How to Play ]           |  ← GameHowToPlay, always present
+| [ How To Play ]           |  ← GameHowToPlay, always present
 | [ Primary Play Button ]   |  ← full-width, default variant
 | (optional secondary action) |
-| [ View today's results ]  |  ← full-width, secondary variant, only if secondaryAction
+| [ View Today's Results ]  |  ← full-width, secondary variant, only if secondaryAction
 | (conditional multiplayer) |
-| [ Create room ]           |  ← full-width, secondary variant, only if onCreateRoom
-| [ Join room ]             |  ← full-width, outline variant, only if onJoinRoom
+| [ Create Room ]           |  ← full-width, secondary variant, only if onCreateRoom
+| [ Join Room ]             |  ← full-width, outline variant, only if onJoinRoom
 +---------------------------+
-| [ Back to catalog ]       |  ← outline, below section
+| [ Back To Catalog ]       |  ← outline, below section
 +---------------------------+
 ```
 
 ### Play button label derivation
 
 ```
-if dailyCompleted is provided AND dailyCompleted === true → "Play puzzle"
-if dailyCompleted is provided AND dailyCompleted === false → "Play daily puzzle"
+if dailyCompleted is provided AND dailyCompleted === true → "Play Puzzle"
+if dailyCompleted is provided AND dailyCompleted === false → "Play Daily Puzzle"
 if playLabel is provided → use playLabel
 otherwise → "Play"
 ```
 
-### Back to catalog
+### Back To Catalog
 
-- Label: `"Back to catalog"`
+- Label: `"Back To Catalog"`
 - Href: `/`
 - Variant: `outline`
 - Renders below the main action group with `mt-6`
@@ -170,11 +170,11 @@ export function CrosswordLaunchView({ game }: CrosswordLaunchViewProps) {
 
 | Case | Behavior |
 |------|----------|
-| First visit, no stored state | `useDailyCompleted` returns `false` → "Play daily puzzle" → daily mode |
-| Daily puzzle in progress | `status === "playing"` → `false` → "Play daily puzzle" (resumes existing session) |
-| Daily puzzle completed | `status === "won"` or `"lost"` → "Play puzzle" → random mode |
-| Daily rolled over | New daily seed → different storage key → `false` → "Play daily puzzle" |
-| Storage corrupt/missing | Returns `false` → "Play daily puzzle" |
+| First visit, no stored state | `useDailyCompleted` returns `false` → "Play Daily Puzzle" → daily mode |
+| Daily puzzle in progress | `status === "playing"` → `false` → "Play Daily Puzzle" (resumes existing session) |
+| Daily puzzle completed | `status === "won"` or `"lost"` → "Play Puzzle" → random mode |
+| Daily rolled over | New daily seed → different storage key → `false` → "Play Daily Puzzle" |
+| Storage corrupt/missing | Returns `false` → "Play Daily Puzzle" |
 
 ---
 
@@ -215,7 +215,7 @@ return (
       playHref={wordGuessPlayPath(wordLength, isDailyCompleted ? "random" : "daily")}
       dailyCompleted={isDailyCompleted}
       secondaryAction={{
-        label: "View today's results",
+        label: "View Today's Results",
         href: wordGuessPlayPath(wordLength, "daily"),
       }}
       onCreateRoom={handleCreateRoom}
@@ -225,7 +225,7 @@ return (
 )
 ```
 
-**Note:** The "View today's results" button is passed via the `secondaryAction` prop, which `GameLaunchActions` renders between the play button and any room controls.
+**Note:** The "View Today's Results" button is passed via the `secondaryAction` prop, which `GameLaunchActions` renders between the play button and any room controls.
 
 ---
 
@@ -281,7 +281,7 @@ No changes to solitaire beyond the button component swap.
 | Test area | What to cover |
 |-----------|---------------|
 | `useDailyCompleted` | Returns false when no stored state, true when status is "won" or "lost", false for "playing"/"abandoned", refreshes on focus/visibility |
-| `GameLaunchActions` | Renders correct buttons with/without roomControls, dailyCompleted toggles label, "Back to catalog" always present |
+| `GameLaunchActions` | Renders correct buttons with/without roomControls, dailyCompleted toggles label, "Back To Catalog" always present |
 | Crossword launch view | Mode pills removed, settings wired, play button label reflects daily status |
 | Word guess launch view | Room controls still work, daily completion check works with new storage format |
 | CrosswordSettingsWidget | 5×5 no longer appears |

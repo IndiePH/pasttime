@@ -12,7 +12,7 @@ export default function GameNotFound() {
           That game isn&apos;t in our catalog yet.
         </p>
         <Button className="mt-8" asChild>
-          <PlatformLink href="/">Back to catalog</PlatformLink>
+          <PlatformLink href="/">Back To Catalog</PlatformLink>
         </Button>
       </div>
     </SiteShell>

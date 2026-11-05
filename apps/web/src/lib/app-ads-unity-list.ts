@@ -1,6 +1,6 @@
 /**
  * Unity Monetization → Settings → Organization → App-ads.txt → Show full list
- * (2026-08-25). Do not mix with website /ads.txt (AdSense).
+ * (2026-08-25). Website display ads are not sold; do not add a separate seller file.
  */
 export const UNITY_APP_ADS_LINES = `
 anzu.io, 691e95644e633a6eee2567ee, RESELLER

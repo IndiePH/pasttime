@@ -25,10 +25,10 @@ export default function GameError({ error, reset }: GameErrorProps) {
         ) : null}
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button type="button" onClick={reset}>
-            Try again
+            Try Again
           </Button>
           <Button variant="outline" asChild>
-            <PlatformLink href="/">Back to catalog</PlatformLink>
+            <PlatformLink href="/">Back To Catalog</PlatformLink>
           </Button>
         </div>
       </div>

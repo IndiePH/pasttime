@@ -80,6 +80,19 @@ function HookHarness() {
       <button type="button" onClick={game.removeLetter}>
         Remove
       </button>
+      <p data-testid="current-guess">{game.currentGuess}</p>
+      <p data-testid="selected-column">
+        {game.selectedColumn === null ? "none" : String(game.selectedColumn)}
+      </p>
+      {[0, 1, 2, 3, 4].map((column) => (
+        <button
+          key={column}
+          type="button"
+          onClick={() => game.selectColumn(column)}
+        >
+          Select {column}
+        </button>
+      ))}
     </div>
   )
 }
@@ -165,6 +178,99 @@ describe("useWordGuessGame", () => {
     expect(screen.getByTestId("guess-count").textContent).toBe("0")
     expect(screen.getByTestId("feedback").textContent).toBe("Word not in dictionary.")
   })
+})
+
+describe("current-row cell editing", () => {
+  beforeEach(() => {
+    storageMap.clear()
+  })
+
+  afterEach(() => {
+    cleanup()
+  })
+
+  it("replaces one selected letter and leaves the rest of the guess", () => {
+    render(<HookHarness />)
+
+    for (const letter of ["A", "P", "P", "L", "E"]) {
+      fireEvent.click(screen.getByRole("button", { name: letter }))
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Select 1" }))
+    fireEvent.click(screen.getByRole("button", { name: "O" }))
+
+    expect(screen.getByTestId("current-guess")).toHaveTextContent("AOPLE")
+    expect(screen.getByTestId("selected-column")).toHaveTextContent("2")
+  })
+
+  it("deletes only the selected letter", () => {
+    render(<HookHarness />)
+
+    for (const letter of ["A", "P", "P", "L", "E"]) {
+      fireEvent.click(screen.getByRole("button", { name: letter }))
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Select 1" }))
+    fireEvent.click(screen.getByRole("button", { name: "Remove" }))
+
+    expect(screen.getByTestId("current-guess")).toHaveTextContent("APLE")
+    expect(screen.getByTestId("selected-column")).toHaveTextContent("1")
+  })
+
+  it("still removes the last letter when no cell is selected", () => {
+    render(<HookHarness />)
+
+    fireEvent.click(screen.getByRole("button", { name: "A" }))
+    fireEvent.click(screen.getByRole("button", { name: "P" }))
+    fireEvent.click(screen.getByRole("button", { name: "Remove" }))
+
+    expect(screen.getByTestId("current-guess")).toHaveTextContent("A")
+    expect(screen.getByTestId("selected-column")).toHaveTextContent("none")
+  })
+
+  it("snaps a click past the typed letters onto the next empty cell", () => {
+    render(<HookHarness />)
+
+    fireEvent.click(screen.getByRole("button", { name: "A" }))
+    fireEvent.click(screen.getByRole("button", { name: "P" }))
+    fireEvent.click(screen.getByRole("button", { name: "Select 4" }))
+
+    expect(screen.getByTestId("selected-column")).toHaveTextContent("2")
+
+    fireEvent.click(screen.getByRole("button", { name: "L" }))
+
+    expect(screen.getByTestId("current-guess")).toHaveTextContent("APL")
+    expect(screen.getByTestId("selected-column")).toHaveTextContent("3")
+  })
+
+  it("moves between letters with the arrow keys and types into the selected cell", () => {
+    render(<HookHarness />)
+
+    fireEvent.click(screen.getByRole("button", { name: "A" }))
+    fireEvent.click(screen.getByRole("button", { name: "P" }))
+    fireEvent.click(screen.getByRole("button", { name: "P" }))
+    fireEvent.keyDown(window, { key: "ArrowLeft" })
+
+    expect(screen.getByTestId("selected-column")).toHaveTextContent("2")
+
+    fireEvent.keyDown(window, { key: "ArrowLeft" })
+    fireEvent.keyDown(window, { key: "o" })
+
+    expect(screen.getByTestId("current-guess")).toHaveTextContent("AOP")
+    expect(screen.getByTestId("selected-column")).toHaveTextContent("2")
+  })
+
+  it("keeps the last letter selected so it can be retyped", () => {
+    render(<HookHarness />)
+
+    for (const letter of ["A", "P", "P", "L", "E"]) {
+      fireEvent.click(screen.getByRole("button", { name: letter }))
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Select 4" }))
+    fireEvent.click(screen.getByRole("button", { name: "T" }))
+
+    expect(screen.getByTestId("current-guess")).toHaveTextContent("APPLT")
+    expect(screen.getByTestId("selected-column")).toHaveTextContent("4")
+  })
+
 })
 
 describe("hard mode", () => {

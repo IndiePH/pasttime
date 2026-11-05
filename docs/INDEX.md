@@ -1,7 +1,7 @@
 # Pasttime — File Index
 
 A flat, navigable index of the **pasttime** monorepo: a cross-platform games hub
-(web, desktop, mobile, multiplayer server). Updated 2026-07-20.
+(web, desktop, mobile, multiplayer server). Updated 2026-11-05.
 
 Legend: ✅ implemented/available · 🚧 coming soon / scaffold · ⚙️ engine/package
 
@@ -71,13 +71,18 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `games/[slug]/play/page.tsx` | Game play |
 | `games/[slug]/room/[code]/page.tsx` | Multiplayer room |
 | `games/[slug]/{loading,error,not-found}.tsx` | Route segments |
-| `about/`, `privacy/`, `terms/` | Static pages (substantive copy for AdSense review; not placeholders) |
+| `about/`, `privacy/`, `terms/` | Site legal pages. The website does not show display ads. Privacy covers daily country traffic totals. |
+| `traffic/page.tsx` | Private traffic summary. `noindex`. Unlocked with `TRAFFIC_VIEW_KEY`. |
+| `api/traffic/route.ts` | Records a same-site page view: country, path, views, visitors. |
+| `robots.ts` | Allows `/`. Disallows `/traffic` and `/api/traffic`. |
+| `app-ads.txt/route.ts` | Unity LevelPlay seller file for the Word Guess Android app |
+| `word-guess/policy/page.tsx` | Word Guess Android privacy policy (LevelPlay, Play Games, Firebase) |
 | `favicon.ico` | Favicon |
 
 **L3 — Shared UI** (`src/components/`)
 | Path | Purpose |
 |------|---------|
-| `shared/` | `site-shell`, `header`, `footer`, `game-card`, `game-launch-actions`, `ad-panel`, `feedback-widget`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
+| `shared/` | `site-shell`, `header`, `banner-placeholder`, `page-side-banner`, `side-banner-placeholder`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `traffic-beacon`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
 | `ui/` | shadcn primitives: `badge`, `button`, `card`, `dialog`, `dropdown-menu` |
 | `ui/icons/` | `game-icon`, `word-guess-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
 | `theme-provider.tsx` | Theme context |
@@ -87,9 +92,9 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 |------|---------|
 | `hub/` | Hub page: `hub-hero`, `hub-catalog`, `hub-filter`, `hub-games-section`, `hub-game-search`, `search-params`, `index` |
 | `games/` | Game plugin system (see [§5](#5-game-modules)) |
-| → `games/components/` | Shared game shells: `game-page-shell`, `game-play-shell`, `game-play-section`, `game-play-view`, `game-play-settings`, `game-play-footer-actions`, `game-content-panel`, `game-session-header`, `game-launch-settings`, `game-how-to-play(-placeholder)`, `game-settings-widget`, `game-settings-placeholder`, `join-room-panel`, `room-lobby-view`, `settings-toggle-field`, `index` |
+| → `games/components/` | Shared game shells: `game-page-shell`, `game-play-shell`, `game-play-section`, `game-play-view`, `game-play-settings`, `game-play-footer-actions`, `game-content-panel`, `game-session-header`, `game-launch-settings`, `game-how-to-play(-placeholder)`, `game-settings-widget`, `game-settings-placeholder`, `play-clock-readout`, `join-room-panel`, `room-lobby-view`, `settings-toggle-field`, `index` |
 | → `games/cards/` | Card-skin prefs: `card-game-preferences`, `card-skin-picker`, `use-card-game-preferences` |
-| → `games/hooks/` | `use-move-queue`, `use-room-lobby` |
+| → `games/hooks/` | `use-move-queue`, `use-room-lobby`, `use-live-play-elapsed`, `use-seal-play-clock-on-leave` |
 | → `games/` (registry glue) | `module-registry`, `game-settings-registry`, `game-play-settings-registry`, `game-how-to-play-registry`, `registered-game-settings`, `registered-game-play-settings`, `registered-how-to-play-content`, `parse-game-search-params`, `index` |
 | → `games/solitaire/` | ✅ Klondike (see [§5](#5-game-modules)) |
 | → `games/word-guess/` | ✅ Word Guess (see [§5](#5-game-modules)) |
@@ -100,7 +105,10 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | Path | Purpose |
 |------|---------|
 | `lib/pasttime-client.ts` | API client wrapper |
+| `lib/app-ads.ts` | LevelPlay `/app-ads.txt` builder (`ownerdomain`, ironSource DIRECT, Unity Ads mirror) |
+| `lib/app-ads-unity-list.ts` | Unity dashboard reseller lines included in `/app-ads.txt` |
 | `lib/utils.ts` | `cn` + helpers |
+| `lib/traffic/` | Country traffic rules, D1 totals, and view-key check. Tests in `traffic.test.ts`. |
 | `infrastructure/storage/` | `storage-provider`, `index` |
 | `platform/navigation/` | `platform-link`, `use-platform-router`, `index` |
 | `hooks/` | `.gitkeep` (reserved) |
@@ -109,6 +117,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | Path | Purpose |
 |------|---------|
 | `scripts/word-guess/build-dictionary.mjs` | Corpus → `games/shared/dictionary.target.json` |
+| `migrations/0002_site_traffic.sql` | D1 table `site_traffic_daily` on `pasttime-lexicon` |
 | `public/_headers` | Cloudflare headers |
 | `public/games/cards/minimal/` | 54 card SVGs (back light/dark + 13 ranks × 4 suits) |
 | `public/.gitkeep` | Keeps dir |
@@ -180,6 +189,7 @@ for what a game *is*.
 | `status-filter.ts` | Hub status filter logic |
 | `room-code.ts` | Room code generation/validation |
 | `card-interaction.ts` / `card-theme.ts` / `playing-cards.ts` | Shared card primitives |
+| `shared/play-clock.ts` | Elapsed-time clock for Crossword, Klondike, and Sudoku. Idle time on the page is kept; time away is not. Word Guess has no clock. |
 | `index.ts` | Barrel |
 
 **Daily**
@@ -192,10 +202,13 @@ for what a game *is*.
 |------|---------|
 | `games/solitaire/index.ts` | Barrel |
 | `games/solitaire/modes.ts` | Klondike/Pyramid/TriPeaks/FreeCell… mode defs |
-| `games/solitaire/paths.ts` | Route paths |
+| `games/solitaire/paths.ts` | Route paths. Play path takes layout mode and `daily` or `random`. |
+| `games/solitaire/round.ts` | Daily and random round values |
+| `games/solitaire/share.ts` | Klondike daily share text. No card identities. |
 | `games/solitaire/klondike/types.ts` | Game types |
 | `games/solitaire/klondike/deck.ts` | Deck creation/shuffle |
 | `games/solitaire/klondike/deal.ts` | Deal layout |
+| `games/solitaire/klondike/daily.ts` | UTC daily seed and storage keys for Draw 1 and Draw 3 |
 | `games/solitaire/klondike/card-utils.ts` | Card helpers |
 | `games/solitaire/klondike/rules.ts` | Move legality |
 | `games/solitaire/klondike/game.ts` | Game engine |
@@ -233,8 +246,19 @@ for what a game *is*.
 | `games/sudoku/{rng,board,conflicts}.ts` | Deterministic RNG and board helpers |
 | `games/sudoku/{rate,generate}.ts` | Human-technique rating and seeded generation |
 | `games/sudoku/game.ts` | Pure play mutations, candidates, undo, and win detection |
+| `games/sudoku/share.ts` | Daily share text: difficulty and elapsed time. No grid. |
 | `games/sudoku/{persistence,play-preferences}.ts` | Storage validation, keys, and preferences |
 | `games/sudoku/*.test.ts` | Domain coverage for settings, generation, rating, play, and persistence |
+
+**Game: reversi** ✅
+| Path | Purpose |
+|------|---------|
+| `games/reversi/types.ts` | Board, seat, session, and difficulty types |
+| `games/reversi/position.ts` | Legal moves, flips, pass, score, and result |
+| `games/reversi/session.ts` | Human and computer seats. The play session is person versus computer |
+| `games/reversi/computer.ts` | Local search for Easy, Medium, and Hard |
+| `games/reversi/settings.ts` | Difficulty labels. Default Medium |
+| `games/reversi/*.test.ts` | Position, session, and computer coverage |
 
 ---
 
@@ -275,9 +299,12 @@ Typed REST + WebSocket multiplayer client (shared web/mobile).
 | `docs/GAMES.md` | Game catalog overview |
 | `docs/SOLITAIRE.md` | Solitaire spec |
 | `docs/superpowers/specs/2026-07-18-sudoku-design.md` | Implemented Sudoku v1 design |
+| `docs/superpowers/specs/2026-11-05-reversi-design.md` | Implemented Reversi: local White computer, flip animation, shared template |
 | `docs/superpowers/plans/2026-07-18-sudoku.md` | Completed Sudoku implementation plan |
+| `docs/superpowers/plans/2026-11-05-reversi.md` | Reversi hotseat plan; computer and flip animation shipped after it |
 | `docs/CARD-ASSETS.md` | Card SVG asset spec |
-| `docs/DEPLOY.md` | Cloudflare deploy + data-build scripts |
+| `docs/DEPLOY.md` | Cloudflare deploy, secrets, and country traffic totals |
+| `docs/third-party.md` | Third-party inventory (LevelPlay active; AdSense retired) |
 | `docs/CONTENT-STORAGE-HANDOFF.md` | R2 + D1 lexicon migration plan (Worker size) |
 | `docs/INDEX.md` | This file |
 
@@ -298,12 +325,12 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 | **Sudoku** | ✅ | `games/sudoku/*` | `features/games/sudoku/` | `LaunchView`, `PlayView`, `StatsView`, `SettingsWidget`, `HowToPlayContent`, `playLayout: board` |
 | Tongits | 🚧 | — | — | catalog only |
 | Pusoy Dos | 🚧 | — | — | catalog only |
-| Reversi | 🚧 | — | — | catalog only |
+| **Reversi** | ✅ | `games/reversi/*` | `features/games/reversi/` | `LaunchView`, `PlayView`, `SettingsWidget`, `HowToPlayContent`, `playLayout: board` |
 | Fleet Grid | 🚧 | — | — | catalog only |
 | Spades | 🚧 | — | — | catalog only |
 | Word Factory | 🚧 | — | — | catalog only |
-| Type Rush | 🚧 | — | — | catalog only |
-| Type Shield | 🚧 | — | — | catalog only |
+| Type Rush | ✅ | `games/type-rush/*` + shared typing core | `features/games/type-rush/` | `LaunchView`, `PlayView`, `SettingsWidget`, `HowToPlayContent` |
+| Type Shield | ✅ | `games/type-shield/*` | `features/games/type-shield/` | `LaunchView`, `PlayView`, `StatsView`, `HowToPlayContent` |
 | Tile Words | 🚧 | — | — | catalog only |
 
 **Solitaire web UI** (`features/games/solitaire/`)
@@ -314,13 +341,14 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 - `search-params.ts`, `solitaire-play-preferences.ts`
 
 **Word Guess web UI** (`features/games/word-guess/`)
-- `components/`: `word-board-preview`, `word-guess-board`, `word-guess-how-to-play`, `word-guess-keyboard`, `word-guess-launch-actions`, `word-guess-launch-view`, `word-guess-mode-picker`, `word-guess-play-settings-widget`, `word-guess-play-view`, `word-guess-settings-widget`, `word-guess-tile`, `word-length-picker`, `index`
-- `hooks/`: `use-word-guess-game` (+ `.test.tsx`), `use-word-guess-daily-completed`
+- `components/`: `word-board-preview`, `word-guess-board` (+ `.test.tsx`), `word-guess-how-to-play`, `word-guess-keyboard`, `word-guess-launch-actions`, `word-guess-launch-view`, `word-guess-mode-picker`, `word-guess-play-settings-widget`, `word-guess-play-view`, `word-guess-settings-widget`, `word-guess-tile`, `word-length-picker`, `index`
+- `hooks/`: `use-word-guess-game` (+ `.test.tsx`): select a tile in the current row and replace that letter, `use-word-guess-daily-completed`
+- Daily win dialog ranks this solve’s try count against a bundled stub. The stats page keeps the guess-distribution bars.
 - `search-params.ts`, `index.ts`
 
 **Crossword web UI** (`features/games/crossword/`)
 - `components/`: `crossword-grid`, `crossword-how-to-play`, `crossword-launch-view`, `crossword-mode-picker`, `crossword-play-settings-widget`, `crossword-play-view`, `crossword-settings-widget`, `index`
-- `hooks/use-crossword-game.ts`
+- `hooks/use-crossword-game.ts` (+ test): play clock and daily solve-time recording
 - `search-params.ts`, `index.ts`
 
 **Sudoku web UI** (`features/games/sudoku/`)
@@ -328,6 +356,19 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 - `context/`: persisted auto-candidate preference provider + test
 - `hooks/use-sudoku-game.ts` (+ test): load/generate/persist flow, timer reconciliation, engagement recording
 - `lib/generate-sudoku.client.ts` (+ test) and `workers/sudoku-generate.worker.ts`: generation bridge
+- `search-params.ts`, `index.ts`
+
+**Reversi web UI** (`features/games/reversi/`)
+- `components/`: launch, play, board, settings, and How To Play. Play uses `GamePlaySection`
+- `hooks/`: computer session, difficulty, flip animation, and flip frames
+- `index.ts`
+
+**Type Rush web UI** (`features/games/type-rush/`)
+- `components/`: launch, play, settings, and How to Play content
+- `type-rush-backspace-preference.ts`: Allow Backspace, on by default, stored at `pasttime.type-rush.backspace`
+- `hooks/use-type-rush-game.ts` (+ test): persisted daily/practice rounds,
+  live timing, backspace, and completion recording
+- Handheld notice: `features/games/components/typing-handheld-notice.tsx`, mounted by `GamePageShell` and `GamePlayShell` for any game tagged typing. Don't Show Again is stored per game id
 - `search-params.ts`, `index.ts`
 
 ---

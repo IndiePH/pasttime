@@ -5,18 +5,24 @@ import { CrosswordHowToPlay } from "@/features/games/crossword/components/crossw
 import { SolitaireHowToPlay } from "@/features/games/solitaire/components/solitaire-how-to-play"
 import { SudokuHowToPlay } from "@/features/games/sudoku/components/sudoku-how-to-play"
 import { WordGuessHowToPlay } from "@/features/games/word-guess/components/word-guess-how-to-play"
+import { TypeRushHowToPlay } from "@/features/games/type-rush/components/type-rush-how-to-play"
+import { TypeShieldHowToPlay } from "@/features/games/type-shield/components/type-shield-how-to-play"
+import { ReversiHowToPlay } from "@/features/games/reversi/components/reversi-how-to-play"
 
 export type GameHowToPlayContentProps = {
   game: GameDefinition
 }
 
 export const GAME_HOW_TO_PLAY_CONTENT: Partial<
-   Record<string, ComponentType<GameHowToPlayContentProps>>
- > = {
-   "word-guess": WordGuessHowToPlay,
-   crossword: CrosswordHowToPlay,
-   solitaire: SolitaireHowToPlay,
-   sudoku: SudokuHowToPlay,
- }
+  Record<string, ComponentType<GameHowToPlayContentProps>>
+> = {
+  "word-guess": WordGuessHowToPlay,
+  crossword: CrosswordHowToPlay,
+  solitaire: SolitaireHowToPlay,
+  sudoku: SudokuHowToPlay,
+  "type-rush": TypeRushHowToPlay,
+  "type-shield": TypeShieldHowToPlay,
+  reversi: ReversiHowToPlay,
+}
 
 export { RegisteredHowToPlayContent } from "@/features/games/registered-how-to-play-content"

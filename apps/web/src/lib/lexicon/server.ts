@@ -116,6 +116,45 @@ async function readR2Text(key: string): Promise<string | null> {
   }
 }
 
+const TYPE_SHIELD_LENGTHS = [5, 6, 7, 8, 9, 10] as const
+let typeShieldWords: string[] | null = null
+
+export async function fetchTypeShieldWords(): Promise<string[]> {
+  if (typeShieldWords && typeShieldWords.length > 0) {
+    return typeShieldWords
+  }
+
+  try {
+    const raw = await readFile(
+      join(DOMAIN_ROOT, "shared", "dictionary.full.enriched.json"),
+      "utf8",
+    )
+    const parsed = JSON.parse(raw) as Record<string, EnrichedEntry[]>
+    const words = TYPE_SHIELD_LENGTHS.flatMap((length) =>
+      listEnrichedAnswerWords(parsed, length).filter((word) =>
+        /^[A-Z]+$/.test(word),
+      ),
+    )
+    if (words.length > 0) {
+      typeShieldWords = words
+      return words
+    }
+  } catch (error) {
+    console.warn("Type Shield dictionary file read failed", error)
+  }
+
+  const fromShards: string[] = []
+  for (const length of TYPE_SHIELD_LENGTHS) {
+    const raw = await readR2Text(lexiconAnswersKey(length))
+    if (!raw) continue
+    fromShards.push(
+      ...parseShardPayload(raw).filter((word) => /^[A-Za-z]+$/.test(word)),
+    )
+  }
+  typeShieldWords = fromShards
+  return fromShards
+}
+
 export async function fetchLexiconAnswers(length: number): Promise<string[]> {
   const key = lexiconAnswersKey(length)
   const fromR2 = await readR2Text(key)

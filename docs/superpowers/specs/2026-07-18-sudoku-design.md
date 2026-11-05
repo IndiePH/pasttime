@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-Ship Sudoku as a first-class Pasttime solo game: classic 9×9, Easy / Medium / Hard (NYT-inspired technique bands), Daily and Endless per difficulty, NYT-style candidates (manual + optional auto-candidate), undo, timer, live peer-conflict highlighting, and local engagement stats. No hints, share cards, variants, or multiplayer in v1.
+Ship Sudoku as a first-class Pasttime solo game: classic 9×9, Easy / Medium / Hard (NYT-inspired technique bands), Daily and Endless per difficulty, NYT-style candidates (manual + optional auto-candidate), undo, timer, live peer-conflict highlighting, and local engagement stats. No hints, variants, or multiplayer in v1. A daily win copies text only: difficulty and elapsed time, with no grid. Endless wins do not share.
 
 **Approach:** Pasttime-native domain engine + feature plugin (same shape as Crossword / Word Guess). Runtime seeded generation with a technique-based reject loop (Web Worker + daily cache).
 
@@ -35,7 +35,7 @@ How to Play dialog. The live implementation is under
 | Timer | Shown during play; persisted across reload |
 | Mistakes | Live peer-conflict highlight; no strike limit / no game-over |
 | Hints | None |
-| Win follow-up | Wire `useEngagementRecorder` + existing stats page; no share card |
+| Win follow-up | Wire `useEngagementRecorder` + existing stats page. Daily wins copy difficulty and time. Endless wins do not share. |
 | Generation | Client-side seeded generate + rate + reject (approach A) |
 
 **Out of v1:** hints, shareable result cards, 6×6 / Killer / other variants, precomputed puzzle bank, multiplayer, wrong-vs-solution “red dot” auto-check (solution is still stored for win validation).
@@ -145,7 +145,7 @@ Clue count is a soft target only. Accept/reject uses the technique ladder. Same 
 
 - Board locks; show elapsed time
 - CTAs: stats / new endless / back to launch
-- No share card
+- Daily wins copy difficulty and elapsed time. The text has no grid. Endless wins do not share.
 
 ---
 
