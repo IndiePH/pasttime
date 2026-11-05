@@ -24,6 +24,7 @@ import {
 } from "./flip-frames"
 import { useReversiDifficulty } from "./reversi-difficulty"
 import { useReversiFlipAnimation } from "./reversi-flip-animation"
+import { useReversiMatchRecorder } from "./use-reversi-match-history"
 
 export function useReversiGame() {
   const difficulty = useReversiDifficulty()
@@ -38,6 +39,8 @@ export function useReversiGame() {
   const [shown, setShown] = useState<Disc[][] | null>(null)
   const [motion, setMotion] = useState<FlipMotion | null>(null)
   const [flippingLabel, setFlippingLabel] = useState<string | null>(null)
+
+  useReversiMatchRecorder(session.position)
 
   useEffect(() => {
     difficultyRef.current = difficulty

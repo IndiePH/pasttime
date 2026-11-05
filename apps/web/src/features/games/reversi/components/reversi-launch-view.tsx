@@ -16,10 +16,14 @@ interface ReversiLaunchViewProps {
 export function ReversiLaunchView({ game }: ReversiLaunchViewProps) {
   return (
     <>
-      <GamePageShell>
+      <GamePageShell game={game}>
         <GameSessionHeader game={game} subtitle={game.description} />
         <ReversiSettingsWidget className="mt-6" />
-        <GameLaunchActions game={game} playHref={gamePlayPath(game.id)} />
+        <GameLaunchActions
+          game={game}
+          playHref={gamePlayPath(game.id)}
+          statsHref="/games/reversi/stats"
+        />
       </GamePageShell>
       <GameOverviewSection gameId={game.id} gameTitle={game.title} />
     </>

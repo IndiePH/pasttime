@@ -63,7 +63,7 @@ export type GameDefinition = {
   /** Maximum players allowed in a multiplayer room */
   maxPlayers?: number
   launchedAt?: string
-  /** Hub “Top picks” row when true */
+  /** Manual hub highlight. Top picks use this only when view counts are unavailable. */
   featured?: boolean
 }
 

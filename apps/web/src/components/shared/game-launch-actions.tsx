@@ -42,42 +42,44 @@ export function GameLaunchActions({ game }: { game: GameDefinition }) {
 
   return (
     <>
-      <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
+      <div className="mt-8 flex w-full flex-col gap-3">
         <GameHowToPlay game={game} />
-        {multiplayer ? (
-          showJoinPanel ? (
-            <JoinRoomPanel
-              gameId={game.id}
-              onCancel={() => setShowJoinPanel(false)}
-            />
+        <div className="mx-auto flex w-full max-w-xs flex-col gap-3">
+          {multiplayer ? (
+            showJoinPanel ? (
+              <JoinRoomPanel
+                gameId={game.id}
+                onCancel={() => setShowJoinPanel(false)}
+              />
+            ) : (
+              <>
+                <Button type="button" className="w-full" asChild>
+                  <PlatformLink href={gamePlayPath(game.id)}>Play Solo</PlatformLink>
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="w-full"
+                  onClick={handleCreateRoom}
+                >
+                  Create Room
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setShowJoinPanel(true)}
+                >
+                  Join Room
+                </Button>
+              </>
+            )
           ) : (
-            <>
-              <Button type="button" className="w-full" asChild>
-                <PlatformLink href={gamePlayPath(game.id)}>Play Solo</PlatformLink>
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                className="w-full"
-                onClick={handleCreateRoom}
-              >
-                Create Room
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => setShowJoinPanel(true)}
-              >
-                Join Room
-              </Button>
-            </>
-          )
-        ) : (
-          <Button type="button" className="w-full" asChild>
-            <PlatformLink href={gamePlayPath(game.id)}>Play</PlatformLink>
-          </Button>
-        )}
+            <Button type="button" className="w-full" asChild>
+              <PlatformLink href={gamePlayPath(game.id)}>Play</PlatformLink>
+            </Button>
+          )}
+        </div>
       </div>
       {!showJoinPanel ? (
         <Button variant="outline" className="mt-6" asChild>

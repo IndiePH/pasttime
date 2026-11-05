@@ -7,6 +7,14 @@ You play Black. A local computer plays White. Launch and play use the shared gam
 
 The spec is `docs/superpowers/specs/2026-11-05-reversi-design.md`.
 
+## Stats
+
+Completed matches are stored locally under a Reversi-specific history key,
+because Reversi has no daily mode and can have multiple matches per day. The
+stats page follows the shared Pasttime stats layout and shows a boxing-style
+Wins–Losses–Draws record, total games, win rate, longest win streak, biggest
+win margin, and average score margin.
+
 ## Match
 
 Standard 8×8. Black starts. The center is White, Black, Black, White from the top-left of those four squares. A move must flip at least one disc. A side with no move passes. The higher count wins.

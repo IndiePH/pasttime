@@ -1,5 +1,11 @@
+import { filterGamesByStatus } from "@pasttime/domain/games"
 import { StaticPage } from "@/components/shared/static-page"
 import { pageMetadata } from "@/lib/seo"
+
+const playableTitles = new Intl.ListFormat("en", {
+  style: "long",
+  type: "conjunction",
+}).format(filterGamesByStatus("available").map((game) => game.title))
 
 export const metadata = pageMetadata({
   title: "About",
@@ -30,7 +36,7 @@ export default function AboutPage() {
         {
           title: "What you can play",
           content: [
-            "The hub currently offers Crossword, Word Guess, Sudoku, and Solitaire, free to play instantly in the browser. More classics are in development and will appear in the catalog when they are ready.",
+            `The hub currently offers ${playableTitles}, free to play instantly in the browser. More classics are in development and will appear in the catalog when they are ready.`,
             "Some games support local solo play with daily and endless modes; selected titles also offer multiplayer rooms when the live server is available.",
           ],
         },

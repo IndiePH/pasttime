@@ -16,7 +16,13 @@ import { GameSessionHeader } from "@/features/games/components/game-session-head
 import { GameOverviewSection } from "@/features/games/content/game-overview-section"
 import { getGameModule } from "@/features/games/module-registry"
 import { parseGameSearchParams } from "@/features/games/parse-game-search-params"
-import { gameApplicationJsonLd, pageMetadata } from "@/lib/seo"
+import { getGameOverview } from "@/features/games/content/game-overviews"
+import {
+  breadcrumbJsonLd,
+  clipMetaDescription,
+  gameApplicationJsonLd,
+  pageMetadata,
+} from "@/lib/seo"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -39,9 +45,11 @@ export async function generateMetadata({
       path: gamePath(slug),
     })
   }
+  const overview = getGameOverview(game.id)
+  const lead = overview?.intro[0] ?? game.description
   return pageMetadata({
     title: game.title,
-    description: game.description,
+    description: clipMetaDescription(lead),
     path: gamePath(game.id),
   })
 }
@@ -56,10 +64,21 @@ export default async function GamePage({ params, searchParams }: PageProps) {
   }
 
   const gameModule = getGameModule(slug)
-  const structuredData =
-    game.status === "available" ? (
-      <JsonLd data={gameApplicationJsonLd(game)} />
-    ) : null
+  const overview = getGameOverview(game.id)
+  const lead = overview?.intro[0] ?? game.description
+  const structuredData = (
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: game.title, path: gamePath(game.id) },
+        ])}
+      />
+      {game.status === "available" ? (
+        <JsonLd data={gameApplicationJsonLd(game, lead)} />
+      ) : null}
+    </>
+  )
 
   if (game.status === "available" && gameModule?.LaunchView) {
     const LaunchView = gameModule.LaunchView

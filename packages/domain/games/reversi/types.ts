@@ -5,6 +5,26 @@ export type Disc = Side | null
 export type Square = { row: number; col: number }
 export type Difficulty = "easy" | "medium" | "hard"
 
+export type ReversiMatchResult = "win" | "loss" | "draw"
+
+export type ReversiMatch = {
+  blackScore: number
+  whiteScore: number
+  result: ReversiMatchResult
+  timestamp: number
+}
+
+export type ReversiStats = {
+  wins: number
+  losses: number
+  draws: number
+  totalGames: number
+  winRate: number
+  longestWinStreak: number
+  biggestWinMargin: number | null
+  averageScoreMargin: number | null
+}
+
 export type Position = {
   board: Disc[][]
   turn: Side

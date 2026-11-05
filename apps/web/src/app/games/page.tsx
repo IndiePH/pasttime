@@ -5,8 +5,10 @@ import { pageMetadata } from "@/lib/seo"
 export const metadata = pageMetadata({
   title: "Games",
   description:
-    "Browse free Crossword, Word Guess, Sudoku, and Solitaire on Pasttime. Instant play in the browser, no download required.",
+    "Browse free Crossword, Word Guess, Sudoku, Solitaire, Reversi, Type Rush, and Type Shield on Pasttime. Instant play in the browser, no download required.",
   path: "/games",
+  // Same hub as the apex. Keep this URL working; index the homepage.
+  canonicalPath: "/",
 })
 
 type PageProps = {

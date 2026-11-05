@@ -1,5 +1,6 @@
 import { GameIcon } from "@/components/ui/icons"
-import type { GameDefinition } from "@pasttime/domain/games"
+import { gamePath, type GameDefinition } from "@pasttime/domain/games"
+import { PlatformLink } from "@/platform/navigation"
 import { cn } from "@/lib/utils"
 
 interface GameSessionHeaderProps {
@@ -23,6 +24,27 @@ export function GameSessionHeader({
           "landscape:flex-row landscape:items-center landscape:justify-between landscape:gap-4 landscape:text-left",
       )}
     >
+      {isCompact ? null : (
+        <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
+          <ol className="flex items-center justify-center gap-1.5">
+            <li>
+              <PlatformLink href="/" className="hover:text-foreground">
+                Home
+              </PlatformLink>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <PlatformLink
+                href={gamePath(game.id)}
+                aria-current="page"
+                className="text-foreground"
+              >
+                {game.title}
+              </PlatformLink>
+            </li>
+          </ol>
+        </nav>
+      )}
       <div
         className={cn(
           "flex flex-col items-center text-center",

@@ -24,6 +24,8 @@ Open [http://localhost:3000](http://localhost:3000).
 - Word Guess — Daily and Endless, 5–10 letters
 - Sudoku — Daily and Random, Easy/Medium/Hard
 - Reversi — Play Black against a local computer at Easy, Medium, or Hard
+- Type Rush — Daily and practice passages
+- Type Shield — Type falling words before they hit the dome
 
 ### Multiplayer API (optional)
 

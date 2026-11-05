@@ -15,7 +15,7 @@ Ship Reversi as a playable solo game. The person places Black. A computer on thi
 - A side with no legal square passes. The match ends when neither side can move. The higher disc count wins. Equal counts draw.
 - The person is Black. The computer is White. Settings stores Easy, Medium, or Hard on this device. The default is Medium.
 - Animate Flips starts on. Settings can turn it off. The choice stays on this device.
-- The hub lists Reversi as available and "1 player". There is no room, no saved match, no stats, no streak, no share card, and no daily mode.
+- The hub lists Reversi as available and "1 player". There is no room, in-progress saved match, share card, or daily mode. Completed match history and local stats are stored on the device.
 - Launch and play use the shared game template. The primary label stays Play. Create Room and Join Room are omitted.
 
 ## Starting position
@@ -95,7 +95,7 @@ The play screen creates a computer session. A person plays Black. After a human 
 
 ## Template fit
 
-Launch uses `GamePageShell`: `GameSessionHeader`, the settings widget under the header, then `GameLaunchActions` (How To Play, Play, Back To Catalog) and the overview.
+Launch uses `GamePageShell`: `GameSessionHeader`, the settings widget under the header, then `GameLaunchActions` (How To Play, Play, Stats, Back To Catalog) and the overview.
 
 Play uses `GamePlayShell` with `layout="board"` and `GamePlaySection`: header, registered settings, the score, the turn line, and the board, then New Game and Back To Setup.
 
@@ -106,15 +106,17 @@ Exceptions: there is no daily mode, so the primary label stays Play. The game is
 | Layer | Path | Responsibility |
 | --- | --- | --- |
 | Domain | `packages/domain/games/reversi/` | Position, legal moves, placement, pass, score, session, seats. No React. |
-| Feature | `apps/web/src/features/games/reversi/` | Launch view, play view, computer hook, difficulty and flip settings, How To Play |
+| Feature | `apps/web/src/features/games/reversi/` | Launch view, play view, stats view, computer hook, match history, difficulty and flip settings, How To Play |
 | Catalog | `packages/domain/games/registry.ts` | `status: "available"`, tags `board` and `strategy`, `playerCount: "1 player"` |
 | Wiring | Module, How To Play, and overview registries | One Play action and the rules dialog |
 
 Import the domain from `@pasttime/domain/games/reversi`. Leave it out of the root domain barrel. Remove `minPlayers`, `maxPlayers`, and the `multiplayer` tag so the shared launch actions do not offer Create Room or Join Room.
 
-The launch view offers one `Play` button to `/games/reversi/play`, plus How To Play and the existing overview. The play view uses `GamePlaySection` on the board layout. It shows both scores, the color to move, a pass sentence when `lastPass` is set, and a result line when the match has ended. `New Game` replaces the session with `createComputerSession`. There is no keyboard control.
+The launch view offers one `Play` button to `/games/reversi/play`, plus How To Play and the existing overview. The play view uses `GamePlaySection` on the board layout. It shows both scores, the color to move, a pass sentence when `lastPass` is set, and a result line when the match has ended. A shared post-solve dialog opens when the match ends with the result, final score, New Game, View Stats, and Close actions. `New Game` replaces the session with `createComputerSession`. There is no keyboard control.
 
-The hook stores one `Session`. Each square is a button. A click calls `acceptHumanMove`. A `null` result does not change state. When `nextStep` is `computer`, the hook calls `chooseMove` and `applyComputerMove` after the flip animation, or at once when animation is off.
+The hook stores one `Session`. Each square is a button. A click calls `acceptHumanMove`. A `null` result does not change state. When `nextStep` is `computer`, the hook calls `chooseMove` and `applyComputerMove` after the flip animation, or at once when animation is off. When a match ends, the hook records the final Black and White counts and result in local match history.
+
+The stats page follows the shared stats-page shell and cards. It shows a boxing-style `Wins–Losses–Draws` record with a `W Wins · L Losses · D Draws` legend, total games, win rate, longest win streak, biggest win margin, and average score margin across all completed matches.
 
 ## Copy
 
@@ -122,6 +124,7 @@ The hook stores one `Session`. Each square is a button. A click calls `acceptHum
 - Turn line: `Black to play` while the person moves. `Black is flipping` or `White is flipping` while discs turn over. `White is thinking` while the computer chooses.
 - Pass line: `White has no move. Black to play.` The names follow the side that passed and the side now to move.
 - Result line: `Black wins 38–26`, `White wins 26–38`, or `Draw 32–32`, using the live counts. The first number is Black.
+- Result dialog: `Black wins!`, `White wins!`, or `Draw game`, with `Final score 38–26` and New Game, View Stats, and Close actions.
 - Landing overview: you play Black and the computer plays White. Difficulty is Easy, Medium, or Hard.
 - `docs/GAMES.md`: Reversi is playable against a local computer.
 
@@ -129,11 +132,11 @@ The hook stores one `Session`. Each square is a button. A click calls `acceptHum
 
 Domain tests cover the starting position, a one-line flip, a multi-direction flip, a rejected illegal square, an automatic pass, a second pass that ends the match, a full board, a win, and a draw. Session tests cover hotseat placement for both colors, `acceptHumanMove` returning `null` when the side to move is a computer seat, and `applyComputerMove` placing a legal square for a computer seat while rejecting a human seat. `nextStep` is human for the hotseat session, computer when that seat is computer, and ended when the match is over.
 
-Web tests cover a legal click that shows `Black is flipping` and then the computer answering so Black is to play again, an illegal click that leaves the board unchanged, flip animation starting on, and New Game restoring the starting position.
+Web tests cover a legal click that shows `Black is flipping` and then the computer answering so Black is to play again, an illegal click that leaves the board unchanged, flip animation starting on, New Game restoring the starting position, the terminal result dialog, match-history persistence, and the boxing-style stats view.
 
 `lint`, `typecheck`, `test`, and `build` stay the quality gates.
 
 ## Out of scope
 
-- Saved games, stats, streaks, share cards, daily puzzles, and rooms.
+- In-progress saved games, share cards, daily puzzles, and rooms.
 - Choosing to play White, board-size variants, and move undo.

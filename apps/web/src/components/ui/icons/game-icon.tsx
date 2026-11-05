@@ -1,26 +1,38 @@
+import type { ComponentType } from "react"
 import type { GameIconId } from "@pasttime/domain/games"
+import {
+  Blocks,
+  Disc,
+  Factory,
+  Grid3x3,
+  Keyboard,
+  LayoutGrid,
+  Shield,
+  Ship,
+  Spade,
+  SquareStack,
+} from "lucide-react"
 
-import { SampleCrewIcon } from "./sample-crew-icon"
-import { SampleGridIcon } from "./sample-grid-icon"
-import { SampleQuizIcon } from "./sample-quiz-icon"
-import { SampleTilesIcon } from "./sample-tiles-icon"
+import { cn } from "@/lib/utils"
+import { PusoyDosIcon } from "./pusoy-dos-icon"
+import { TongitsIcon } from "./tongits-icon"
 import { WordGuessIcon } from "./word-guess-icon"
 
 const ICONS = {
   "word-guess": WordGuessIcon,
-  solitaire: SampleCrewIcon,
-  tongits: SampleCrewIcon,
-  "pusoy-dos": SampleCrewIcon,
-  crossword: SampleGridIcon,
-  sudoku: SampleGridIcon,
-  reversi: SampleTilesIcon,
-  "fleet-grid": SampleQuizIcon,
-  spades: SampleCrewIcon,
-  "word-factory": WordGuessIcon,
-  "type-rush": SampleQuizIcon,
-  "type-shield": SampleQuizIcon,
-  "tile-words": WordGuessIcon,
-} satisfies Record<GameIconId, typeof WordGuessIcon>
+  solitaire: SquareStack,
+  tongits: TongitsIcon,
+  "pusoy-dos": PusoyDosIcon,
+  crossword: LayoutGrid,
+  sudoku: Grid3x3,
+  reversi: Disc,
+  "fleet-grid": Ship,
+  spades: Spade,
+  "word-factory": Factory,
+  "type-rush": Keyboard,
+  "type-shield": Shield,
+  "tile-words": Blocks,
+} satisfies Record<GameIconId, ComponentType<{ className?: string }>>
 
 export function GameIcon({
   id,
@@ -32,5 +44,20 @@ export function GameIcon({
   title?: string
 }) {
   const Icon = ICONS[id]
-  return <Icon className={className} role={title ? "img" : undefined} aria-label={title} />
+  return (
+    <span
+      className={cn(
+        "relative inline-grid place-items-center text-primary",
+        className,
+      )}
+      role={title ? "img" : undefined}
+      aria-label={title}
+    >
+      <span
+        aria-hidden
+        className="icon-plate absolute inset-0 rounded-[22%] bg-muted"
+      />
+      <Icon aria-hidden className="relative size-[58%]" />
+    </span>
+  )
 }

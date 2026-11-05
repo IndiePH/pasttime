@@ -83,38 +83,40 @@ export function GameLaunchActions({
 
   return (
     <>
-      <div className="mt-8 flex w-60 flex-col gap-3">
+      <div className="mt-8 flex w-full flex-col gap-3">
         <GameHowToPlay game={game} />
-        <Button type="button" className="w-full" asChild>
-          <PlatformLink href={playHref}>{playLabel}</PlatformLink>
-        </Button>
-        {secondaryAction ? (
-          <Button type="button" variant="secondary" className="w-full" asChild>
-            <PlatformLink href={secondaryAction.href}>
-              {secondaryAction.label}
-            </PlatformLink>
+        <div className="mx-auto flex w-60 flex-col gap-3">
+          <Button type="button" className="w-full" asChild>
+            <PlatformLink href={playHref}>{playLabel}</PlatformLink>
           </Button>
-        ) : null}
-        {onCreateRoom ? (
-          <Button
-            type="button"
-            variant="secondary"
-            className="w-full"
-            onClick={handleCreateRoom}
-          >
-            Create Room
-          </Button>
-        ) : null}
-        {onJoinRoom ? (
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={handleJoinRoom}
-          >
-            Join Room
-          </Button>
-        ) : null}
+          {secondaryAction ? (
+            <Button type="button" variant="secondary" className="w-full" asChild>
+              <PlatformLink href={secondaryAction.href}>
+                {secondaryAction.label}
+              </PlatformLink>
+            </Button>
+          ) : null}
+          {onCreateRoom ? (
+            <Button
+              type="button"
+              variant="secondary"
+              className="w-full"
+              onClick={handleCreateRoom}
+            >
+              Create Room
+            </Button>
+          ) : null}
+          {onJoinRoom ? (
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleJoinRoom}
+            >
+              Join Room
+            </Button>
+          ) : null}
+        </div>
       </div>
       <GamePlayFooterActions className="mt-3">
         {statsHref ? (

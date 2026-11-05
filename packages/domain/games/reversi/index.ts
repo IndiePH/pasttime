@@ -25,12 +25,16 @@ export {
   REVERSI_DIFFICULTIES,
   REVERSI_DIFFICULTY_DEFAULT,
 } from "./settings"
+export { computeReversiStats } from "./stats"
 export type {
   Difficulty,
   Disc,
   MoveChooser,
   NextStep,
   Position,
+  ReversiMatch,
+  ReversiMatchResult,
+  ReversiStats,
   Seat,
   Session,
   Side,
