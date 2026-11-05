@@ -9,7 +9,7 @@ Web is deployed as a Cloudflare Worker via OpenNext, **not** `next start`.
 
 | Environment | URL |
 |-------------|-----|
-| Production (custom domain) | https://gamehub.pasttime.xyz |
+| Production (custom domain) | https://pasttime.xyz |
 | Workers.dev | https://gamehub.xent-xent.workers.dev/ |
 
 Worker name in Cloudflare: **`gamehub`** (product brand remains Pasttime).

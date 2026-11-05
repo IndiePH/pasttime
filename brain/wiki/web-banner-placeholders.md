@@ -1,9 +1,9 @@
 # Web banner placeholders
-updated: 2026-11-05
+updated: 2026-11-06
 tags: [monetization, layout]
 related: [adsense-manual-units, levelplay-app-ads, engineering-decisions]
 
-The header and the left rail load Adsterra display banners from `adsterra-banner.tsx`. Those tags are in this tree and show on pasttime.xyz only after this branch is deployed. Adsterra returns an empty script for any other host, including localhost, so the box stays blank there. There is still no `/ads.txt` until the dashboard lines are pasted. Google AdSense stays retired. Word Guess Android stays on Unity LevelPlay in `/app-ads.txt`. Do not copy those reseller lines into a website seller file. Anti-Adblock stays off. Do not paste the replacement codes from that email.
+The header and the left rail load Adsterra display banners from `adsterra-banner.tsx`. The canonical public website host is `pasttime.xyz`; `gamehub.pasttime.xyz` is not a production URL. Adsterra returns an empty script for any other host, including localhost, so the box stays blank there. There is still no `/ads.txt` until the dashboard lines are pasted. Google AdSense stays retired. Word Guess Android stays on Unity LevelPlay in `/app-ads.txt`. Do not copy those reseller lines into a website seller file. Anti-Adblock stays off. Do not paste the replacement codes from that email.
 
 ## Header
 
@@ -73,6 +73,7 @@ Sources: [publisher signup](https://adsterra.com/publishers/), [add a website](h
 - [x] Header code in `BannerPlaceholder`: 728×90 from the `md` breakpoint, 320×50 below that, hidden when the viewport is 500px tall or shorter. It stays pinned with the header, including on play. Only the size that fits is requested.
 - [x] Rail code in `PageSideBanner`: 160×600 at `lg` and up, `1.5rem` from the left edge. On play, the top aligns to `[data-play-field]`. On other pages, the top aligns to the title, and the rail stays off when the column would run under it or the measured height is under 600px. Type Shield keeps `sideBanner={false}`.
 - [x] Confirm a client-side route change still requests the banner. The header and the rail are mounted again with the same two units, and a second copy is not left behind.
+- [x] Retry one time when the Adsterra loader completes without creating its iframe. The retry is bounded per mount and does not reload the page or loop on blockers/no-fill.
 - [ ] An empty box is an unfilled auction. Do not fill it with a pop, a push, or an AdSense passback.
 
 ### Legal copy

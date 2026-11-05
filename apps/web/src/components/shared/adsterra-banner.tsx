@@ -32,6 +32,10 @@ type AtOptions = {
   params: Record<string, never>
 }
 
+const AD_LOAD_TIMEOUT_MS = 8_000
+const AD_RENDER_GRACE_MS = 1_500
+const MAX_AD_ATTEMPTS = 2
+
 function adsAllowed(): boolean {
   if (window.localStorage.getItem(OPT_OUT_KEY) === "1") return false
   const nav = navigator as Navigator & { globalPrivacyControl?: boolean }
@@ -56,31 +60,71 @@ function mountUnit(
   const run = mountQueue.then(
     () =>
       new Promise<void>((resolve) => {
-        if (cancelled() || !container.isConnected || !adsAllowed()) {
-          resolve()
-          return
+        let attempt = 0
+        let loadTimer: number | undefined
+        let retryTimer: number | undefined
+        let currentOptions: AtOptions | undefined
+
+        const clearTimers = () => {
+          if (loadTimer !== undefined) window.clearTimeout(loadTimer)
+          if (retryTimer !== undefined) window.clearTimeout(retryTimer)
         }
-        const options: AtOptions = {
-          key: unit.key,
-          format: "iframe",
-          height: unit.height,
-          width: unit.width,
-          params: {},
-        }
-        ;(window as Window & { atOptions?: AtOptions }).atOptions = options
-        const script = document.createElement("script")
-        script.src = `https://bauval.org/22/${unit.key}`
-        script.async = false
-        let settled = false
+
         const finish = () => {
-          if (settled) return
-          settled = true
+          clearTimers()
+          const win = window as Window & { atOptions?: AtOptions }
+          if (win.atOptions === currentOptions) delete win.atOptions
           resolve()
         }
-        script.onload = finish
-        script.onerror = finish
-        window.setTimeout(finish, 8000)
-        container.replaceChildren(script)
+
+        const mountAttempt = () => {
+          if (cancelled() || !container.isConnected || !adsAllowed()) {
+            finish()
+            return
+          }
+
+          attempt += 1
+          const options: AtOptions = {
+            key: unit.key,
+            format: "iframe",
+            height: unit.height,
+            width: unit.width,
+            params: {},
+          }
+          currentOptions = options
+          ;(window as Window & { atOptions?: AtOptions }).atOptions = options
+
+          const script = document.createElement("script")
+          script.src = `https://bauval.org/22/${unit.key}`
+          script.async = false
+
+          let attemptSettled = false
+          const inspectResult = () => {
+            if (attemptSettled) return
+            attemptSettled = true
+            if (loadTimer !== undefined) window.clearTimeout(loadTimer)
+
+            const rendered = container.querySelector("iframe") !== null
+            if (
+              cancelled() ||
+              !container.isConnected ||
+              rendered ||
+              attempt >= MAX_AD_ATTEMPTS
+            ) {
+              finish()
+              return
+            }
+
+            retryTimer = window.setTimeout(mountAttempt, AD_RENDER_GRACE_MS)
+          }
+
+          script.onload = inspectResult
+          script.onerror = inspectResult
+          loadTimer = window.setTimeout(inspectResult, AD_LOAD_TIMEOUT_MS)
+          container.replaceChildren(script)
+        }
+
+        mountAttempt()
       }),
   )
   mountQueue = run.then(
