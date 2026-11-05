@@ -49,7 +49,7 @@ export default function TermsPage() {
         {
           title: "Advertising and third-party services",
           content: [
-            "The Pasttime website does not display advertisements. The Word Guess Android app may display ads through Unity LevelPlay. Those parties have their own terms and privacy practices, linked from the Word Guess privacy policy. Your interactions with ads in that app are between you and those parties.",
+            "The Pasttime website may display banner advertisements from Adsterra. The Word Guess Android app may display ads through Unity LevelPlay. Those parties have their own terms and privacy practices, linked from the Word Guess privacy policy. Your interactions with ads are between you and those parties.",
             "We are not responsible for third-party content, offers, or websites linked from ads or elsewhere on the Service.",
           ],
         },

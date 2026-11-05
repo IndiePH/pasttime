@@ -42,7 +42,7 @@ export default function AboutPage() {
         {
           title: "How Pasttime stays free",
           content: [
-            "Browser games on this site are free to play and do not show display ads.",
+            "Browser games on this site are free to play. Banner ads from Adsterra support the site.",
             "The Word Guess Android app is supported by Unity LevelPlay advertising. That app’s data use is described in the Word Guess privacy policy.",
           ],
         },

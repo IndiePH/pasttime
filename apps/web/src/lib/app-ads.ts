@@ -5,8 +5,8 @@ import { UNITY_APP_ADS_LINES } from "./app-ads-unity-list"
  * Served at the domain apex: https://pasttime.xyz/app-ads.txt
  * Play Console Website is pasttime.xyz — the crawler strips any path.
  *
- * The website does not sell display ads, so there is no /ads.txt.
- * Do not add a website seller line here.
+ * Website Adsterra tags are separate. Do not add website seller lines here;
+ * this file is only for the Android app's LevelPlay inventory.
  *
  * Body is Unity dashboard "Show full list" plus ownerdomain, ironSource DIRECT
  * (public Publisher ID), and a unity3d.com mirror of the Unity Ads DIRECT line.

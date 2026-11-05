@@ -36,8 +36,8 @@ export default function PrivacyPage() {
           content: (
             <div className="space-y-3">
               <p>
-                The Pasttime website does not show display ads and does not use
-                Google AdSense.
+                The Pasttime website may show banner ads from Adsterra. The
+                website does not use Google AdSense.
               </p>
               <p>
                 The Word Guess Android app shows ads through Unity LevelPlay so

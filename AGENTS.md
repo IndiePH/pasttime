@@ -60,13 +60,13 @@ Read `brain/schema.md` for the full contract. Rules:
 | [dictionary-pipeline](brain/wiki/dictionary-pipeline.md) | Enriched dict, Word Guess answer pool, crossword corpus, R2/D1 publish, definition fixing |
 | [engineering-decisions](brain/wiki/engineering-decisions.md) | Persistent log of architectural, tradeoff, rule-override, and technical-debt decisions |
 | [geo-seo](brain/wiki/geo-seo.md) | Crawl map, JSON-LD, and on-page facts for search and answer engines |
-| [levelplay-app-ads](brain/wiki/levelplay-app-ads.md) | Word Guess Android LevelPlay: app-ads.txt, no website display ads |
+| [levelplay-app-ads](brain/wiki/levelplay-app-ads.md) | Word Guess Android LevelPlay app-ads.txt, separate from website Adsterra |
 | [nyt-engagement-patterns](brain/wiki/nyt-engagement-patterns.md) | NYT Games engagement patterns; Phase 8 post-solve modal + share cards shipped |
 | [percentile-ranking-patterns](brain/wiki/percentile-ranking-patterns.md) | Anonymous percentile ranking styles; Phase 8 comparative rankings implementation |
 | [reversi-design](brain/wiki/reversi-design.md) | Local computer plays White; difficulty and flip animation stay on the device |
 | [site-traffic](brain/wiki/site-traffic.md) | Daily page views and visitors by country; private `/traffic` summary |
 | [sudoku-design](brain/wiki/sudoku-design.md) | Shipped Sudoku v1 decisions and patterns: difficulty bands, generation, storage, timer, hydration, and launch UX |
-| [web-banner-placeholders](brain/wiki/web-banner-placeholders.md) | Empty banner boxes and the Sovrn setup checklist; no tag until that list is done |
+| [web-banner-placeholders](brain/wiki/web-banner-placeholders.md) | Adsterra header and rail placements, delivery diagnostics, and app-ads boundary |
 
 Add to this wiki as new knowledge is accumulated.
 

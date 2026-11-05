@@ -71,7 +71,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `games/[slug]/play/page.tsx` | Game play |
 | `games/[slug]/room/[code]/page.tsx` | Multiplayer room |
 | `games/[slug]/{loading,error,not-found}.tsx` | Route segments |
-| `about/`, `privacy/`, `terms/` | Site legal pages. The website does not show display ads. Privacy covers daily country traffic totals. |
+| `about/`, `privacy/`, `terms/` | Site legal pages. Website banners use Adsterra; privacy covers daily country traffic totals. |
 | `traffic/page.tsx` | Private traffic summary. `noindex`. Unlocked with `TRAFFIC_VIEW_KEY`. |
 | `api/traffic/route.ts` | Records a same-site page view: country, path, views, visitors. |
 | `robots.ts` | Allows `/`. Disallows `/traffic` and `/api/traffic`. |

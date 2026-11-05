@@ -50,11 +50,23 @@ If the latest Worker version is not currently deployed, `wrangler secret put` fa
 
 ### Unity LevelPlay (Word Guess Android)
 
-The website does not sell display ads yet. There is no `/ads.txt` and no AdSense script or slot. The header and the left rail are empty placeholders (`BannerPlaceholder`, `PageSideBanner`). They are not a network and they do not change `/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay. When Sovrn approves the site, follow the checklist in `brain/wiki/web-banner-placeholders.md` before adding the tags or `/ads.txt`.
+The website serves Adsterra display banners in the header and left rail
+(`BannerPlaceholder`, `PageSideBanner`). The tags are client-side and do not
+require `/ads.txt`; that path intentionally remains a 404. They do not change
+`/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay.
+See `brain/wiki/web-banner-placeholders.md` for placement behavior and blank-ad
+diagnostics.
 
 `https://pasttime.xyz/app-ads.txt` must stay on the apex. It starts with `ownerdomain=pasttime.xyz` and includes ironSource DIRECT, Unity Ads DIRECT (`unity.com` / `unity3d.com`), plus the Unity reseller list baked in `apps/web/src/lib/app-ads-unity-list.ts`. The public publisher ID lives in `apps/web/src/lib/app-ads.ts`. Do not put ironSource API keys in the repo or in Worker vars.
 
-Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Live checks: `https://pasttime.xyz/app-ads.txt` still returns the LevelPlay file, and `https://pasttime.xyz/ads.txt` is a 404 (no Google seller line). Privacy, about, and terms describe LevelPlay on the Android app. The app disclosure is `/word-guess/policy`. See `brain/wiki/levelplay-app-ads.md`.
+`https://pasttime.xyz/app-ads.txt` returns the LevelPlay file, while
+`https://pasttime.xyz/ads.txt` remains a 404 by design. Privacy, about, and
+terms describe Adsterra on the website and LevelPlay on the Android app. The
+app disclosure is `/word-guess/policy`. See
+`brain/wiki/levelplay-app-ads.md`.
+
+Each banner makes one bounded retry when the provider request fails, times out,
+or produces no iframe. Loaded ads are not periodically refreshed.
 
 **Pre-review crawl checks (apex):**
 
