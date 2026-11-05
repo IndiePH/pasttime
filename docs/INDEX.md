@@ -84,7 +84,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 |------|---------|
 | `shared/` | `site-shell`, `header`, `banner-placeholder`, `page-side-banner`, `side-banner-placeholder`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `traffic-beacon`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
 | `ui/` | shadcn primitives: `badge`, `button`, `card`, `dialog`, `dropdown-menu` |
-| `ui/icons/` | `game-icon` (Lucide glyph per game), `word-guess-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
+| `ui/icons/` | `game-icon` (Lucide glyphs; custom marks for Word Guess, Tongits, and Pusoy Dos), `word-guess-icon`, `pusoy-dos-icon`, `tongits-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
 | `theme-provider.tsx` | Theme context |
 
 **L4 — Features** (`src/features/`)

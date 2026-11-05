@@ -1,21 +1,43 @@
 import type { SVGProps } from "react"
 
+const TILE = 5.4
+const GAP = 0.9
+const COLS = 3
+const ROWS = 3
+const BOARD_W = COLS * TILE + (COLS - 1) * GAP
+const BOARD_H = ROWS * TILE + (ROWS - 1) * GAP
+const ORIGIN_X = (24 - BOARD_W) / 2
+const ORIGIN_Y = (24 - BOARD_H) / 2
+
+const TILE_PAINT = {
+  correct: { fill: "currentColor", fillOpacity: 1 },
+  present: { fill: "currentColor", fillOpacity: 0.42 },
+  absent: { fill: "none", stroke: "currentColor", strokeWidth: 1 },
+} as const
+
+const BOARD = [
+  ["absent", "present", "absent"],
+  ["correct", "present", "absent"],
+  ["correct", "correct", "correct"],
+] as const
+
+/** Three-by-three letter tiles, the Word Guess board. */
 export function WordGuessIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-      {...props}
-    >
-      <rect width="48" height="48" rx="10" className="fill-muted" />
-      <rect x="10" y="14" width="8" height="8" rx="1.5" className="fill-primary/80" />
-      <rect x="20" y="14" width="8" height="8" rx="1.5" className="fill-primary/50" />
-      <rect x="30" y="14" width="8" height="8" rx="1.5" className="fill-primary/30" />
-      <rect x="10" y="26" width="8" height="8" rx="1.5" className="fill-primary/30" />
-      <rect x="20" y="26" width="8" height="8" rx="1.5" className="fill-primary/80" />
-      <rect x="30" y="26" width="8" height="8" rx="1.5" className="fill-primary/50" />
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden {...props}>
+      {BOARD.map((row, rowIndex) =>
+        row.map((state, colIndex) => (
+          <rect
+            key={`${rowIndex}-${colIndex}`}
+            x={ORIGIN_X + colIndex * (TILE + GAP)}
+            y={ORIGIN_Y + rowIndex * (TILE + GAP)}
+            width={TILE}
+            height={TILE}
+            rx="0.85"
+            {...TILE_PAINT[state]}
+          />
+        )),
+      )}
     </svg>
   )
 }

@@ -1,6 +1,8 @@
 export { GameIcon } from "./game-icon"
+export { PusoyDosIcon } from "./pusoy-dos-icon"
 export { SampleCrewIcon } from "./sample-crew-icon"
 export { SampleGridIcon } from "./sample-grid-icon"
 export { SampleQuizIcon } from "./sample-quiz-icon"
 export { SampleTilesIcon } from "./sample-tiles-icon"
+export { TongitsIcon } from "./tongits-icon"
 export { WordGuessIcon } from "./word-guess-icon"

@@ -1,3 +1,4 @@
+import type { ComponentType } from "react"
 import type { GameIconId } from "@pasttime/domain/games"
 import {
   Blocks,
@@ -6,22 +7,22 @@ import {
   Grid3x3,
   Keyboard,
   LayoutGrid,
-  LetterText,
   Shield,
   Ship,
   Spade,
   SquareStack,
-  WalletCards,
-  type LucideIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { PusoyDosIcon } from "./pusoy-dos-icon"
+import { TongitsIcon } from "./tongits-icon"
+import { WordGuessIcon } from "./word-guess-icon"
 
 const ICONS = {
-  "word-guess": LetterText,
+  "word-guess": WordGuessIcon,
   solitaire: SquareStack,
-  tongits: WalletCards,
-  "pusoy-dos": WalletCards,
+  tongits: TongitsIcon,
+  "pusoy-dos": PusoyDosIcon,
   crossword: LayoutGrid,
   sudoku: Grid3x3,
   reversi: Disc,
@@ -31,7 +32,7 @@ const ICONS = {
   "type-rush": Keyboard,
   "type-shield": Shield,
   "tile-words": Blocks,
-} satisfies Record<GameIconId, LucideIcon>
+} satisfies Record<GameIconId, ComponentType<{ className?: string }>>
 
 export function GameIcon({
   id,
