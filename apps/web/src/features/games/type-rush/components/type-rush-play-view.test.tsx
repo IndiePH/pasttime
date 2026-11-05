@@ -1,9 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { GameDefinition } from "@pasttime/domain/games"
 import type { TypeRushRoundState } from "@pasttime/domain/games/type-rush"
 import { TypeRushPlayView } from "./type-rush-play-view"
+import { dismissTypingHandheldNotice } from "@/features/games/components/typing-handheld-notice"
+import { setTypeRushBackspace } from "@/features/games/type-rush/type-rush-backspace-preference"
 
 const MOCK_GAME: GameDefinition = {
   id: "type-rush",
@@ -56,6 +58,12 @@ vi.mock("@/features/games/type-rush/hooks/use-type-rush-game", () => ({
 }))
 
 describe("TypeRushPlayView passage layout", () => {
+  beforeEach(() => {
+    mockBackspaceCharacter.mockClear()
+    setTypeRushBackspace(true)
+    dismissTypingHandheldNotice("type-rush", false)
+  })
+
   it("keeps the full source passage stable after an incorrect character", () => {
     render(<TypeRushPlayView game={MOCK_GAME} modeLabel="Solo play" />)
 
@@ -71,5 +79,15 @@ describe("TypeRushPlayView passage layout", () => {
     fireEvent.keyDown(screen.getByRole("textbox"), { key: "Backspace" })
 
     expect(mockBackspaceCharacter).toHaveBeenCalledTimes(1)
+  })
+
+  it("ignores Backspace when the setting is off", () => {
+    setTypeRushBackspace(false)
+    render(<TypeRushPlayView game={MOCK_GAME} modeLabel="Solo play" />)
+
+    fireEvent.keyDown(screen.getByRole("textbox"), { key: "Backspace" })
+
+    expect(mockBackspaceCharacter).not.toHaveBeenCalled()
+    expect(screen.getByRole("status")).toHaveTextContent("Backspace is off.")
   })
 })

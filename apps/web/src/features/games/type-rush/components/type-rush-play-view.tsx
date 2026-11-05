@@ -18,11 +18,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { GameBoardLoading } from "@/features/games/components/game-board-loading"
+import { useTypingHandheldNotice } from "@/features/games/components/typing-handheld-notice"
 import { GamePlayFooterActions } from "@/features/games/components/game-play-footer-actions"
 import { GamePlayShell } from "@/features/games/components/game-play-shell"
 import { GameSessionHeader } from "@/features/games/components/game-session-header"
 import { typeRushSearchParams } from "@/features/games/type-rush/search-params"
 import { useTypeRushGame } from "@/features/games/type-rush/hooks/use-type-rush-game"
+import { useTypeRushBackspace } from "@/features/games/type-rush/type-rush-backspace-preference"
 import { PlatformLink } from "@/platform/navigation"
 
 interface TypeRushPlayViewProps {
@@ -44,18 +46,22 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
   const mode = modeParam as TypeRushRoundMode
   const contentType = contentParam as TypeRushContentType
   const typeRush = useTypeRushGame(mode, contentType, freshParam ?? false)
+  const allowBackspace = useTypeRushBackspace()
+  const noticePhase = useTypingHandheldNotice(game.id)
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
-    if (typeRush.round) {
+    if (noticePhase === "closed" && typeRush.round) {
       inputRef.current?.focus()
     }
-  }, [typeRush.round])
+  }, [noticePhase, typeRush.round])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Backspace") {
       event.preventDefault()
-      typeRush.backspaceCharacter()
+      if (allowBackspace) {
+        typeRush.backspaceCharacter()
+      }
       return
     }
 
@@ -85,21 +91,26 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
     !typeRush.round ||
     !typeRush.metrics
   ) {
-    return <GameBoardLoading label="Loading Type Rush…" />
+    return (
+      <GamePlayShell game={game}>
+        <GameBoardLoading label="Loading Type Rush…" />
+      </GamePlayShell>
+    )
   }
 
   const { round, metrics } = typeRush
   const isPlaying = round.status === "playing"
 
   return (
-    <GamePlayShell>
+    <>
+      <GamePlayShell game={game}>
       <GameSessionHeader
         game={game}
         subtitle={`${modeLabel} · ${formatTypeRushRoundModeLabel(mode)} · ${formatTypeRushContentTypeLabel(contentType)}`}
         density="compact"
       />
 
-      <Card className="mt-6 w-full text-left">
+      <Card data-play-field className="mt-6 w-full text-left">
         <CardHeader className="gap-3">
           <div className="flex items-center justify-between gap-3">
             <CardTitle>Type Rush</CardTitle>
@@ -174,7 +185,9 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
             aria-live="polite"
           >
             {isPlaying
-              ? "Click the passage and type every character."
+              ? allowBackspace
+                ? "Click the passage and type every character."
+                : "Click the passage and type every character. Backspace is off."
               : `Complete in ${formatPlayElapsed(round.elapsedMs)} at ${formatAccuracy(metrics.accuracy)} accuracy.`}
           </p>
         </CardContent>
@@ -191,5 +204,6 @@ export function TypeRushPlayView({ game, modeLabel }: TypeRushPlayViewProps) {
         </Button>
       </GamePlayFooterActions>
     </GamePlayShell>
+    </>
   )
 }

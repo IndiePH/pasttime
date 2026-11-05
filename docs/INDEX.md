@@ -365,8 +365,10 @@ UI module registered in `apps/web/src/features/games/module-registry.ts`
 
 **Type Rush web UI** (`features/games/type-rush/`)
 - `components/`: launch, play, settings, and How to Play content
+- `type-rush-backspace-preference.ts`: Allow Backspace, on by default, stored at `pasttime.type-rush.backspace`
 - `hooks/use-type-rush-game.ts` (+ test): persisted daily/practice rounds,
   live timing, backspace, and completion recording
+- Handheld notice: `features/games/components/typing-handheld-notice.tsx`, mounted by `GamePageShell` and `GamePlayShell` for any game tagged typing. Don't Show Again is stored per game id
 - `search-params.ts`, `index.ts`
 
 ---

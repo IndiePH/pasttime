@@ -11,7 +11,12 @@ import {
 } from "@pasttime/domain/games/type-rush"
 import { Button } from "@/components/ui/button"
 import { GameSettingsWidget } from "@/features/games/components/game-settings-widget"
+import { SettingsToggleField } from "@/features/games/components/settings-toggle-field"
 import { typeRushSearchParams } from "@/features/games/type-rush/search-params"
+import {
+  setTypeRushBackspace,
+  useTypeRushBackspace,
+} from "@/features/games/type-rush/type-rush-backspace-preference"
 
 interface TypeRushSettingsWidgetProps {
   className?: string
@@ -24,13 +29,17 @@ export function TypeRushSettingsWidget({
     "content",
     typeRushSearchParams.content
   )
+  const allowBackspace = useTypeRushBackspace()
   const [draftContentType, setDraftContentType] =
     React.useState<TypeRushContentType>(TYPE_RUSH_CONTENT_TYPE_DEFAULT)
+  const [draftAllowBackspace, setDraftAllowBackspace] =
+    React.useState(allowBackspace)
   const contentType = contentParam as TypeRushContentType
 
   const handleOpen = React.useCallback(() => {
     setDraftContentType(contentType)
-  }, [contentType])
+    setDraftAllowBackspace(allowBackspace)
+  }, [allowBackspace, contentType])
 
   const handleApply = React.useCallback(() => {
     void setContentParam(
@@ -38,17 +47,25 @@ export function TypeRushSettingsWidget({
         ? null
         : draftContentType
     )
-  }, [draftContentType, setContentParam])
+    setTypeRushBackspace(draftAllowBackspace)
+  }, [draftAllowBackspace, draftContentType, setContentParam])
 
   return (
     <GameSettingsWidget
       className={className}
       panelId="type-rush-settings-panel"
       description="Choose what to type in this session."
-      summary={formatTypeRushContentTypeLabel(contentType)}
+      summary={
+        allowBackspace
+          ? formatTypeRushContentTypeLabel(contentType)
+          : `${formatTypeRushContentTypeLabel(contentType)} · No Backspace`
+      }
       onOpen={handleOpen}
       onApply={handleApply}
-      applyDisabled={draftContentType === contentType}
+      applyDisabled={
+        draftContentType === contentType &&
+        draftAllowBackspace === allowBackspace
+      }
     >
       <fieldset className="space-y-2">
         <legend className="text-xs font-medium text-muted-foreground">
@@ -73,6 +90,13 @@ export function TypeRushSettingsWidget({
           ))}
         </div>
       </fieldset>
+      <SettingsToggleField
+        className="mt-4"
+        label="Allow Backspace"
+        description="Backspace deletes the last character."
+        value={draftAllowBackspace}
+        onValueChange={setDraftAllowBackspace}
+      />
     </GameSettingsWidget>
   )
 }

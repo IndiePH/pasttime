@@ -61,6 +61,13 @@ passage round state.
 - The result stores elapsed milliseconds, accuracy, WPM, and character counts.
 - An active round resumes from validated localStorage after refresh.
 - Daily wins record through the existing engagement layer.
+- Settings includes Allow Backspace. It is on by default and stored on this
+  device at `pasttime.type-rush.backspace`. Turning it off ignores Backspace
+  and says so under the passage.
+- Every game tagged `typing` shows a handheld notice from the shared launch
+  and play shells. Every player sees it. Continue closes it. Don't Show Again
+  is stored separately for each game at `pasttime.typing.handheld-notice.<id>`.
+  The dialog keeps the line near 60 characters.
 
 ## Type Shield boundary
 
@@ -73,6 +80,8 @@ targets, health/lives, scoring, and co-op ownership.
 - Shared typing behavior receives pure unit tests.
 - Type Rush domain receives tests for deterministic prompts, forgiving input,
   completion, metrics, daily/practice state, and persistence validation.
-- Type Rush web tests cover launch routing, play progress, resume behavior, and
-  completion rendering.
+- Type Rush web tests cover launch routing, play progress, resume behavior,
+  completion rendering, and Backspace turned off.
+- The handheld notice tests cover dismissal for one typing game without hiding
+  another.
 - Workspace quality gates remain `lint`, `typecheck`, `test`, and `build`.

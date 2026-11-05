@@ -21,6 +21,10 @@ export function TypeRushHowToPlay({ game }: { game: GameDefinition }) {
             accuracy but do not stop your run.
           </li>
           <li>
+            Backspace removes the last character. Turn Allow Backspace off in
+            Settings to keep every keystroke.
+          </li>
+          <li>
             Finish the final character to complete the passage and see your
             result.
           </li>

@@ -39,7 +39,7 @@ export function TypeRushLaunchView({ game }: TypeRushLaunchViewProps) {
 
   return (
     <>
-      <GamePageShell>
+      <GamePageShell game={game}>
         <GameSessionHeader game={game} subtitle={game.description} />
         <TypeRushSettingsWidget className="mt-6" />
         <GameLaunchActions

@@ -19,6 +19,10 @@ Before starting work, read these files for project context:
 
 Use `.planning/` as the single source of truth for project context.
 
+## Game template
+
+A new game starts from the shared launch and play template: `GamePageShell`, `GameLaunchActions`, `GamePlayShell`, and `GamePlaySection`. Pass `game` into both shells. A game tagged `typing` then gets the handheld notice, with Don't Show Again stored for that game alone. Before implementation, write a Template fit note in that game's design spec. Name any part the game cannot follow because of its own limits, such as no daily mode or no multiplayer. Do not replace a template action with a new label. The full rule is `.cursor/rules/game-template.mdc`.
+
 ## 🧠 Brain Directory — Agent Memory
 
 `brain/` is a persistent wiki maintained by the agent as a second brain.
