@@ -4,6 +4,7 @@ import { SiteShell } from "@/components/shared/site-shell"
 
 interface StaticPageSection {
   title: string
+  id?: string
   content: ReactNode
 }
 
@@ -67,7 +68,11 @@ export function StaticPage({
         </header>
         <div className="mt-10 space-y-10">
           {sections.map((section) => (
-            <section key={section.title} className="space-y-3">
+            <section
+              key={section.title}
+              id={section.id}
+              className="scroll-mt-48 space-y-3"
+            >
               <h2 className="text-xl font-medium tracking-tight">
                 {section.title}
               </h2>

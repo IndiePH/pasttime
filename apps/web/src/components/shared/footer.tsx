@@ -5,6 +5,10 @@ const footerLinks = [
   { href: "/about", label: "About" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
+  {
+    href: "/privacy#do-not-sell",
+    label: "Do Not Sell My Personal Information",
+  },
 ] as const
 
 export function Footer() {

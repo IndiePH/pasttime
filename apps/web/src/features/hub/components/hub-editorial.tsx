@@ -62,9 +62,9 @@ export function HubEditorial() {
             How Pasttime stays free
           </h3>
           <p className="leading-relaxed text-muted-foreground">
-            Browser games on this site are free to play and do not show display
-            ads. The Word Guess Android app is supported by Unity LevelPlay
-            advertising, described in its{" "}
+            Browser games on this site are free to play. Banner ads from Adsterra
+            support the site. The Word Guess Android app is supported by Unity
+            LevelPlay advertising, described in its{" "}
             <a
               href="/word-guess/policy"
               className="underline underline-offset-4 hover:text-foreground"
