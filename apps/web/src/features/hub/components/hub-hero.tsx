@@ -16,13 +16,15 @@ export function HubHero() {
         </div>
         <div className="grid gap-3 sm:grid-cols-2 sm:gap-6">
           <p className="text-muted-foreground">
-            Jump into Crossword, Word Guess, Sudoku, or Solitaire. Each game
-            keeps progress on your device and offers a calm layout built for a
-            short break or a longer streak.
+            Crossword, Word Guess, Sudoku, Solitaire, Reversi, Type Rush, and
+            Type Shield are ready to play. Each game keeps progress on your
+            device and offers a calm layout built for a short break or a longer
+            streak.
           </p>
           <p className="text-muted-foreground">
-            Every title below is playable today. Open a game page for rules and
-            tips, then start a daily puzzle or a fresh run without signing up.
+            Open a game page for the rules, then start a daily puzzle or a
+            fresh run without signing up. Coming soon titles stay labeled
+            until they can be played.
           </p>
         </div>
       </div>

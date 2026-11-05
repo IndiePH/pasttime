@@ -1,7 +1,26 @@
+import { filterGamesByStatus, gamePath } from "@pasttime/domain/games"
+import { hubFaqs } from "@/features/hub/hub-faq"
+import { PlatformLink } from "@/platform/navigation"
+
+const PLAYABLE_BLURBS: Record<string, string> = {
+  crossword:
+    "daily and random grids with across and down clues, local progress, and a calm board.",
+  "word-guess":
+    "find the hidden word with color feedback. Choose length, daily or endless, and optional hard mode. Rooms support up to four players.",
+  sudoku:
+    "classic 9×9 logic puzzles. Every row, column, and box holds 1–9 once, with difficulty bands, notes, and a daily board.",
+  solitaire: "Klondike and related patience layouts, with local save state.",
+  reversi: "play Black against the computer and flip bracketed discs.",
+  "type-rush": "type a passage for time, accuracy, and words per minute.",
+  "type-shield": "type the word on a falling comet before it reaches the dome.",
+}
+
 /**
  * SSR editorial copy for the hub. Crawlers need more than a game grid.
  */
 export function HubEditorial() {
+  const playable = filterGamesByStatus("available")
+  const faqs = hubFaqs()
   return (
     <section
       className="mt-16 space-y-12 border-t border-border/60 pb-16 pt-12"
@@ -17,8 +36,8 @@ export function HubEditorial() {
         <p className="leading-relaxed text-muted-foreground">
           Pasttime is built for people who want a real puzzle break without an
           install wall, a noisy feed, or a forced account. Open the site, pick a
-          game, and play. Crossword, Word Guess, Sudoku, and Solitaire are
-          ready in the browser on this device.
+          playable game, and start. Coming soon cards stay labeled until those
+          games launch.
         </p>
         <p className="leading-relaxed text-muted-foreground">
           Progress and preferences stay local by default. That keeps sessions
@@ -34,26 +53,17 @@ export function HubEditorial() {
             What you can play today
           </h3>
           <ul className="list-disc space-y-2 pl-5 leading-relaxed text-muted-foreground">
-            <li>
-              <span className="font-medium text-foreground">Crossword:</span>{" "}
-              daily and random grids with across/down clues, local progress, and
-              a calm board for longer solves.
-            </li>
-            <li>
-              <span className="font-medium text-foreground">Word Guess:</span>{" "}
-              find the hidden word with color feedback; choose length, daily or
-              endless modes, and optional hard mode.
-            </li>
-            <li>
-              <span className="font-medium text-foreground">Sudoku:</span>{" "}
-              classic 9×9 logic puzzles with difficulty bands, notes, and a
-              daily board when you want a shared challenge.
-            </li>
-            <li>
-              <span className="font-medium text-foreground">Solitaire:</span>{" "}
-              Klondike and related patience layouts with local save state and
-              settings that stay out of the way.
-            </li>
+            {playable.map((game) => (
+              <li key={game.id}>
+                <PlatformLink
+                  href={gamePath(game.id)}
+                  className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80"
+                >
+                  {game.title}
+                </PlatformLink>
+                : {PLAYABLE_BLURBS[game.id] ?? game.description}
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -102,7 +112,7 @@ export function HubEditorial() {
         </h3>
         <ol className="grid list-decimal gap-4 pl-5 leading-relaxed text-muted-foreground md:grid-cols-3">
           <li>
-            Open a game page and use How to play if you want the rules, then
+            Open a game page and use How To Play if you want the rules, then
             start a daily puzzle or a fresh run from the launch controls. The
             article below each title is background, not a second tutorial.
           </li>
@@ -116,6 +126,20 @@ export function HubEditorial() {
             distributions; those screens stay personal to this browser.
           </li>
         </ol>
+      </div>
+
+      <div className="space-y-8">
+        <h3 className="text-lg font-medium tracking-tight">
+          Questions about Pasttime
+        </h3>
+        <div className="space-y-6">
+          {faqs.map((faq) => (
+            <section key={faq.question} className="space-y-2">
+              <h4 className="font-medium tracking-tight">{faq.question}</h4>
+              <p className="leading-relaxed text-muted-foreground">{faq.answer}</p>
+            </section>
+          ))}
+        </div>
       </div>
     </section>
   )

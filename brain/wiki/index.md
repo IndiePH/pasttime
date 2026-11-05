@@ -10,6 +10,7 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 | [classic-game-conventions](classic-game-conventions.md) | Original rules and UX of Solitaire Klondike and Word Guess, with Pasttime innovation ideas |
 | [dictionary-pipeline](dictionary-pipeline.md) | Enriched dict, Word Guess answer pool, crossword corpus, R2/D1 publish, definition fixing |
 | [engineering-decisions](engineering-decisions.md) | Persistent log of architectural, tradeoff, rule-override, and technical-debt decisions |
+| [geo-seo](geo-seo.md) | Crawl map, JSON-LD, and on-page facts for search and answer engines |
 | [levelplay-app-ads](levelplay-app-ads.md) | Word Guess Android LevelPlay: app-ads.txt, no website display ads |
 | [nyt-engagement-patterns](nyt-engagement-patterns.md) | NYT Games engagement patterns; Phase 8 post-solve modal + share cards shipped |
 | [percentile-ranking-patterns](percentile-ranking-patterns.md) | Anonymous percentile ranking styles; Phase 8 comparative rankings implementation |

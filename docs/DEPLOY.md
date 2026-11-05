@@ -58,15 +58,16 @@ Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Li
 
 | URL | Expect |
 |-----|--------|
-| `https://pasttime.xyz/robots.txt` | 200, `Allow: /`, `Disallow: /traffic` and `/api/traffic`, `Sitemap: https://pasttime.xyz/sitemap.xml` |
-| `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub, legal, available + coming-soon landings, `/word-guess/policy`) |
+| `https://pasttime.xyz/robots.txt` | 200, `Allow: /`, `Disallow: /traffic` and `/api/traffic` for `*`. Named answer-engine crawlers also skip `/games/*/play`, `/stats`, and `/room`. `Sitemap: https://pasttime.xyz/sitemap.xml` |
+| `https://pasttime.xyz/llms.txt` | 200 text map of playable landings, about, legal, and coming-soon pages. No play, stats, room, or `/traffic` URLs |
+| `https://pasttime.xyz/sitemap.xml` | 200 urlset (hub at the apex, legal, available + coming-soon landings, `/word-guess/policy`). `/games` is the same hub and is not listed. `lastmod` is `SITE_CONTENT_UPDATED`, not the request time |
 | `https://pasttime.xyz/` | SSR hub copy including editorial; playable catalog plus labeled Coming soon; no `animate-pulse` skeletons |
 | `https://pasttime.xyz/games/<slug>` | SSR origin/history article for every registry game (coming soon: no Play) |
 | `https://pasttime.xyz/games/<slug>/play` | `noindex` (thin interactive shell) |
 
 Search Console property must be **`pasttime.xyz`** (`pasttime.app` / `www.pasttime.xyz` do not resolve). After deploy, re-submit the sitemap URL and use URL Inspection on hub + game landings (Request indexing), plus robots/sitemap if GSC still shows fetch errors.
 
-**Stay on Cloudflare Free:** keep large lexicon data in R2/D1 (not in the Worker script), leave apex attached as a Worker Custom Domain, and avoid paid Workers/Image/AI add-ons until Word Guess LevelPlay revenue covers them. SEO leverage that costs $0: SSR copy, sitemap/GSC, canonicals/JSON-LD, noindex on play/stats/room.
+**Stay on Cloudflare Free:** keep large lexicon data in R2/D1 (not in the Worker script), leave apex attached as a Worker Custom Domain, and avoid paid Workers/Image/AI add-ons until Word Guess LevelPlay revenue covers them. SEO leverage that costs $0: SSR copy, sitemap/GSC, canonicals/JSON-LD, `/llms.txt`, noindex on play/stats/room.
 
 ## Lexicon publish (R2 + D1)
 

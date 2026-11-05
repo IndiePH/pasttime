@@ -8,7 +8,8 @@ import { HubEditorial } from "@/features/hub/components/hub-editorial"
 import { HubGamesSection } from "@/features/hub/components/hub-games-section"
 import { HubHero } from "@/features/hub/components/hub-hero"
 import { hubSearchParamsCache } from "@/features/hub/search-params"
-import { websiteJsonLd } from "@/lib/seo"
+import { hubFaqs } from "@/features/hub/hub-faq"
+import { faqPageJsonLd, gameCatalogJsonLd, websiteJsonLd } from "@/lib/seo"
 
 export function HubPage() {
   // Playable games stay primary. Coming soon sits in its own section with
@@ -24,6 +25,8 @@ export function HubPage() {
   return (
     <SiteShell>
       <JsonLd data={websiteJsonLd()} />
+      <JsonLd data={gameCatalogJsonLd(filterGamesByStatus("available"))} />
+      <JsonLd data={faqPageJsonLd(hubFaqs())} />
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <HubHero />
         <HubGamesSection

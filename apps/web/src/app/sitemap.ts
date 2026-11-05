@@ -2,44 +2,39 @@ import type { MetadataRoute } from "next"
 
 import { GAME_REGISTRY, gamePath } from "@pasttime/domain/games"
 
-import { SITE_URL } from "@/lib/seo"
+import { SITE_CONTENT_UPDATED, SITE_URL } from "@/lib/seo"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date()
+  // Stable lastmod. `new Date()` on every request makes every URL look freshly edited.
+  const lastModified = new Date(SITE_CONTENT_UPDATED)
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
-      lastModified: now,
-      changeFrequency: "daily",
+      lastModified,
+      changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${SITE_URL}/games`,
-      lastModified: now,
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
       url: `${SITE_URL}/about`,
-      lastModified: now,
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
       url: `${SITE_URL}/privacy`,
-      lastModified: now,
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.4,
     },
     {
       url: `${SITE_URL}/terms`,
-      lastModified: now,
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.4,
     },
     {
       url: `${SITE_URL}/word-guess/policy`,
-      lastModified: now,
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.5,
     },
@@ -49,7 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     (game) => game.status === "available",
   ).map((game) => ({
     url: `${SITE_URL}${gamePath(game.id)}`,
-    lastModified: now,
+    lastModified,
     changeFrequency: "weekly",
     priority: 0.8,
   }))
@@ -58,7 +53,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     (game) => game.status === "coming_soon",
   ).map((game) => ({
     url: `${SITE_URL}${gamePath(game.id)}`,
-    lastModified: now,
+    lastModified,
     changeFrequency: "monthly",
     priority: 0.4,
   }))

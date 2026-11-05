@@ -1,11 +1,10 @@
 import { HubPage } from "@/features/hub"
 import { hubSearchParamsCache } from "@/features/hub/search-params"
-import { pageMetadata } from "@/lib/seo"
+import { pageMetadata, SITE_DESCRIPTION } from "@/lib/seo"
 
 export const metadata = pageMetadata({
   title: "Pasttime | Play more. Think sharper.",
-  description:
-    "Free daily puzzles and classic games in one hub: Crossword, Word Guess, Sudoku, and Solitaire. Instant play, no download required.",
+  description: SITE_DESCRIPTION,
   path: "/",
   absoluteTitle: true,
 })
