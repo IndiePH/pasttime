@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import { TypingHandheldNotice } from "@/features/games/components/typing-handheld-notice"
 
 import { gamePageShellClassName } from "./game-page-shell"
+import { PlaySideBanner } from "./play-side-banner"
 
 export type GamePlayLayout = "default" | "board"
 
@@ -13,6 +14,8 @@ interface GamePlayShellProps {
   children: React.ReactNode
   className?: string
   layout?: GamePlayLayout
+  /** Left 160×600 placeholder. Off when the stage is already too wide. */
+  sideBanner?: boolean
   /** When this game is tagged typing, the shell shows the handheld notice. */
   game?: GameDefinition
 }
@@ -21,28 +24,32 @@ export function GamePlayShell({
   children,
   className,
   layout = "default",
+  sideBanner = true,
   game,
 }: GamePlayShellProps) {
   const notice =
     game && isTypingGame(game) ? (
       <TypingHandheldNotice gameId={game.id} />
     ) : null
-
-  if (layout === "board") {
-    return (
-      <>
-        {notice}
-        <div className={cn(gamePlayBoardShellClassName, className)}>
-          {children}
-        </div>
-      </>
-    )
-  }
+  const field = (
+    <div
+      data-play-shell
+      className={cn(
+        layout === "board" ? gamePlayBoardShellClassName : gamePageShellClassName,
+        className,
+      )}
+    >
+      {children}
+    </div>
+  )
 
   return (
     <>
       {notice}
-      <div className={cn(gamePageShellClassName, className)}>{children}</div>
+      {sideBanner ? (
+        <PlaySideBanner />
+      ) : null}
+      {field}
     </>
   )
 }

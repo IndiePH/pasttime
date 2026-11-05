@@ -1,16 +1,18 @@
 # LevelPlay app-ads
 
-updated: 2026-10-02
+updated: 2026-11-05
 tags: [monetization, levelplay, devops]
-related: [adsense-manual-units, engineering-decisions]
+related: [adsense-manual-units, engineering-decisions, web-banner-placeholders]
 
-The website does not sell display ads. Word Guess on Android uses **Unity LevelPlay**. There is no Google AdSense script, slot, or `/ads.txt`.
+The website does not sell display ads. Word Guess on Android uses **Unity LevelPlay**. There is no Google AdSense script, slot, or `/ads.txt`. Empty banner boxes on the site are layout placeholders only. See [web-banner-placeholders](web-banner-placeholders.md).
 
 ## What replaced the website units
 
 | Former AdSense surface | Replacement |
 |------------------------|-------------|
-| Top strip, bottom strip, hub card | Removed. LevelPlay ads run in the Android app, not in the browser grid. |
+| Top strip | Empty header placeholder. Not filled, and not AdSense. |
+| Bottom strip, hub card | Not reserved. |
+| Browser grid | LevelPlay still runs in the Android app, not in the browser. |
 | `/ads.txt` | Not served. App crawlers use `/app-ads.txt`. Do not copy LevelPlay reseller lines into a website `ads.txt`. |
 | Privacy, About, Terms AdSense copy | Website pages say the site has no display ads and point at `/word-guess/policy`. |
 | AdSense env vars in `wrangler.jsonc` | Removed. Publisher ID is code in `apps/web/src/lib/app-ads.ts`. |

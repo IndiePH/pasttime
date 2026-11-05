@@ -18,6 +18,7 @@ interface GamePlaySectionProps {
   subtitle?: string
   headerDensity?: "default" | "compact"
   contentLayout?: GamePlayContentLayout
+  contentClassName?: string
   children: React.ReactNode
   footer?: React.ReactNode
   className?: string
@@ -32,6 +33,7 @@ export function GamePlaySection({
   subtitle,
   headerDensity = "default",
   contentLayout = "default",
+  contentClassName,
   children,
   footer,
   className,
@@ -44,7 +46,12 @@ export function GamePlaySection({
         density={headerDensity}
       />
       <GamePlaySettings game={game} className={gamePlaySettingsClassName} />
-      <div className={contentLayoutClassNames[contentLayout]}>{children}</div>
+      <div
+        data-play-field
+        className={cn(contentLayoutClassNames[contentLayout], contentClassName)}
+      >
+        {children}
+      </div>
       {footer}
     </div>
   )

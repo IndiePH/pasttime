@@ -82,7 +82,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 **L3 — Shared UI** (`src/components/`)
 | Path | Purpose |
 |------|---------|
-| `shared/` | `site-shell`, `header`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `traffic-beacon`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
+| `shared/` | `site-shell`, `header`, `banner-placeholder`, `footer`, `game-card`, `game-launch-actions`, `feedback-widget`, `traffic-beacon`, `mode-toggle`, `static-page`, `trust-badges`, `index` |
 | `ui/` | shadcn primitives: `badge`, `button`, `card`, `dialog`, `dropdown-menu` |
 | `ui/icons/` | `game-icon`, `word-guess-icon`, `sample-{crew,grid,quiz,tiles}-icon`, `index` |
 | `theme-provider.tsx` | Theme context |
@@ -92,7 +92,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 |------|---------|
 | `hub/` | Hub page: `hub-hero`, `hub-catalog`, `hub-filter`, `hub-games-section`, `hub-game-search`, `search-params`, `index` |
 | `games/` | Game plugin system (see [§5](#5-game-modules)) |
-| → `games/components/` | Shared game shells: `game-page-shell`, `game-play-shell`, `game-play-section`, `game-play-view`, `game-play-settings`, `game-play-footer-actions`, `game-content-panel`, `game-session-header`, `game-launch-settings`, `game-how-to-play(-placeholder)`, `game-settings-widget`, `game-settings-placeholder`, `play-clock-readout`, `join-room-panel`, `room-lobby-view`, `settings-toggle-field`, `index` |
+| → `games/components/` | Shared game shells: `game-page-shell`, `game-play-shell`, `game-play-section`, `play-side-banner`, `side-banner-placeholder`, `game-play-view`, `game-play-settings`, `game-play-footer-actions`, `game-content-panel`, `game-session-header`, `game-launch-settings`, `game-how-to-play(-placeholder)`, `game-settings-widget`, `game-settings-placeholder`, `play-clock-readout`, `join-room-panel`, `room-lobby-view`, `settings-toggle-field`, `index` |
 | → `games/cards/` | Card-skin prefs: `card-game-preferences`, `card-skin-picker`, `use-card-game-preferences` |
 | → `games/hooks/` | `use-move-queue`, `use-room-lobby`, `use-live-play-elapsed`, `use-seal-play-clock-on-leave` |
 | → `games/` (registry glue) | `module-registry`, `game-settings-registry`, `game-play-settings-registry`, `game-how-to-play-registry`, `registered-game-settings`, `registered-game-play-settings`, `registered-how-to-play-content`, `parse-game-search-params`, `index` |

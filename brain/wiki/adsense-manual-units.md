@@ -1,9 +1,11 @@
 # AdSense manual units
 
-updated: 2026-10-02
+updated: 2026-11-05
 tags: [monetization, adsense]
-related: [levelplay-app-ads, engineering-decisions]
+related: [levelplay-app-ads, engineering-decisions, web-banner-placeholders]
 
 Google AdSense was removed on 2026-10-02. Do not re-add website units, `/ads.txt`, or `NEXT_PUBLIC_ADSENSE_*` vars.
+
+The header and play-screen boxes added on 2026-11-05 are empty placeholders. They are not AdSense. See [web-banner-placeholders](web-banner-placeholders.md).
 
 Word Guess Android advertising is Unity LevelPlay. See [levelplay-app-ads](levelplay-app-ads.md).

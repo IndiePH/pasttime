@@ -57,6 +57,7 @@ Read `brain/schema.md` for the full contract. Rules:
 |------|---------|
 | [adsense-manual-units](brain/wiki/adsense-manual-units.md) | Retired. Website AdSense removed; see levelplay-app-ads |
 | [levelplay-app-ads](brain/wiki/levelplay-app-ads.md) | Word Guess Android LevelPlay app-ads.txt; no website display ads |
+| [web-banner-placeholders](brain/wiki/web-banner-placeholders.md) | Empty header and play-screen banner boxes; no network and no ads.txt |
 | [classic-game-conventions](brain/wiki/classic-game-conventions.md) | Solitaire/Word Guess conventions and innovation ideas |
 | [dictionary-pipeline](brain/wiki/dictionary-pipeline.md) | Dictionary, crossword corpus, and definition pipeline |
 | [engineering-decisions](brain/wiki/engineering-decisions.md) | Architectural and tradeoff decision log |
