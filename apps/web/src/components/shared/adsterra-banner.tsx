@@ -115,7 +115,14 @@ function mountUnit(
               return
             }
 
-            retryTimer = window.setTimeout(mountAttempt, AD_RENDER_GRACE_MS)
+            retryTimer = window.setTimeout(() => {
+              retryTimer = undefined
+              if (container.querySelector("iframe") !== null) {
+                finish()
+                return
+              }
+              mountAttempt()
+            }, AD_RENDER_GRACE_MS)
           }
 
           script.onload = inspectResult

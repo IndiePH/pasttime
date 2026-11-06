@@ -3,14 +3,17 @@ import { describe, expect, it } from "vitest"
 import {
   countryFlag,
   countryLabel,
+  createVisitorId,
   decideTrafficWrite,
   digestKey,
+  hashVisitorId,
   hexTokensMatch,
   hitToken,
   normalizeCountry,
   normalizeTrafficPath,
   parseTrafficRange,
   trafficSinceDay,
+  visitorId,
 } from "./traffic"
 
 const NOW = Date.parse("2026-11-04T15:00:00.000Z")
@@ -22,7 +25,6 @@ function decide(
     sameSite: true,
     userAgent: "Mozilla/5.0 Chrome/120",
     path: "/games/crossword",
-    seenCookie: undefined,
     hitCookie: undefined,
     country: "us",
     now: NOW,
@@ -59,20 +61,18 @@ describe("traffic path and country", () => {
 })
 
 describe("decideTrafficWrite", () => {
-  it("records a page view and a first visitor for the UTC day", () => {
+  it("records a page view", () => {
     expect(decide()).toEqual({
       action: "record",
       day: "2026-11-04",
       country: "US",
       path: "/games/crossword",
-      visitor: true,
       hit: hitToken("/games/crossword", NOW),
     })
   })
 
-  it("counts later pages as views only", () => {
-    const decision = decide({ seenCookie: "2026-11-04", path: "/" })
-    expect(decision).toMatchObject({ action: "record", visitor: false, path: "/" })
+  it("records another path in the same day", () => {
+    expect(decide({ path: "/" })).toMatchObject({ action: "record", path: "/" })
   })
 
   it("ignores a repeat of the same page inside the hit window", () => {
@@ -97,6 +97,25 @@ describe("decideTrafficWrite", () => {
       action: "record",
       country: "XX",
     })
+  })
+})
+
+describe("visitor identity", () => {
+  it("accepts only a version 4 id", () => {
+    const id = createVisitorId()
+    expect(visitorId(id)).toBe(id)
+    expect(visitorId(` ${id.toUpperCase()} `)).toBe(id)
+    expect(visitorId("not-a-visitor")).toBeNull()
+    expect(visitorId(undefined)).toBeNull()
+  })
+
+  it("hashes the id without keeping it", async () => {
+    const id = "11111111-1111-4111-8111-111111111111"
+    const hash = await hashVisitorId(id)
+    expect(hash).toHaveLength(64)
+    expect(hash).not.toContain(id)
+    expect(await hashVisitorId(id)).toBe(hash)
+    expect(await hashVisitorId(createVisitorId())).not.toBe(hash)
   })
 })
 

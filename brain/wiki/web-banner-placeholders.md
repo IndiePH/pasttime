@@ -3,7 +3,7 @@ updated: 2026-11-06
 tags: [monetization, layout]
 related: [adsense-manual-units, levelplay-app-ads, engineering-decisions]
 
-The header and the left rail load Adsterra display banners from `adsterra-banner.tsx`. The canonical public website host is `pasttime.xyz`; `gamehub.pasttime.xyz` is not a production URL. Adsterra returns an empty script for any other host, including localhost, so the box stays blank there. There is still no `/ads.txt` until the dashboard lines are pasted. Google AdSense stays retired. Word Guess Android stays on Unity LevelPlay in `/app-ads.txt`. Do not copy those reseller lines into a website seller file. Anti-Adblock stays off. Do not paste the replacement codes from that email.
+The header and the left rail load Adsterra display banners from `adsterra-banner.tsx`. The canonical public website host is `pasttime.xyz`; `gamehub.pasttime.xyz` is not a production URL. Adsterra returns an empty script for any other host, including localhost, so the box stays blank there. The website `/ads.txt` route now contains Adsterra's standard direct-seller line and still needs deployment. Google AdSense stays retired. Word Guess Android stays on Unity LevelPlay in `/app-ads.txt`. Do not copy those reseller lines into a website seller file. Anti-Adblock stays off. Do not paste the replacement codes from that email.
 
 ## Header
 
@@ -63,17 +63,17 @@ Sources: [publisher signup](https://adsterra.com/publishers/), [add a website](h
 - [x] Leave BOOST CPM off. Their own guide says turning it on allows every ad type. The live snippets are banner units.
 - [x] Add only Display Banner units: 728×90, 320×50, and 160×600. Do not add a popunder, social bar, interstitial, smartlink, native unit, or 300×250.
 - [x] Wait until the site status is Approved, then copy each unit's code from the dashboard. Do not edit the snippet.
-- [ ] Copy the ads.txt lines from the dashboard into a Worker route at `/ads.txt`. Serve them as plain text. Do not 301 that path.
-- [ ] Keep `ownerdomain=pasttime.xyz` on the first line of that file.
-- [ ] Leave `/app-ads.txt` as the Unity LevelPlay file. Do not copy those reseller lines into `/ads.txt`.
-- [ ] Do not add an AdSense line, a Sovrn line, or a Nitro line.
+- [x] Add the Adsterra seller line to the Worker route at `/ads.txt` and serve it as plain text. Do not 301 that path. The dashboard UI did not expose a separate seller block; the route uses `adsterra.com, htfw-3915, DIRECT`.
+- [x] Keep `ownerdomain=pasttime.xyz` on the first line of that file.
+- [x] Leave `/app-ads.txt` as the Unity LevelPlay file. Live check on 2026-11-06 returned 200 with `ownerdomain=pasttime.xyz` and LevelPlay seller lines.
+- [x] Do not add an AdSense line, a Sovrn line, or a Nitro line.
 
 ### Placements
 
 - [x] Header code in `BannerPlaceholder`: 728×90 from the `md` breakpoint, 320×50 below that, hidden when the viewport is 500px tall or shorter. It stays pinned with the header, including on play. Only the size that fits is requested.
 - [x] Rail code in `PageSideBanner`: 160×600 at `lg` and up, `1.5rem` from the left edge. On play, the top aligns to `[data-play-field]`. On other pages, the top aligns to the title, and the rail stays off when the column would run under it or the measured height is under 600px. Type Shield keeps `sideBanner={false}`.
 - [x] Confirm a client-side route change still requests the banner. The header and the rail are mounted again with the same two units, and a second copy is not left behind.
-- [x] Retry one time when the Adsterra loader completes without creating its iframe. The retry is bounded per mount and does not reload the page or loop on blockers/no-fill.
+- [x] Retry one time when the Adsterra loader completes without creating its iframe. The retry is bounded per mount and does not reload the page or loop on blockers/no-fill. At the end of the render grace period, check again before replacing the slot so a late iframe is kept.
 - [ ] An empty box is an unfilled auction. Do not fill it with a pop, a push, or an AdSense passback.
 
 ### Legal copy
@@ -82,12 +82,18 @@ Privacy, about, and terms name Adsterra for website banners. The Word Guess Andr
 
 - [x] Privacy, about, and terms name Adsterra for website ads.
 - [x] The site has a "Do Not Sell My Personal Information" link for US visitors. It points at `/privacy#do-not-sell`. The button stores `pasttime.ads.opt-out` and reloads. Global Privacy Control hides the banners too.
-- [ ] If EU/EEA traffic is real, add a consent tool and pass the consent string the tag expects. Do not add a second ad network's consent script.
+
+### Before EU/EEA delivery
+
+- [ ] Confirm Adsterra's current consent protocol and the exact signal its banner tag accepts. Do this before enabling EU/EEA delivery; do not wait for traffic to appear.
+- [ ] Choose one CMP, gate the Adsterra loader until consent or the supported non-personalized path is selected, pass the confirmed consent signal, and provide a withdrawal path. Do not add a second ad network's consent script.
+- [ ] Update the website privacy copy and live verification checklist to cover the CMP, consent state, and withdrawal path.
 
 ### After it is live
 
+- [ ] Deploy the late-iframe fallback guard from `adsterra-banner.tsx`, then recheck the header and rail on production.
 - [ ] `https://pasttime.xyz/ads.txt` returns 200 with the Adsterra lines and `ownerdomain=pasttime.xyz`. The body has no LevelPlay line.
-- [ ] `https://pasttime.xyz/app-ads.txt` is still the LevelPlay file.
-- [ ] The game still loads when a box is empty, and no full-page or popunder ad appears.
+- [x] `https://pasttime.xyz/app-ads.txt` is still the LevelPlay file; live check on 2026-11-06 returned 200.
+- [x] Crossword play still loads when its banner boxes are empty, and no full-page or popunder ad appeared during the live check on 2026-11-06. An empty box remains a possible no-fill result.
 - [ ] Judge Adsterra on dollars from the banner units. A higher number that comes from a pop or a push does not count.
 - [ ] Payout is Net 15, twice a month. Paxum pays from a $5 balance. PayPal and a local bank transfer pay from $25. A wire pays from $1,000. Amounts under the line roll forward.

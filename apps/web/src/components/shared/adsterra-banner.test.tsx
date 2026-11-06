@@ -72,4 +72,26 @@ describe("AdsterraBanner", () => {
 
     expect(slot.querySelector("script")).toBe(retryScript)
   })
+
+  it("keeps a late-rendered iframe instead of replacing it with a retry", async () => {
+    vi.useFakeTimers()
+    const { container } = render(<AdsterraBanner unit="leaderboard" />)
+    await flushMountQueue()
+
+    const slot = container.firstElementChild as HTMLElement
+    const firstScript = slot.querySelector("script")
+    expect(firstScript).not.toBeNull()
+
+    await act(async () => {
+      firstScript?.dispatchEvent(new Event("load"))
+      vi.advanceTimersByTime(1_000)
+      const iframe = document.createElement("iframe")
+      slot.appendChild(iframe)
+      vi.advanceTimersByTime(500)
+      await Promise.resolve()
+    })
+
+    expect(slot.querySelector("iframe")).not.toBeNull()
+    expect(slot.querySelector("script")).toBe(firstScript)
+  })
 })

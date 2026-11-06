@@ -14,7 +14,7 @@ export default function PrivacyPage() {
     <StaticPage
       title="Privacy Policy"
       description="How we collect, use, and protect information when you use Pasttime."
-      lastUpdated="2026-11-05"
+      lastUpdated="2026-11-06"
       sections={[
         {
           title: "Overview",
@@ -30,7 +30,7 @@ export default function PrivacyPage() {
             "Local device storage: We store preferences and game progress in your browser’s local storage (for example theme settings, in-progress games, and local stats). This data stays on your device unless you clear site data or your browser removes it.",
             "Feedback you send: If you use the Feedback button, we receive the message you submit, the category you choose, and any email address you optionally provide. We use this only to respond to feedback and improve the service.",
             "Technical and usage data: Like most websites, our hosting and infrastructure providers may process standard request data such as IP address, browser type, device type, referring URL, and timestamps when you load pages. We use this to operate, secure, and troubleshoot the site.",
-            "Site traffic: When a page is viewed, we add to a daily total for that page and country. The country is a two-letter code supplied by our host from the connection. A first-party cookie remembers that this browser was already counted today, so a refresh is not a new visitor. These totals are aggregates. We do not store IP addresses or a history of one person’s visits in them.",
+            "Site traffic: When a page is viewed, we add to a daily total for that page and country. The country is a two-letter code supplied by our host from the connection. A first-party cookie stores a random identifier for this browser. We keep a one-way hash of that identifier with the UTC day and country, so the same browser is counted once across a date range. We do not store the raw identifier, an IP address, or the list of pages that browser opened.",
           ],
         },
         {
@@ -62,7 +62,7 @@ export default function PrivacyPage() {
         {
           title: "How we use information",
           content: [
-            "We use information to provide and improve Pasttime, remember your preferences and progress on your device, respond to feedback, maintain security, show website banner ads, and comply with legal obligations. Aggregate page and country counts show which games are opened and where visits come from.",
+            "We use information to provide and improve Pasttime, remember your preferences and progress on your device, respond to feedback, maintain security, show website banner ads, and comply with legal obligations. Aggregate page and country counts show which games are opened and where visits come from. The anonymous browser hash is used only to count a browser once in a traffic range.",
             "We do not sell gameplay content you enter into puzzles, and we do not use it as a profile to market unrelated products to you. Website banners may share identifiers with Adsterra and its partners, as described under Do Not Sell My Personal Information.",
           ],
         },
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
           title: "Cookies and similar technologies",
           content: [
             "The website uses local storage for preferences and game progress. Hosting providers may process standard request logs. Adsterra may set cookies or similar storage when a website banner loads. Those cookies are used to show and measure ads.",
-            "Two short-lived first-party cookies support the traffic totals. One marks that this browser was already counted as a visitor for the current UTC day. The other suppresses a repeat count of the same page for about 30 seconds. Clearing cookies resets that count. They are not used for advertising.",
+            "Two first-party cookies support the traffic totals. One stores a random browser identifier for about 400 days. We store only a one-way hash of it, together with the UTC day and country, so the same browser is counted once in a date range. The other suppresses a repeat count of the same page for about 30 seconds. Clearing cookies, or using another browser, starts a new count. These cookies are not used for advertising.",
             "You can block or delete cookies and clear local storage through your browser. Doing so may reset preferences and progress. Advertising technologies in the Word Guess Android app are covered in that app’s privacy policy.",
           ],
         },
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
         {
           title: "Data retention",
           content:
-            "Local storage data remains on your device until you clear it or your browser removes it. Feedback messages and optional contact emails are retained only as long as needed to handle the request and improve the product, unless a longer period is required by law. Daily country and page totals are kept as aggregates and are not tied to an IP address or an account. Adsterra retains website advertising data according to its own policy. Unity LevelPlay retains Word Guess app advertising data according to its own policy, linked from the Word Guess privacy policy.",
+            "Local storage data remains on your device until you clear it or your browser removes it. Feedback messages and optional contact emails are retained only as long as needed to handle the request and improve the product, unless a longer period is required by law. Daily country and page totals, and the anonymous per-day browser hashes used to count unique browsers, are kept for traffic reporting. They are not tied to an IP address or an account. Clearing the traffic cookie disconnects later visits from the old hash; it does not delete counts already stored. Adsterra retains website advertising data according to its own policy. Unity LevelPlay retains Word Guess app advertising data according to its own policy, linked from the Word Guess privacy policy.",
         },
         {
           title: "International processing",

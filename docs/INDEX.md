@@ -71,10 +71,11 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `games/[slug]/play/page.tsx` | Game play |
 | `games/[slug]/room/[code]/page.tsx` | Multiplayer room |
 | `games/[slug]/{loading,error,not-found}.tsx` | Route segments |
-| `about/`, `privacy/`, `terms/` | Site legal pages. Website banners are Adsterra. Privacy covers that disclosure, the Do Not Sell control, and daily country traffic totals. |
+| `about/`, `privacy/`, `terms/` | Site legal pages. Website banners are Adsterra. Privacy covers that disclosure, the Do Not Sell control, and unique-browser traffic counts. |
 | `traffic/page.tsx` | Private traffic summary. `noindex`. Unlocked with `TRAFFIC_VIEW_KEY`. |
-| `api/traffic/route.ts` | Records a same-site page view: country, path, views, visitors. |
+| `api/traffic/route.ts` | Records a same-site page view and one anonymous browser per UTC day. |
 | `robots.ts` | Allows `/`. Disallows `/traffic` and `/api/traffic`. |
+| `ads.txt/route.ts` | Adsterra website seller file |
 | `app-ads.txt/route.ts` | Unity LevelPlay seller file for the Word Guess Android app |
 | `word-guess/policy/page.tsx` | Word Guess Android privacy policy (LevelPlay, Play Games, Firebase) |
 | `favicon.ico` | Favicon |
@@ -108,7 +109,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `lib/app-ads.ts` | LevelPlay `/app-ads.txt` builder (`ownerdomain`, ironSource DIRECT, Unity Ads mirror) |
 | `lib/app-ads-unity-list.ts` | Unity dashboard reseller lines included in `/app-ads.txt` |
 | `lib/utils.ts` | `cn` + helpers |
-| `lib/traffic/` | Country traffic rules, D1 totals, view-key check, and hub Top picks ranking (`top-picks.ts`). Tests in `traffic.test.ts` and `top-picks.test.ts`. |
+| `lib/traffic/` | Unique-browser traffic rules, D1 totals, view-key check, and hub Top picks ranking (`top-picks.ts`). Tests in `traffic.test.ts` and `top-picks.test.ts`. |
 | `infrastructure/storage/` | `storage-provider`, `index` |
 | `platform/navigation/` | `platform-link`, `use-platform-router`, `index` |
 | `hooks/` | `.gitkeep` (reserved) |
@@ -118,6 +119,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 |------|---------|
 | `scripts/word-guess/build-dictionary.mjs` | Corpus → `games/shared/dictionary.target.json` |
 | `migrations/0002_site_traffic.sql` | D1 table `site_traffic_daily` on `pasttime-lexicon` |
+| `migrations/0003_unique_traffic_visitors.sql` | D1 table `site_traffic_visitor_days` for unique browsers |
 | `public/_headers` | Cloudflare headers |
 | `public/games/cards/minimal/` | 54 card SVGs (back light/dark + 13 ranks × 4 suits) |
 | `public/.gitkeep` | Keeps dir |

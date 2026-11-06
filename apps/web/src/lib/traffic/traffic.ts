@@ -1,10 +1,15 @@
 import { timingSafeEqual } from "node:crypto"
 
 export const TRAFFIC_SEEN_COOKIE = "pt_seen"
+export const TRAFFIC_VISITOR_COOKIE = "pt_vid"
 export const TRAFFIC_HIT_COOKIE = "pt_hit"
 export const TRAFFIC_AUTH_COOKIE = "pt_traffic_auth"
 export const TRAFFIC_HIT_WINDOW_MS = 30_000
+export const TRAFFIC_VISITOR_MAX_AGE_SECONDS = 60 * 60 * 24 * 400
 export const TRAFFIC_RANGES = [7, 30, 90] as const
+
+const VISITOR_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 export type TrafficRange = (typeof TRAFFIC_RANGES)[number]
 
@@ -28,7 +33,6 @@ export type TrafficDecision =
       day: string
       country: string
       path: string
-      visitor: boolean
       hit: string
     }
 
@@ -136,7 +140,6 @@ export function decideTrafficWrite(input: {
   sameSite: boolean
   userAgent: string | null
   path: unknown
-  seenCookie: string | undefined
   hitCookie: string | undefined
   country: string | null
   now: number
@@ -151,20 +154,34 @@ export function decideTrafficWrite(input: {
   const hit = hitToken(path, input.now)
   if (input.hitCookie === hit) return { action: "ignore" }
 
-  const day = utcDay(new Date(input.now))
   return {
     action: "record",
-    day,
+    day: utcDay(new Date(input.now)),
     country: normalizeCountry(input.country),
     path,
-    visitor: input.seenCookie !== day,
     hit,
   }
 }
 
+export function visitorId(raw: string | undefined): string | null {
+  const value = raw?.trim().toLowerCase() ?? ""
+  return VISITOR_ID.test(value) ? value : null
+}
+
+export function createVisitorId(): string {
+  return crypto.randomUUID()
+}
+
+export async function hashVisitorId(id: string): Promise<string> {
+  return sha256(`pasttime-visitor:v1:${id}`)
+}
+
 export async function digestKey(key: string): Promise<string> {
-  const data = new TextEncoder().encode(`pasttime-traffic:v1:${key}`)
-  const digest = await crypto.subtle.digest("SHA-256", data)
+  return sha256(`pasttime-traffic:v1:${key}`)
+}
+
+async function sha256(value: string): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value))
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("")
 }
 
