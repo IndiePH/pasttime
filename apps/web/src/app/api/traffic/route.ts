@@ -4,11 +4,16 @@ import { NextResponse } from "next/server"
 
 import { recordTrafficHit } from "@/lib/traffic/store"
 import {
+  createVisitorId,
   decideTrafficWrite,
+  hashVisitorId,
   isSameSiteTrafficRequest,
   TRAFFIC_HIT_COOKIE,
   TRAFFIC_HIT_WINDOW_MS,
   TRAFFIC_SEEN_COOKIE,
+  TRAFFIC_VISITOR_COOKIE,
+  TRAFFIC_VISITOR_MAX_AGE_SECONDS,
+  visitorId,
 } from "@/lib/traffic/traffic"
 
 export const dynamic = "force-dynamic"
@@ -44,7 +49,6 @@ export async function POST(request: Request) {
     sameSite: true,
     userAgent: request.headers.get("user-agent"),
     path,
-    seenCookie: cookieStore.get(TRAFFIC_SEEN_COOKIE)?.value,
     hitCookie: cookieStore.get(TRAFFIC_HIT_COOKIE)?.value,
     country: await readCountry(request),
     now: Date.now(),
@@ -52,8 +56,16 @@ export async function POST(request: Request) {
 
   if (decision.action === "ignore") return noContent()
 
+  const visitor =
+    visitorId(cookieStore.get(TRAFFIC_VISITOR_COOKIE)?.value) ?? createVisitorId()
+
   try {
-    const stored = await recordTrafficHit(decision)
+    const stored = await recordTrafficHit({
+      day: decision.day,
+      country: decision.country,
+      path: decision.path,
+      visitorHash: await hashVisitorId(visitor),
+    })
     if (!stored) return noContent()
   } catch (error) {
     console.warn("traffic: count was not stored", error)
@@ -62,15 +74,20 @@ export async function POST(request: Request) {
 
   const response = noContent()
   const secure = process.env.NODE_ENV === "production"
-  if (decision.visitor) {
-    response.cookies.set(TRAFFIC_SEEN_COOKIE, decision.day, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure,
-      path: "/",
-      maxAge: 60 * 60 * 36,
-    })
-  }
+  response.cookies.set(TRAFFIC_VISITOR_COOKIE, visitor, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure,
+    path: "/",
+    maxAge: TRAFFIC_VISITOR_MAX_AGE_SECONDS,
+  })
+  response.cookies.set(TRAFFIC_SEEN_COOKIE, "", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure,
+    path: "/",
+    maxAge: 0,
+  })
   response.cookies.set(TRAFFIC_HIT_COOKIE, decision.hit, {
     httpOnly: true,
     sameSite: "lax",

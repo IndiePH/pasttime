@@ -31,7 +31,7 @@ Last audited: 2026-10-02
 
 ### Cloudflare
 
-- Role: Hosts the web app on Workers, stores lexicon content and daily country traffic totals in R2 and D1, and supplies the visitor country code. Images and log observability are bound in Wrangler config.
+- Role: Hosts the web app on Workers, stores lexicon content, daily page views, and anonymous unique-browser counts in R2 and D1, and supplies the country code. Images and log observability are bound in Wrangler config.
 - Workspace: apps/web
 - Where used: `apps/web/open-next.config.ts` (`defineCloudflareConfig`), `apps/web/src/lib/lexicon/server.ts` (`getCloudflareContext`, `CONTENT_R2`, `LEXICON_DB`), `apps/web/src/lib/traffic/store.ts` and `apps/web/src/app/api/traffic/route.ts` (D1 totals, `cf.country`), `apps/web/wrangler.jsonc`, deploy scripts in `apps/web/package.json`
 - Config names: bindings `CONTENT_R2`, `LEXICON_DB`, `IMAGES`, `ASSETS`, `WORKER_SELF_REFERENCE`; worker `gamehub`; secret `TRAFFIC_VIEW_KEY` (unlocks `/traffic`, not listed in `secrets.required`)

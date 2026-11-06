@@ -24,7 +24,7 @@ export const dynamic = "force-dynamic"
 
 export const metadata = pageMetadata({
   title: "Traffic",
-  description: "Private summary of Pasttime page views by country.",
+  description: "Private summary of Pasttime page views and unique browsers by country.",
   path: "/traffic",
   noIndex: true,
 })
@@ -136,8 +136,7 @@ async function TrafficReport({ range }: { range: TrafficRange }) {
   }
 
   const views = summary?.countries.reduce((total, row) => total + row.views, 0) ?? 0
-  const visitors =
-    summary?.countries.reduce((total, row) => total + row.visitors, 0) ?? 0
+  const visitors = summary?.visitors ?? 0
   const maxViews = summary?.countries[0]?.views ?? 0
 
   return (
@@ -146,7 +145,7 @@ async function TrafficReport({ range }: { range: TrafficRange }) {
         <div>
           <h1 className="font-heading text-2xl font-medium">Traffic</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Page views and browsers by country, {since} through {today} UTC.
+            Page views and unique browsers by country, {since} through {today} UTC.
           </p>
         </div>
         <form action={lockTraffic}>
@@ -195,7 +194,7 @@ async function TrafficReport({ range }: { range: TrafficRange }) {
         <>
           <div className="grid gap-3 sm:grid-cols-3">
             <Metric label="Page views" value={formatCount(views)} />
-            <Metric label="Visitors" value={formatCount(visitors)} />
+            <Metric label="Unique browsers" value={formatCount(visitors)} />
             <Metric label="Countries" value={formatCount(summary.countries.length)} />
           </div>
 
@@ -208,12 +207,12 @@ async function TrafficReport({ range }: { range: TrafficRange }) {
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <caption className="sr-only">Views and visitors by country</caption>
+                  <caption className="sr-only">Views and unique browsers by country</caption>
                   <thead className="text-left text-muted-foreground">
                     <tr>
                       <th className="py-2 pr-3 font-medium">Country</th>
                       <th className="px-3 py-2 font-medium">Views</th>
-                      <th className="py-2 pl-3 font-medium">Visitors</th>
+                      <th className="py-2 pl-3 font-medium">Browsers</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -273,8 +272,13 @@ async function TrafficReport({ range }: { range: TrafficRange }) {
           </section>
 
           <p className="text-xs text-muted-foreground">
-            A visitor is one browser per UTC day. Country comes from Cloudflare
-            at the edge. IP addresses are not stored.
+            A unique browser is one browser across this date range. Clearing
+            cookies, or using another browser, starts a new count. Daily and
+            country counts can add up to more than the total when the same
+            browser returns on another day or is seen from another country.
+            Country is the Cloudflare edge code on the first counted page that
+            UTC day. IP addresses are not stored. Days before this count was
+            deployed still show page views, with no browser total.
           </p>
         </>
       ) : null}
@@ -312,7 +316,7 @@ function CountList({
                 {countLabel(row.views, "view")}
                 {row.visitors === undefined
                   ? ""
-                  : ` · ${countLabel(row.visitors, "visitor")}`}
+                  : ` · ${countLabel(row.visitors, "browser")}`}
               </span>
             </li>
           ))}
