@@ -75,6 +75,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 | `traffic/page.tsx` | Private traffic summary. `noindex`. Unlocked with `TRAFFIC_VIEW_KEY`. |
 | `api/traffic/route.ts` | Records a same-site page view: country, path, views, visitors. |
 | `robots.ts` | Allows `/`. Disallows `/traffic` and `/api/traffic`. |
+| `ads.txt/route.ts` | Adsterra website seller file |
 | `app-ads.txt/route.ts` | Unity LevelPlay seller file for the Word Guess Android app |
 | `word-guess/policy/page.tsx` | Word Guess Android privacy policy (LevelPlay, Play Games, Firebase) |
 | `favicon.ico` | Favicon |
@@ -118,6 +119,7 @@ Next.js primary app. The authoritative game UI surface. Layers (L0→L5):
 |------|---------|
 | `scripts/word-guess/build-dictionary.mjs` | Corpus → `games/shared/dictionary.target.json` |
 | `migrations/0002_site_traffic.sql` | D1 table `site_traffic_daily` on `pasttime-lexicon` |
+| `migrations/0003_unique_traffic_visitors.sql` | D1 table `site_traffic_visitor_days` for unique browsers |
 | `public/_headers` | Cloudflare headers |
 | `public/games/cards/minimal/` | 54 card SVGs (back light/dark + 13 ranks × 4 suits) |
 | `public/.gitkeep` | Keeps dir |

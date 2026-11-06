@@ -1,5 +1,5 @@
 # Wiki Index
-updated: 2026-11-05
+updated: 2026-11-06
 
 Master list of all wiki pages. One line per page.
 Keep entries sorted alphabetically. Add a page here whenever you create one.
@@ -14,6 +14,6 @@ Keep entries sorted alphabetically. Add a page here whenever you create one.
 | [nyt-engagement-patterns](nyt-engagement-patterns.md) | NYT Games engagement patterns; Phase 8 post-solve modal + share cards shipped |
 | [percentile-ranking-patterns](percentile-ranking-patterns.md) | Anonymous percentile ranking styles; Phase 8 comparative rankings implementation |
 | [reversi-design](reversi-design.md) | Local computer plays White; difficulty and flip animation stay on the device |
-| [site-traffic](site-traffic.md) | Daily page views and visitors by country; private `/traffic` summary |
+| [site-traffic](site-traffic.md) | Daily page views and unique browsers by country; private `/traffic` summary |
 | [sudoku-design](sudoku-design.md) | Shipped Sudoku v1 decisions and patterns: difficulty bands, generation, storage, timer, hydration, and launch UX |
-| [web-banner-placeholders](web-banner-placeholders.md) | Adsterra banner tags and the setup checklist; banners only, `/ads.txt` still waiting on dashboard lines |
+| [web-banner-placeholders](web-banner-placeholders.md) | Adsterra banner tags and the setup checklist; website `/ads.txt` route added, deployment pending |

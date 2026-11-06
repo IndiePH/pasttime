@@ -4,7 +4,7 @@ import { buildAppAdsTxt } from "@/lib/app-ads"
  * LevelPlay app-ads.txt (Word Guess on Android). Must be served at the domain apex:
  * https://pasttime.xyz/app-ads.txt
  * Play Console store listing Website should use pasttime.xyz (path is stripped).
- * The website has no display-ad seller file.
+ * Website display-ad sellers are served separately at /ads.txt.
  */
 export function GET() {
   return new Response(buildAppAdsTxt(), {

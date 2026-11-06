@@ -40,7 +40,7 @@ Local: copy from `.env.example` into `.env.local` (gitignored). Never commit rea
 
 ### Foot traffic
 
-Page views are daily aggregates in D1 table `site_traffic_daily` (migration `apps/web/migrations/0002_site_traffic.sql` on `pasttime-lexicon`). Apply from `apps/web` with `npm run lexicon:migrate` before the first production count, or `npm run lexicon:migrate:local` for the local D1 used by `next dev`. The private summary is [https://pasttime.xyz/traffic](https://pasttime.xyz/traffic). Country is Cloudflare’s edge code (`cf.country`, then `CF-IPCountry`). IP addresses are not stored. A browser is one visitor per UTC day.
+Page views are daily aggregates in D1 table `site_traffic_daily`. Unique browsers are distinct one-way visitor hashes in `site_traffic_visitor_days` (migration `apps/web/migrations/0003_unique_traffic_visitors.sql` on `pasttime-lexicon`). Apply from `apps/web` with `npm run lexicon:migrate` before deploying this counting method, or `npm run lexicon:migrate:local` for the local D1 used by `next dev`. Until that migration is applied, a page view is dropped instead of stored. The private summary is [https://pasttime.xyz/traffic](https://pasttime.xyz/traffic). Country is Cloudflare’s edge code (`cf.country`, then `CF-IPCountry`), saved with the first counted page that UTC day. IP addresses and the raw browser identifier are not stored. A unique browser is one browser across the selected 7, 30, or 90 day range. Days recorded before the visitor table existed stay page views only and cannot be rebuilt as unique browsers.
 
 Deployed 2026-11-04 as Worker version `02df0176-7374-4719-9571-99b9b5f7b5c2`. `TRAFFIC_VIEW_KEY` is a Worker secret. See `brain/wiki/site-traffic.md`.
 
@@ -48,11 +48,11 @@ If the latest Worker version is not currently deployed, `wrangler secret put` fa
 
 ### Unity LevelPlay (Word Guess Android)
 
-The website serves Adsterra display banners in the header and the left rail (`BannerPlaceholder`, `PageSideBanner`). The tags are in the app and appear on pasttime.xyz only after this branch is deployed. There is still no `/ads.txt`: paste the dashboard lines before adding that route. There is no AdSense script or slot. These tags do not change `/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay. The remaining steps are in `brain/wiki/web-banner-placeholders.md`.
+The website serves Adsterra display banners in the header and the left rail (`BannerPlaceholder`, `PageSideBanner`). The tags and the website seller file at `/ads.txt` are in the app and appear on pasttime.xyz only after this branch is deployed. The current seller file starts with `ownerdomain=pasttime.xyz` and contains `adsterra.com, htfw-3915, DIRECT`. There is no AdSense script or slot. These tags do not change `/app-ads.txt`. Advertising for the Word Guess Android app is Unity LevelPlay. The remaining steps are in `brain/wiki/web-banner-placeholders.md`.
 
 `https://pasttime.xyz/app-ads.txt` must stay on the apex. It starts with `ownerdomain=pasttime.xyz` and includes ironSource DIRECT, Unity Ads DIRECT (`unity.com` / `unity3d.com`), plus the Unity reseller list baked in `apps/web/src/lib/app-ads-unity-list.ts`. The public publisher ID lives in `apps/web/src/lib/app-ads.ts`. Do not put ironSource API keys in the repo or in Worker vars.
 
-Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Live checks: `https://pasttime.xyz/app-ads.txt` still returns the LevelPlay file, and `https://pasttime.xyz/ads.txt` is a 404 until the Adsterra dashboard lines are pasted (no Google seller line). Privacy, about, and terms describe Adsterra banners on the website and LevelPlay on the Android app. The app disclosure is `/word-guess/policy`. See `brain/wiki/levelplay-app-ads.md`.
+Deployed 2026-10-02 as Worker version `dc5611a9-a1bf-4bfd-acb4-6ca68eda505d`. Live checks: `https://pasttime.xyz/app-ads.txt` still returns the LevelPlay file, and `https://pasttime.xyz/ads.txt` remains a 404 until the current branch is deployed (no Google seller line). Privacy, about, and terms describe Adsterra banners on the website and LevelPlay on the Android app. The app disclosure is `/word-guess/policy`. See `brain/wiki/levelplay-app-ads.md`.
 
 **Pre-review crawl checks (apex):**
 

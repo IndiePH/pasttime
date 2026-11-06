@@ -207,7 +207,7 @@ Last audited: 2026-10-02
 - Advisories: none
 - Bump: current
 - Upgrade risk: low
-- Breakage: The loader reads `window.atOptions`, so units mount one at a time. `/ads.txt` is not served until the dashboard lines are pasted. `/app-ads.txt` stays LevelPlay.
+- Breakage: The loader reads `window.atOptions`, so units mount one at a time. Website `/ads.txt` is served separately from `/app-ads.txt`, which stays LevelPlay.
 - Checked: 2026-11-05
 - Status: active
 
